@@ -29,7 +29,8 @@
     "lint:scripts": "eslint --ext .js,.cjs,.mjs,.ts --ignore-path .gitignore",
     "lint:spelling": "cspell \"**\" --no-progress",
     "prepare": "husky install",
-    "release": "commit-and-tag-version -s"
+    "release": "commit-and-tag-version -s",
+    "release:prettier-config": "pnpm --filter './packages/prettier-config/**' release"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.4.4",

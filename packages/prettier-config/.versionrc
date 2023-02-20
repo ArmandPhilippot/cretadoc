@@ -1,0 +1,5 @@
+{
+  "path": ".",
+  "tag-prefix": "@cretadoc/prettier-config@",
+  "releaseCommitMessageFormat": "chore(prettier-config): release v{{currentTag}}"
+}

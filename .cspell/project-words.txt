@@ -3,4 +3,5 @@ creativecommons
 cretadoc
 nodenext
 sublicensable
+versionrc
 waivable
