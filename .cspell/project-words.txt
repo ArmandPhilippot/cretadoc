@@ -1,0 +1,6 @@
+commitlint
+creativecommons
+cretadoc
+nodenext
+sublicensable
+waivable

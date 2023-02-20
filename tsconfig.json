@@ -1,0 +1,65 @@
+{
+  "compilerOptions": {
+    /* Projects */
+    "incremental": true,
+    "tsBuildInfoFile": "./.tsbuildinfo",
+
+    /* Language and Environment */
+    "target": "ESNext",
+    "lib": ["ESNext"],
+    "jsx": "react",
+    "useDefineForClassFields": true,
+
+    /* Modules */
+    "module": "ESNext",
+    "rootDir": ".",
+    "moduleResolution": "nodenext",
+    "baseUrl": ".",
+    "resolveJsonModule": true,
+
+    /* JavaScript Support */
+    "allowJs": false,
+
+    /* Emit */
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "dist",
+    "noEmit": true,
+    "importHelpers": true,
+    "importsNotUsedAsValues": "remove",
+    "downlevelIteration": true,
+    "noEmitHelpers": true,
+
+    /* Interop Constraints */
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Type Checking */
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "useUnknownInCatchVariables": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": false, // Prefer ESlint instead
+    "noUnusedParameters": false, // Prefer ESlint instead
+    "exactOptionalPropertyTypes": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "allowUnreachableCode": false,
+
+    /* Completeness */
+    "skipLibCheck": true
+  },
+  "include": ["./**/*"],
+  "exclude": ["node_modules", "coverage/**"]
+}
