@@ -45,6 +45,25 @@ Or add the config to your `package.json`:
 }
 ```
 
+### With Typescript
+
+In addition to this package, you should install some Typescript specific packages:
+
+```
+pnpm add -D @typescript-eslint/parser @typescript-eslint/eslint-plugin typescript
+```
+
+By default, ESlint is configured to find the nearest `tsconfig.json` file in your project. You can override this behavior and tells ESlint which config should be used by adding the following lines to your ESlint config:
+
+```json
+{
+  "parserOptions": {
+    "project": true,
+    "tsconfigRootDir": __dirname
+  }
+}
+```
+
 ## License
 
 This package is released under the [MIT license](./LICENSE).

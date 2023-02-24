@@ -33,6 +33,8 @@
     "release": "commit-and-tag-version -s --no-verify"
   },
   "peerDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
     "eslint": "^7.23.0 || ^8.0.0"
   },
   "peerDependenciesMeta": {
@@ -41,7 +43,10 @@
     }
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.52.0",
+    "@typescript-eslint/parser": "^5.52.0",
     "commit-and-tag-version": "^11.1.0",
-    "eslint": "^8.34.0"
+    "eslint": "^8.34.0",
+    "typescript": "^4.9.5"
   }
 }
