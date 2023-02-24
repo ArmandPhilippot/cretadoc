@@ -30,6 +30,7 @@
     "lint:spelling": "cspell \"**\" --no-progress",
     "prepare": "husky install",
     "release": "commit-and-tag-version -s",
+    "release:eslint-config": "pnpm --filter './packages/eslint-config/**' release",
     "release:prettier-config": "pnpm --filter './packages/prettier-config/**' release"
   },
   "devDependencies": {

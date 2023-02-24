@@ -1,0 +1,47 @@
+{
+  "name": "@cretadoc/eslint-config",
+  "description": "The ESLint rules for Cretadoc packages.",
+  "keywords": [
+    "cretadoc",
+    "eslint",
+    "eslint-config"
+  ],
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": {
+    "name": "Armand Philippot",
+    "email": "contact@armandphilippot.com",
+    "url": "https://www.armandphilippot.com/"
+  },
+  "homepage": "https://github.com/ArmandPhilippot/cretadoc/tree/main/packages/eslint-config#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com:ArmandPhilippot/cretadoc.git",
+    "directory": "packages/eslint-config"
+  },
+  "bugs": {
+    "url": "https://github.com/ArmandPhilippot/cretadoc/issues"
+  },
+  "packageManager": "pnpm@7.27.1",
+  "engines": {
+    "node": ">=14.6.0"
+  },
+  "main": "index.js",
+  "scripts": {
+    "fix": "eslint --fix --ext .js,.cjs,.mjs,.ts",
+    "lint": "eslint --ext .js,.cjs,.mjs,.ts",
+    "release": "commit-and-tag-version -s --no-verify"
+  },
+  "peerDependencies": {
+    "eslint": "^7.23.0 || ^8.0.0"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "commit-and-tag-version": "^11.1.0",
+    "eslint": "^8.34.0"
+  }
+}

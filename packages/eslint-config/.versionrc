@@ -1,0 +1,5 @@
+{
+  "path": ".",
+  "tag-prefix": "@cretadoc/eslint-config@",
+  "releaseCommitMessageFormat": "chore(eslint-config): release v{{currentTag}}"
+}
