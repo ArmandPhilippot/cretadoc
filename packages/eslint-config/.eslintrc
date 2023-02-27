@@ -1,3 +1,7 @@
 {
-  "extends": "./index.js"
+  "root": true,
+  "extends": "./index.js",
+  "parserOptions": {
+    "sourceType": "script"
+  }
 }

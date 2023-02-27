@@ -13,15 +13,15 @@ Some rules have options. These options are explicitly defined even when they mat
 ## Install
 
 ```
-npm install --save-dev @cretadoc/eslint-config
+npm install --save-dev eslint eslint-plugin-import @cretadoc/eslint-config
 ```
 
 ```
-yarn add -D @cretadoc/eslint-config
+yarn add -D eslint eslint-plugin-import @cretadoc/eslint-config
 ```
 
 ```
-pnpm add -D @cretadoc/eslint-config
+pnpm add -D eslint eslint-plugin-import @cretadoc/eslint-config
 ```
 
 ## Usage
@@ -30,6 +30,7 @@ Create an `.eslintrc` file with:
 
 ```json
 {
+  "root": true,
   "extends": "@cretadoc/eslint-config"
 }
 ```
@@ -40,6 +41,7 @@ Or add the config to your `package.json`:
 {
   "name": "your-package",
   "eslintConfig": {
+    "root": true,
     "extends": "@cretadoc/eslint-config"
   }
 }
