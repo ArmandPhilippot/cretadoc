@@ -49,7 +49,7 @@ Or add the config to your `package.json`:
 
 ### With Typescript
 
-In addition to this package, you should install some Typescript specific packages:
+You should install some specific packages in addition:
 
 ```
 pnpm add -D @typescript-eslint/parser @typescript-eslint/eslint-plugin typescript
@@ -65,6 +65,37 @@ By default, ESlint is configured to find the nearest `tsconfig.json` file in you
   }
 }
 ```
+
+### With React
+
+This package also provides a shareable configuration for React projects. You should install some specific packages in addition:
+
+```
+pnpm add -D eslint-plugin-jsx-a11y eslint-plugin-react eslint-plugin-react-hooks
+```
+
+Create an `.eslintrc` file with:
+
+```json
+{
+  "root": true,
+  "extends": "@cretadoc/eslint-config/react"
+}
+```
+
+Or add the config to your `package.json`:
+
+```json
+{
+  "name": "your-package",
+  "eslintConfig": {
+    "root": true,
+    "extends": "@cretadoc/eslint-config/react"
+  }
+}
+```
+
+If you are using Storybook, you should also install `eslint-plugin-storybook`. However, this plugin does not support MDX files.
 
 ## License
 
