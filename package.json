@@ -37,6 +37,8 @@
   "devDependencies": {
     "@commitlint/cli": "^17.4.4",
     "@commitlint/config-conventional": "^17.4.4",
+    "@cretadoc/eslint-config": "workspace:^1.0.0",
+    "@cretadoc/prettier-config": "workspace:^1.0.0",
     "@typescript-eslint/eslint-plugin": "^5.54.0",
     "@typescript-eslint/parser": "^5.54.0",
     "commit-and-tag-version": "^11.1.0",
