@@ -18,7 +18,7 @@
     "url": "https://github.com/ArmandPhilippot/cretadoc/issues"
   },
   "type": "module",
-  "packageManager": "pnpm@7.27.1",
+  "packageManager": "pnpm@7.28.0",
   "engines": {
     "node": ">=14.6.0"
   },
@@ -30,18 +30,19 @@
     "lint:spelling": "cspell \"**\" --no-progress",
     "prepare": "husky install",
     "release": "commit-and-tag-version -s",
+    "release:api": "pnpm --filter './packages/api/**' release",
     "release:eslint-config": "pnpm --filter './packages/eslint-config/**' release",
     "release:prettier-config": "pnpm --filter './packages/prettier-config/**' release"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.4.4",
     "@commitlint/config-conventional": "^17.4.4",
-    "@typescript-eslint/eslint-plugin": "^5.52.0",
-    "@typescript-eslint/parser": "^5.52.0",
+    "@typescript-eslint/eslint-plugin": "^5.54.0",
+    "@typescript-eslint/parser": "^5.54.0",
     "commit-and-tag-version": "^11.1.0",
     "concurrently": "^7.6.0",
-    "cspell": "^6.26.3",
-    "eslint": "^8.34.0",
+    "cspell": "^6.27.0",
+    "eslint": "^8.35.0",
     "eslint-plugin-import": "^2.27.5",
     "husky": "^8.0.3",
     "lint-staged": "^13.1.2",
