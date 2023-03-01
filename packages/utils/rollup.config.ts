@@ -20,12 +20,12 @@ export default [
     output: [
       {
         ...outputOptions,
-        file: `dist/api.cjs`,
+        file: `dist/utils.cjs`,
         format: 'cjs',
       },
       {
         ...outputOptions,
-        file: `dist/api.mjs`,
+        file: `dist/utils.mjs`,
         format: 'es',
       },
     ],
@@ -39,7 +39,7 @@ export default [
   }),
   bundle({
     output: {
-      file: `dist/api.d.ts`,
+      file: `dist/utils.d.ts`,
       format: 'es',
     },
     plugins: [dts()],
