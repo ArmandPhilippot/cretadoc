@@ -1,6 +1,7 @@
 commitlint
 creativecommons
 cretadoc
+graphiql
 nodenext
 sublicensable
 versionrc

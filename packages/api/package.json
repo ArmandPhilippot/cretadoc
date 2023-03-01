@@ -50,10 +50,18 @@
     "test:watch": "vitest watch",
     "watch": "rollup --config rollup.config.ts --configPlugin rollup-plugin-esbuild --watch"
   },
+  "dependencies": {
+    "@cretadoc/utils": "workspace:^0.1.0",
+    "dataloader": "^2.2.2",
+    "graphql": "^16.6.0",
+    "graphql-yoga": "^3.7.0",
+    "validator": "^13.9.0"
+  },
   "devDependencies": {
     "@cretadoc/eslint-config": "workspace:^1.0.0",
     "@cretadoc/prettier-config": "workspace:^1.0.0",
     "@types/node": "^18.14.2",
+    "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.54.0",
     "@typescript-eslint/parser": "^5.54.0",
     "@vitest/coverage-c8": "^0.29.2",
