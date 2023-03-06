@@ -1,0 +1,5 @@
+{
+  "path": ".",
+  "tag-prefix": "@cretadoc/read-dir@",
+  "releaseCommitMessageFormat": "chore(read-dir): release v{{currentTag}}"
+}

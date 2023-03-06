@@ -1,0 +1,71 @@
+{
+  "name": "@cretadoc/read-dir",
+  "description": "The Cretadoc helper to read directories recursively.",
+  "keywords": [
+    "cretadoc",
+    "read-dir",
+    "walk-dir",
+    "read-dir"
+  ],
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": {
+    "name": "Armand Philippot",
+    "email": "contact@armandphilippot.com",
+    "url": "https://www.armandphilippot.com/"
+  },
+  "homepage": "https://github.com/ArmandPhilippot/cretadoc/tree/main/packages/read-dir#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com:ArmandPhilippot/cretadoc.git",
+    "directory": "packages/read-dir"
+  },
+  "bugs": {
+    "url": "https://github.com/ArmandPhilippot/cretadoc/issues"
+  },
+  "packageManager": "pnpm@7.29.0",
+  "engines": {
+    "node": ">=14.6.0"
+  },
+  "type": "module",
+  "files": [
+    "dist/**"
+  ],
+  "main": "dist/read-dir.cjs",
+  "module": "dist/read-dir.mjs",
+  "types": "dist/read-dir.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/read-dir.cjs",
+      "import": "./dist/read-dir.mjs"
+    }
+  },
+  "scripts": {
+    "build": "pnpm clean && rollup --config rollup.config.ts --configPlugin rollup-plugin-esbuild",
+    "clean": "rimraf ./dist",
+    "fix": "eslint --fix --ext .js,.cjs,.mjs,.ts",
+    "lint": "eslint --ext .js,.cjs,.mjs,.ts",
+    "release": "commit-and-tag-version -s --no-verify",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest watch",
+    "watch": "rollup --config rollup.config.ts --configPlugin rollup-plugin-esbuild --watch"
+  },
+  "devDependencies": {
+    "@cretadoc/eslint-config": "^1.0.0",
+    "@cretadoc/prettier-config": "^1.0.0",
+    "@types/node": "^18.14.2",
+    "@typescript-eslint/eslint-plugin": "^5.54.0",
+    "@typescript-eslint/parser": "^5.54.0",
+    "@vitest/coverage-c8": "^0.29.2",
+    "commit-and-tag-version": "^11.1.0",
+    "eslint": "^8.35.0",
+    "eslint-plugin-import": "^2.27.5",
+    "rimraf": "^4.1.2",
+    "rollup": "^3.17.3",
+    "rollup-plugin-dts": "^5.2.0",
+    "rollup-plugin-esbuild": "^5.0.0",
+    "typescript": "^4.9.5",
+    "vitest": "^0.29.2"
+  }
+}
