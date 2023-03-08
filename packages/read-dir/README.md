@@ -75,8 +75,42 @@ const dir = await readDir(currentPath, { depth: 1, includeFileContents: true });
 console.dir(dir, { depth: undefined });
 ```
 
+## Output
+
+Given `readDir('/full/path/to/dir')`, you could obtain something like:
+
+```js
+{
+  content: {
+    directories: [],
+    files: [
+      {
+        content: undefined,
+        createdAt: '2022-08-03T12:07:05.230Z',
+        extension: '.md',
+        id: 'L2Z1bGwvcGF0aC90by9kaXIvcmVhZG1lLm1k',
+        name: 'readme',
+        path: '/full/path/to/dir/readme.md',
+        type: 'file',
+        updatedAt: '2022-08-03T12:07:09.927Z',
+      }
+    ]
+  },
+  createdAt: '2022-08-03T12:07:05.230Z',
+  id: 'L2Z1bGwvcGF0aC90by9kaXI=',
+  name: 'dir',
+  path: '/full/path/to/dir',
+  type: 'directory',
+  updatedAt: '2022-08-03T12:07:09.927Z',
+}
+```
+
 ## License
 
 This package is released under the [MIT license](./LICENSE).
 
 The documentation (Markdown files) is released under a [Creative Commons license](./LICENSE-docs).
+
+<!---
+cspell:ignoreRegExp /id: '.*'/g
+--->
