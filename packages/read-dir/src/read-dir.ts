@@ -52,12 +52,12 @@ const getCommonData = async (path: string): Promise<CommonData> => {
  * Retrieve a RegularFile object.
  *
  * @param {string} path - The file path.
- * @param {Readonly<ReadDirOptions>} options - The options.
+ * @param {Omit<Readonly<ReadDirOptions>, 'depth'>} options - The options.
  * @returns {Promise<Maybe<RegularFile>>} The file data.
  */
 const getRegularFile = async (
   path: string,
-  { extensions, includeFileContents }: Readonly<ReadDirOptions>
+  { extensions, includeFileContents }: Omit<Readonly<ReadDirOptions>, 'depth'>
 ): Promise<Maybe<RegularFile>> => {
   const commonData = await getCommonData(path);
   const { ext, name } = parse(path);
@@ -141,13 +141,19 @@ const removeRegularFiles = (
  *
  * @param {string} path - The directory path.
  * @param {Readonly<ReadDirOptions>} options - The options.
- * @returns {Promise<DirectoryContents>} The directory contents.
+ * @returns {Promise<Maybe<DirectoryContents>>} The directory contents.
  */
 const getDirContents = async (
   path: string,
-  options: Readonly<ReadDirOptions>
-): Promise<DirectoryContents> => {
-  const dirContents = await getDirAndFilesIn(path, options);
+  { depth, ...options }: Readonly<ReadDirOptions>
+): Promise<Maybe<DirectoryContents>> => {
+  const depthLimit = 0;
+  const dirContents =
+    !depth || depth > depthLimit
+      ? await getDirAndFilesIn(path, { depth, ...options })
+      : undefined;
+
+  if (!dirContents) return undefined;
 
   return {
     directories: dirContents.filter(removeRegularFiles),
@@ -164,10 +170,15 @@ const getDirContents = async (
  */
 const getDirectory = async (
   path: string,
-  options: Readonly<ReadDirOptions>
+  { depth, ...options }: Readonly<ReadDirOptions>
 ): Promise<Directory> => {
   const commonData = await getCommonData(path);
-  const content = await getDirContents(path, options);
+  const depthCount = 1;
+  const updatedDepth = depth === undefined ? undefined : depth - depthCount;
+  const content = await getDirContents(path, {
+    depth: updatedDepth,
+    ...options,
+  });
 
   return {
     ...commonData,

@@ -41,6 +41,8 @@ const filesFixture: Array<Fixture<'file'>> = [
   { path: join(fixturesPath, './commodi/nested.md'), type: 'file' },
   { path: join(fixturesPath, './ipsa/commodi/atque.json'), type: 'file' },
 ];
+const rootDirectories = getRootFixturesFrom(directoriesFixture, fixturesPath);
+const rootFiles = getRootFixturesFrom(filesFixture, fixturesPath);
 
 describe('read-dir', () => {
   beforeAll(async () => {
@@ -67,14 +69,9 @@ describe('read-dir', () => {
 
   it('returns the directory data', async () => {
     const dir = await readDir(fixturesPath);
-    const rootDirectories = getRootFixturesFrom(
-      directoriesFixture,
-      fixturesPath
-    );
-    const rootFiles = getRootFixturesFrom(filesFixture, fixturesPath);
 
-    expect(dir.content.directories.length).toBe(rootDirectories.length);
-    expect(dir.content.files.length).toBe(rootFiles.length);
+    expect(dir.content?.directories.length).toBe(rootDirectories.length);
+    expect(dir.content?.files.length).toBe(rootFiles.length);
     expect(dir.createdAt).toBeTruthy();
     expect(dir.id).toBe(generateIdFrom(fixturesPath));
     expect(dir.name).toBe(basename(fixturesPath));
@@ -87,11 +84,11 @@ describe('read-dir', () => {
   it('returns the files contents if the option is set', async () => {
     const dir = await readDir(fixturesPath, { includeFileContents: true });
 
-    expect(dir.content.files.every((file) => file.content !== undefined)).toBe(
+    expect(dir.content?.files.every((file) => file.content !== undefined)).toBe(
       true
     );
     expect(
-      dir.content.files.find((file) => file.name === 'README')?.content ===
+      dir.content?.files.find((file) => file.name === 'README')?.content ===
         readmeContent
     ).toBe(true);
     expect.assertions(2);
@@ -105,10 +102,38 @@ describe('read-dir', () => {
     const isMarkdownFile = (file: RegularFile) =>
       file.extension === markdownExtension;
     const isDirOnlyHasMarkdownFiles = (subDir: Directory) =>
-      subDir.content.files.every(isMarkdownFile);
+      subDir.content?.files.every(isMarkdownFile);
 
-    expect(dir.content.files.every(isMarkdownFile)).toBe(true);
-    expect(dir.content.directories.every(isDirOnlyHasMarkdownFiles)).toBe(true);
+    expect(dir.content?.files.every(isMarkdownFile)).toBe(true);
+    expect(dir.content?.directories.every(isDirOnlyHasMarkdownFiles)).toBe(
+      true
+    );
     expect.assertions(2);
+  });
+
+  it('respects the given depth limit', async () => {
+    const rootDirOnly = await readDir(fixturesPath, {
+      depth: 0,
+    });
+
+    expect(rootDirOnly.content).toBeUndefined();
+
+    const rootDirAndDirectChildren = await readDir(fixturesPath, {
+      depth: 1,
+    });
+
+    expect(rootDirAndDirectChildren.content?.directories.length).toBe(
+      rootDirectories.length
+    );
+    expect(rootDirAndDirectChildren.content?.files.length).toBe(
+      rootFiles.length
+    );
+    expect(
+      rootDirAndDirectChildren.content?.directories.every(
+        (subDir) => subDir.content === undefined
+      )
+    ).toBe(true);
+
+    expect.assertions(4);
   });
 });

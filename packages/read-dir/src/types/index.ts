@@ -1,4 +1,3 @@
-import type { Maybe } from '@cretadoc/utils';
 import type { FILE_TYPES, VALID_FILE_TYPES } from '../utils/constants';
 
 export type FileType = (typeof FILE_TYPES)[number];
@@ -28,7 +27,7 @@ export type DirectoryContents = {
 };
 
 export type RegularFileOrDirectory<T extends ValidFileType> = Dates & {
-  content: T extends 'directory' ? DirectoryContents : Maybe<string>;
+  content?: T extends 'directory' ? DirectoryContents : string;
   /**
    * The file extension.
    */
@@ -55,6 +54,12 @@ export type Directory = RegularFileOrDirectory<'directory'>;
 export type RegularFile = RegularFileOrDirectory<'file'>;
 
 export type ReadDirOptions = {
+  /**
+   * Define the maximum number of recursion.
+   *
+   * @default undefined
+   */
+  depth: number | undefined;
   /**
    * Only include files with the given extensions.
    *
