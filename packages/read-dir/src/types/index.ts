@@ -1,4 +1,5 @@
-import type { FILE_TYPES, VALID_FILE_TYPES } from '../utils/constants';
+export const FILE_TYPES = ['directory', 'file', 'unknown'] as const;
+export const VALID_FILE_TYPES = ['directory', 'file'] as const;
 
 export type FileType = (typeof FILE_TYPES)[number];
 export type ValidFileType = (typeof VALID_FILE_TYPES)[number];
