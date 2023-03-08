@@ -4,6 +4,17 @@ export type FileType = (typeof FILE_TYPES)[number];
 export type ValidFileType = (typeof VALID_FILE_TYPES)[number];
 export type Extension = `.${string}` | '';
 
+export type Dates = {
+  /**
+   * The creation date registered by the filesystem.
+   */
+  createdAt: string;
+  /**
+   * The update date registered by the filesystem.
+   */
+  updatedAt: string;
+};
+
 export type DirectoryContents = {
   /**
    * The subdirectories inside the directory.
@@ -15,11 +26,8 @@ export type DirectoryContents = {
   files: RegularFile[];
 };
 
-export type RegularFileOrDirectory<T extends ValidFileType> = {
-  /**
-   * The creation date registered by the filesystem.
-   */
-  createdAt: string;
+export type RegularFileOrDirectory<T extends ValidFileType> = Dates & {
+  content?: T extends 'directory' ? DirectoryContents : never;
   /**
    * The file extension.
    */
@@ -40,10 +48,6 @@ export type RegularFileOrDirectory<T extends ValidFileType> = {
    * The filetype.
    */
   type: T;
-  /**
-   * The update date registered by the filesystem.
-   */
-  updatedAt: string;
 };
 
 export type Directory = RegularFileOrDirectory<'directory'>;

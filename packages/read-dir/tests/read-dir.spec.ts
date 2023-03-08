@@ -1,0 +1,86 @@
+/* eslint-disable max-statements */
+/* eslint-disable @typescript-eslint/no-magic-numbers */
+import { rm } from 'fs/promises';
+import { basename, dirname, join } from 'path';
+import { fileURLToPath } from 'url';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { readDir } from '../src';
+import { generateIdFrom } from '../src/utils/helpers/strings';
+import { createFixtures, type Fixture } from './utils/fixtures';
+import { getRootFixturesFrom } from './utils/helpers';
+
+const currentPath = fileURLToPath(import.meta.url);
+const dirPath = dirname(currentPath);
+const fixturesPath = join(dirPath, './fixtures/');
+const directoriesFixture: Array<Fixture<'directory'>> = [
+  { path: join(fixturesPath, './qui'), type: 'directory' },
+  { path: join(fixturesPath, './commodi'), type: 'directory' },
+  {
+    path: join(fixturesPath, './ipsa'),
+    symlinkTo: join(fixturesPath, './dir-symlink'),
+    type: 'directory',
+  },
+  { path: join(fixturesPath, './ipsa/numquam'), type: 'directory' },
+  { path: join(fixturesPath, './ipsa/commodi'), type: 'directory' },
+];
+const readmeContent = '# Cretadoc auto-generated fixture';
+const filesFixture: Array<Fixture<'file'>> = [
+  {
+    path: join(fixturesPath, './tenetur.txt'),
+    symlinkTo: join(fixturesPath, './symlink.txt'),
+    type: 'file',
+  },
+  {
+    content: readmeContent,
+    path: join(fixturesPath, './README.md'),
+    type: 'file',
+  },
+  { path: join(fixturesPath, './aut.js'), type: 'file' },
+  { path: join(fixturesPath, './.prettierrc'), type: 'file' },
+  { path: join(fixturesPath, './qui/nested.txt'), type: 'file' },
+  { path: join(fixturesPath, './commodi/nested.md'), type: 'file' },
+  { path: join(fixturesPath, './ipsa/commodi/atque.json'), type: 'file' },
+];
+
+describe('read-dir', () => {
+  beforeAll(async () => {
+    await createFixtures([...directoriesFixture, ...filesFixture]);
+  });
+
+  afterAll(async () => {
+    await rm(fixturesPath, { recursive: true, force: true });
+  });
+
+  it('throws an error if the path does not exist', async () => {
+    await expect(async () =>
+      readDir('./non-existing-path')
+    ).rejects.toThrowError();
+    expect.assertions(1);
+  });
+
+  it('throws an error if the path is a file', async () => {
+    await expect(async () =>
+      readDir(join(dirPath, './read-dir.spec.ts'))
+    ).rejects.toThrowError();
+    expect.assertions(1);
+  });
+
+  it('returns the directory data', async () => {
+    const dir = await readDir(fixturesPath);
+    const rootDirectories = getRootFixturesFrom(
+      directoriesFixture,
+      fixturesPath
+    );
+    const rootFiles = getRootFixturesFrom(filesFixture, fixturesPath);
+
+    expect(dir.content?.directories.length).toBe(rootDirectories.length);
+    expect(dir.content?.files.length).toBe(rootFiles.length);
+    expect(dir.createdAt).toBeTruthy();
+    expect(dir.id).toBe(generateIdFrom(fixturesPath));
+    expect(dir.name).toBe(basename(fixturesPath));
+    expect(dir.path).toBe(fixturesPath);
+    expect(dir.type).toBe('directory');
+    expect(dir.updatedAt).toBeTruthy();
+    expect.assertions(8);
+  });
+});

@@ -1,74 +1,14 @@
-import type { Dirent } from 'fs';
 import { readdir, stat } from 'fs/promises';
-import { basename, extname, join, sep } from 'path';
+import { basename, join, parse } from 'path';
+import { removeUndefined } from '@cretadoc/utils';
 import type {
+  Dates,
   Directory,
   DirectoryContents,
   Extension,
-  FileType,
   RegularFile,
-  ValidFileType,
 } from './types';
-
-/**
- * Retrieve the file type of a directory entry.
- *
- * @param {Dirent} entry - A directory entry.
- * @returns {FileType} The matching file type.
- */
-const getFileTypeOf = (entry: Dirent): FileType => {
-  if (entry.isDirectory()) return 'directory';
-  if (entry.isFile()) return 'file';
-  return 'unknown';
-};
-
-type EntryPathAndType = {
-  path: string;
-  type: FileType;
-};
-
-/**
- * Retrieve the path and types of each directory entries.
- *
- * @param {Dirent[]} entries - The directory entries.
- * @param {string} parent - The parent path.
- * @returns {EntryPathAndType[]} The path and type of each entries.
- */
-const getPathAndTypeFrom = (
-  entries: Dirent[],
-  parent: string
-): EntryPathAndType[] =>
-  entries.map((entry) => {
-    const fileType = getFileTypeOf(entry);
-
-    return {
-      path: join(parent, entry.name),
-      type: fileType,
-    };
-  });
-
-type ValidEntryPathAndType = {
-  path: string;
-  type: ValidFileType;
-};
-
-/**
- * Method to filter an array and remove entries with `unknown` type.
- *
- * @param {EntryPathAndType} entry - A object with path and type.
- * @returns {boolean} True if it is a `ValidEntryPathAndType` object.
- */
-const removeEntriesWithUnknownType = (
-  entry: EntryPathAndType
-): entry is ValidEntryPathAndType => {
-  if (entry.type === 'unknown') return false;
-  return true;
-};
-
-type Dates = {
-  createdAt: string;
-  updatedAt: string;
-};
+import { generateIdFrom } from './utils/helpers/strings';
 
 /**
  * Retrieve the creation date and the update date of a path.
@@ -85,42 +25,73 @@ const getDatesFrom = async (path: string): Promise<Dates> => {
   };
 };
 
+type CommonData = Pick<
+  Directory | RegularFile,
+  'createdAt' | 'id' | 'path' | 'updatedAt'
+>;
+
 /**
- * Transform a path to a buffer.
- *
- * @param {string} path - A path.
- * @returns {string} An id.
+ * Retrieve the data shared by directories and files.
+ * @param {string} path - A directory or file path.
+ * @returns {Promise<CommonData>} The common data.
  */
-const generateIdFrom = (path: string) => Buffer.from(path).toString('base64');
+const getCommonData = async (path: string): Promise<CommonData> => {
+  const { createdAt, updatedAt } = await getDatesFrom(path);
+
+  return {
+    createdAt,
+    id: generateIdFrom(path),
+    path,
+    updatedAt,
+  };
+};
+
+/**
+ * Retrieve a RegularFile object.
+ *
+ * @param {string} path - The file path.
+ * @returns {Promise<RegularFile>} The file data.
+ */
+const getRegularFile = async (path: string): Promise<RegularFile> => {
+  const commonData = await getCommonData(path);
+  const { ext, name } = parse(path);
+  const extension = ext as Extension;
+
+  return {
+    ...commonData,
+    extension,
+    name,
+    type: 'file',
+  };
+};
 
 /**
  * Retrieve an array of directories and regular files.
  *
- * @param {ValidEntryPathAndType[]} entries - An array of path and file type.
+ * @param {string} path - The directory path
  * @returns {Promise<Array<Directory | RegularFile>>} The directories and files.
  */
-const getDirAndFilesFrom = async (
-  entries: ValidEntryPathAndType[]
+const getDirAndFilesIn = async (
+  path: string
 ): Promise<Array<Directory | RegularFile>> => {
-  const promises = entries.map(async ({ path, type }) => {
-    const { createdAt, updatedAt } = await getDatesFrom(path);
-    const extension = extname(path) as Extension;
-
-    const fileOrDir:
-      | Omit<Directory, 'extension' | 'type'>
-      | Omit<RegularFile, 'extension' | 'type'> = {
-      createdAt,
-      id: generateIdFrom(path),
-      name: basename(path).replace(extension, ''),
-      path,
-      updatedAt,
-    };
-
-    if (type === 'directory') return { ...fileOrDir, type };
-    return { ...fileOrDir, extension, type };
+  const dirEntries = await readdir(path, {
+    encoding: 'utf8',
+    withFileTypes: true,
   });
 
-  return Promise.all(promises);
+  const promises = dirEntries.map(async (entry) => {
+    const fullPath = join(path, entry.name);
+
+    /* eslint-disable-next-line @typescript-eslint/no-use-before-define -- The
+    circular reference is needed to avoid repeats. */
+    if (entry.isDirectory()) return getDirectory(fullPath);
+    if (entry.isFile()) return getRegularFile(fullPath);
+    return undefined;
+  });
+
+  const awaitedPromises = await Promise.all(promises);
+
+  return awaitedPromises.filter(removeUndefined);
 };
 
 /**
@@ -156,37 +127,29 @@ const removeRegularFiles = (
  * @returns {Promise<DirectoryContents>} The directory contents.
  */
 const getDirContents = async (path: string): Promise<DirectoryContents> => {
-  const dirEntries = await readdir(path, {
-    encoding: 'utf8',
-    withFileTypes: true,
-  });
-  const entriesPathAndType = getPathAndTypeFrom(dirEntries, path);
-  const validEntries = entriesPathAndType.filter(removeEntriesWithUnknownType);
-  const directoriesAndFiles = await getDirAndFilesFrom(validEntries);
+  const dirContents = await getDirAndFilesIn(path);
 
   return {
-    directories: directoriesAndFiles.filter(removeRegularFiles),
-    files: directoriesAndFiles.filter(removeDirectories),
+    directories: dirContents.filter(removeRegularFiles),
+    files: dirContents.filter(removeDirectories),
   };
 };
 
 /**
- * Remove the root path from a directory or regular file path.
+ * Retrieve a Directory object.
  *
- * @param {T} fileOrDir - Either a directory or a regular file.
- * @param {string} rootPath - The root path.
- * @returns {T} Either the directory or regular file with truncated path.
+ * @param {string} path - The directory path.
+ * @returns {Promise<Directory>} The directory data.
  */
-const removeRootPathFrom = <T extends Directory | RegularFile>(
-  fileOrDir: T,
-  rootPath: string
-): T => {
-  const path = fileOrDir.path.replace(rootPath, `.${sep}`);
+const getDirectory = async (path: string): Promise<Directory> => {
+  const commonData = await getCommonData(path);
+  const content = await getDirContents(path);
 
   return {
-    ...fileOrDir,
-    id: generateIdFrom(path),
-    path,
+    ...commonData,
+    content,
+    name: basename(path),
+    type: 'directory',
   };
 };
 
@@ -194,15 +157,7 @@ const removeRootPathFrom = <T extends Directory | RegularFile>(
  * Walk through a directory.
  *
  * @param {string} path - The directory path.
- * @returns {Promise<DirectoryContents>} The directory contents.
+ * @returns {Promise<Directory>} The directory data.
  */
-export const readDir = async (path: string): Promise<DirectoryContents> => {
-  const dirContents = await getDirContents(path);
-
-  return {
-    directories: dirContents.directories.map((dir) =>
-      removeRootPathFrom(dir, path)
-    ),
-    files: dirContents.files.map((file) => removeRootPathFrom(file, path)),
-  };
-};
+export const readDir = async (path: string): Promise<Directory> =>
+  getDirectory(path);
