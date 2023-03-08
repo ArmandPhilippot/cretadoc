@@ -73,8 +73,8 @@ describe('read-dir', () => {
     );
     const rootFiles = getRootFixturesFrom(filesFixture, fixturesPath);
 
-    expect(dir.content?.directories.length).toBe(rootDirectories.length);
-    expect(dir.content?.files.length).toBe(rootFiles.length);
+    expect(dir.content.directories.length).toBe(rootDirectories.length);
+    expect(dir.content.files.length).toBe(rootFiles.length);
     expect(dir.createdAt).toBeTruthy();
     expect(dir.id).toBe(generateIdFrom(fixturesPath));
     expect(dir.name).toBe(basename(fixturesPath));
@@ -82,5 +82,18 @@ describe('read-dir', () => {
     expect(dir.type).toBe('directory');
     expect(dir.updatedAt).toBeTruthy();
     expect.assertions(8);
+  });
+
+  it('returns the files contents if the option is set', async () => {
+    const dir = await readDir(fixturesPath, { includeFileContents: true });
+
+    expect(dir.content.files.every((file) => file.content !== undefined)).toBe(
+      true
+    );
+    expect(
+      dir.content.files.find((file) => file.name === 'README')?.content ===
+        readmeContent
+    ).toBe(true);
+    expect.assertions(2);
   });
 });

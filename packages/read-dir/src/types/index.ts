@@ -1,3 +1,4 @@
+import type { Maybe } from '@cretadoc/utils';
 import type { FILE_TYPES, VALID_FILE_TYPES } from '../utils/constants';
 
 export type FileType = (typeof FILE_TYPES)[number];
@@ -27,7 +28,7 @@ export type DirectoryContents = {
 };
 
 export type RegularFileOrDirectory<T extends ValidFileType> = Dates & {
-  content?: T extends 'directory' ? DirectoryContents : never;
+  content: T extends 'directory' ? DirectoryContents : Maybe<string>;
   /**
    * The file extension.
    */
@@ -52,3 +53,12 @@ export type RegularFileOrDirectory<T extends ValidFileType> = Dates & {
 
 export type Directory = RegularFileOrDirectory<'directory'>;
 export type RegularFile = RegularFileOrDirectory<'file'>;
+
+export type ReadDirOptions = {
+  /**
+   * Should we include the contents of the files?
+   *
+   * @default false
+   */
+  includeFileContents: boolean;
+};

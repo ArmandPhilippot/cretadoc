@@ -1,4 +1,4 @@
-import { readdir, stat } from 'fs/promises';
+import { readdir, readFile, stat } from 'fs/promises';
 import { basename, join, parse } from 'path';
 import { removeUndefined } from '@cretadoc/utils';
 import type {
@@ -6,8 +6,10 @@ import type {
   Directory,
   DirectoryContents,
   Extension,
+  ReadDirOptions,
   RegularFile,
 } from './types';
+import { mergeOptionsWithDefault } from './utils/helpers/config';
 import { generateIdFrom } from './utils/helpers/strings';
 
 /**
@@ -50,15 +52,23 @@ const getCommonData = async (path: string): Promise<CommonData> => {
  * Retrieve a RegularFile object.
  *
  * @param {string} path - The file path.
+ * @param {boolean} [includeFileContents] - Should we read file contents?
  * @returns {Promise<RegularFile>} The file data.
  */
-const getRegularFile = async (path: string): Promise<RegularFile> => {
+const getRegularFile = async (
+  path: string,
+  includeFileContents?: boolean
+): Promise<RegularFile> => {
   const commonData = await getCommonData(path);
   const { ext, name } = parse(path);
   const extension = ext as Extension;
+  const content = includeFileContents
+    ? await readFile(path, 'utf8')
+    : undefined;
 
   return {
     ...commonData,
+    content,
     extension,
     name,
     type: 'file',
@@ -69,10 +79,12 @@ const getRegularFile = async (path: string): Promise<RegularFile> => {
  * Retrieve an array of directories and regular files.
  *
  * @param {string} path - The directory path
+ * @param {Readonly<ReadDirOptions>} options - The options
  * @returns {Promise<Array<Directory | RegularFile>>} The directories and files.
  */
 const getDirAndFilesIn = async (
-  path: string
+  path: string,
+  options: Readonly<ReadDirOptions>
 ): Promise<Array<Directory | RegularFile>> => {
   const dirEntries = await readdir(path, {
     encoding: 'utf8',
@@ -84,8 +96,9 @@ const getDirAndFilesIn = async (
 
     /* eslint-disable-next-line @typescript-eslint/no-use-before-define -- The
     circular reference is needed to avoid repeats. */
-    if (entry.isDirectory()) return getDirectory(fullPath);
-    if (entry.isFile()) return getRegularFile(fullPath);
+    if (entry.isDirectory()) return getDirectory(fullPath, options);
+    if (entry.isFile())
+      return getRegularFile(fullPath, options.includeFileContents);
     return undefined;
   });
 
@@ -124,10 +137,14 @@ const removeRegularFiles = (
  * Retrieve all the contents from a directory.
  *
  * @param {string} path - The directory path.
+ * @param {Readonly<ReadDirOptions>} options - The options.
  * @returns {Promise<DirectoryContents>} The directory contents.
  */
-const getDirContents = async (path: string): Promise<DirectoryContents> => {
-  const dirContents = await getDirAndFilesIn(path);
+const getDirContents = async (
+  path: string,
+  options: Readonly<ReadDirOptions>
+): Promise<DirectoryContents> => {
+  const dirContents = await getDirAndFilesIn(path, options);
 
   return {
     directories: dirContents.filter(removeRegularFiles),
@@ -139,11 +156,15 @@ const getDirContents = async (path: string): Promise<DirectoryContents> => {
  * Retrieve a Directory object.
  *
  * @param {string} path - The directory path.
+ * @param {Readonly<ReadDirOptions>} options - The options.
  * @returns {Promise<Directory>} The directory data.
  */
-const getDirectory = async (path: string): Promise<Directory> => {
+const getDirectory = async (
+  path: string,
+  options: Readonly<ReadDirOptions>
+): Promise<Directory> => {
   const commonData = await getCommonData(path);
-  const content = await getDirContents(path);
+  const content = await getDirContents(path, options);
 
   return {
     ...commonData,
@@ -157,7 +178,14 @@ const getDirectory = async (path: string): Promise<Directory> => {
  * Walk through a directory.
  *
  * @param {string} path - The directory path.
+ * @param {Partial<ReadDirOptions>} [options] - The options.
  * @returns {Promise<Directory>} The directory data.
  */
-export const readDir = async (path: string): Promise<Directory> =>
-  getDirectory(path);
+export const readDir = async (
+  path: string,
+  options?: Partial<ReadDirOptions>
+): Promise<Directory> => {
+  const mergedOptions = mergeOptionsWithDefault(options);
+
+  return getDirectory(path, mergedOptions);
+};
