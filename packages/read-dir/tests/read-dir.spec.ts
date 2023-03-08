@@ -4,7 +4,7 @@ import { rm } from 'fs/promises';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { readDir } from '../src';
+import { type Directory, readDir, type RegularFile } from '../src';
 import { generateIdFrom } from '../src/utils/helpers/strings';
 import { createFixtures, type Fixture } from './utils/fixtures';
 import { getRootFixturesFrom } from './utils/helpers';
@@ -94,6 +94,21 @@ describe('read-dir', () => {
       dir.content.files.find((file) => file.name === 'README')?.content ===
         readmeContent
     ).toBe(true);
+    expect.assertions(2);
+  });
+
+  it('returns only files with the given extensions', async () => {
+    const markdownExtension = '.md';
+    const dir = await readDir(fixturesPath, {
+      extensions: [markdownExtension],
+    });
+    const isMarkdownFile = (file: RegularFile) =>
+      file.extension === markdownExtension;
+    const isDirOnlyHasMarkdownFiles = (subDir: Directory) =>
+      subDir.content.files.every(isMarkdownFile);
+
+    expect(dir.content.files.every(isMarkdownFile)).toBe(true);
+    expect(dir.content.directories.every(isDirOnlyHasMarkdownFiles)).toBe(true);
     expect.assertions(2);
   });
 });

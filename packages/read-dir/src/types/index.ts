@@ -56,6 +56,12 @@ export type RegularFile = RegularFileOrDirectory<'file'>;
 
 export type ReadDirOptions = {
   /**
+   * Only include files with the given extensions.
+   *
+   * @default undefined
+   */
+  extensions: Extension[] | undefined;
+  /**
    * Should we include the contents of the files?
    *
    * @default false

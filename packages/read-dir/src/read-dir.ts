@@ -1,6 +1,6 @@
 import { readdir, readFile, stat } from 'fs/promises';
 import { basename, join, parse } from 'path';
-import { removeUndefined } from '@cretadoc/utils';
+import { type Maybe, removeUndefined } from '@cretadoc/utils';
 import type {
   Dates,
   Directory,
@@ -52,16 +52,20 @@ const getCommonData = async (path: string): Promise<CommonData> => {
  * Retrieve a RegularFile object.
  *
  * @param {string} path - The file path.
- * @param {boolean} [includeFileContents] - Should we read file contents?
- * @returns {Promise<RegularFile>} The file data.
+ * @param {Readonly<ReadDirOptions>} options - The options.
+ * @returns {Promise<Maybe<RegularFile>>} The file data.
  */
 const getRegularFile = async (
   path: string,
-  includeFileContents?: boolean
-): Promise<RegularFile> => {
+  { extensions, includeFileContents }: Readonly<ReadDirOptions>
+): Promise<Maybe<RegularFile>> => {
   const commonData = await getCommonData(path);
   const { ext, name } = parse(path);
   const extension = ext as Extension;
+  const isValidExtension = extensions ? extensions.includes(extension) : true;
+
+  if (!isValidExtension) return undefined;
+
   const content = includeFileContents
     ? await readFile(path, 'utf8')
     : undefined;
@@ -97,8 +101,7 @@ const getDirAndFilesIn = async (
     /* eslint-disable-next-line @typescript-eslint/no-use-before-define -- The
     circular reference is needed to avoid repeats. */
     if (entry.isDirectory()) return getDirectory(fullPath, options);
-    if (entry.isFile())
-      return getRegularFile(fullPath, options.includeFileContents);
+    if (entry.isFile()) return getRegularFile(fullPath, options);
     return undefined;
   });
 
