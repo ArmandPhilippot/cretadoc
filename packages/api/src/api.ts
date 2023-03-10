@@ -1,7 +1,14 @@
 import type { PartialDeep } from '@cretadoc/utils';
 import { createYoga } from 'graphql-yoga';
 import { schema } from './schema';
-import type { APIConfig, APIInstance } from './types';
+import { PagesRepository } from './schema/pages/pages.repository';
+import { initLoaders } from './schema/schema.loaders';
+import type {
+  APIConfig,
+  APIContext,
+  APIDataConfig,
+  APIInstance,
+} from './types';
 import { DEFAULT_ENDPOINT, DEFAULT_GRAPHIQL } from './utils/constants';
 
 /**
@@ -36,6 +43,24 @@ const mergeConfigWithDefaults = (
 };
 
 /**
+ * Create the API context.
+ *
+ * @param {APIDataConfig} data - The data configuration object.
+ * @returns {APIContext} The GraphQL context.
+ */
+const initContext = ({ pages }: APIDataConfig): APIContext => {
+  const pagesRepository = pages ? new PagesRepository(pages) : undefined;
+
+  const loaders = initLoaders({
+    pages: pagesRepository,
+  });
+
+  return {
+    loaders,
+  };
+};
+
+/**
  * Create an instance of the API.
  *
  * @param {PartialDeep<APIConfig>} [config] - An API configuration object.
@@ -43,8 +68,10 @@ const mergeConfigWithDefaults = (
  */
 export const createAPI = (config?: PartialDeep<APIConfig>): APIInstance => {
   const mergedConfig = mergeConfigWithDefaults(config);
+  const context = initContext({ ...config?.data });
 
   return createYoga({
+    context,
     graphiql: mergedConfig.graphiql,
     graphqlEndpoint: mergedConfig.endpoint,
     schema,
