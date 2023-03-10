@@ -1,7 +1,10 @@
 commitlint
 creativecommons
 cretadoc
+dotenv
+eslintcache
 graphiql
+pnpm
 nodenext
 sublicensable
 versionrc
