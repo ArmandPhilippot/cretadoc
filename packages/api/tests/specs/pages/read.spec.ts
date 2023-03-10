@@ -4,6 +4,7 @@ import request from 'supertest';
 import { afterAll, beforeAll, describe, it } from 'vitest';
 import type { PageInput } from '../../../src/types';
 import { DEFAULT_ENDPOINT } from '../../../src/utils/constants';
+import { error } from '../../../src/utils/errors/messages';
 import { pagesFixtures } from '../../fixtures/pages';
 import { expect } from '../../utils';
 import { PAGES_FIXTURES_DIR } from '../../utils/constants';
@@ -57,5 +58,23 @@ describe('page', () => {
       expect(response.body.data).toReturnPage({ page: firstPage });
 
     expect.assertions(1);
+  });
+
+  it('returns an error if both id and name are missing', async () => {
+    const response = await sendPageQuery();
+
+    expect(response.body).toReturnException({
+      code: 'BAD_USER_INPUT',
+      message: error.missing.input,
+    });
+  });
+
+  it('returns an error if both id and name are given', async () => {
+    const response = await sendPageQuery({ id: 'anyId', name: 'anyName' });
+
+    expect(response.body).toReturnException({
+      code: 'BAD_USER_INPUT',
+      message: error.invalid.input,
+    });
   });
 });
