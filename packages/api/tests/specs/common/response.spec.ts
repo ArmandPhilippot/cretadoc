@@ -1,12 +1,15 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import request from 'supertest';
 import { describe, it } from 'vitest';
-import { DEFAULT_ENDPOINT } from '../../src/utils/constants';
-import { expect } from '../utils';
-import { createAPIServer } from '../utils/helpers';
+import { DEFAULT_ENDPOINT } from '../../../src/utils/constants';
+import { expect } from '../../utils';
+import { createAPIServer } from '../../utils/helpers';
 
 describe('response', () => {
   it('returns a successful response when using the default endpoint', async () => {
     const api = createAPIServer({});
+    api.start();
+
     const response = await request(api.instance)
       .post(DEFAULT_ENDPOINT)
       .send({ query: '' });
@@ -14,8 +17,8 @@ describe('response', () => {
     const text = 'errors'; // We are not passing a query.
 
     expect(response).toRespondWith({ statusCode: 200, text });
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     expect.assertions(1);
+    api.stop();
   });
 
   it('returns a successful response when using a custom endpoint', async () => {
@@ -27,6 +30,8 @@ describe('response', () => {
       );
 
     const api = createAPIServer({ endpoint: customEndpoint });
+    api.start();
+
     const response = await request(api.instance)
       .post(customEndpoint)
       .send({ query: '' });
@@ -34,8 +39,8 @@ describe('response', () => {
     const text = 'errors'; // Without query we should have errors.
 
     expect(response).toRespondWith({ statusCode: 200, text });
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     expect.assertions(1);
+    api.stop();
   });
 
   it('returns a 404 response when using a wrong endpoint', async () => {
@@ -47,6 +52,8 @@ describe('response', () => {
       );
 
     const api = createAPIServer({});
+    api.start();
+
     const response = await request(api.instance)
       .post(customEndpoint)
       .send({ query: '' });
@@ -54,7 +61,7 @@ describe('response', () => {
     const text = ''; // Should be empty.
 
     expect(response).toRespondWith({ statusCode: 404, text });
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     expect.assertions(1);
+    api.stop();
   });
 });

@@ -1,21 +1,25 @@
 import { createServer, type Server } from 'http';
 import type { Nullable } from '@cretadoc/utils';
-import { createAPI } from '../../../src';
+import { type APIConfig, createAPI } from '../../../src';
 import { DEFAULT_ENDPOINT } from '../../../src/utils/constants';
 
-type CreateAPIServerConfig = {
-  endpoint?: string;
+type CreateAPIServerConfig = Pick<Partial<APIConfig>, 'data' | 'endpoint'> & {
   hostname?: string;
   port?: number;
 };
 
 export const createAPIServer = ({
+  data,
   endpoint = DEFAULT_ENDPOINT,
   hostname = 'localhost',
   port = 3100,
 }: CreateAPIServerConfig) => {
-  const api = createAPI({ endpoint });
-  const server = createServer(() => api);
+  const api = createAPI({ data, endpoint });
+  const server = createServer((req, res) => {
+    void (async () => {
+      await api(req, res);
+    })();
+  });
   let serverInstance: Nullable<Server> = null;
 
   const start = () => {
