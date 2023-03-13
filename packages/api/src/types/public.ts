@@ -1,5 +1,5 @@
 import type { YogaServerInstance } from 'graphql-yoga';
-import type { API_ERROR_CODE } from 'src/utils/constants';
+import type { API_ERROR_CODE } from '../utils/constants';
 import type { APIContext, ServerContext } from './contexts';
 
 /**

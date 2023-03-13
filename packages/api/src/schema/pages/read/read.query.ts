@@ -1,5 +1,5 @@
 import { type GraphQLFieldConfig, GraphQLString } from 'graphql';
-import type { APIContext, PageInput } from '../../../types';
+import type { APIContext, Page, QueryInput } from '../../../types';
 import {
   InputValidationError,
   LoadersError,
@@ -7,7 +7,7 @@ import {
 import { error } from '../../../utils/errors/messages';
 import { PageType } from '../pages.types';
 
-export const page: GraphQLFieldConfig<null, APIContext, Partial<PageInput>> = {
+export const page: GraphQLFieldConfig<null, APIContext, QueryInput<Page>> = {
   type: PageType,
   args: {
     id: {
@@ -21,7 +21,7 @@ export const page: GraphQLFieldConfig<null, APIContext, Partial<PageInput>> = {
   },
   resolve: async (_source, { id, name }, context) => {
     if (!context.loaders?.page)
-      throw new LoadersError('Page cannot be loaded.');
+      throw new LoadersError(error.missing.loader('Page'));
 
     if (!id && !name)
       throw new InputValidationError(error.missing.input, ['id', 'name']);

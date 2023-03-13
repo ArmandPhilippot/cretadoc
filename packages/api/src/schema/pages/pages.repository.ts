@@ -1,10 +1,23 @@
 import { isAbsolute } from 'path';
 import { readDir, type RegularFile } from '@cretadoc/read-dir';
 import { isString, type Maybe } from '@cretadoc/utils';
-import type { Page, PageInput } from '../../types';
+import type {
+  ListInput,
+  ListReturn,
+  OrderBy,
+  Page,
+  PageInput,
+  PageOrderFields,
+  PageWhereFields,
+} from '../../types';
 import { MARKDOWN_EXTENSION } from '../../utils/constants';
 import { ConfigError } from '../../utils/errors/exceptions';
 import { error } from '../../utils/errors/messages';
+import {
+  byCreatedAtProp,
+  byNameProp,
+  byUpdatedAtProp,
+} from '../../utils/helpers';
 
 export class PagesRepository {
   #rootDir: string;
@@ -74,5 +87,95 @@ export class PagesRepository {
     const pages = await this.#getPages();
 
     return pages?.filter((page) => values.includes(page[prop]));
+  }
+
+  /**
+   * Filter the pages.
+   *
+   * @param {Page[]} pages - The pages.
+   * @param {PageWhereFields} where - The filter parameters.
+   * @returns {Page[]} The filtered pages.
+   */
+  #filter(
+    pages: Page[],
+    { createdAt, name, updatedAt }: PageWhereFields
+  ): Page[] {
+    let filteredPages = pages;
+
+    if (createdAt)
+      filteredPages = filteredPages.filter(
+        (page) => page.createdAt === createdAt
+      );
+
+    if (name)
+      filteredPages = filteredPages.filter((page) => page.name.includes(name));
+
+    if (updatedAt)
+      filteredPages = filteredPages.filter(
+        (page) => page.updatedAt === updatedAt
+      );
+
+    return filteredPages;
+  }
+
+  /**
+   * Order the given pages.
+   *
+   * @param {Page[]} pages - The pages.
+   * @param {OrderBy<PageOrderFields>} orderBy - The order by instructions.
+   * @returns {Page[]} The ordered pages.
+   */
+  #order(
+    pages: Page[],
+    { direction, field }: OrderBy<PageOrderFields>
+  ): Page[] {
+    let orderedPages = pages;
+
+    switch (field) {
+      case 'createdAt':
+        orderedPages = orderedPages.sort(byCreatedAtProp);
+        break;
+      case 'name':
+        orderedPages = orderedPages.sort(byNameProp);
+        break;
+      case 'updatedAt':
+        orderedPages = orderedPages.sort(byUpdatedAtProp);
+        break;
+      default:
+        break;
+    }
+
+    return direction === 'ASC' ? orderedPages : orderedPages.reverse();
+  }
+
+  /**
+   * Find the pages matching the given parameters.
+   *
+   * @param {ListInput<Page>} params - The list parameters.
+   * @returns {Promise<ListReturn<Page[]>>} The matching pages.
+   */
+  public async find({
+    first,
+    after,
+    orderBy,
+    where,
+  }: ListInput<Page>): Promise<ListReturn<Page[]>> {
+    const pages = await this.#getPages();
+
+    if (!pages)
+      return {
+        data: undefined,
+        total: 0,
+      };
+
+    const filteredPages = where ? this.#filter(pages, where) : pages;
+    const orderedPages = orderBy
+      ? this.#order(filteredPages, orderBy)
+      : filteredPages;
+
+    return {
+      data: orderedPages.slice(after, after + first),
+      total: orderedPages.length,
+    };
   }
 }
