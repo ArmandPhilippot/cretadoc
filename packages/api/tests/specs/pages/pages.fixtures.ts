@@ -1,7 +1,7 @@
 import { parse } from 'path';
 import { pagesFixtures } from '../../fixtures/pages';
+import type { PageWithoutDates } from '../../types';
 import { PAGES_FIXTURES_DIR } from '../../utils/constants';
-import type { PageWithoutDates } from '../../utils/types';
 
 export const pages = pagesFixtures.map((page): PageWithoutDates => {
   const relativePath = page.path.replace(PAGES_FIXTURES_DIR, './');

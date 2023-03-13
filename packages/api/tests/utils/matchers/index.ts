@@ -1,12 +1,16 @@
-import { toRespondWith, type ToRespondWithMatcher } from './to-respond-with';
+import { toBePage, type ToBePage } from './to-be-page';
 import {
-  toReturnException,
-  type ToReturnException,
-} from './to-return-exception';
-import { toReturnPage, type ToReturnPage } from './to-return-page';
+  toContainException,
+  type ToContainException,
+} from './to-contain-exception';
+import { toRespondWith, type ToRespondWithMatcher } from './to-respond-with';
 
-export type CustomMatchers = ToRespondWithMatcher &
-  ToReturnException &
-  ToReturnPage;
+export type CustomMatchers = ToBePage &
+  ToContainException &
+  ToRespondWithMatcher;
 
-export const matchers = { toRespondWith, toReturnException, toReturnPage };
+export const matchers = {
+  toBePage,
+  toContainException,
+  toRespondWith,
+};

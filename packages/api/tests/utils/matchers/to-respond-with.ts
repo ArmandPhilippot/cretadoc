@@ -1,5 +1,5 @@
 import type supertest from 'supertest';
-import type { MatcherResult } from '../types';
+import type { MatcherResult } from '../../types';
 
 type ExpectedResponse = {
   statusCode: number;
