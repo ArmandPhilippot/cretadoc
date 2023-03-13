@@ -154,7 +154,7 @@ module.exports = {
   'no-template-curly-in-string': 'error',
   'no-ternary': 'off',
   'no-throw-literal': 'error',
-  'no-undef-init': 'error',
+  'no-undef-init': 'off',
   'no-underscore-dangle': 'off',
   'no-unmodified-loop-condition': 'error',
   'no-unneeded-ternary': ['error', { defaultAssignment: false }],
