@@ -158,6 +158,7 @@ module.exports = {
     {
       detectObjects: false,
       enforceConst: false,
+      ignore: [-1, 0, 1, 2],
       ignoreArrayIndexes: false,
       ignoreClassFieldInitialValues: true,
       ignoreDefaultValues: true,
