@@ -1,21 +1,29 @@
 import request from 'supertest';
 import type { APIInstance } from '../../../src';
-import type { Page, PagePayload, QueryInput } from '../../../src/types';
+import type {
+  ConnectionInput,
+  Page,
+  PageConnectionPayload,
+  PagePayload,
+  QueryInput,
+} from '../../../src/types';
 import type { QueryResult } from '../../../src/types/gql';
 import { DEFAULT_ENDPOINT } from '../../../src/utils/constants';
-import { pageQuery } from '../../specs/pages/pages.queries';
+import { pageQuery, pagesQuery } from '../../specs/pages/pages.queries';
 import type { QueryResultWithErrors } from '../../types';
 
-export const queries = [pageQuery] as const;
+export const queries = [pageQuery, pagesQuery] as const;
 
 export type Queries = (typeof queries)[number];
 
 export type Variables = {
   [pageQuery]: QueryInput<Page>;
+  [pagesQuery]: ConnectionInput<Page>;
 };
 
 export type Result = {
   [pageQuery]: PagePayload;
+  [pagesQuery]: PageConnectionPayload;
 };
 
 export type SendQueryProps<Q extends Queries> = {
