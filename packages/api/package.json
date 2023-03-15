@@ -46,8 +46,8 @@
     "fix": "eslint --fix --ext .js,.cjs,.mjs,.ts",
     "lint": "eslint --ext .js,.cjs,.mjs,.ts",
     "release": "commit-and-tag-version -s --no-verify",
-    "test": "vitest",
-    "test:coverage": "vitest run --coverage",
+    "test": "vitest --threads=false",
+    "test:coverage": "vitest run --coverage --threads=false",
     "test:watch": "vitest watch",
     "watch": "rollup --config rollup.config.ts --configPlugin rollup-plugin-esbuild --watch"
   },
