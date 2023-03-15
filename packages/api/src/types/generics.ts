@@ -46,3 +46,23 @@ export type ListReturn<T> = {
 };
 
 export type ListLoader<T> = (params: ListInput<T>) => Promise<ListReturn<T[]>>;
+
+export type Errors<T> = {
+  [K in keyof T]-?: Nullable<string[]>;
+};
+
+export type ErrorsFrom<T> = {
+  errors: Errors<T>;
+};
+
+export type InputFrom<T> = {
+  input: T;
+};
+
+export type Mutator<Input, Return> = (input: Input) => Promise<Maybe<Return>>;
+
+export type MutationResult<P extends string, T> = {
+  [K in P]: T;
+};
+
+export type ValidationErrors<T> = Record<keyof T, string[]>;

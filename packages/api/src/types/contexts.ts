@@ -1,11 +1,11 @@
 import type { IncomingMessage, ServerResponse } from 'http';
 import type { Maybe } from '@cretadoc/utils';
 import type { PagesRepository } from '../schema/pages/pages.repository';
-import type { PageLoaders } from './schema';
+import type { PageLoaders, PageMutators } from './schema';
 
 export type Loaders = PageLoaders;
 
-export type Mutators = object;
+export type Mutators = PageMutators;
 
 export type Repositories = {
   pages: Maybe<PagesRepository>;

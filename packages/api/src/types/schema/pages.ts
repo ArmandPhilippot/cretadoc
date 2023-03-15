@@ -1,23 +1,17 @@
 import type { RegularFile } from '@cretadoc/read-dir';
 import type { Maybe, NullableOptionalKeysOf } from '@cretadoc/utils';
 import type DataLoader from 'dataloader';
-import type { ListLoader, Payload } from '../generics';
+import type {
+  ErrorsFrom,
+  InputFrom,
+  ListLoader,
+  MutationResult,
+  Mutator,
+  Payload,
+} from '../generics';
 import type { Connection, QueryResult } from '../gql';
 
 export type Page = Omit<RegularFile, 'extension' | 'type'>;
-
-/*
- * ===========================================================================
- *  Payload types
- * ===========================================================================
- */
-
-export type PagePayload = Payload<'page', NullableOptionalKeysOf<Page, true>>;
-
-export type PageConnectionPayload = Payload<
-  'pages',
-  NullableOptionalKeysOf<Connection<Page>, true>
->;
 
 /*
  * ===========================================================================
@@ -26,6 +20,8 @@ export type PageConnectionPayload = Payload<
  */
 
 export type PageInput = Pick<Page, 'id' | 'name'>;
+
+export type PagePayload = Payload<'page', NullableOptionalKeysOf<Page, true>>;
 
 /*
  * ===========================================================================
@@ -39,7 +35,30 @@ export type PageWhereFields = Partial<
 
 export type PageOrderFields = Pick<Page, 'createdAt' | 'name' | 'updatedAt'>;
 
+export type PageConnectionPayload = Payload<
+  'pages',
+  NullableOptionalKeysOf<Connection<Page>, true>
+>;
+
 export type PageConnectionResult = QueryResult<PageConnectionPayload>;
+
+/*
+ * ===========================================================================
+ *  Create types
+ * ===========================================================================
+ */
+
+export type PageCreate = Pick<Page, 'content' | 'name'>;
+
+export type PageCreateInput = InputFrom<PageCreate>;
+
+export type PageCreateErrors = ErrorsFrom<PageCreate>;
+
+export type PageCreatePayload = PagePayload | PageCreateErrors;
+
+export type PageCreateResult = MutationResult<'pageCreate', PageCreatePayload>;
+
+export type PageCreateMutator = Mutator<PageCreate, Page>;
 
 /*
  * ===========================================================================
@@ -56,5 +75,17 @@ export type PageLoaders = {
     byId: PageByIdLoader;
     byName: PageByNameLoader;
     list: ListLoader<Page>;
+  };
+};
+
+/*
+ * ===========================================================================
+ *  Mutators types
+ * ===========================================================================
+ */
+
+export type PageMutators = {
+  page?: {
+    create: PageCreateMutator;
   };
 };

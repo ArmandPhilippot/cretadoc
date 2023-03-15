@@ -1,4 +1,5 @@
-import { isAbsolute } from 'path';
+import { writeFile } from 'fs/promises';
+import { isAbsolute, join } from 'path';
 import { readDir, type RegularFile } from '@cretadoc/read-dir';
 import { isString, type Maybe } from '@cretadoc/utils';
 import type {
@@ -6,6 +7,7 @@ import type {
   ListReturn,
   OrderBy,
   Page,
+  PageCreate,
   PageInput,
   PageOrderFields,
   PageWhereFields,
@@ -17,6 +19,7 @@ import {
   byCreatedAtProp,
   byNameProp,
   byUpdatedAtProp,
+  generateBase64String,
 } from '../../utils/helpers';
 
 export class PagesRepository {
@@ -50,7 +53,7 @@ export class PagesRepository {
     return {
       content,
       createdAt,
-      id: Buffer.from(relativePath).toString('base64'),
+      id: generateBase64String(relativePath),
       name,
       path: relativePath,
       updatedAt,
@@ -71,6 +74,22 @@ export class PagesRepository {
     return dir.content?.files.map((file) =>
       this.#convertRegularFileToPage(file)
     );
+  }
+
+  /**
+   * Retrieve a page by looking for a value in a prop.
+   *
+   * @param prop - The prop name.
+   * @param value - The value to looking for.
+   * @returns {Promise<Maybe<Page>>} The matching page.
+   */
+  public async get<P extends keyof PageInput>(
+    prop: P,
+    value: PageInput[P]
+  ): Promise<Maybe<Page>> {
+    const pages = await this.#getPages();
+
+    return pages?.find((page) => page[prop] === value);
   }
 
   /**
@@ -177,5 +196,28 @@ export class PagesRepository {
       data: orderedPages.slice(after, after + first),
       total: orderedPages.length,
     };
+  }
+
+  /**
+   * Retrieve an absolute file path from its name.
+   *
+   * @param {string} name - The filename without extension.
+   * @returns {string} The absolute path.
+   */
+  #getAbsolutePathFrom(name: string): string {
+    return join(this.#rootDir, `./${name}${MARKDOWN_EXTENSION}`);
+  }
+
+  /**
+   * Create a new page in pages directory.
+   *
+   * @param {PageCreate} page - The page to write.
+   * @returns {Promise<Maybe<Page>>} The new page.
+   */
+  public async create({ name, content }: PageCreate): Promise<Maybe<Page>> {
+    const filePath = this.#getAbsolutePathFrom(name);
+    await writeFile(filePath, content ?? '', { encoding: 'utf8' });
+
+    return this.get('name', name);
   }
 }

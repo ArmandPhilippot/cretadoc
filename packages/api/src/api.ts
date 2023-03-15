@@ -3,6 +3,7 @@ import { createYoga } from 'graphql-yoga';
 import { schema } from './schema';
 import { PagesRepository } from './schema/pages/pages.repository';
 import { initLoaders } from './schema/schema.loaders';
+import { initMutators } from './schema/schema.mutators';
 import type {
   APIConfig,
   APIContext,
@@ -55,8 +56,13 @@ const initContext = ({ pages }: APIDataConfig): APIContext => {
     pages: pagesRepository,
   });
 
+  const mutators = initMutators({
+    pages: pagesRepository,
+  });
+
   return {
     loaders,
+    mutators,
   };
 };
 
