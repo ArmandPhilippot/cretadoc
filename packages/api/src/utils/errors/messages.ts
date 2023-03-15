@@ -14,6 +14,10 @@ export const error = {
     file: {
       name: 'Must be a valid filename, it contains forbidden characters.',
     },
+    format: {
+      id: 'Must be a valid id format.',
+    },
+    missing: (entity: string) => `The requested ${entity} does not exist.`,
     string: {
       length: ({ min, max }: { min: number; max: number }) =>
         `Must be between ${min} and ${max} characters.`,

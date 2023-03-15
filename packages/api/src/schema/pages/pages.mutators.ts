@@ -1,6 +1,7 @@
 import type { PageMutators } from '../../types';
 import { createPage } from './create/create.mutator';
 import type { PagesRepository } from './pages.repository';
+import { updatePage } from './update/update.mutator';
 
 /**
  * Initialize the pages mutators.
@@ -12,6 +13,7 @@ export const initPageMutators = (repository: PagesRepository): PageMutators => {
   return {
     page: {
       create: async (data) => createPage(repository, data),
+      update: async (data) => updatePage(repository, data),
     },
   };
 };

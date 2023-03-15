@@ -1,5 +1,5 @@
-import { writeFile } from 'fs/promises';
-import { isAbsolute, join } from 'path';
+import { rename, writeFile } from 'fs/promises';
+import { isAbsolute, join, parse } from 'path';
 import { readDir, type RegularFile } from '@cretadoc/read-dir';
 import { isString, type Maybe } from '@cretadoc/utils';
 import type {
@@ -10,6 +10,7 @@ import type {
   PageCreate,
   PageInput,
   PageOrderFields,
+  PageUpdate,
   PageWhereFields,
 } from '../../types';
 import { MARKDOWN_EXTENSION } from '../../utils/constants';
@@ -19,6 +20,7 @@ import {
   byCreatedAtProp,
   byNameProp,
   byUpdatedAtProp,
+  decodeBase64String,
   generateBase64String,
 } from '../../utils/helpers';
 
@@ -219,5 +221,43 @@ export class PagesRepository {
     await writeFile(filePath, content ?? '', { encoding: 'utf8' });
 
     return this.get('name', name);
+  }
+
+  /**
+   * Rename a page.
+   *
+   * @param {string} name - The new page name.
+   * @param {string} oldPath - The old absolute path.
+   * @returns {Promise<string>} The new absolute path.
+   */
+  async #renamePage(name: string, oldPath: string): Promise<string> {
+    const absolutePath = this.#getAbsolutePathFrom(name);
+    await rename(oldPath, absolutePath);
+
+    return absolutePath;
+  }
+
+  /**
+   * Update an existing page.
+   *
+   * @param {PageUpdate} data - The data to update.
+   * @returns {Promise<Maybe<Page>>} The updated page.
+   */
+  public async update({ content, id, name }: PageUpdate): Promise<Maybe<Page>> {
+    const relativePath = decodeBase64String(id);
+    const oldName = parse(relativePath).name;
+    const newName = name ?? oldName;
+    const absolutePath = join(this.#rootDir, relativePath);
+    const newAbsolutePath =
+      name && oldName !== name
+        ? await this.#renamePage(name, absolutePath)
+        : absolutePath;
+
+    if (content)
+      await writeFile(newAbsolutePath, content, {
+        encoding: 'utf8',
+      });
+
+    return this.get('name', newName);
   }
 }

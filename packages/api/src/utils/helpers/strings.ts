@@ -25,17 +25,17 @@ export const decodeBase64String = (value: string): string =>
  * @param {number} id - A numeric id.
  * @returns {string} A string id.
  */
-export const generateId = (prefix: string, id: number): string =>
+export const generatePrefixedId = (prefix: string, id: number): string =>
   generateBase64String(`${prefix}${id}`);
 
 /**
- * Retrieve a numeric id from a string id.
+ * Retrieve a numeric id from a prefixed string id.
  *
  * @param {string} prefix - The id prefix.
  * @param {string} id - The string id.
  * @returns {number} The numeric id.
  */
-export const decodeId = (prefix: string, id: string): number =>
+export const decodePrefixedId = (prefix: string, id: string): number =>
   parseInt(decodeBase64String(id).replace(prefix, ''), 10);
 
 /**
@@ -45,7 +45,7 @@ export const decodeId = (prefix: string, id: string): number =>
  * @returns {string} The cursor.
  */
 export const generateCursor = (num: number): string =>
-  generateId('cursor', num);
+  generatePrefixedId('cursor', num);
 
 /**
  * Transform a cursor to a number.
@@ -55,5 +55,5 @@ export const generateCursor = (num: number): string =>
  */
 export const decodeCursor = (cursor: Maybe<string>): number => {
   if (isUndefined(cursor)) return 0;
-  return decodeId('cursor', cursor);
+  return decodePrefixedId('cursor', cursor);
 };

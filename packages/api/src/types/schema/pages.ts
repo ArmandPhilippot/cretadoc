@@ -62,6 +62,24 @@ export type PageCreateMutator = Mutator<PageCreate, Page>;
 
 /*
  * ===========================================================================
+ *  Update types
+ * ===========================================================================
+ */
+
+export type PageUpdate = Pick<Page, 'id'> & Partial<PageCreate>;
+
+export type PageUpdateInput = InputFrom<PageUpdate>;
+
+export type PageUpdateErrors = ErrorsFrom<PageUpdate>;
+
+export type PageUpdatePayload = PagePayload | PageUpdateErrors;
+
+export type PageUpdateResult = MutationResult<'pageUpdate', PageUpdatePayload>;
+
+export type PageUpdateMutator = Mutator<PageUpdate, Page>;
+
+/*
+ * ===========================================================================
  *  Loaders types
  * ===========================================================================
  */
@@ -87,5 +105,6 @@ export type PageLoaders = {
 export type PageMutators = {
   page?: {
     create: PageCreateMutator;
+    update: PageUpdateMutator;
   };
 };
