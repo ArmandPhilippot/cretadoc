@@ -5,11 +5,13 @@ import type {
   PagePayload,
   PageUpdateErrors,
   PageUpdatePayload,
+  PageUpdateResult,
 } from '../../../src/types';
 import { MARKDOWN_EXTENSION } from '../../../src/utils/constants';
 import { error } from '../../../src/utils/errors/messages';
 import { generateBase64String } from '../../../src/utils/helpers';
 import { pagesFixtures } from '../../fixtures/pages';
+import type { QueryResultWithErrors } from '../../types';
 import { expect } from '../../utils';
 import { PAGES_FIXTURES_DIR } from '../../utils/constants';
 import {
@@ -26,6 +28,8 @@ const api = createAPIServer({
   data: { pages: PAGES_FIXTURES_DIR },
   port: 3220,
 });
+
+const misconfiguredAPI = createAPIServer({ port: 3270 });
 
 const updatePage = async (variables?: Variables[typeof pageUpdate]) =>
   sendQuery({ api: api.instance, query: pageUpdate, variables });
@@ -164,5 +168,20 @@ describe('pageUpdate', () => {
 
     const assertionsCount = 4;
     expect.assertions(assertionsCount);
+  });
+
+  it('returns an error when API is misconfigured', async () => {
+    const response = await sendQuery({
+      api: misconfiguredAPI.instance,
+      query: pageUpdate,
+      variables: { input: { id: 'anyIdSinceErrorIsExpected' } },
+    });
+
+    expect(response.body.data.pageUpdate).toBeNull();
+    const body = response.body as QueryResultWithErrors<PageUpdateResult>;
+    expect(body.errors).toContainException({
+      code: 'BAD_CONFIGURATION',
+      message: error.missing.mutator('Page'),
+    });
   });
 });

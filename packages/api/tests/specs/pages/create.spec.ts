@@ -2,6 +2,7 @@ import { isObject, isObjKeyExist, type Nullable } from '@cretadoc/utils';
 import type {
   PageCreateErrors,
   PageCreatePayload,
+  PageCreateResult,
   PagePayload,
 } from 'src/types';
 import { afterAll, beforeAll, describe, it } from 'vitest';
@@ -9,6 +10,7 @@ import { MARKDOWN_EXTENSION } from '../../../src/utils/constants';
 import { error } from '../../../src/utils/errors/messages';
 import { generateBase64String } from '../../../src/utils/helpers';
 import { pagesFixtures } from '../../fixtures/pages';
+import type { QueryResultWithErrors } from '../../types';
 import { expect } from '../../utils';
 import { PAGES_FIXTURES_DIR } from '../../utils/constants';
 import {
@@ -25,6 +27,8 @@ const api = createAPIServer({
   data: { pages: PAGES_FIXTURES_DIR },
   port: 3220,
 });
+
+const misconfiguredAPI = createAPIServer({ port: 3270 });
 
 const createPage = async (variables?: Variables[typeof pageCreate]) =>
   sendQuery({ api: api.instance, query: pageCreate, variables });
@@ -148,5 +152,20 @@ describe('pageCreate', () => {
 
     const assertionsCount = 3;
     expect.assertions(assertionsCount);
+  });
+
+  it('returns an error when API is misconfigured', async () => {
+    const response = await sendQuery({
+      api: misconfiguredAPI.instance,
+      query: pageCreate,
+      variables: { input: { name: 'anyNameSinceErrorIsExpected' } },
+    });
+
+    expect(response.body.data.pageCreate).toBeNull();
+    const body = response.body as QueryResultWithErrors<PageCreateResult>;
+    expect(body.errors).toContainException({
+      code: 'BAD_CONFIGURATION',
+      message: error.missing.mutator('Page'),
+    });
   });
 });

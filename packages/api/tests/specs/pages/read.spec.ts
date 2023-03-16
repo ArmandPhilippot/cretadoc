@@ -20,6 +20,8 @@ const api = createAPIServer({
   port: 3200,
 });
 
+const misconfiguredAPI = createAPIServer({ port: 3250 });
+
 const sendPageQuery = async (variables?: Variables[typeof pageQuery]) =>
   sendQuery({ api: api.instance, query: pageQuery, variables });
 
@@ -80,5 +82,20 @@ describe('page', () => {
       message: error.invalid.input,
     });
     expect.assertions(2);
+  });
+
+  it('returns an error when API is misconfigured', async () => {
+    const response = await sendQuery({
+      api: misconfiguredAPI.instance,
+      query: pageQuery,
+      variables: { name: 'anyNameSinceErrorIsExpected' },
+    });
+
+    expect(response.body.data.page).toBeNull();
+    const body = response.body as QueryResultWithErrors<PagePayload>;
+    expect(body.errors).toContainException({
+      code: 'BAD_CONFIGURATION',
+      message: error.missing.loader('Page'),
+    });
   });
 });

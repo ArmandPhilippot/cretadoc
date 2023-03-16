@@ -26,6 +26,8 @@ const api = createAPIServer({
   port: 3230,
 });
 
+const misconfiguredAPI = createAPIServer({ port: 3280 });
+
 const deletePage = async (variables?: Variables[typeof pageDelete]) =>
   sendQuery({ api: api.instance, query: pageDelete, variables });
 
@@ -180,5 +182,20 @@ describe('pageDelete', () => {
       message: error.invalid.input,
     });
     expect.assertions(2);
+  });
+
+  it('returns an error when API is misconfigured', async () => {
+    const response = await sendQuery({
+      api: misconfiguredAPI.instance,
+      query: pageDelete,
+      variables: { input: { name: 'anyNameSinceErrorIsExpected' } },
+    });
+
+    expect(response.body.data.pageDelete).toBeNull();
+    const body = response.body as QueryResultWithErrors<PageDeleteResult>;
+    expect(body.errors).toContainException({
+      code: 'BAD_CONFIGURATION',
+      message: error.missing.mutator('Page'),
+    });
   });
 });
