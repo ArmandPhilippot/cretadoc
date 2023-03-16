@@ -6,6 +6,8 @@ import type {
   PageConnectionPayload,
   PageCreateInput,
   PageCreateResult,
+  PageDeleteInput,
+  PageDeleteResult,
   PagePayload,
   PageUpdateInput,
   PageUpdateResult,
@@ -13,11 +15,15 @@ import type {
 } from '../../../src/types';
 import type { QueryResult } from '../../../src/types/gql';
 import { DEFAULT_ENDPOINT } from '../../../src/utils/constants';
-import { pageCreate, pageUpdate } from '../../specs/pages/pages.mutations';
+import {
+  pageCreate,
+  pageDelete,
+  pageUpdate,
+} from '../../specs/pages/pages.mutations';
 import { pageQuery, pagesQuery } from '../../specs/pages/pages.queries';
 import type { QueryResultWithErrors } from '../../types';
 
-export const mutations = [pageCreate, pageUpdate] as const;
+export const mutations = [pageCreate, pageDelete, pageUpdate] as const;
 
 export type Mutations = (typeof mutations)[number];
 
@@ -27,6 +33,7 @@ export type Queries = (typeof queries)[number];
 
 export type Variables = {
   [pageCreate]: PageCreateInput;
+  [pageDelete]: PageDeleteInput;
   [pageUpdate]: PageUpdateInput;
   [pageQuery]: QueryInput<Page>;
   [pagesQuery]: ConnectionInput<Page>;
@@ -34,6 +41,7 @@ export type Variables = {
 
 export type Result = {
   [pageCreate]: PageCreateResult;
+  [pageDelete]: PageDeleteResult;
   [pageUpdate]: PageUpdateResult;
   [pageQuery]: PagePayload;
   [pagesQuery]: PageConnectionPayload;

@@ -21,6 +21,29 @@ export const pageCreate = `mutation CreatePage($input: PageCreateInput!) {
   }
 }`;
 
+export const pageDelete = `mutation DeletePage($input: PageDeleteInput!) {
+  pageDelete(input: $input) {
+    ... on PagePayload {
+      __typename
+      page {
+        content
+        createdAt
+        id
+        name
+        path
+        updatedAt
+      }
+    }
+    ... on PageDeleteErrors {
+      __typename
+      errors {
+        id
+        name
+      }
+    }
+  }
+}`;
+
 export const pageUpdate = `mutation UpdatePage($input: PageUpdateInput!) {
   pageUpdate(input: $input) {
     ... on PagePayload {
