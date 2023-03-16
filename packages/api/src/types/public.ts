@@ -7,6 +7,11 @@ import type { APIContext, ServerContext } from './contexts';
  */
 export type APIDataConfig = {
   /**
+   * The path of the documentation directory.
+   * @default undefined
+   */
+  doc?: string;
+  /**
    * The path of the pages directory.
    * @default undefined
    */

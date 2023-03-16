@@ -1,13 +1,16 @@
+import { docFixtures } from './tests/fixtures/doc';
 import { pagesFixtures } from './tests/fixtures/pages';
-import { PAGES_FIXTURES_DIR } from './tests/utils/constants';
+import { DOC_FIXTURES_DIR, PAGES_FIXTURES_DIR } from './tests/utils/constants';
 import { createFixtures, cleanFixtures } from './tests/utils/helpers/fixtures';
 import { createAPIServer } from './tests/utils/helpers/server';
 
 const createAPI = async () => {
+  await createFixtures(docFixtures);
   await createFixtures(pagesFixtures);
 
   return createAPIServer({
     data: {
+      doc: DOC_FIXTURES_DIR,
       pages: PAGES_FIXTURES_DIR,
     },
     endpoint: '/graphql',
@@ -18,6 +21,7 @@ const createAPI = async () => {
 
 const deleteFixturesOnExit = async () => {
   try {
+    await cleanFixtures(DOC_FIXTURES_DIR);
     await cleanFixtures(PAGES_FIXTURES_DIR);
   } catch (e) {
     console.error('EXIT HANDLER ERROR', e);

@@ -1,6 +1,7 @@
 import type { PartialDeep } from '@cretadoc/utils';
 import { createYoga } from 'graphql-yoga';
 import { schema } from './schema';
+import { DocRepository } from './schema/doc/doc.repository';
 import { PagesRepository } from './schema/pages/pages.repository';
 import { initLoaders } from './schema/schema.loaders';
 import { initMutators } from './schema/schema.mutators';
@@ -49,14 +50,17 @@ const mergeConfigWithDefaults = (
  * @param {APIDataConfig} data - The data configuration object.
  * @returns {APIContext} The GraphQL context.
  */
-const initContext = ({ pages }: APIDataConfig): APIContext => {
+const initContext = ({ doc, pages }: APIDataConfig): APIContext => {
+  const docRepository = doc ? new DocRepository(doc) : undefined;
   const pagesRepository = pages ? new PagesRepository(pages) : undefined;
 
   const loaders = initLoaders({
+    doc: docRepository,
     pages: pagesRepository,
   });
 
   const mutators = initMutators({
+    doc: docRepository,
     pages: pagesRepository,
   });
 

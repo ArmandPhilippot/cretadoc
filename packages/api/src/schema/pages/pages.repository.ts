@@ -1,7 +1,8 @@
 import { rename, rm, writeFile } from 'fs/promises';
-import { isAbsolute, join, parse } from 'path';
-import { readDir, type RegularFile } from '@cretadoc/read-dir';
-import { isString, type Maybe } from '@cretadoc/utils';
+import { join, parse } from 'path';
+import type { RegularFile } from '@cretadoc/read-dir';
+import type { Maybe } from '@cretadoc/utils';
+import { FileSystemRepository } from '../../repositories/filesystem.repository';
 import type {
   ListInput,
   ListReturn,
@@ -14,8 +15,6 @@ import type {
   PageWhereFields,
 } from '../../types';
 import { MARKDOWN_EXTENSION } from '../../utils/constants';
-import { ConfigError } from '../../utils/errors/exceptions';
-import { error } from '../../utils/errors/messages';
 import {
   byCreatedAtProp,
   byNameProp,
@@ -24,17 +23,9 @@ import {
   generateBase64String,
 } from '../../utils/helpers';
 
-export class PagesRepository {
-  #rootDir: string;
-
+export class PagesRepository extends FileSystemRepository {
   constructor(dir: string) {
-    if (!isString(dir))
-      throw new ConfigError('Pages directory', error.invalid.type('string'));
-
-    if (!isAbsolute(dir))
-      throw new ConfigError('Pages directory', error.invalid.path('absolute'));
-
-    this.#rootDir = dir;
+    super(dir, 'Pages');
   }
 
   /**
@@ -50,7 +41,7 @@ export class PagesRepository {
     updatedAt,
     content,
   }: RegularFile): Page {
-    const relativePath = path.replace(this.#rootDir, './');
+    const relativePath = path.replace(this.getRootDir(), './');
 
     return {
       content,
@@ -68,12 +59,9 @@ export class PagesRepository {
    * @returns {Promise<Maybe<Page[]>>} The pages.
    */
   async #getPages(): Promise<Maybe<Page[]>> {
-    const dir = await readDir(this.#rootDir, {
-      extensions: [MARKDOWN_EXTENSION],
-      includeFileContents: true,
-    });
+    const dirContents = await this.getContentsOf(this.getRootDir());
 
-    return dir.content?.files.map((file) =>
+    return dirContents?.files.map((file) =>
       this.#convertRegularFileToPage(file)
     );
   }
@@ -207,7 +195,7 @@ export class PagesRepository {
    * @returns {string} The absolute path.
    */
   #getAbsolutePathFrom(name: string): string {
-    return join(this.#rootDir, `./${name}${MARKDOWN_EXTENSION}`);
+    return join(this.getRootDir(), `./${name}${MARKDOWN_EXTENSION}`);
   }
 
   /**
@@ -247,7 +235,7 @@ export class PagesRepository {
     const relativePath = decodeBase64String(id);
     const oldName = parse(relativePath).name;
     const newName = name ?? oldName;
-    const absolutePath = join(this.#rootDir, relativePath);
+    const absolutePath = join(this.getRootDir(), relativePath);
     const newAbsolutePath =
       name && oldName !== name
         ? await this.#renamePage(name, absolutePath)
@@ -268,7 +256,7 @@ export class PagesRepository {
    * @returns {Promise<void>}
    */
   public async del(path: string): Promise<void> {
-    const absolutePath = join(this.#rootDir, path);
+    const absolutePath = join(this.getRootDir(), path);
     await rm(absolutePath);
   }
 }
