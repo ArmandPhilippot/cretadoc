@@ -1,4 +1,4 @@
-import { rename, writeFile } from 'fs/promises';
+import { rename, rm, writeFile } from 'fs/promises';
 import { isAbsolute, join, parse } from 'path';
 import { readDir, type RegularFile } from '@cretadoc/read-dir';
 import { isString, type Maybe } from '@cretadoc/utils';
@@ -259,5 +259,16 @@ export class PagesRepository {
       });
 
     return this.get('name', newName);
+  }
+
+  /**
+   * Delete an existing page.
+   *
+   * @param {PageDelete} path - The relative path of the page.
+   * @returns {Promise<void>}
+   */
+  public async del(path: string): Promise<void> {
+    const absolutePath = join(this.#rootDir, path);
+    await rm(absolutePath);
   }
 }

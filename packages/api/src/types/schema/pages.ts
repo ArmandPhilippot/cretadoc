@@ -62,6 +62,24 @@ export type PageCreateMutator = Mutator<PageCreate, Page>;
 
 /*
  * ===========================================================================
+ *  Delete types
+ * ===========================================================================
+ */
+
+export type PageDelete = Partial<Pick<Page, 'id' | 'name'>>;
+
+export type PageDeleteInput = InputFrom<PageDelete>;
+
+export type PageDeleteErrors = ErrorsFrom<PageDelete>;
+
+export type PageDeletePayload = PagePayload | PageDeleteErrors;
+
+export type PageDeleteResult = MutationResult<'pageDelete', PageDeletePayload>;
+
+export type PageDeleteMutator = Mutator<PageDelete, Page>;
+
+/*
+ * ===========================================================================
  *  Update types
  * ===========================================================================
  */
@@ -105,6 +123,7 @@ export type PageLoaders = {
 export type PageMutators = {
   page?: {
     create: PageCreateMutator;
+    del: PageDeleteMutator;
     update: PageUpdateMutator;
   };
 };
