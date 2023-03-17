@@ -62,6 +62,16 @@ export const byNameProp = <T extends { name: string }>(a: T, b: T): number =>
   byNonAsciiStringProp('name', a, b);
 
 /**
+ * Method to sort an array of object using `path` property.
+ *
+ * @param a - The first object to compare.
+ * @param b - The second object to compare.
+ * @returns {number} The method result.
+ */
+export const byPathProp = <T extends { path: string }>(a: T, b: T): number =>
+  byNonAsciiStringProp('path', a, b);
+
+/**
  * Method to sort an array of object using `updatedAt` property.
  *
  * @param a - The first object to compare.

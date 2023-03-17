@@ -2,8 +2,23 @@ import { basename, join, parse } from 'path';
 import type { RegularFile } from '@cretadoc/read-dir';
 import type { Maybe, Nullable } from '@cretadoc/utils';
 import { FileSystemRepository } from '../../repositories/filesystem.repository';
-import type { DocEntryParent, DocFile, DocFileInput } from '../../types';
-import { generateBase64String } from '../../utils/helpers';
+import type {
+  DocEntryParent,
+  DocFile,
+  DocFileInput,
+  DocFileOrderFields,
+  DocFileWhereFields,
+  ListInput,
+  ListReturn,
+  OrderBy,
+} from '../../types';
+import {
+  byCreatedAtProp,
+  byNameProp,
+  byPathProp,
+  byUpdatedAtProp,
+  generateBase64String,
+} from '../../utils/helpers';
 
 export class DocRepository extends FileSystemRepository {
   constructor(dir: string) {
@@ -109,5 +124,103 @@ export class DocRepository extends FileSystemRepository {
     const files = await this.#getFilesIn(path);
 
     return files?.filter((file) => values.includes(file[prop]));
+  }
+
+  /**
+   * Filter the documentation files.
+   *
+   * @param {DocFile[]} files - The files.
+   * @param {DocFileWhereFields} where - The filter parameters.
+   * @returns {DocFile[]} The filtered files.
+   */
+  #filter(
+    files: DocFile[],
+    { createdAt, name, updatedAt }: Omit<DocFileWhereFields, 'path'>
+  ): DocFile[] {
+    let filteredDocFiles = files.slice(0);
+
+    if (createdAt)
+      filteredDocFiles = filteredDocFiles.filter(
+        (page) => page.createdAt === createdAt
+      );
+
+    if (name)
+      filteredDocFiles = filteredDocFiles.filter((page) =>
+        page.name.includes(name)
+      );
+
+    if (updatedAt)
+      filteredDocFiles = filteredDocFiles.filter(
+        (page) => page.updatedAt === updatedAt
+      );
+
+    return filteredDocFiles;
+  }
+
+  /**
+   * Order the given documentation files.
+   *
+   * @param {DocFile[]} files - The documentation files.
+   * @param {OrderBy<DocFileOrderFields>} orderBy - The order by instructions.
+   * @returns {DocFile[]} The ordered documentation files.
+   */
+  #order(
+    files: DocFile[],
+    { direction, field }: OrderBy<DocFileOrderFields>
+  ): DocFile[] {
+    let orderedDocFiles = files.slice(0);
+
+    switch (field) {
+      case 'createdAt':
+        orderedDocFiles = orderedDocFiles.sort(byCreatedAtProp);
+        break;
+      case 'name':
+        orderedDocFiles = orderedDocFiles.sort(byNameProp);
+        break;
+      case 'path':
+        orderedDocFiles = orderedDocFiles.sort(byPathProp);
+        break;
+      case 'updatedAt':
+        orderedDocFiles = orderedDocFiles.sort(byUpdatedAtProp);
+        break;
+      default:
+        break;
+    }
+
+    return direction === 'ASC' ? orderedDocFiles : orderedDocFiles.reverse();
+  }
+
+  /**
+   * Find the documentation files matching the given parameters.
+   *
+   * @param {ListInput<DocFile>} params - The list parameters.
+   * @returns {Promise<ListReturn<DocFile[]>>} The matching documentation files.
+   */
+  public async find({
+    first,
+    after,
+    orderBy,
+    where,
+  }: ListInput<DocFile>): Promise<ListReturn<DocFile[]>> {
+    const path = where?.path
+      ? join(this.getRootDir(), where.path)
+      : this.getRootDir();
+    const files = await this.#getFilesIn(path);
+
+    if (!files)
+      return {
+        data: undefined,
+        total: 0,
+      };
+
+    const filteredDocFiles = where ? this.#filter(files, where) : files;
+    const orderedDocFiles = orderBy
+      ? this.#order(filteredDocFiles, orderBy)
+      : filteredDocFiles;
+
+    return {
+      data: orderedDocFiles.slice(after, after + first),
+      total: orderedDocFiles.length,
+    };
   }
 }

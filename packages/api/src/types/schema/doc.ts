@@ -1,9 +1,13 @@
 import type { Directory, RegularFile } from '@cretadoc/read-dir';
 import type { Payload } from '../generics';
 import type { QueryResult } from '../gql';
-import type { DocFileLoaders, DocFilePayload } from './doc-files';
+import type {
+  DocFileConnectionPayload,
+  DocFileLoaders,
+  DocFilePayload,
+} from './doc-files';
 
-export type Doc = DocFilePayload;
+export type Doc = DocFilePayload & DocFileConnectionPayload;
 
 export type DocEntryParent = Pick<
   Directory | RegularFile,

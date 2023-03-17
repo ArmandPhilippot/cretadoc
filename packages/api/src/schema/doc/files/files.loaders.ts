@@ -1,5 +1,6 @@
-import type { DocFileLoaders } from '../../../types';
+import type { DocFile, DocFileLoaders, ListInput } from '../../../types';
 import type { DocRepository } from '../doc.repository';
+import { listDocFiles } from './list/list.loaders';
 import { getDocFileById, getDocFileByPath } from './read/read.loaders';
 
 /**
@@ -15,6 +16,8 @@ export const initDocFileLoaders = (
     file: {
       byId: getDocFileById(repository),
       byPath: getDocFileByPath(repository),
+      list: async (params: ListInput<DocFile>) =>
+        listDocFiles(repository, params),
     },
   };
 };

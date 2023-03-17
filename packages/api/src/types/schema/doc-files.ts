@@ -1,7 +1,8 @@
 import type { RegularFile } from '@cretadoc/read-dir';
 import type { Maybe, Nullable, NullableOptionalKeysOf } from '@cretadoc/utils';
 import type DataLoader from 'dataloader';
-import type { Payload } from '../generics';
+import type { ListLoader, Payload } from '../generics';
+import type { Connection, QueryResult } from '../gql';
 import type { DocEntryParent } from './doc';
 
 export type DocFile = Omit<RegularFile, 'extension'> & {
@@ -23,6 +24,28 @@ export type DocFilePayload = Payload<
 
 /*
  * ===========================================================================
+ *  Connection types
+ * ===========================================================================
+ */
+
+export type DocFileWhereFields = Partial<
+  Pick<DocFile, 'createdAt' | 'name' | 'path' | 'updatedAt'>
+>;
+
+export type DocFileOrderFields = Pick<
+  DocFile,
+  'createdAt' | 'name' | 'path' | 'updatedAt'
+>;
+
+export type DocFileConnectionPayload = Payload<
+  'files',
+  NullableOptionalKeysOf<Connection<DocFile>, true>
+>;
+
+export type DocFileConnectionResult = QueryResult<DocFileConnectionPayload>;
+
+/*
+ * ===========================================================================
  *  Loaders types
  * ===========================================================================
  */
@@ -38,5 +61,6 @@ export type DocFileLoaders = {
   file: {
     byId: DocFileByIdLoader;
     byPath: DocFileByPathLoader;
+    list: ListLoader<DocFile>;
   };
 };
