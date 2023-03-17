@@ -183,7 +183,7 @@ export class PagesRepository extends FileSystemRepository {
       : filteredPages;
 
     return {
-      data: orderedPages.slice(after, after + first),
+      data: orderedPages.slice(after, (after ?? 0) + first),
       total: orderedPages.length,
     };
   }
@@ -205,8 +205,7 @@ export class PagesRepository extends FileSystemRepository {
    * @returns {Promise<Maybe<Page>>} The new page.
    */
   public async create({ name, content }: PageCreate): Promise<Maybe<Page>> {
-    const filePath = this.#getAbsolutePathFrom(name);
-    await writeFile(filePath, content ?? '', { encoding: 'utf8' });
+    await this.createMarkdownFile('./', name, content);
 
     return this.get('name', name);
   }

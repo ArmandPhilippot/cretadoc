@@ -7,7 +7,7 @@ import { updatePage } from './update/update.mutator';
 /**
  * Initialize the pages mutators.
  *
- * @param {string} repository - The page repository.
+ * @param {PagesRepository} repository - The page repository.
  * @returns {PageMutators} The page mutators.
  */
 export const initPageMutators = (repository: PagesRepository): PageMutators => {

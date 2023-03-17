@@ -1,7 +1,14 @@
 import type { RegularFile } from '@cretadoc/read-dir';
 import type { Maybe, Nullable, NullableOptionalKeysOf } from '@cretadoc/utils';
 import type DataLoader from 'dataloader';
-import type { ListLoader, Payload } from '../generics';
+import type {
+  ErrorsFrom,
+  InputFrom,
+  ListLoader,
+  MutationResult,
+  Mutator,
+  Payload,
+} from '../generics';
 import type { Connection, QueryResult } from '../gql';
 import type { DocEntryParent } from './doc';
 
@@ -46,6 +53,29 @@ export type DocFileConnectionResult = QueryResult<DocFileConnectionPayload>;
 
 /*
  * ===========================================================================
+ *  Create types
+ * ===========================================================================
+ */
+
+export type DocFileCreate = Pick<DocFile, 'content' | 'name'> & {
+  parentPath?: string;
+};
+
+export type DocFileCreateInput = InputFrom<DocFileCreate>;
+
+export type DocFileCreateErrors = ErrorsFrom<DocFileCreate>;
+
+export type DocFileCreatePayload = DocFilePayload | DocFileCreateErrors;
+
+export type DocFileCreateResult = MutationResult<
+  'docFileCreate',
+  DocFileCreatePayload
+>;
+
+export type DocFileCreateMutator = Mutator<DocFileCreate, DocFile>;
+
+/*
+ * ===========================================================================
  *  Loaders types
  * ===========================================================================
  */
@@ -62,5 +92,17 @@ export type DocFileLoaders = {
     byId: DocFileByIdLoader;
     byPath: DocFileByPathLoader;
     list: ListLoader<DocFile>;
+  };
+};
+
+/*
+ * ===========================================================================
+ *  Mutators types
+ * ===========================================================================
+ */
+
+export type DocFileMutators = {
+  file: {
+    create: DocFileCreateMutator;
   };
 };

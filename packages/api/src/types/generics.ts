@@ -37,7 +37,7 @@ export type ConnectionInput<
 > = Pagination<O> & Where<W>;
 
 export type ListInput<T> = Omit<ConnectionInput<T>, 'after' | 'offset'> & {
-  after: number;
+  after?: number;
 };
 
 export type ListReturn<T> = {

@@ -1,4 +1,5 @@
-import { isAbsolute } from 'path';
+import { writeFile } from 'fs/promises';
+import { isAbsolute, join } from 'path';
 import {
   type DirectoryContents,
   readDir,
@@ -66,5 +67,49 @@ export class FileSystemRepository {
     const dir = await this.getDirectoryDataFrom(path);
 
     return dir.content;
+  }
+
+  /**
+   * Transform an absolute path to a relative path.
+   *
+   * @param {string} absolutePath - An absolute path.
+   * @returns {string} A relative path.
+   */
+  public getRelativePathFrom(absolutePath: string): string {
+    if (!isAbsolute(absolutePath))
+      throw new Error(error.invalid.path('absolute'));
+
+    return absolutePath.replace(this.#rootDir, './');
+  }
+
+  /**
+   * Retrieve the absolute path of a markdown file.
+   *
+   * @param {string} name - The filename without extension.
+   * @returns {string} The absolute path.
+   */
+  #getMarkdownFileAbsolutePath(relativePath: string, name: string): string {
+    const basePath = join(this.getRootDir(), relativePath);
+
+    return join(basePath, `./${name}${MARKDOWN_EXTENSION}`);
+  }
+
+  /**
+   * Create a new markdown file in the given directory.
+   *
+   * @param {string} path - A relative path where to create the new file.
+   * @param {string} name - The filename to create.
+   * @param {string} [content] - The file contents to write.
+   * @returns {Promise<string>} The absolute file path.
+   */
+  public async createMarkdownFile(
+    path: string,
+    name: string,
+    content?: string
+  ): Promise<string> {
+    const filePath = this.#getMarkdownFileAbsolutePath(path, name);
+    await writeFile(filePath, content ?? '', { encoding: 'utf8' });
+
+    return filePath;
   }
 }

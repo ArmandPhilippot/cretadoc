@@ -1,4 +1,9 @@
-import type { DocFile, DocFileLoaders, ListInput } from '../../../types';
+import type {
+  DocFile,
+  DocFileInput,
+  DocFileLoaders,
+  ListInput,
+} from '../../../types';
 import type { DocRepository } from '../doc.repository';
 import { listDocFiles } from './list/list.loaders';
 import { getDocFileById, getDocFileByPath } from './read/read.loaders';
@@ -20,4 +25,18 @@ export const initDocFileLoaders = (
         listDocFiles(repository, params),
     },
   };
+};
+
+/**
+ * Clear the documentation files loaders.
+ *
+ * @param {DocFileLoaders['file']} fileLoaders - The file loaders.
+ * @param {DocFileInput} input - The file id and path.
+ */
+export const clearDocFileLoaders = (
+  fileLoaders: DocFileLoaders['file'],
+  { id, path }: DocFileInput
+) => {
+  fileLoaders.byId.clear(id);
+  fileLoaders.byPath.clear(path);
 };

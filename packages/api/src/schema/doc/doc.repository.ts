@@ -14,6 +14,7 @@ import type {
   DocEntryKind,
   DocEntryParent,
   DocFile,
+  DocFileCreate,
   DocFileInput,
   DocFileOrderFields,
   DocFileWhereFields,
@@ -307,8 +308,25 @@ export class DocRepository extends FileSystemRepository {
       : filteredDocEntries;
 
     return {
-      data: orderedDocEntries.slice(after, after + first),
+      data: orderedDocEntries.slice(after, (after ?? 0) + first),
       total: orderedDocEntries.length,
     };
+  }
+
+  /**
+   * Create a new documentation file in the given directory.
+   *
+   * @param {DocFileCreate} file - The file to write.
+   * @returns {Promise<Maybe<DocFile>>} The new documentation file.
+   */
+  public async create({
+    name,
+    content,
+    parentPath,
+  }: DocFileCreate): Promise<Maybe<DocFile>> {
+    const basePath = parentPath ?? './';
+    const filePath = await this.createMarkdownFile(basePath, name, content);
+
+    return this.getFile('path', this.getRelativePathFrom(filePath), basePath);
   }
 }

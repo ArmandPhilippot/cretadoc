@@ -9,6 +9,7 @@ import type {
 import type {
   DocFileConnectionPayload,
   DocFileLoaders,
+  DocFileMutators,
   DocFilePayload,
 } from './doc-files';
 
@@ -42,4 +43,14 @@ export type DocResult = QueryResult<DocPayload>;
 
 export type DocLoaders = {
   doc?: DocDirectoryLoaders & DocFileLoaders;
+};
+
+/*
+ * ===========================================================================
+ *  Mutators types
+ * ===========================================================================
+ */
+
+export type DocMutators = {
+  doc?: DocFileMutators;
 };
