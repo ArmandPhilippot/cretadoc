@@ -1,15 +1,14 @@
 import { basename, parse } from 'path';
-import { MARKDOWN_EXTENSION } from '../../../src/utils/constants';
 import { generateBase64String } from '../../../src/utils/helpers';
 import { docFixtures } from '../../fixtures/doc';
-import type { DocFileWithoutDates } from '../../types';
+import type { DocDirectoryWithoutDatesAndContent } from '../../types';
 import { DOC_FIXTURES_DIR } from '../../utils/constants';
 
-export const docFiles = docFixtures
-  .filter((fileOrDir) => fileOrDir.path.endsWith(MARKDOWN_EXTENSION))
-  .map((fileOrDir): DocFileWithoutDates => {
+export const docDirectories = docFixtures
+  .map((fileOrDir): DocDirectoryWithoutDatesAndContent => {
     const relativePath = fileOrDir.path.replace(DOC_FIXTURES_DIR, './');
-    const parentPath = parse(relativePath).dir;
+    const dirPath = parse(relativePath).dir;
+    const parentPath = parse(dirPath).dir;
     const parent =
       parentPath === '.'
         ? null
@@ -20,11 +19,11 @@ export const docFiles = docFixtures
           };
 
     return {
-      content: fileOrDir.content,
-      id: Buffer.from(relativePath).toString('base64'),
-      name: parse(relativePath).name,
+      id: Buffer.from(dirPath).toString('base64'),
+      name: parse(dirPath).name,
       parent,
-      path: relativePath,
-      type: 'file',
+      path: dirPath,
+      type: 'directory',
     };
-  });
+  })
+  .filter((dir) => dir.path !== '.');

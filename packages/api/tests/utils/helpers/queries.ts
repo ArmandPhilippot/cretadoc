@@ -2,6 +2,7 @@ import request from 'supertest';
 import type { APIInstance } from '../../../src';
 import type {
   ConnectionInput,
+  DocDirectory,
   DocFile,
   DocPayload,
   Page,
@@ -17,6 +18,7 @@ import type {
 } from '../../../src/types';
 import type { QueryResult } from '../../../src/types/gql';
 import { DEFAULT_ENDPOINT } from '../../../src/utils/constants';
+import { docDirectoryQuery } from '../../specs/doc-directories/doc-directories.queries';
 import {
   docFileQuery,
   docFilesQuery,
@@ -34,6 +36,7 @@ export const mutations = [pageCreate, pageDelete, pageUpdate] as const;
 export type Mutations = (typeof mutations)[number];
 
 export const queries = [
+  docDirectoryQuery,
   docFileQuery,
   docFilesQuery,
   pageQuery,
@@ -43,6 +46,7 @@ export const queries = [
 export type Queries = (typeof queries)[number];
 
 export type Variables = {
+  [docDirectoryQuery]: QueryInput<DocDirectory>;
   [docFileQuery]: QueryInput<DocFile>;
   [docFilesQuery]: ConnectionInput<DocFile>;
   [pageCreate]: PageCreateInput;
@@ -53,6 +57,7 @@ export type Variables = {
 };
 
 export type Result = {
+  [docDirectoryQuery]: DocPayload;
   [docFileQuery]: DocPayload;
   [docFilesQuery]: DocPayload;
   [pageCreate]: PageCreateResult;

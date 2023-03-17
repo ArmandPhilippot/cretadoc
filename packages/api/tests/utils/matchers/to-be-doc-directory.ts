@@ -1,20 +1,23 @@
 import type { Nullable } from '@cretadoc/utils';
-import type { DocFile } from '../../../src/types';
-import type { MatcherResult, DocEntryWithoutDatesAndType } from '../../types';
+import type { DocDirectory } from '../../../src/types';
+import type {
+  MatcherResult,
+  DocDirectoryWithoutDatesAndContent,
+} from '../../types';
 
-export type ToBeDocEntry = {
-  toBeDocEntry: (
-    expected: Nullable<DocEntryWithoutDatesAndType>
+export type ToBeDocDirectory = {
+  toBeDocDirectory: (
+    expected: Nullable<DocDirectoryWithoutDatesAndContent>
   ) => MatcherResult;
 };
 
-export function toBeDocEntry(
+export function toBeDocDirectory(
   this: ReturnType<Vi.ExpectStatic['getState']>,
-  entry: Nullable<DocFile>,
-  expected: Nullable<DocEntryWithoutDatesAndType>
+  entry: Nullable<DocDirectory>,
+  expected: Nullable<DocDirectoryWithoutDatesAndContent>
 ): MatcherResult {
   const match = this.isNot ? 'does not match' : 'matches';
-  const message = () => `Doc payload ${match}.`;
+  const message = () => `DocDirectory ${match}.`;
 
   if (entry === null)
     return {
@@ -24,19 +27,15 @@ export function toBeDocEntry(
       expected,
     };
 
-  const isContentMatch = this.equals(entry.content, expected?.content);
   const isIdMatch = this.equals(entry.id, expected?.id);
   const isNameMatch = this.equals(entry.name, expected?.name);
   const isParentMatch = this.equals(entry.parent, expected?.parent);
   const isPathMatch = this.equals(entry.path, expected?.path);
+  const isTypeMatch = this.equals(entry.type, expected?.type);
 
   return {
     pass:
-      isContentMatch &&
-      isIdMatch &&
-      isNameMatch &&
-      isParentMatch &&
-      isPathMatch,
+      isIdMatch && isNameMatch && isParentMatch && isPathMatch && isTypeMatch,
     message,
     actual: entry,
     expected,

@@ -11,8 +11,8 @@ import {
   type Variables,
 } from '../../utils/helpers';
 import { cleanFixtures, createFixtures } from '../../utils/helpers/fixtures';
-import { docFiles } from './doc-files.fixtures';
-import { docFileQuery } from './doc-files.queries';
+import { docDirectories } from './doc-directories.fixtures';
+import { docDirectoryQuery } from './doc-directories.queries';
 
 const api = createAPIServer({
   data: { doc: DOC_FIXTURES_DIR },
@@ -21,10 +21,11 @@ const api = createAPIServer({
 
 const misconfiguredAPI = createAPIServer({ port: 3250 });
 
-const sendDocFileQuery = async (variables?: Variables[typeof docFileQuery]) =>
-  sendQuery({ api: api.instance, query: docFileQuery, variables });
+const sendDocDirectoryQuery = async (
+  variables?: Variables[typeof docDirectoryQuery]
+) => sendQuery({ api: api.instance, query: docDirectoryQuery, variables });
 
-describe('docFile', () => {
+describe('docDirectory', () => {
   beforeAll(async () => {
     await createFixtures(docFixtures);
     api.start();
@@ -35,34 +36,34 @@ describe('docFile', () => {
     await cleanFixtures(DOC_FIXTURES_DIR);
   });
 
-  it('returns a documentation file by id', async () => {
-    const firstFile = docFiles[0];
+  it('returns a documentation directory by id', async () => {
+    const firstDirectory = docDirectories[0];
 
-    if (!firstFile) throw new Error('Documentation fixtures are missing.');
+    if (!firstDirectory) throw new Error('Documentation fixtures are missing.');
 
-    const response = await sendDocFileQuery({ id: firstFile.id });
+    const response = await sendDocDirectoryQuery({ id: firstDirectory.id });
 
     expect(response.body.data).not.toBeNull();
-    expect(response.body.data.doc?.file).toBeDocFile(firstFile);
+    expect(response.body.data.doc?.directory).toBeDocDirectory(firstDirectory);
     expect.assertions(2);
   });
 
-  it('returns a documentation file by path', async () => {
-    const firstFile = docFiles[0];
+  it('returns a documentation directory by path', async () => {
+    const firstDirectory = docDirectories[0];
 
-    if (!firstFile) throw new Error('Documentation fixtures are missing.');
+    if (!firstDirectory) throw new Error('Documentation fixtures are missing.');
 
-    const response = await sendDocFileQuery({ path: firstFile.path });
+    const response = await sendDocDirectoryQuery({ path: firstDirectory.path });
 
-    expect(response.body.data.doc?.file).not.toBeNull();
-    expect(response.body.data.doc?.file).toBeDocFile(firstFile);
+    expect(response.body.data.doc?.directory).not.toBeNull();
+    expect(response.body.data.doc?.directory).toBeDocDirectory(firstDirectory);
     expect.assertions(2);
   });
 
   it('returns an error if both id and path are missing', async () => {
-    const response = await sendDocFileQuery();
+    const response = await sendDocDirectoryQuery();
 
-    expect(response.body.data.doc?.file).toBeNull();
+    expect(response.body.data.doc?.directory).toBeNull();
     const body = response.body as QueryResultWithErrors<DocPayload>;
     expect(body.errors).toContainException({
       code: 'BAD_USER_INPUT',
@@ -72,9 +73,12 @@ describe('docFile', () => {
   });
 
   it('returns an error if both id and path are given', async () => {
-    const response = await sendDocFileQuery({ id: 'anyId', path: 'anyPath' });
+    const response = await sendDocDirectoryQuery({
+      id: 'anyId',
+      path: 'anyPath',
+    });
 
-    expect(response.body.data.doc?.file).toBeNull();
+    expect(response.body.data.doc?.directory).toBeNull();
     const body = response.body as QueryResultWithErrors<DocPayload>;
     expect(body.errors).toContainException({
       code: 'BAD_USER_INPUT',
@@ -86,11 +90,11 @@ describe('docFile', () => {
   it('returns an error when API is misconfigured', async () => {
     const response = await sendQuery({
       api: misconfiguredAPI.instance,
-      query: docFileQuery,
+      query: docDirectoryQuery,
       variables: { path: 'anyPathSinceErrorIsExpected' },
     });
 
-    expect(response.body.data.doc?.file).toBeNull();
+    expect(response.body.data.doc?.directory).toBeNull();
     const body = response.body as QueryResultWithErrors<DocPayload>;
     expect(body.errors).toContainException({
       code: 'BAD_CONFIGURATION',
