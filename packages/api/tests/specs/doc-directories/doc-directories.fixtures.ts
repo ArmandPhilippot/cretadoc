@@ -4,7 +4,7 @@ import { docFixtures } from '../../fixtures/doc';
 import type { DocDirectoryWithoutDatesAndContent } from '../../types';
 import { DOC_FIXTURES_DIR } from '../../utils/constants';
 
-export const docDirectories = docFixtures
+const onlyDocDirectories = docFixtures
   .map((fileOrDir): DocDirectoryWithoutDatesAndContent => {
     const relativePath = fileOrDir.path.replace(DOC_FIXTURES_DIR, './');
     const dirPath = parse(relativePath).dir;
@@ -27,3 +27,10 @@ export const docDirectories = docFixtures
     };
   })
   .filter((dir) => dir.path !== '.');
+
+const getUniqueListBy = (
+  arr: DocDirectoryWithoutDatesAndContent[],
+  key: keyof DocDirectoryWithoutDatesAndContent
+) => [...new Map(arr.map((item) => [item[key], item])).values()];
+
+export const docDirectories = getUniqueListBy(onlyDocDirectories, 'id');

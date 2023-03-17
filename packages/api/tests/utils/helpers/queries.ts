@@ -18,7 +18,10 @@ import type {
 } from '../../../src/types';
 import type { QueryResult } from '../../../src/types/gql';
 import { DEFAULT_ENDPOINT } from '../../../src/utils/constants';
-import { docDirectoryQuery } from '../../specs/doc-directories/doc-directories.queries';
+import {
+  docDirectoriesQuery,
+  docDirectoryQuery,
+} from '../../specs/doc-directories/doc-directories.queries';
 import {
   docFileQuery,
   docFilesQuery,
@@ -37,6 +40,7 @@ export type Mutations = (typeof mutations)[number];
 
 export const queries = [
   docDirectoryQuery,
+  docDirectoriesQuery,
   docFileQuery,
   docFilesQuery,
   pageQuery,
@@ -47,6 +51,7 @@ export type Queries = (typeof queries)[number];
 
 export type Variables = {
   [docDirectoryQuery]: QueryInput<DocDirectory>;
+  [docDirectoriesQuery]: ConnectionInput<DocDirectory>;
   [docFileQuery]: QueryInput<DocFile>;
   [docFilesQuery]: ConnectionInput<DocFile>;
   [pageCreate]: PageCreateInput;
@@ -58,6 +63,7 @@ export type Variables = {
 
 export type Result = {
   [docDirectoryQuery]: DocPayload;
+  [docDirectoriesQuery]: DocPayload;
   [docFileQuery]: DocPayload;
   [docFilesQuery]: DocPayload;
   [pageCreate]: PageCreateResult;
