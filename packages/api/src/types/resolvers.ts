@@ -1,4 +1,6 @@
 import type {
+  DocDirectory,
+  DocDirectoryInput,
   DocFile,
   DocFileInput,
   DocFileOrderFields,
@@ -9,7 +11,9 @@ import type {
   PageWhereFields,
 } from './schema';
 
-export type ResolveInputFields<T> = T extends DocFile
+export type ResolveInputFields<T> = T extends DocDirectory
+  ? DocDirectoryInput
+  : T extends DocFile
   ? DocFileInput
   : T extends Page
   ? PageInput

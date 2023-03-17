@@ -1,4 +1,5 @@
 import type { DocLoaders } from '../../types';
+import { initDocDirectoryLoaders } from './directories/directories.loaders';
 import type { DocRepository } from './doc.repository';
 import { initDocFileLoaders } from './files/files.loaders';
 
@@ -11,6 +12,7 @@ import { initDocFileLoaders } from './files/files.loaders';
 export const initDocLoaders = (repository: DocRepository): DocLoaders => {
   return {
     doc: {
+      ...initDocDirectoryLoaders(repository),
       ...initDocFileLoaders(repository),
     },
   };

@@ -1,8 +1,14 @@
 import { basename, join, parse } from 'path';
-import type { RegularFile } from '@cretadoc/read-dir';
+import type {
+  Directory,
+  DirectoryContents,
+  RegularFile,
+} from '@cretadoc/read-dir';
 import type { Maybe, Nullable } from '@cretadoc/utils';
 import { FileSystemRepository } from '../../repositories/filesystem.repository';
 import type {
+  DocDirectory,
+  DocDirectoryInput,
   DocEntryParent,
   DocFile,
   DocFileInput,
@@ -44,23 +50,39 @@ export class DocRepository extends FileSystemRepository {
   }
 
   /**
-   * Convert a RegularFile object to a DocFile object.
+   * Convert the DirectoryContents.
    *
-   * @param {RegularFile} file - An object.
-   * @returns {DocFile} A DocFile object.
+   * @param {Maybe<DirectoryContents>} content - An object.
+   * @returns {Maybe<DirectoryContents>} The converted object.
    */
-  #convertRegularFileToDocFile({
-    createdAt,
-    name,
-    path,
-    type,
-    updatedAt,
-    content,
-  }: RegularFile): DocFile {
+  #convertDirectoryContents(
+    content: Maybe<DirectoryContents>
+  ): Maybe<DirectoryContents> {
+    if (!content) return undefined;
+
+    return {
+      directories: content.directories.map((dir) => this.#convert(dir)),
+      files: content.files.map((file) => this.#convert(file)),
+    };
+  }
+
+  /**
+   * Convert a Directory to a DocDirectory or a RegularFile to a DocFile.
+   *
+   * @param {Directory | RegularFile} fileOrDir - An object.
+   * @returns {DocDirectory | DocFile} The converted object.
+   */
+  #convert<
+    T extends Directory | RegularFile,
+    R = T extends Directory ? DocDirectory : DocFile
+  >({ createdAt, name, path, type, updatedAt, content }: T): R {
     const relativePath = path.replace(this.getRootDir(), './');
 
     return {
-      content,
+      content:
+        type === 'directory'
+          ? this.#convertDirectoryContents(content)
+          : content,
       createdAt,
       id: generateBase64String(relativePath),
       name,
@@ -68,7 +90,60 @@ export class DocRepository extends FileSystemRepository {
       path: relativePath,
       type,
       updatedAt,
-    };
+    } as R;
+  }
+
+  /**
+   * Retrieve the documentation directories in a directory.
+   *
+   * @returns {Promise<Maybe<DirectoryContents>>} The documentation directories.
+   */
+  async #getDirectoriesIn(path: string): Promise<Maybe<DocDirectory[]>> {
+    const dirContents = await this.getContentsOf(path);
+
+    return dirContents?.directories.map((dir) => this.#convert(dir));
+  }
+
+  /**
+   * Retrieve a documentation directory by looking for a value in a prop.
+   *
+   * @param {P} prop - The prop name.
+   * @param {DocDirectoryInput[P]} value - The value to looking for.
+   * @param {string} [parentPath] - The parent relative path.
+   * @returns {Promise<Maybe<DocDirectory>>} The matching documentation directory.
+   */
+  public async getDirectory<P extends keyof DocDirectoryInput>(
+    prop: P,
+    value: DocDirectoryInput[P],
+    parentPath?: string
+  ): Promise<Maybe<DocDirectory>> {
+    const path = parentPath
+      ? join(this.getRootDir(), parentPath)
+      : this.getRootDir();
+    const directories = await this.#getDirectoriesIn(path);
+
+    return directories?.find((dir) => dir[prop] === value);
+  }
+
+  /**
+   * Retrieve many documentation directories by looking for values in a prop.
+   *
+   * @param {P} prop - The prop name.
+   * @param {ReadonlyArray<DocDirectoryInput[P]>} values - The values to looking for.
+   * @param {string} [parentPath] - The parent relative path.
+   * @returns {Promise<Maybe<DocDirectory[]>>} The matching documentation directories.
+   */
+  public async getManyDirectory<P extends keyof DocDirectoryInput>(
+    prop: P,
+    values: ReadonlyArray<DocDirectoryInput[P]>,
+    parentPath?: string
+  ): Promise<Maybe<DocDirectory[]>> {
+    const path = parentPath
+      ? join(this.getRootDir(), parentPath)
+      : this.getRootDir();
+    const directories = await this.#getDirectoriesIn(path);
+
+    return directories?.filter((dir) => values.includes(dir[prop]));
   }
 
   /**
@@ -79,9 +154,7 @@ export class DocRepository extends FileSystemRepository {
   async #getFilesIn(path: string): Promise<Maybe<DocFile[]>> {
     const dirContents = await this.getContentsOf(path);
 
-    return dirContents?.files.map((file) =>
-      this.#convertRegularFileToDocFile(file)
-    );
+    return dirContents?.files.map((file) => this.#convert(file));
   }
 
   /**
