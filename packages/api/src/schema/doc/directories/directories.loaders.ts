@@ -1,5 +1,10 @@
-import type { DocDirectoryLoaders } from '../../../types';
+import type {
+  DocDirectory,
+  DocDirectoryLoaders,
+  ListInput,
+} from '../../../types';
 import type { DocRepository } from '../doc.repository';
+import { listDocDirectories } from './list/list.loaders';
 import {
   getDocDirectoryById,
   getDocDirectoryByPath,
@@ -18,6 +23,8 @@ export const initDocDirectoryLoaders = (
     directory: {
       byId: getDocDirectoryById(repository),
       byPath: getDocDirectoryByPath(repository),
+      list: async (params: ListInput<DocDirectory>) =>
+        listDocDirectories(repository, params),
     },
   };
 };

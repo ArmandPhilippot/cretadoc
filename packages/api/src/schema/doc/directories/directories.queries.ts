@@ -1,3 +1,4 @@
+import { directories } from './list/list.query';
 import { directory } from './read/read.query';
 
-export { directory };
+export { directory, directories };

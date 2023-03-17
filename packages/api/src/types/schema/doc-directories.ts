@@ -1,7 +1,8 @@
 import type { Directory } from '@cretadoc/read-dir';
 import type { Maybe, Nullable, NullableOptionalKeysOf } from '@cretadoc/utils';
 import type DataLoader from 'dataloader';
-import type { Payload } from '../generics';
+import type { ListLoader, Payload } from '../generics';
+import type { Connection, QueryResult } from '../gql';
 import type { DocEntryParent } from './doc';
 
 export type DocDirectory = Omit<Directory, 'extension'> & {
@@ -23,6 +24,29 @@ export type DocDirectoryPayload = Payload<
 
 /*
  * ===========================================================================
+ *  Connection types
+ * ===========================================================================
+ */
+
+export type DocDirectoryWhereFields = Partial<
+  Pick<DocDirectory, 'createdAt' | 'name' | 'path' | 'updatedAt'>
+>;
+
+export type DocDirectoryOrderFields = Pick<
+  DocDirectory,
+  'createdAt' | 'name' | 'path' | 'updatedAt'
+>;
+
+export type DocDirectoryConnectionPayload = Payload<
+  'directories',
+  NullableOptionalKeysOf<Connection<DocDirectory>, true>
+>;
+
+export type DocDirectoryConnectionResult =
+  QueryResult<DocDirectoryConnectionPayload>;
+
+/*
+ * ===========================================================================
  *  Loaders types
  * ===========================================================================
  */
@@ -41,5 +65,6 @@ export type DocDirectoryLoaders = {
   directory: {
     byId: DocDirectoryByIdLoader;
     byPath: DocDirectoryByPathLoader;
+    list: ListLoader<DocDirectory>;
   };
 };

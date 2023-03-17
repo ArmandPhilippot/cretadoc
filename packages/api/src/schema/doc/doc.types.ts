@@ -1,5 +1,5 @@
 import { GraphQLObjectType } from 'graphql';
-import { directory } from './directories/directories.queries';
+import { directories, directory } from './directories/directories.queries';
 import { file, files } from './files/files.queries';
 
 export const DocType = new GraphQLObjectType({
@@ -8,6 +8,7 @@ export const DocType = new GraphQLObjectType({
   fields: () => {
     return {
       directory,
+      directories,
       file,
       files,
     };

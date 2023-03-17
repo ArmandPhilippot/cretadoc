@@ -11,4 +11,4 @@ import type { DocRepository } from '../../doc.repository';
 export const listDocFiles = async (
   repository: DocRepository,
   params: ListInput<DocFile>
-): Promise<ListReturn<DocFile[]>> => repository.find(params);
+): Promise<ListReturn<DocFile[]>> => repository.find('file', params);

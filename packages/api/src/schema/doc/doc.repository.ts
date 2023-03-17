@@ -9,6 +9,9 @@ import { FileSystemRepository } from '../../repositories/filesystem.repository';
 import type {
   DocDirectory,
   DocDirectoryInput,
+  DocDirectoryOrderFields,
+  DocDirectoryWhereFields,
+  DocEntryKind,
   DocEntryParent,
   DocFile,
   DocFileInput,
@@ -200,100 +203,112 @@ export class DocRepository extends FileSystemRepository {
   }
 
   /**
-   * Filter the documentation files.
+   * Filter the documentation entries.
    *
-   * @param {DocFile[]} files - The files.
-   * @param {DocFileWhereFields} where - The filter parameters.
-   * @returns {DocFile[]} The filtered files.
+   * @param {T[]} entries - The entries.
+   * @param {W} where - The filter parameters.
+   * @returns {T[]} The filtered entries.
    */
-  #filter(
-    files: DocFile[],
-    { createdAt, name, updatedAt }: Omit<DocFileWhereFields, 'path'>
-  ): DocFile[] {
-    let filteredDocFiles = files.slice(0);
+  #filter<
+    T extends DocDirectory | DocFile,
+    W extends
+      | DocDirectoryWhereFields
+      | DocFileWhereFields = T extends DocDirectory
+      ? DocDirectoryWhereFields
+      : DocFileWhereFields
+  >(entries: T[], { createdAt, name, updatedAt }: Omit<W, 'path'>): T[] {
+    let filteredDocEntries = entries.slice(0);
 
     if (createdAt)
-      filteredDocFiles = filteredDocFiles.filter(
+      filteredDocEntries = filteredDocEntries.filter(
         (page) => page.createdAt === createdAt
       );
 
     if (name)
-      filteredDocFiles = filteredDocFiles.filter((page) =>
+      filteredDocEntries = filteredDocEntries.filter((page) =>
         page.name.includes(name)
       );
 
     if (updatedAt)
-      filteredDocFiles = filteredDocFiles.filter(
+      filteredDocEntries = filteredDocEntries.filter(
         (page) => page.updatedAt === updatedAt
       );
 
-    return filteredDocFiles;
+    return filteredDocEntries;
   }
 
   /**
-   * Order the given documentation files.
+   * Order the given documentation entries.
    *
-   * @param {DocFile[]} files - The documentation files.
-   * @param {OrderBy<DocFileOrderFields>} orderBy - The order by instructions.
-   * @returns {DocFile[]} The ordered documentation files.
+   * @param {T[]} entries - The documentation entries.
+   * @param {OrderBy<F>} orderBy - The order by instructions.
+   * @returns {T[]} The ordered documentation entries.
    */
-  #order(
-    files: DocFile[],
-    { direction, field }: OrderBy<DocFileOrderFields>
-  ): DocFile[] {
-    let orderedDocFiles = files.slice(0);
+  #order<
+    T extends DocDirectory | DocFile,
+    F = T extends DocDirectory ? DocDirectoryOrderFields : DocFileOrderFields
+  >(entries: T[], { direction, field }: OrderBy<F>): T[] {
+    let orderedDocEntries = entries.slice(0);
 
     switch (field) {
       case 'createdAt':
-        orderedDocFiles = orderedDocFiles.sort(byCreatedAtProp);
+        orderedDocEntries = orderedDocEntries.sort(byCreatedAtProp);
         break;
       case 'name':
-        orderedDocFiles = orderedDocFiles.sort(byNameProp);
+        orderedDocEntries = orderedDocEntries.sort(byNameProp);
         break;
       case 'path':
-        orderedDocFiles = orderedDocFiles.sort(byPathProp);
+        orderedDocEntries = orderedDocEntries.sort(byPathProp);
         break;
       case 'updatedAt':
-        orderedDocFiles = orderedDocFiles.sort(byUpdatedAtProp);
+        orderedDocEntries = orderedDocEntries.sort(byUpdatedAtProp);
         break;
       default:
         break;
     }
 
-    return direction === 'ASC' ? orderedDocFiles : orderedDocFiles.reverse();
+    return direction === 'ASC'
+      ? orderedDocEntries
+      : orderedDocEntries.reverse();
   }
 
   /**
-   * Find the documentation files matching the given parameters.
+   * Find the documentation entries matching the given parameters.
    *
-   * @param {ListInput<DocFile>} params - The list parameters.
-   * @returns {Promise<ListReturn<DocFile[]>>} The matching documentation files.
+   * @param {ListInput<T>} params - The list parameters.
+   * @returns {Promise<ListReturn<T[]>>} The matching documentation entries.
    */
-  public async find({
-    first,
-    after,
-    orderBy,
-    where,
-  }: ListInput<DocFile>): Promise<ListReturn<DocFile[]>> {
+  public async find<
+    K extends DocEntryKind,
+    T extends DocDirectory | DocFile = K extends 'directory'
+      ? DocDirectory
+      : DocFile
+  >(
+    kind: K,
+    { first, after, orderBy, where }: ListInput<T>
+  ): Promise<ListReturn<T[]>> {
     const path = where?.path
       ? join(this.getRootDir(), where.path)
       : this.getRootDir();
-    const files = await this.#getFilesIn(path);
+    const entries: Maybe<T[]> =
+      kind === 'directory'
+        ? ((await this.#getDirectoriesIn(path)) as Maybe<T[]>)
+        : ((await this.#getFilesIn(path)) as Maybe<T[]>);
 
-    if (!files)
+    if (!entries)
       return {
         data: undefined,
         total: 0,
       };
 
-    const filteredDocFiles = where ? this.#filter(files, where) : files;
-    const orderedDocFiles = orderBy
-      ? this.#order(filteredDocFiles, orderBy)
-      : filteredDocFiles;
+    const filteredDocEntries = where ? this.#filter(entries, where) : entries;
+    const orderedDocEntries = orderBy
+      ? this.#order(filteredDocEntries, orderBy)
+      : filteredDocEntries;
 
     return {
-      data: orderedDocFiles.slice(after, after + first),
-      total: orderedDocFiles.length,
+      data: orderedDocEntries.slice(after, after + first),
+      total: orderedDocEntries.length,
     };
   }
 }
