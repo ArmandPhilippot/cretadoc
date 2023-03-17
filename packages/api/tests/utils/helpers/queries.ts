@@ -6,6 +6,8 @@ import type {
   DocFile,
   DocFileCreateInput,
   DocFileCreateResult,
+  DocFileUpdateInput,
+  DocFileUpdateResult,
   DocPayload,
   Page,
   PageConnectionPayload,
@@ -24,7 +26,10 @@ import {
   docDirectoriesQuery,
   docDirectoryQuery,
 } from '../../specs/doc-directories/doc-directories.queries';
-import { docFileCreate } from '../../specs/doc-files/doc-files.mutations';
+import {
+  docFileCreate,
+  docFileUpdate,
+} from '../../specs/doc-files/doc-files.mutations';
 import {
   docFileQuery,
   docFilesQuery,
@@ -39,6 +44,7 @@ import type { QueryResultWithErrors } from '../../types';
 
 export const mutations = [
   docFileCreate,
+  docFileUpdate,
   pageCreate,
   pageDelete,
   pageUpdate,
@@ -61,6 +67,7 @@ export type Variables = {
   [docDirectoryQuery]: QueryInput<DocDirectory>;
   [docDirectoriesQuery]: ConnectionInput<DocDirectory>;
   [docFileCreate]: DocFileCreateInput;
+  [docFileUpdate]: DocFileUpdateInput;
   [docFileQuery]: QueryInput<DocFile>;
   [docFilesQuery]: ConnectionInput<DocFile>;
   [pageCreate]: PageCreateInput;
@@ -74,6 +81,7 @@ export type Result = {
   [docDirectoryQuery]: DocPayload;
   [docDirectoriesQuery]: DocPayload;
   [docFileCreate]: DocFileCreateResult;
+  [docFileUpdate]: DocFileUpdateResult;
   [docFileQuery]: DocPayload;
   [docFilesQuery]: DocPayload;
   [pageCreate]: PageCreateResult;
