@@ -2,6 +2,7 @@ import { isString } from '@cretadoc/utils';
 import type {
   DocDirectoryByPathLoader,
   DocFileCreate,
+  DocFileUpdate,
   ValidationErrors,
 } from '../../../types';
 import { error } from '../../../utils/errors/messages';
@@ -89,6 +90,38 @@ export const validateDocFileCreateInput = async <T extends DocFileCreate>(
 
   if (content)
     validationErrors.content.push(...validateDocFileContent(content));
+
+  if (parentPath) {
+    const parentPathErrors = await validateDocFileParentPath(
+      parentPath,
+      loader
+    );
+    validationErrors.parentPath.push(...parentPathErrors);
+  }
+
+  return validationErrors;
+};
+
+/**
+ * Validate the input to update a documentation file.
+ *
+ * @param {T} input - The documentation file data.
+ * @param {DocDirectoryByPathLoader} loader - A directory loader.
+ * @returns {Promise<ValidationErrors<T>>} The validation errors.
+ */
+export const validateDocFileUpdateInput = async <T extends DocFileUpdate>(
+  input: T,
+  loader: DocDirectoryByPathLoader
+): Promise<ValidationErrors<T>> => {
+  const validationErrors = initValidationErrors(input);
+  const { id, content, name, parentPath } = input;
+
+  validationErrors.id.push(...validateDocFileId(id));
+
+  if (content)
+    validationErrors.content.push(...validateDocFileContent(content));
+
+  if (name) validationErrors.name.push(...validateDocFileName(name));
 
   if (parentPath) {
     const parentPathErrors = await validateDocFileParentPath(

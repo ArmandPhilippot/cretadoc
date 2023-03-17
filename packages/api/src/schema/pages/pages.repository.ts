@@ -1,4 +1,4 @@
-import { rename, rm, writeFile } from 'fs/promises';
+import { rm, writeFile } from 'fs/promises';
 import { join, parse } from 'path';
 import type { RegularFile } from '@cretadoc/read-dir';
 import type { Maybe } from '@cretadoc/utils';
@@ -14,7 +14,6 @@ import type {
   PageUpdate,
   PageWhereFields,
 } from '../../types';
-import { MARKDOWN_EXTENSION } from '../../utils/constants';
 import {
   byCreatedAtProp,
   byNameProp,
@@ -189,16 +188,6 @@ export class PagesRepository extends FileSystemRepository {
   }
 
   /**
-   * Retrieve an absolute file path from its name.
-   *
-   * @param {string} name - The filename without extension.
-   * @returns {string} The absolute path.
-   */
-  #getAbsolutePathFrom(name: string): string {
-    return join(this.getRootDir(), `./${name}${MARKDOWN_EXTENSION}`);
-  }
-
-  /**
    * Create a new page in pages directory.
    *
    * @param {PageCreate} page - The page to write.
@@ -208,20 +197,6 @@ export class PagesRepository extends FileSystemRepository {
     await this.createMarkdownFile('./', name, content);
 
     return this.get('name', name);
-  }
-
-  /**
-   * Rename a page.
-   *
-   * @param {string} name - The new page name.
-   * @param {string} oldPath - The old absolute path.
-   * @returns {Promise<string>} The new absolute path.
-   */
-  async #renamePage(name: string, oldPath: string): Promise<string> {
-    const absolutePath = this.#getAbsolutePathFrom(name);
-    await rename(oldPath, absolutePath);
-
-    return absolutePath;
   }
 
   /**
@@ -237,7 +212,7 @@ export class PagesRepository extends FileSystemRepository {
     const absolutePath = join(this.getRootDir(), relativePath);
     const newAbsolutePath =
       name && oldName !== name
-        ? await this.#renamePage(name, absolutePath)
+        ? await this.renameFile(name, absolutePath)
         : absolutePath;
 
     if (content)

@@ -1,3 +1,4 @@
+import { writeFile } from 'fs/promises';
 import { basename, join, parse } from 'path';
 import type {
   Directory,
@@ -17,6 +18,7 @@ import type {
   DocFileCreate,
   DocFileInput,
   DocFileOrderFields,
+  DocFileUpdate,
   DocFileWhereFields,
   ListInput,
   ListReturn,
@@ -27,6 +29,7 @@ import {
   byNameProp,
   byPathProp,
   byUpdatedAtProp,
+  decodeBase64String,
   generateBase64String,
 } from '../../utils/helpers';
 
@@ -166,16 +169,16 @@ export class DocRepository extends FileSystemRepository {
    *
    * @param {P} prop - The prop name.
    * @param {DocFileInput[P]} value - The value to looking for.
-   * @param {string} [parentPath] - The parent relative path.
    * @returns {Promise<Maybe<DocFile>>} The matching documentation file.
    */
   public async getFile<P extends keyof DocFileInput>(
     prop: P,
-    value: DocFileInput[P],
-    parentPath?: string
+    value: DocFileInput[P]
   ): Promise<Maybe<DocFile>> {
-    const path = parentPath
-      ? join(this.getRootDir(), parentPath)
+    const relativePath = prop === 'id' ? decodeBase64String(value) : value;
+    const parent = this.#getParentOf(relativePath);
+    const path = parent?.path
+      ? join(this.getRootDir(), parent.path)
       : this.getRootDir();
     const files = await this.#getFilesIn(path);
 
@@ -327,6 +330,37 @@ export class DocRepository extends FileSystemRepository {
     const basePath = parentPath ?? './';
     const filePath = await this.createMarkdownFile(basePath, name, content);
 
-    return this.getFile('path', this.getRelativePathFrom(filePath), basePath);
+    return this.getFile('path', this.getRelativePathFrom(filePath));
+  }
+
+  /**
+   * Update an existing documentation file.
+   *
+   * @param {DocFileUpdate} data - The data to update.
+   * @returns {Promise<Maybe<DocFile>>} The updated documentation file.
+   */
+  public async updateFile({
+    content,
+    id,
+    name,
+    parentPath,
+  }: DocFileUpdate): Promise<Maybe<DocFile>> {
+    const relativePath = decodeBase64String(id);
+    const oldName = parse(relativePath).name;
+    const absolutePath = join(this.getRootDir(), relativePath);
+    const newAbsolutePath =
+      name && oldName !== name
+        ? await this.renameFile(name, absolutePath, parentPath)
+        : absolutePath;
+
+    if (content)
+      await writeFile(newAbsolutePath, content, {
+        encoding: 'utf8',
+      });
+
+    const newRelativePath = this.getRelativePathFrom(newAbsolutePath);
+    const file = await this.getFile('path', newRelativePath);
+
+    return file;
   }
 }

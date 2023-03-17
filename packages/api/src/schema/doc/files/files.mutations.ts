@@ -1,3 +1,4 @@
 import { fileCreate } from './create/create.mutation';
+import { fileUpdate } from './update/update.mutation';
 
-export const filesMutations = { fileCreate };
+export { fileCreate, fileUpdate };

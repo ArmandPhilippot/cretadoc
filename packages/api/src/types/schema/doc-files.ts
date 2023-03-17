@@ -76,6 +76,27 @@ export type DocFileCreateMutator = Mutator<DocFileCreate, DocFile>;
 
 /*
  * ===========================================================================
+ *  Update types
+ * ===========================================================================
+ */
+
+export type DocFileUpdate = Pick<DocFile, 'id'> & Partial<DocFileCreate>;
+
+export type DocFileUpdateInput = InputFrom<DocFileUpdate>;
+
+export type DocFileUpdateErrors = ErrorsFrom<DocFileUpdate>;
+
+export type DocFileUpdatePayload = DocFilePayload | DocFileUpdateErrors;
+
+export type DocFileUpdateResult = MutationResult<
+  'docFileUpdate',
+  DocFileUpdatePayload
+>;
+
+export type DocFileUpdateMutator = Mutator<DocFileUpdate, DocFile>;
+
+/*
+ * ===========================================================================
  *  Loaders types
  * ===========================================================================
  */
@@ -104,5 +125,6 @@ export type DocFileLoaders = {
 export type DocFileMutators = {
   file: {
     create: DocFileCreateMutator;
+    update: DocFileUpdateMutator;
   };
 };

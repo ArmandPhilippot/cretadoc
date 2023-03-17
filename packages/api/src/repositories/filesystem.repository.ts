@@ -1,4 +1,4 @@
-import { writeFile } from 'fs/promises';
+import { rename, writeFile } from 'fs/promises';
 import { isAbsolute, join } from 'path';
 import {
   type DirectoryContents,
@@ -111,5 +111,40 @@ export class FileSystemRepository {
     await writeFile(filePath, content ?? '', { encoding: 'utf8' });
 
     return filePath;
+  }
+
+  /**
+   * Retrieve an absolute file path from its name.
+   *
+   * @param {string} name - The filename without extension.
+   * @param {string} [parentPath] - The relative parent path.
+   * @returns {string} The absolute path.
+   */
+  #getAbsolutePathFrom(name: string, parentPath?: string): string {
+    const filename = `./${name}${MARKDOWN_EXTENSION}`;
+    const fileWithParentPath = parentPath
+      ? join(parentPath, filename)
+      : filename;
+
+    return join(this.getRootDir(), fileWithParentPath);
+  }
+
+  /**
+   * Rename a file.
+   *
+   * @param {string} newName - The new file name.
+   * @param {string} oldPath - The old absolute path.
+   * @param {string} [newParentPath] - The new relative parent path.
+   * @returns {Promise<string>} The new absolute path.
+   */
+  public async renameFile(
+    newName: string,
+    oldPath: string,
+    newParentPath?: string
+  ): Promise<string> {
+    const newPath = this.#getAbsolutePathFrom(newName, newParentPath);
+    await rename(oldPath, newPath);
+
+    return newPath;
   }
 }

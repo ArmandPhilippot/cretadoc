@@ -1,6 +1,7 @@
 import type { DocFileMutators } from '../../../types';
 import type { DocRepository } from '../doc.repository';
 import { createDocFile } from './create/create.mutator';
+import { updateDocFile } from './update/update.mutator';
 
 /**
  * Initialize the documentation file mutators.
@@ -14,6 +15,7 @@ export const initDocFileMutators = (
   return {
     file: {
       create: async (data) => createDocFile(repository, data),
+      update: async (data) => updateDocFile(repository, data),
     },
   };
 };
