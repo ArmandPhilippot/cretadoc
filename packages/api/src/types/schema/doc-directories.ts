@@ -82,6 +82,33 @@ export type DocDirectoryCreateMutator = Mutator<
 
 /*
  * ===========================================================================
+ *  Update types
+ * ===========================================================================
+ */
+
+export type DocDirectoryUpdate = Pick<DocDirectory, 'id'> &
+  Partial<DocDirectoryCreate>;
+
+export type DocDirectoryUpdateInput = InputFrom<DocDirectoryUpdate>;
+
+export type DocDirectoryUpdateErrors = ErrorsFrom<DocDirectoryUpdate>;
+
+export type DocDirectoryUpdatePayload =
+  | DocDirectoryPayload
+  | DocDirectoryUpdateErrors;
+
+export type DocDirectoryUpdateResult = MutationResult<
+  'docDirectoryUpdate',
+  DocDirectoryUpdatePayload
+>;
+
+export type DocDirectoryUpdateMutator = Mutator<
+  DocDirectoryUpdate,
+  DocDirectory
+>;
+
+/*
+ * ===========================================================================
  *  Loaders types
  * ===========================================================================
  */
@@ -113,5 +140,6 @@ export type DocDirectoryLoaders = {
 export type DocDirectoryMutators = {
   directory: {
     create: DocDirectoryCreateMutator;
+    update: DocDirectoryUpdateMutator;
   };
 };

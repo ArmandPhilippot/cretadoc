@@ -61,12 +61,13 @@ export class FileSystemRepository {
   /**
    * Retrieve the contents of a directory.
    *
+   * @param {string} dir - The absolute path of a directory.
    * @returns {Promise<Maybe<DirectoryContents>>} The directory contents.
    */
-  public async getContentsOf(path: string): Promise<Maybe<DirectoryContents>> {
-    const dir = await this.getDirectoryDataFrom(path);
+  public async getContentsOf(dir: string): Promise<Maybe<DirectoryContents>> {
+    const requestedDir = await this.getDirectoryDataFrom(dir);
 
-    return dir.content;
+    return requestedDir.content;
   }
 
   /**
@@ -83,15 +84,37 @@ export class FileSystemRepository {
   }
 
   /**
+   * Retrieve an absolute file path from its name.
+   *
+   * @param {string} name - The filename without extension.
+   * @param {string} [parentPath] - The relative parent path.
+   * @returns {string} The absolute path.
+   */
+  #getAbsolutePathFrom(name: string, parentPath?: string): string {
+    const fileWithParentPath = parentPath ? join(parentPath, name) : name;
+
+    return join(this.getRootDir(), fileWithParentPath);
+  }
+
+  /**
+   * Retrieve the filename with markdown extension.
+   *
+   * @param {string} name - The filename without extension.
+   * @returns {string} The filename with extension.
+   */
+  public getMDFilenameFrom(name: string): string {
+    return `${name}${MARKDOWN_EXTENSION}`;
+  }
+
+  /**
    * Retrieve the absolute path of a markdown file.
    *
    * @param {string} name - The filename without extension.
+   * @param {string} [parentPath] - The relative path of its parent.
    * @returns {string} The absolute path.
    */
-  #getMarkdownFileAbsolutePath(relativePath: string, name: string): string {
-    const basePath = join(this.getRootDir(), relativePath);
-
-    return join(basePath, `./${name}${MARKDOWN_EXTENSION}`);
+  #getMarkdownFileAbsolutePath(name: string, parentPath?: string): string {
+    return this.#getAbsolutePathFrom(this.getMDFilenameFrom(name), parentPath);
   }
 
   /**
@@ -107,26 +130,10 @@ export class FileSystemRepository {
     name: string,
     content?: string
   ): Promise<string> {
-    const filePath = this.#getMarkdownFileAbsolutePath(path, name);
+    const filePath = this.#getMarkdownFileAbsolutePath(name, path);
     await writeFile(filePath, content ?? '', { encoding: 'utf8' });
 
     return filePath;
-  }
-
-  /**
-   * Retrieve an absolute file path from its name.
-   *
-   * @param {string} name - The filename without extension.
-   * @param {string} [parentPath] - The relative parent path.
-   * @returns {string} The absolute path.
-   */
-  #getAbsolutePathFrom(name: string, parentPath?: string): string {
-    const filename = `./${name}${MARKDOWN_EXTENSION}`;
-    const fileWithParentPath = parentPath
-      ? join(parentPath, filename)
-      : filename;
-
-    return join(this.getRootDir(), fileWithParentPath);
   }
 
   /**
@@ -142,7 +149,10 @@ export class FileSystemRepository {
     oldPath: string,
     newParentPath?: string
   ): Promise<string> {
-    const newPath = this.#getAbsolutePathFrom(newName, newParentPath);
+    const isMarkdownFile = oldPath.endsWith(MARKDOWN_EXTENSION);
+    const newPath = isMarkdownFile
+      ? this.#getMarkdownFileAbsolutePath(newName, newParentPath)
+      : this.#getAbsolutePathFrom(newName, newParentPath);
     await rename(oldPath, newPath);
 
     return newPath;

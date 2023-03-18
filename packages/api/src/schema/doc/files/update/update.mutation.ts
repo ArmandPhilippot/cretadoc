@@ -45,7 +45,7 @@ export const fileUpdate: GraphQLFieldConfig<
       context.loaders.doc.directory.byPath
     );
 
-    const { content, id, name } = input;
+    const { content, id, name, parentPath } = input;
 
     const maybeExistentDocFile = await context.loaders.doc.file.byId.load(id);
 
@@ -59,6 +59,7 @@ export const fileUpdate: GraphQLFieldConfig<
       content: content ? sanitizeString(content) : undefined,
       id,
       name,
+      parentPath,
     });
 
     if (file) clearDocFileLoaders(context.loaders.doc.file, { ...file });

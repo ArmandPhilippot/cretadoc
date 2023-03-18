@@ -12,6 +12,7 @@ import type {
   DocDirectoryCreate,
   DocDirectoryInput,
   DocDirectoryOrderFields,
+  DocDirectoryUpdate,
   DocDirectoryWhereFields,
   DocEntryKind,
   DocEntryParent,
@@ -332,6 +333,31 @@ export class DocRepository extends FileSystemRepository {
     await mkdir(dirPath, { recursive: true });
 
     return this.getDirectory('path', this.getRelativePathFrom(dirPath));
+  }
+
+  /**
+   * Update an existing documentation directory.
+   *
+   * @param {DocDirectoryUpdate} data - The data to update.
+   * @returns {Promise<Maybe<DocDirectory>>} The updated doc directory.
+   */
+  public async updateDirectory({
+    id,
+    name,
+    parentPath,
+  }: DocDirectoryUpdate): Promise<Maybe<DocDirectory>> {
+    const currentRelativePath = decodeBase64String(id);
+    const currentName = parse(currentRelativePath).name;
+    const absolutePath = join(this.getRootDir(), currentRelativePath);
+    const newAbsolutePath =
+      name || parentPath
+        ? await this.renameFile(name ?? currentName, absolutePath, parentPath)
+        : absolutePath;
+
+    const newRelativePath = this.getRelativePathFrom(newAbsolutePath);
+    const dir = await this.getDirectory('path', newRelativePath);
+
+    return dir;
   }
 
   /**

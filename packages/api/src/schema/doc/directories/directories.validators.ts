@@ -1,6 +1,7 @@
 import type {
   DocDirectoryByPathLoader,
   DocDirectoryCreate,
+  DocDirectoryUpdate,
   ValidationErrors,
 } from '../../../types';
 import { error } from '../../../utils/errors/messages';
@@ -72,6 +73,37 @@ export const validateDocDirectoryCreateInput = async <
   const { name, parentPath } = input;
 
   validationErrors.name.push(...validateDocDirectoryName(name));
+
+  if (parentPath) {
+    const parentPathErrors = await validateDocDirectoryParentPath(
+      parentPath,
+      loader
+    );
+    validationErrors.parentPath.push(...parentPathErrors);
+  }
+
+  return validationErrors;
+};
+
+/**
+ * Validate the input to update a documentation directory.
+ *
+ * @param {T} input - The documentation directory data.
+ * @param {DocDirectoryByPathLoader} loader - A directory loader.
+ * @returns {Promise<ValidationErrors<T>>} The validation errors.
+ */
+export const validateDocDirectoryUpdateInput = async <
+  T extends DocDirectoryUpdate
+>(
+  input: T,
+  loader: DocDirectoryByPathLoader
+): Promise<ValidationErrors<T>> => {
+  const validationErrors = initValidationErrors(input);
+  const { id, name, parentPath } = input;
+
+  validationErrors.id.push(...validateDocDirectoryId(id));
+
+  if (name) validationErrors.name.push(...validateDocDirectoryName(name));
 
   if (parentPath) {
     const parentPathErrors = await validateDocDirectoryParentPath(
