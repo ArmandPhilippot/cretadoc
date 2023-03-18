@@ -5,6 +5,8 @@ import type {
   DocDirectory,
   DocDirectoryCreateInput,
   DocDirectoryCreateResult,
+  DocDirectoryUpdateInput,
+  DocDirectoryUpdateResult,
   DocFile,
   DocFileCreateInput,
   DocFileCreateResult,
@@ -26,7 +28,10 @@ import type {
 } from '../../../src/types';
 import type { QueryResult } from '../../../src/types/gql';
 import { DEFAULT_ENDPOINT } from '../../../src/utils/constants';
-import { docDirectoryCreate } from '../../specs/doc-directories/doc-directories.mutations';
+import {
+  docDirectoryCreate,
+  docDirectoryUpdate,
+} from '../../specs/doc-directories/doc-directories.mutations';
 import {
   docDirectoriesQuery,
   docDirectoryQuery,
@@ -50,6 +55,7 @@ import type { QueryResultWithErrors } from '../../types';
 
 export const mutations = [
   docDirectoryCreate,
+  docDirectoryUpdate,
   docFileCreate,
   docFileDelete,
   docFileUpdate,
@@ -73,6 +79,7 @@ export type Queries = (typeof queries)[number];
 
 export type Variables = {
   [docDirectoryCreate]: DocDirectoryCreateInput;
+  [docDirectoryUpdate]: DocDirectoryUpdateInput;
   [docDirectoryQuery]: QueryInput<DocDirectory>;
   [docDirectoriesQuery]: ConnectionInput<DocDirectory>;
   [docFileCreate]: DocFileCreateInput;
@@ -89,6 +96,7 @@ export type Variables = {
 
 export type Result = {
   [docDirectoryCreate]: DocDirectoryCreateResult;
+  [docDirectoryUpdate]: DocDirectoryUpdateResult;
   [docDirectoryQuery]: DocPayload;
   [docDirectoriesQuery]: DocPayload;
   [docFileCreate]: DocFileCreateResult;
