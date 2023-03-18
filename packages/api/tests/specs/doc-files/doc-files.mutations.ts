@@ -28,6 +28,35 @@ export const docFileCreate = `mutation CreateDocFile($input: DocFileCreateInput!
   }
 }`;
 
+export const docFileDelete = `mutation DeleteDocFile($input: DocFileDeleteInput!) {
+  docFileDelete(input: $input) {
+    ... on DocFilePayload {
+      __typename
+      file {
+        content
+        createdAt
+        id
+        name
+        parent {
+          id
+          name
+          path
+        }
+        path
+        type
+        updatedAt
+      }
+    }
+    ... on DocFileDeleteErrors {
+      __typename
+      errors {
+        id
+        path
+      }
+    }
+  }
+}`;
+
 export const docFileUpdate = `mutation UpdateDocFile($input: DocFileUpdateInput!) {
   docFileUpdate(input: $input) {
     ... on DocFilePayload {
