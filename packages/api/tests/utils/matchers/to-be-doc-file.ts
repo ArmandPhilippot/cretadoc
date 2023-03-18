@@ -8,37 +8,26 @@ export type ToBeDocFile = {
 
 export function toBeDocFile(
   this: ReturnType<Vi.ExpectStatic['getState']>,
-  entry: Nullable<DocFile>,
+  file: Nullable<DocFile>,
   expected: Nullable<DocFileWithoutDates>
 ): MatcherResult {
   const match = this.isNot ? 'does not match' : 'matches';
   const message = () => `DocFile ${match}.`;
 
-  if (entry === null)
+  if (file === null)
     return {
       message,
-      pass: this.equals(entry, expected),
-      actual: entry,
+      pass: this.equals(file, expected),
+      actual: file,
       expected,
     };
 
-  const isContentMatch = this.equals(entry.content, expected?.content);
-  const isIdMatch = this.equals(entry.id, expected?.id);
-  const isNameMatch = this.equals(entry.name, expected?.name);
-  const isParentMatch = this.equals(entry.parent, expected?.parent);
-  const isPathMatch = this.equals(entry.path, expected?.path);
-  const isTypeMatch = this.equals(entry.type, expected?.type);
+  const { createdAt, updatedAt, ...actual } = file;
 
   return {
-    pass:
-      isContentMatch &&
-      isIdMatch &&
-      isNameMatch &&
-      isParentMatch &&
-      isPathMatch &&
-      isTypeMatch,
+    pass: this.equals(actual, expected),
     message,
-    actual: entry,
+    actual,
     expected,
   };
 }
