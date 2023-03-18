@@ -54,6 +54,62 @@ export const docDirectoryCreate = `mutation CreateDocDirectory($input: DocDirect
   }
 }`;
 
+export const docDirectoryDelete = `mutation DeleteDocDirectory($input: DocDirectoryDeleteInput!) {
+  docDirectoryDelete(input: $input) {
+    ... on DocDirectoryPayload {
+      __typename
+      directory {
+        content {
+          directories {
+            createdAt
+            id
+            name
+            parent {
+              id
+              name
+              path
+            }
+            path
+            type
+            updatedAt
+          }
+          files {
+            createdAt
+            id
+            name
+            parent {
+              id
+              name
+              path
+            }
+            path
+            type
+            updatedAt
+          }
+        }
+        createdAt
+        id
+        name
+        parent {
+          id
+          name
+          path
+        }
+        path
+        type
+        updatedAt
+      }
+    }
+    ... on DocDirectoryDeleteErrors {
+      __typename
+      errors {
+        id
+        path
+      }
+    }
+  }
+}`;
+
 export const docDirectoryUpdate = `mutation UpdateDocDirectory($input: DocDirectoryUpdateInput!) {
   docDirectoryUpdate(input: $input) {
     ... on DocDirectoryPayload {
