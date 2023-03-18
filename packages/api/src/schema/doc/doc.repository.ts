@@ -1,4 +1,4 @@
-import { writeFile } from 'fs/promises';
+import { mkdir, writeFile } from 'fs/promises';
 import { basename, join, parse } from 'path';
 import type {
   Directory,
@@ -9,6 +9,7 @@ import type { Maybe, Nullable } from '@cretadoc/utils';
 import { FileSystemRepository } from '../../repositories/filesystem.repository';
 import type {
   DocDirectory,
+  DocDirectoryCreate,
   DocDirectoryInput,
   DocDirectoryOrderFields,
   DocDirectoryWhereFields,
@@ -116,16 +117,16 @@ export class DocRepository extends FileSystemRepository {
    *
    * @param {P} prop - The prop name.
    * @param {DocDirectoryInput[P]} value - The value to looking for.
-   * @param {string} [parentPath] - The parent relative path.
-   * @returns {Promise<Maybe<DocDirectory>>} The matching documentation directory.
+   * @returns {Promise<Maybe<DocDirectory>>} The matching doc directory.
    */
   public async getDirectory<P extends keyof DocDirectoryInput>(
     prop: P,
-    value: DocDirectoryInput[P],
-    parentPath?: string
+    value: DocDirectoryInput[P]
   ): Promise<Maybe<DocDirectory>> {
-    const path = parentPath
-      ? join(this.getRootDir(), parentPath)
+    const relativePath = prop === 'id' ? decodeBase64String(value) : value;
+    const parent = this.#getParentOf(relativePath);
+    const path = parent?.path
+      ? join(this.getRootDir(), parent.path)
       : this.getRootDir();
     const directories = await this.#getDirectoriesIn(path);
 
@@ -136,9 +137,9 @@ export class DocRepository extends FileSystemRepository {
    * Retrieve many documentation directories by looking for values in a prop.
    *
    * @param {P} prop - The prop name.
-   * @param {ReadonlyArray<DocDirectoryInput[P]>} values - The values to looking for.
+   * @param {ReadonlyArray<DocDirectoryInput[P]>} values - The values.
    * @param {string} [parentPath] - The parent relative path.
-   * @returns {Promise<Maybe<DocDirectory[]>>} The matching documentation directories.
+   * @returns {Promise<Maybe<DocDirectory[]>>} The matching doc directories.
    */
   public async getManyDirectory<P extends keyof DocDirectoryInput>(
     prop: P,
@@ -317,12 +318,29 @@ export class DocRepository extends FileSystemRepository {
   }
 
   /**
+   * Create a new documentation directory in the given directory.
+   *
+   * @param {DocDirectoryCreate} directory - The directory to write.
+   * @returns {Promise<Maybe<DocDirectory>>} The new documentation directory.
+   */
+  public async createDirectory({
+    name,
+    parentPath,
+  }: DocDirectoryCreate): Promise<Maybe<DocDirectory>> {
+    const relativeParentPath = parentPath ?? './';
+    const dirPath = join(this.getRootDir(), relativeParentPath, name);
+    await mkdir(dirPath, { recursive: true });
+
+    return this.getDirectory('path', this.getRelativePathFrom(dirPath));
+  }
+
+  /**
    * Create a new documentation file in the given directory.
    *
    * @param {DocFileCreate} file - The file to write.
    * @returns {Promise<Maybe<DocFile>>} The new documentation file.
    */
-  public async create({
+  public async createFile({
     name,
     content,
     parentPath,

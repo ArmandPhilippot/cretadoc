@@ -1,5 +1,6 @@
 import type {
   DocDirectory,
+  DocDirectoryInput,
   DocDirectoryLoaders,
   ListInput,
 } from '../../../types';
@@ -27,4 +28,18 @@ export const initDocDirectoryLoaders = (
         listDocDirectories(repository, params),
     },
   };
+};
+
+/**
+ * Clear the documentation directories loaders.
+ *
+ * @param {DocDirectoryLoaders['directory']} directoryLoaders - The dir loaders.
+ * @param {DocDirectoryInput} input - The directory id and path.
+ */
+export const clearDocDirectoryLoaders = (
+  directoryLoaders: DocDirectoryLoaders['directory'],
+  { id, path }: DocDirectoryInput
+) => {
+  directoryLoaders.byId.clear(id);
+  directoryLoaders.byPath.clear(path);
 };

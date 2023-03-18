@@ -4,6 +4,7 @@ import type { QueryResult } from '../gql';
 import type {
   DocDirectoryConnectionPayload,
   DocDirectoryLoaders,
+  DocDirectoryMutators,
   DocDirectoryPayload,
 } from './doc-directories';
 import type {
@@ -52,5 +53,5 @@ export type DocLoaders = {
  */
 
 export type DocMutators = {
-  doc?: DocFileMutators;
+  doc?: DocDirectoryMutators & DocFileMutators;
 };

@@ -12,4 +12,4 @@ import type { DocRepository } from '../../doc.repository';
 export const createDocFile = async (
   repository: DocRepository,
   data: DocFileCreate
-): Promise<Maybe<DocFile>> => repository.create(data);
+): Promise<Maybe<DocFile>> => repository.createFile(data);
