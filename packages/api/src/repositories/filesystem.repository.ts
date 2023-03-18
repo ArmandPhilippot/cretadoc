@@ -161,11 +161,12 @@ export class FileSystemRepository {
   /**
    * Delete an existing file.
    *
-   * @param {PageDelete} relativePath - The relative path of the file.
+   * @param {string} relativePath - The relative path of the file.
+   * @param {boolean} [isRecursive] - Should the removal be recursive?
    * @returns {Promise<void>}
    */
-  public async del(relativePath: string): Promise<void> {
+  public async del(relativePath: string, isRecursive?: boolean): Promise<void> {
     const absolutePath = join(this.getRootDir(), relativePath);
-    await rm(absolutePath);
+    await rm(absolutePath, { recursive: !!isRecursive });
   }
 }

@@ -82,6 +82,41 @@ export type DocDirectoryCreateMutator = Mutator<
 
 /*
  * ===========================================================================
+ *  Delete types
+ * ===========================================================================
+ */
+
+export type DocDirectoryDeleteOptions = {
+  /**
+   * Should we delete only empty directories?
+   * @default true
+   */
+  onlyEmpty?: boolean;
+};
+
+export type DocDirectoryDelete = Partial<Pick<DocDirectory, 'id' | 'path'>> &
+  DocDirectoryDeleteOptions;
+
+export type DocDirectoryDeleteInput = InputFrom<DocDirectoryDelete>;
+
+export type DocDirectoryDeleteErrors = ErrorsFrom<DocDirectoryDelete>;
+
+export type DocDirectoryDeletePayload =
+  | DocDirectoryPayload
+  | DocDirectoryDeleteErrors;
+
+export type DocDirectoryDeleteResult = MutationResult<
+  'docDirectoryDelete',
+  DocDirectoryDeletePayload
+>;
+
+export type DocDirectoryDeleteMutator = Mutator<
+  DocDirectoryDelete,
+  DocDirectory
+>;
+
+/*
+ * ===========================================================================
  *  Update types
  * ===========================================================================
  */
@@ -140,6 +175,7 @@ export type DocDirectoryLoaders = {
 export type DocDirectoryMutators = {
   directory: {
     create: DocDirectoryCreateMutator;
+    del: DocDirectoryDeleteMutator;
     update: DocDirectoryUpdateMutator;
   };
 };

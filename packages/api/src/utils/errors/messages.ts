@@ -10,6 +10,9 @@ export const error = {
     mutator: (entity: string) => `${entity} cannot be mutated.` as const,
   },
   validation: {
+    directory: {
+      contents: 'Must be an empty directory.',
+    },
     existent: (entity: string) =>
       `Must be unique, ${entity} already exists.` as const,
     file: {

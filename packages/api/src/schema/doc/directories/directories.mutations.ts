@@ -1,4 +1,5 @@
 import { directoryCreate } from './create/create.mutation';
+import { directoryDelete } from './delete/delete.mutation';
 import { directoryUpdate } from './update/update.mutation';
 
-export { directoryCreate, directoryUpdate };
+export { directoryCreate, directoryDelete, directoryUpdate };

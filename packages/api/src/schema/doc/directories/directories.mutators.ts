@@ -1,6 +1,7 @@
 import type { DocDirectoryMutators } from '../../../types';
 import type { DocRepository } from '../doc.repository';
 import { createDocDirectory } from './create/create.mutator';
+import { deleteDocDirectory } from './delete/delete.mutator';
 import { updateDocDirectory } from './update/update.mutator';
 
 /**
@@ -15,6 +16,7 @@ export const initDocDirectoryMutators = (
   return {
     directory: {
       create: async (data) => createDocDirectory(repository, data),
+      del: async (data) => deleteDocDirectory(repository, data),
       update: async (data) => updateDocDirectory(repository, data),
     },
   };
