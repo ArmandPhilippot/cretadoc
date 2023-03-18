@@ -2,6 +2,7 @@ import { isString } from '@cretadoc/utils';
 import validator from 'validator';
 import type { ValidationErrors } from '../../types';
 import { error } from '../errors/messages';
+import { isRelativePath } from './paths';
 
 /**
  * Init the validation errors.
@@ -67,6 +68,20 @@ export const validateFilename = (filename: string): string[] => {
     errors.push(error.validation.string.length(nameLength));
 
   if (!isValidFilename(filename)) errors.push(error.validation.file.name);
+
+  return errors;
+};
+
+/**
+ * Validate a relative path.
+ *
+ * @param {string} path - The path to validate.
+ * @returns {string[]} An array of error messages or an empty array.
+ */
+export const validateRelativePath = (path: string): string[] => {
+  const errors: string[] = [];
+
+  if (!isRelativePath(path)) errors.push(error.validation.format.path);
 
   return errors;
 };

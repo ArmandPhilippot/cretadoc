@@ -1,7 +1,10 @@
 import { isString } from '@cretadoc/utils';
 import type {
   DocDirectoryByPathLoader,
+  DocFileByIdLoader,
+  DocFileByPathLoader,
   DocFileCreate,
+  DocFileDelete,
   DocFileUpdate,
   ValidationErrors,
 } from '../../../types';
@@ -10,6 +13,7 @@ import { decodeBase64String } from '../../../utils/helpers';
 import {
   initValidationErrors,
   validateFilename,
+  validateRelativePath,
 } from '../../../utils/helpers/validators';
 
 /**
@@ -61,9 +65,7 @@ export const validateDocFileParentPath = async (
   path: string,
   loader: DocDirectoryByPathLoader
 ): Promise<string[]> => {
-  const errors: string[] = [];
-
-  if (!path.startsWith('./')) errors.push(error.validation.format.path);
+  const errors: string[] = [...validateRelativePath(path)];
 
   const maybeDir = await loader.load(path);
 
@@ -130,6 +132,65 @@ export const validateDocFileUpdateInput = async <T extends DocFileUpdate>(
     );
     validationErrors.parentPath.push(...parentPathErrors);
   }
+
+  return validationErrors;
+};
+
+type Validator = (str: string) => string[];
+
+/**
+ * Validate the value to delete a documentation file.
+ *
+ * @param {string} value - The value to delete a documentation file.
+ * @param {DocFileByIdLoader | DocFileByPathLoader} loader - A method to load a documentation file.
+ * @param {Validator} validator - A method to validate the value.
+ * @returns {Promise<string[]>} An array of error messages or an empty array.
+ */
+const validateDocFileDeleteByIdOrByPath = async (
+  value: string,
+  loader: DocFileByIdLoader | DocFileByPathLoader,
+  validator: Validator
+): Promise<string[]> => {
+  const errors: string[] = [];
+  errors.push(...validator(value));
+
+  const maybeDocFile = await loader.load(value);
+
+  if (!maybeDocFile) errors.push(error.validation.missing('file'));
+
+  return errors;
+};
+
+/**
+ * Validate the input to delete a documentation file.
+ *
+ * @param {T} input - The documentation file data.
+ * @param {T} loader - A method to load a documentation file.
+ * @returns {Promise<ValidationErrors<T>>} The validation errors.
+ */
+export const validateDocFileDeleteInput = async <T extends DocFileDelete>(
+  input: T,
+  loader: DocFileByIdLoader | DocFileByPathLoader
+): Promise<ValidationErrors<T>> => {
+  const validationErrors = initValidationErrors(input);
+  const { id, path } = input;
+
+  if (id)
+    validationErrors.id.push(
+      ...(await validateDocFileDeleteByIdOrByPath(
+        id,
+        loader,
+        validateDocFileId
+      ))
+    );
+  else if (path)
+    validationErrors.path.push(
+      ...(await validateDocFileDeleteByIdOrByPath(
+        path,
+        loader,
+        validateRelativePath
+      ))
+    );
 
   return validationErrors;
 };

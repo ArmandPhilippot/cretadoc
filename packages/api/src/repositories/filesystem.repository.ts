@@ -1,4 +1,4 @@
-import { rename, writeFile } from 'fs/promises';
+import { rename, rm, writeFile } from 'fs/promises';
 import { isAbsolute, join } from 'path';
 import {
   type DirectoryContents,
@@ -146,5 +146,16 @@ export class FileSystemRepository {
     await rename(oldPath, newPath);
 
     return newPath;
+  }
+
+  /**
+   * Delete an existing file.
+   *
+   * @param {PageDelete} relativePath - The relative path of the file.
+   * @returns {Promise<void>}
+   */
+  public async del(relativePath: string): Promise<void> {
+    const absolutePath = join(this.getRootDir(), relativePath);
+    await rm(absolutePath);
   }
 }

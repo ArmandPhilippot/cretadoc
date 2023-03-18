@@ -1,3 +1,4 @@
+export * from './paths';
 export * from './sanitizers';
 export * from './sort';
 export * from './strings';

@@ -76,6 +76,27 @@ export type DocFileCreateMutator = Mutator<DocFileCreate, DocFile>;
 
 /*
  * ===========================================================================
+ *  Delete types
+ * ===========================================================================
+ */
+
+export type DocFileDelete = Partial<Pick<DocFile, 'id' | 'path'>>;
+
+export type DocFileDeleteInput = InputFrom<DocFileDelete>;
+
+export type DocFileDeleteErrors = ErrorsFrom<DocFileDelete>;
+
+export type DocFileDeletePayload = DocFilePayload | DocFileDeleteErrors;
+
+export type DocFileDeleteResult = MutationResult<
+  'docFileDelete',
+  DocFileDeletePayload
+>;
+
+export type DocFileDeleteMutator = Mutator<DocFileDelete, DocFile>;
+
+/*
+ * ===========================================================================
  *  Update types
  * ===========================================================================
  */
@@ -125,6 +146,7 @@ export type DocFileLoaders = {
 export type DocFileMutators = {
   file: {
     create: DocFileCreateMutator;
+    del: DocFileDeleteMutator;
     update: DocFileUpdateMutator;
   };
 };
