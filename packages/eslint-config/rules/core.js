@@ -169,7 +169,10 @@ module.exports = {
     },
   ],
   'no-unused-private-class-members': 'error',
-  'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+  'no-unused-vars': [
+    'error',
+    { argsIgnorePattern: '^_', ignoreRestSiblings: true },
+  ],
   'no-use-before-define': [
     'error',
     {
