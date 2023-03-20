@@ -1,11 +1,11 @@
 import { basename, parse } from 'path';
 import { generateBase64String } from '../../../src/utils/helpers';
 import { docFixtures } from '../../fixtures/doc';
-import type { DocDirectoryWithoutDatesAndContent } from '../../types';
+import type { DocDirectoryWithoutDatesAndContents } from '../../types';
 import { DOC_FIXTURES_DIR } from '../../utils/constants';
 
 const onlyDocDirectories = docFixtures
-  .map((fileOrDir): DocDirectoryWithoutDatesAndContent => {
+  .map((fileOrDir): DocDirectoryWithoutDatesAndContents => {
     const relativePath = fileOrDir.path.replace(DOC_FIXTURES_DIR, './');
     const dirPath = parse(relativePath).dir;
     const parentPath = parse(dirPath).dir;
@@ -29,8 +29,8 @@ const onlyDocDirectories = docFixtures
   .filter((dir) => dir.path !== '.');
 
 const getUniqueListBy = (
-  arr: DocDirectoryWithoutDatesAndContent[],
-  key: keyof DocDirectoryWithoutDatesAndContent
+  arr: DocDirectoryWithoutDatesAndContents[],
+  key: keyof DocDirectoryWithoutDatesAndContents
 ) => [...new Map(arr.map((item) => [item[key], item])).values()];
 
 export const docDirectories = getUniqueListBy(onlyDocDirectories, 'id');

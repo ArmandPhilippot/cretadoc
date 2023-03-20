@@ -15,15 +15,15 @@ import {
 } from '../../utils/helpers/validators';
 
 /**
- * Validate a page content.
+ * Validate a page contents.
  *
- * @param {string} content - The content to validate.
+ * @param {string} contents - The contents to validate.
  * @returns {string[]} An array of error messages or an empty array.
  */
-export const validatePageContent = (content: string): string[] => {
+export const validatePageContents = (contents: string): string[] => {
   const errors: string[] = [];
 
-  if (!isString(content)) errors.push(error.invalid.type('string'));
+  if (!isString(contents)) errors.push(error.invalid.type('string'));
 
   return errors;
 };
@@ -62,9 +62,11 @@ export const validatePageCreateInput = <T extends PageCreate>(
   input: T
 ): ValidationErrors<T> => {
   const validationErrors = initValidationErrors(input);
-  const { name, content } = input;
+  const { name, contents } = input;
 
-  if (content) validationErrors.content.push(...validatePageContent(content));
+  if (contents)
+    validationErrors.contents.push(...validatePageContents(contents));
+
   validationErrors.name.push(...validatePageName(name));
 
   return validationErrors;
@@ -80,10 +82,13 @@ export const validatePageUpdateInput = <T extends PageUpdate>(
   input: T
 ): ValidationErrors<T> => {
   const validationErrors = initValidationErrors(input);
-  const { id, content, name } = input;
+  const { id, contents, name } = input;
 
   validationErrors.id.push(...validatePageId(id));
-  if (content) validationErrors.content.push(...validatePageContent(content));
+
+  if (contents)
+    validationErrors.contents.push(...validatePageContents(contents));
+
   if (name) validationErrors.name.push(...validatePageName(name));
 
   return validationErrors;

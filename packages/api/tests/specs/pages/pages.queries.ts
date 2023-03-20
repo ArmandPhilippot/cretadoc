@@ -1,6 +1,6 @@
 export const pageQuery = `query Page($id: String, $name: String) {
   page(id: $id, name: $name) {
-    content
+    contents
     createdAt
     id
     name
@@ -20,7 +20,7 @@ export const pagesQuery = `query Pages($after: String, $first: Int, $offset: Int
     edges {
       cursor
       node {
-        content
+        contents
         createdAt
         id
         name

@@ -17,8 +17,8 @@ export const DocFileUpdateInputType = new GraphQLInputObjectType({
   name: 'DocFileUpdateInput',
   description: 'The input to update an existing documentation file.',
   fields: {
-    content: {
-      description: 'The file content.',
+    contents: {
+      description: 'The file contents.',
       type: GraphQLString,
     },
     id: {
@@ -47,9 +47,9 @@ export const DocFileUpdateErrorsType = new GraphQLObjectType<
       type: new GraphQLObjectType<DocFileUpdateErrors['errors']>({
         name: 'DocFileUpdateErrorsProperties',
         fields: {
-          content: {
+          contents: {
             type: new GraphQLList(GraphQLString),
-            resolve: ({ content }) => content,
+            resolve: ({ contents }) => contents,
           },
           id: {
             type: new GraphQLList(GraphQLString),

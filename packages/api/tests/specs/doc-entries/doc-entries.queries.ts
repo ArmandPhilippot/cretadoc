@@ -14,7 +14,7 @@ export const docEntriesQuery = `query DocEntries($after: String, $first: Int, $o
           ... on DocFile {
             id
             name
-            fileContent: content
+            fileContents: contents
             createdAt
             parent {
               id
@@ -28,7 +28,7 @@ export const docEntriesQuery = `query DocEntries($after: String, $first: Int, $o
           ... on DocDirectory {
             id
             name
-            dirContent: content {
+            dirContents: contents {
               directories {
                 createdAt
                 id

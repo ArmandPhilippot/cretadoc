@@ -7,7 +7,7 @@ export const pages = pagesFixtures.map((page): PageWithoutDates => {
   const relativePath = page.path.replace(PAGES_FIXTURES_DIR, './');
 
   return {
-    content: page.content,
+    contents: page.contents,
     id: Buffer.from(relativePath).toString('base64'),
     name: parse(relativePath).name,
     path: relativePath,

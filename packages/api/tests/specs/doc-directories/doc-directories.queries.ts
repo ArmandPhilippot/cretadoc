@@ -1,7 +1,7 @@
 export const docDirectoryQuery = `query DocDirectory($id: String, $path: String ) {
   doc {
     directory(id: $id, path: $path) {
-      content {
+      contents {
         directories {
           createdAt
           id
@@ -56,7 +56,7 @@ export const docDirectoriesQuery = `query DocDirectories($after: String, $first:
       edges {
         cursor
         node {
-          content {
+          contents {
             directories {
               createdAt
               id

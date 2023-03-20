@@ -69,17 +69,17 @@ export class DocRepository extends FileSystemRepository {
   /**
    * Convert the DirectoryContents.
    *
-   * @param {Maybe<DirectoryContents>} content - An object.
+   * @param {Maybe<DirectoryContents>} contents - An object.
    * @returns {Maybe<DirectoryContents>} The converted object.
    */
   #convertDirectoryContents(
-    content: Maybe<DirectoryContents>
+    contents: Maybe<DirectoryContents>
   ): Maybe<DirectoryContents> {
-    if (!content) return undefined;
+    if (!contents) return undefined;
 
     return {
-      directories: content.directories.map((dir) => this.#convert(dir)),
-      files: content.files.map((file) => this.#convert(file)),
+      directories: contents.directories.map((dir) => this.#convert(dir)),
+      files: contents.files.map((file) => this.#convert(file)),
     };
   }
 
@@ -92,14 +92,14 @@ export class DocRepository extends FileSystemRepository {
   #convert<
     T extends Directory | RegularFile,
     R = T extends Directory ? DocDirectory : DocFile
-  >({ createdAt, name, path, type, updatedAt, content }: T): R {
+  >({ createdAt, name, path, type, updatedAt, contents }: T): R {
     const relativePath = path.replace(this.getRootDir(), './');
 
     return {
-      content:
+      contents:
         type === 'directory'
-          ? this.#convertDirectoryContents(content)
-          : content,
+          ? this.#convertDirectoryContents(contents)
+          : contents,
       createdAt,
       id: generateBase64String(relativePath),
       name,
@@ -429,11 +429,11 @@ export class DocRepository extends FileSystemRepository {
    */
   public async createFile({
     name,
-    content,
+    contents,
     parentPath,
   }: DocFileCreate): Promise<Maybe<DocFile>> {
     const basePath = parentPath ?? './';
-    const filePath = await this.createMarkdownFile(basePath, name, content);
+    const filePath = await this.createMarkdownFile(basePath, name, contents);
 
     return this.getFile('path', this.getRelativePathFrom(filePath));
   }
@@ -445,7 +445,7 @@ export class DocRepository extends FileSystemRepository {
    * @returns {Promise<Maybe<DocFile>>} The updated documentation file.
    */
   public async updateFile({
-    content,
+    contents,
     id,
     name,
     parentPath,
@@ -458,8 +458,8 @@ export class DocRepository extends FileSystemRepository {
         ? await this.renameFile(name, absolutePath, parentPath)
         : absolutePath;
 
-    if (content)
-      await writeFile(newAbsolutePath, content, {
+    if (contents)
+      await writeFile(newAbsolutePath, contents, {
         encoding: 'utf8',
       });
 

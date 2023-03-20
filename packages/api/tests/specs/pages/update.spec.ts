@@ -66,7 +66,7 @@ describe('pageUpdate', () => {
 
     if (isPagePayload(response.body.data.pageUpdate))
       expect(response.body.data.pageUpdate.page).toBePage({
-        content: existingPage.content,
+        contents: existingPage.contents,
         id: existingPage.id,
         name: existingPage.name,
         path: existingPage.path,
@@ -90,7 +90,7 @@ describe('pageUpdate', () => {
 
     if (isPagePayload(response.body.data.pageUpdate))
       expect(response.body.data.pageUpdate.page).toBePage({
-        content: existingPage.content,
+        contents: existingPage.contents,
         id: generateBase64String(newPagePath),
         name: newPageName,
         path: newPagePath,
@@ -104,17 +104,17 @@ describe('pageUpdate', () => {
 
     if (!existingPage) throw new Error('Pages fixtures are missing.');
 
-    const newPageContent =
+    const newPageContents =
       'Esse pariatur tenetur. Deserunt et unde ut magnam officia rem doloremque optio non. Qui amet doloremque adipisci aliquam dicta in nulla sint. Fugit velit facilis impedit et.';
     const response = await updatePage({
-      input: { id: existingPage.id, content: newPageContent },
+      input: { id: existingPage.id, contents: newPageContents },
     });
 
     expect(response.body.data.pageUpdate).not.toBeNull();
 
     if (isPagePayload(response.body.data.pageUpdate))
       expect(response.body.data.pageUpdate.page).toBePage({
-        content: newPageContent,
+        contents: newPageContents,
         id: existingPage.id,
         name: existingPage.name,
         path: existingPage.path,
@@ -137,7 +137,7 @@ describe('pageUpdate', () => {
     expect(response.body.data.pageUpdate).not.toBeNull();
 
     if (isPageValidationErrors(response.body.data.pageUpdate)) {
-      expect(response.body.data.pageUpdate.errors.content).toBeNull();
+      expect(response.body.data.pageUpdate.errors.contents).toBeNull();
       expect(response.body.data.pageUpdate.errors.id).toStrictEqual([]);
       expect(response.body.data.pageUpdate.errors.name).toStrictEqual(
         expectedErrors
@@ -159,7 +159,7 @@ describe('pageUpdate', () => {
     expect(response.body.data.pageUpdate).not.toBeNull();
 
     if (isPageValidationErrors(response.body.data.pageUpdate)) {
-      expect(response.body.data.pageUpdate.errors.content).toBeNull();
+      expect(response.body.data.pageUpdate.errors.contents).toBeNull();
       expect(response.body.data.pageUpdate.errors.id).toStrictEqual(
         expectedErrors
       );

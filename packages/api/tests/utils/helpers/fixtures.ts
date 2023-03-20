@@ -20,9 +20,9 @@ const isPathExists = async (path: string): Promise<boolean> => {
 
 export type Fixture = {
   /**
-   * The file content.
+   * The file contents.
    */
-  content?: string;
+  contents?: string;
   /**
    * The absolute path.
    */
@@ -35,7 +35,10 @@ const createDirectoryFixture = async (path: string) => {
   if (!isExist) await mkdir(path, { recursive: true });
 };
 
-const createFileFixture = async (path: string, content: string | undefined) => {
+const createFileFixture = async (
+  path: string,
+  contents: string | undefined
+) => {
   const isFileExist = await isPathExists(path);
 
   if (isFileExist) return;
@@ -45,12 +48,12 @@ const createFileFixture = async (path: string, content: string | undefined) => {
 
   if (!isParentExist) await createDirectoryFixture(parentDir);
 
-  writeFileSync(path, content ?? '', { encoding: 'utf8' });
+  writeFileSync(path, contents ?? '', { encoding: 'utf8' });
 };
 
 export const createFixtures = async (fixtures: Fixture[]) => {
   for (const fixture of fixtures)
-    await createFileFixture(fixture.path, fixture.content);
+    await createFileFixture(fixture.path, fixture.contents);
 };
 
 /**

@@ -63,7 +63,7 @@ describe('pageCreate', () => {
 
     if (isPagePayload(response.body.data.pageCreate))
       expect(response.body.data.pageCreate.page).toBePage({
-        content: '',
+        contents: '',
         id: generateBase64String(newPagePath),
         name: newPageName,
         path: newPagePath,
@@ -73,19 +73,19 @@ describe('pageCreate', () => {
   });
 
   it('can create a new page with content', async () => {
-    const newPageContent =
+    const newPageContents =
       'Error impedit voluptates veritatis minima. Quasi ut rem iusto soluta corporis expedita earum consectetur quis. Est porro quia qui nobis repellat dicta quis. Explicabo harum odit veniam harum expedita est temporibus. Optio molestias doloribus et asperiores officia aperiam enim. Et dolor placeat.';
     const newPageName = 'impedit';
     const newPagePath = `./${newPageName}${MARKDOWN_EXTENSION}`;
     const response = await createPage({
-      input: { name: newPageName, content: newPageContent },
+      input: { name: newPageName, contents: newPageContents },
     });
 
     expect(response.body.data.pageCreate).not.toBeNull();
 
     if (isPagePayload(response.body.data.pageCreate))
       expect(response.body.data.pageCreate.page).toBePage({
-        content: newPageContent,
+        contents: newPageContents,
         id: generateBase64String(newPagePath),
         name: newPageName,
         path: newPagePath,
@@ -102,7 +102,7 @@ describe('pageCreate', () => {
     expect(response.body.data.pageCreate).not.toBeNull();
 
     if (isPageValidationErrors(response.body.data.pageCreate)) {
-      expect(response.body.data.pageCreate.errors.content).toBeNull();
+      expect(response.body.data.pageCreate.errors.contents).toBeNull();
       expect(response.body.data.pageCreate.errors.name).toStrictEqual(
         expectedErrors
       );
@@ -123,7 +123,7 @@ describe('pageCreate', () => {
     expect(response.body.data.pageCreate).not.toBeNull();
 
     if (isPageValidationErrors(response.body.data.pageCreate)) {
-      expect(response.body.data.pageCreate.errors.content).toBeNull();
+      expect(response.body.data.pageCreate.errors.contents).toBeNull();
       expect(response.body.data.pageCreate.errors.name).toStrictEqual(
         expectedErrors
       );
@@ -144,7 +144,7 @@ describe('pageCreate', () => {
     expect(response.body.data.pageCreate).not.toBeNull();
 
     if (isPageValidationErrors(response.body.data.pageCreate)) {
-      expect(response.body.data.pageCreate.errors.content).toBeNull();
+      expect(response.body.data.pageCreate.errors.contents).toBeNull();
       expect(response.body.data.pageCreate.errors.name).toStrictEqual(
         expectedErrors
       );

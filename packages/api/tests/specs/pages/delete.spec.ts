@@ -66,7 +66,7 @@ describe('pageDelete', () => {
         id: existingPage.id,
         name: existingPage.name,
         path: existingPage.path,
-        content: existingPage.content,
+        contents: existingPage.contents,
       });
 
     expect.assertions(2);
@@ -86,7 +86,7 @@ describe('pageDelete', () => {
         id: existingPage.id,
         name: existingPage.name,
         path: existingPage.path,
-        content: existingPage.content,
+        contents: existingPage.contents,
       });
 
     expect.assertions(2);

@@ -17,8 +17,8 @@ export const DocFileCreateInputType = new GraphQLInputObjectType({
   name: 'DocFileCreateInput',
   description: 'The input to create a new documentation file.',
   fields: {
-    content: {
-      description: 'The file content.',
+    contents: {
+      description: 'The file contents.',
       type: GraphQLString,
     },
     name: {
@@ -43,9 +43,9 @@ export const DocFileCreateErrorsType = new GraphQLObjectType<
       type: new GraphQLObjectType<DocFileCreateErrors['errors']>({
         name: 'DocFileCreateErrorsProperties',
         fields: {
-          content: {
+          contents: {
             type: new GraphQLList(GraphQLString),
-            resolve: ({ content }) => content,
+            resolve: ({ contents }) => contents,
           },
           name: {
             type: new GraphQLList(GraphQLString),

@@ -63,7 +63,7 @@ describe('docFileCreate', () => {
 
     if (isDocFilePayload(response.body.data.docFileCreate))
       expect(response.body.data.docFileCreate.file).toBeDocFile({
-        content: '',
+        contents: '',
         id: generateBase64String(newDocFilePath),
         name: newDocFileName,
         parent: null,
@@ -75,19 +75,19 @@ describe('docFileCreate', () => {
   });
 
   it('can create a new doc file with content', async () => {
-    const newDocFileContent =
+    const newDocFileContents =
       'Error impedit voluptates veritatis minima. Quasi ut rem iusto soluta corporis expedita earum consectetur quis. Est porro quia qui nobis repellat dicta quis. Explicabo harum odit veniam harum expedita est temporibus. Optio molestias doloribus et asperiores officia aperiam enim. Et dolor placeat.';
     const newDocFileName = 'impedit';
     const newDocFilePath = `./${newDocFileName}${MARKDOWN_EXTENSION}`;
     const response = await createDocFile({
-      input: { name: newDocFileName, content: newDocFileContent },
+      input: { name: newDocFileName, contents: newDocFileContents },
     });
 
     expect(response.body.data.docFileCreate).not.toBeNull();
 
     if (isDocFilePayload(response.body.data.docFileCreate))
       expect(response.body.data.docFileCreate.file).toBeDocFile({
-        content: newDocFileContent,
+        contents: newDocFileContents,
         id: generateBase64String(newDocFilePath),
         name: newDocFileName,
         parent: null,
@@ -106,7 +106,7 @@ describe('docFileCreate', () => {
     expect(response.body.data.docFileCreate).not.toBeNull();
 
     if (isDocFileValidationErrors(response.body.data.docFileCreate)) {
-      expect(response.body.data.docFileCreate.errors.content).toBeNull();
+      expect(response.body.data.docFileCreate.errors.contents).toBeNull();
       expect(response.body.data.docFileCreate.errors.name).toStrictEqual(
         expectedErrors
       );
@@ -117,17 +117,17 @@ describe('docFileCreate', () => {
   });
 
   it('returns validation errors when name is too long', async () => {
-    const pageName =
+    const fileName =
       'Voluptas aut ipsum quaerat est officia non sapiente eos. Aut rerum ipsum qui. Cupiditate inventore rerum eos aut amet ut. Ducimus aspernatur necessitatibus pariatur sed consequatur. Similique ad qui repudiandae qui inventore eum quod sapiente. Quis odit amet voluptate omnis aliquam eum similique nihil. Dolorum id qui earum modi et suscipit voluptates et. Cumque minima illo voluptates perferendis recusandae. Vel cupiditate odio. Et excepturi ea eum blanditiis aut.';
     const expectedErrors = [
       error.validation.string.length({ max: 255, min: 1 }),
     ];
-    const response = await createDocFile({ input: { name: pageName } });
+    const response = await createDocFile({ input: { name: fileName } });
 
     expect(response.body.data.docFileCreate).not.toBeNull();
 
     if (isDocFileValidationErrors(response.body.data.docFileCreate)) {
-      expect(response.body.data.docFileCreate.errors.content).toBeNull();
+      expect(response.body.data.docFileCreate.errors.contents).toBeNull();
       expect(response.body.data.docFileCreate.errors.name).toStrictEqual(
         expectedErrors
       );
@@ -150,7 +150,7 @@ describe('docFileCreate', () => {
     expect(response.body.data.docFileCreate).not.toBeNull();
 
     if (isDocFileValidationErrors(response.body.data.docFileCreate)) {
-      expect(response.body.data.docFileCreate.errors.content).toBeNull();
+      expect(response.body.data.docFileCreate.errors.contents).toBeNull();
       expect(response.body.data.docFileCreate.errors.name).toStrictEqual(
         expectedErrors
       );

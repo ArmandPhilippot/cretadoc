@@ -38,12 +38,12 @@ export class PagesRepository extends FileSystemRepository {
     name,
     path,
     updatedAt,
-    content,
+    contents,
   }: RegularFile): Page {
     const relativePath = path.replace(this.getRootDir(), './');
 
     return {
-      content,
+      contents,
       createdAt,
       id: generateBase64String(relativePath),
       name,
@@ -193,8 +193,8 @@ export class PagesRepository extends FileSystemRepository {
    * @param {PageCreate} page - The page to write.
    * @returns {Promise<Maybe<Page>>} The new page.
    */
-  public async create({ name, content }: PageCreate): Promise<Maybe<Page>> {
-    await this.createMarkdownFile('./', name, content);
+  public async create({ name, contents }: PageCreate): Promise<Maybe<Page>> {
+    await this.createMarkdownFile('./', name, contents);
 
     return this.get('name', name);
   }
@@ -205,7 +205,11 @@ export class PagesRepository extends FileSystemRepository {
    * @param {PageUpdate} data - The data to update.
    * @returns {Promise<Maybe<Page>>} The updated page.
    */
-  public async update({ content, id, name }: PageUpdate): Promise<Maybe<Page>> {
+  public async update({
+    contents,
+    id,
+    name,
+  }: PageUpdate): Promise<Maybe<Page>> {
     const relativePath = decodeBase64String(id);
     const oldName = parse(relativePath).name;
     const newName = name ?? oldName;
@@ -215,8 +219,8 @@ export class PagesRepository extends FileSystemRepository {
         ? await this.renameFile(name, absolutePath)
         : absolutePath;
 
-    if (content)
-      await writeFile(newAbsolutePath, content, {
+    if (contents)
+      await writeFile(newAbsolutePath, contents, {
         encoding: 'utf8',
       });
 

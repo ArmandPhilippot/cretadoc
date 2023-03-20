@@ -35,10 +35,10 @@ export const DocFileType = new GraphQLObjectType<DocFile, APIContext>({
   description: 'A single documentation file.',
   fields: () => {
     return {
-      content: {
+      contents: {
         type: GraphQLString,
-        description: 'The content of the file.',
-        resolve: ({ content }) => content,
+        description: 'The contents of the file.',
+        resolve: ({ contents }) => contents,
       },
       createdAt: {
         type: new GraphQLNonNull(GraphQLString),

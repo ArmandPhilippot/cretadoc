@@ -33,7 +33,7 @@ export const pageUpdate: GraphQLFieldConfig<null, APIContext, PageUpdateInput> =
 
       const validationErrors = validatePageUpdateInput(input);
 
-      const { content, id, name } = input;
+      const { contents, id, name } = input;
 
       const maybeExistentPage = await context.loaders.page.byId.load(id);
 
@@ -44,7 +44,7 @@ export const pageUpdate: GraphQLFieldConfig<null, APIContext, PageUpdateInput> =
         return { errors: validationErrors };
 
       const page = await context.mutators.page.update({
-        content: content ? sanitizeString(content) : undefined,
+        contents: contents ? sanitizeString(contents) : undefined,
         id,
         name,
       });

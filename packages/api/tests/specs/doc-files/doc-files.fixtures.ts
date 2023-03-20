@@ -20,7 +20,7 @@ export const docFiles = docFixtures
           };
 
     return {
-      content: fileOrDir.content,
+      contents: fileOrDir.contents,
       id: Buffer.from(relativePath).toString('base64'),
       name: parse(relativePath).name,
       parent,

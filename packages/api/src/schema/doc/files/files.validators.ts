@@ -86,12 +86,12 @@ export const validateDocFileCreateInput = async <T extends DocFileCreate>(
   loader: DocDirectoryByPathLoader
 ): Promise<ValidationErrors<T>> => {
   const validationErrors = initValidationErrors(input);
-  const { name, content, parentPath } = input;
+  const { name, contents, parentPath } = input;
 
   validationErrors.name.push(...validateDocFileName(name));
 
-  if (content)
-    validationErrors.content.push(...validateDocFileContent(content));
+  if (contents)
+    validationErrors.contents.push(...validateDocFileContent(contents));
 
   if (parentPath) {
     const parentPathErrors = await validateDocFileParentPath(
@@ -116,12 +116,12 @@ export const validateDocFileUpdateInput = async <T extends DocFileUpdate>(
   loader: DocDirectoryByPathLoader
 ): Promise<ValidationErrors<T>> => {
   const validationErrors = initValidationErrors(input);
-  const { id, content, name, parentPath } = input;
+  const { id, contents, name, parentPath } = input;
 
   validationErrors.id.push(...validateDocFileId(id));
 
-  if (content)
-    validationErrors.content.push(...validateDocFileContent(content));
+  if (contents)
+    validationErrors.contents.push(...validateDocFileContent(contents));
 
   if (name) validationErrors.name.push(...validateDocFileName(name));
 

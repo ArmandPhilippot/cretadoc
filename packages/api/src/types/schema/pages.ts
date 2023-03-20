@@ -48,7 +48,7 @@ export type PageConnectionResult = QueryResult<PageConnectionPayload>;
  * ===========================================================================
  */
 
-export type PageCreate = Pick<Page, 'content' | 'name'>;
+export type PageCreate = Pick<Page, 'contents' | 'name'>;
 
 export type PageCreateInput = InputFrom<PageCreate>;
 

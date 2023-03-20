@@ -32,7 +32,7 @@ export const pageCreate: GraphQLFieldConfig<null, APIContext, PageCreateInput> =
         throw new LoadersError(error.missing.loader('Page'));
 
       const validationErrors = validatePageCreateInput(input);
-      const { content, name } = input;
+      const { contents, name } = input;
       const maybeExistentPage = await context.loaders.page.byName.load(name);
 
       if (maybeExistentPage !== undefined)
@@ -44,7 +44,7 @@ export const pageCreate: GraphQLFieldConfig<null, APIContext, PageCreateInput> =
         };
 
       const page = await context.mutators.page.create({
-        content: content ? sanitizeString(content) : undefined,
+        contents: contents ? sanitizeString(contents) : undefined,
         name,
       });
 

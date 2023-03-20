@@ -3,7 +3,7 @@ export const docFileCreate = `mutation CreateDocFile($input: DocFileCreateInput!
     ... on DocFilePayload {
       __typename
       file {
-        content
+        contents
         createdAt
         id
         name
@@ -20,7 +20,7 @@ export const docFileCreate = `mutation CreateDocFile($input: DocFileCreateInput!
     ... on DocFileCreateErrors {
       __typename
       errors {
-        content
+        contents
         name
         parentPath
       }
@@ -33,7 +33,7 @@ export const docFileDelete = `mutation DeleteDocFile($input: DocFileDeleteInput!
     ... on DocFilePayload {
       __typename
       file {
-        content
+        contents
         createdAt
         id
         name
@@ -62,7 +62,7 @@ export const docFileUpdate = `mutation UpdateDocFile($input: DocFileUpdateInput!
     ... on DocFilePayload {
       __typename
       file {
-        content
+        contents
         createdAt
         id
         name
@@ -79,7 +79,7 @@ export const docFileUpdate = `mutation UpdateDocFile($input: DocFileUpdateInput!
     ... on DocFileUpdateErrors {
       __typename
       errors {
-        content
+        contents
         id
         name
         parentPath

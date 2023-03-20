@@ -64,7 +64,7 @@ describe('docFileDelete', () => {
 
     if (isDocFilePayload(response.body.data.docFileDelete))
       expect(response.body.data.docFileDelete.file).toBeDocFile({
-        content: existingDocFile.content,
+        contents: existingDocFile.contents,
         id: existingDocFile.id,
         name: existingDocFile.name,
         parent: existingDocFile.parent,
@@ -89,7 +89,7 @@ describe('docFileDelete', () => {
 
     if (isDocFilePayload(response.body.data.docFileDelete))
       expect(response.body.data.docFileDelete.file).toBeDocFile({
-        content: existingDocFile.content,
+        contents: existingDocFile.contents,
         id: existingDocFile.id,
         name: existingDocFile.name,
         parent: existingDocFile.parent,

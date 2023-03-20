@@ -126,8 +126,8 @@ export const validateDocDirectoryUpdateInput = async <
  * @returns {boolean} True if it is empty.
  */
 const isDirectoryEmpty = (dir: DocDirectory): boolean => {
-  const hasSubDir = !!dir.content?.directories.length;
-  const hasFiles = !!dir.content?.files.length;
+  const hasSubDir = !!dir.contents?.directories.length;
+  const hasFiles = !!dir.contents?.files.length;
 
   return !hasFiles && !hasSubDir;
 };

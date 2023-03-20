@@ -3,7 +3,7 @@ export const pageCreate = `mutation CreatePage($input: PageCreateInput!) {
     ... on PagePayload {
       __typename
       page {
-        content
+        contents
         createdAt
         id
         name
@@ -14,7 +14,7 @@ export const pageCreate = `mutation CreatePage($input: PageCreateInput!) {
     ... on PageCreateErrors {
       __typename
       errors {
-        content
+        contents
         name
       }
     }
@@ -26,7 +26,7 @@ export const pageDelete = `mutation DeletePage($input: PageDeleteInput!) {
     ... on PagePayload {
       __typename
       page {
-        content
+        contents
         createdAt
         id
         name
@@ -49,7 +49,7 @@ export const pageUpdate = `mutation UpdatePage($input: PageUpdateInput!) {
     ... on PagePayload {
       __typename
       page {
-        content
+        contents
         createdAt
         id
         name
@@ -60,7 +60,7 @@ export const pageUpdate = `mutation UpdatePage($input: PageUpdateInput!) {
     ... on PageUpdateErrors {
       __typename
       errors {
-        content
+        contents
         id
         name
       }

@@ -26,9 +26,9 @@ export type MatcherResult = {
   expected?: unknown;
 };
 
-export type DocDirectoryWithoutDatesAndContent = Omit<
+export type DocDirectoryWithoutDatesAndContents = Omit<
   NonNullable<DocDirectoryPayload['directory']>,
-  'content' | 'createdAt' | 'updatedAt'
+  'contents' | 'createdAt' | 'updatedAt'
 >;
 
 export type DocFileWithoutDates = Omit<

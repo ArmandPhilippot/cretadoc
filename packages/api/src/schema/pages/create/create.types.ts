@@ -17,8 +17,8 @@ export const PageCreateInputType = new GraphQLInputObjectType({
   name: 'PageCreateInput',
   description: 'The input to create a new page.',
   fields: {
-    content: {
-      description: 'The page content.',
+    contents: {
+      description: 'The page contents.',
       type: GraphQLString,
     },
     name: {
@@ -39,9 +39,9 @@ export const PageCreateErrorsType = new GraphQLObjectType<
       type: new GraphQLObjectType<PageCreateErrors['errors']>({
         name: 'PageCreateErrorsProperties',
         fields: {
-          content: {
+          contents: {
             type: new GraphQLList(GraphQLString),
-            resolve: ({ content }) => content,
+            resolve: ({ contents }) => contents,
           },
           name: {
             type: new GraphQLList(GraphQLString),

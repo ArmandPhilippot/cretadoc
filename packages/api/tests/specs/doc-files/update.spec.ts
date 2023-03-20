@@ -67,7 +67,7 @@ describe('updateDocFile', () => {
 
     if (isDocFilePayload(response.body.data.docFileUpdate))
       expect(response.body.data.docFileUpdate.file).toBeDocFile({
-        content: existingDocFile.content,
+        contents: existingDocFile.contents,
         id: existingDocFile.id,
         name: existingDocFile.name,
         parent: null,
@@ -98,7 +98,7 @@ describe('updateDocFile', () => {
 
     if (isDocFilePayload(response.body.data.docFileUpdate))
       expect(response.body.data.docFileUpdate.file).toBeDocFile({
-        content: existingDocFile.content,
+        contents: existingDocFile.contents,
         id: generateBase64String(newDocFilePath),
         name: newDocFileName,
         parent: null,
@@ -115,12 +115,12 @@ describe('updateDocFile', () => {
     if (!existingDocFile)
       throw new Error('Documentation fixtures are missing.');
 
-    const newDocFileContent =
+    const newDocFileContents =
       'Esse pariatur tenetur. Deserunt et unde ut magnam officia rem doloremque optio non. Qui amet doloremque adipisci aliquam dicta in nulla sint. Fugit velit facilis impedit et.';
     const response = await updateDocFile({
       input: {
         id: existingDocFile.id,
-        content: newDocFileContent,
+        contents: newDocFileContents,
         parentPath: existingDocFile.parent?.path,
       },
     });
@@ -129,7 +129,7 @@ describe('updateDocFile', () => {
 
     if (isDocFilePayload(response.body.data.docFileUpdate))
       expect(response.body.data.docFileUpdate.file).toBeDocFile({
-        content: newDocFileContent,
+        contents: newDocFileContents,
         id: existingDocFile.id,
         name: existingDocFile.name,
         parent: existingDocFile.parent,
@@ -154,7 +154,7 @@ describe('updateDocFile', () => {
     expect(response.body.data.docFileUpdate).not.toBeNull();
 
     if (isDocFileValidationErrors(response.body.data.docFileUpdate)) {
-      expect(response.body.data.docFileUpdate.errors.content).toBeNull();
+      expect(response.body.data.docFileUpdate.errors.contents).toBeNull();
       expect(response.body.data.docFileUpdate.errors.id).toStrictEqual([]);
       expect(response.body.data.docFileUpdate.errors.name).toStrictEqual(
         expectedErrors
@@ -176,7 +176,7 @@ describe('updateDocFile', () => {
     expect(response.body.data.docFileUpdate).not.toBeNull();
 
     if (isDocFileValidationErrors(response.body.data.docFileUpdate)) {
-      expect(response.body.data.docFileUpdate.errors.content).toBeNull();
+      expect(response.body.data.docFileUpdate.errors.contents).toBeNull();
       expect(response.body.data.docFileUpdate.errors.id).toStrictEqual(
         expectedErrors
       );

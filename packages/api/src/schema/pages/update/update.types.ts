@@ -17,8 +17,8 @@ export const PageUpdateInputType = new GraphQLInputObjectType({
   name: 'PageUpdateInput',
   description: 'The input to update an existing page.',
   fields: {
-    content: {
-      description: 'The page content.',
+    contents: {
+      description: 'The page contents.',
       type: GraphQLString,
     },
     id: {
@@ -43,9 +43,9 @@ export const PageUpdateErrorsType = new GraphQLObjectType<
       type: new GraphQLObjectType<PageUpdateErrors['errors']>({
         name: 'PageUpdateErrorsProperties',
         fields: {
-          content: {
+          contents: {
             type: new GraphQLList(GraphQLString),
-            resolve: ({ content }) => content,
+            resolve: ({ contents }) => contents,
           },
           id: {
             type: new GraphQLList(GraphQLString),

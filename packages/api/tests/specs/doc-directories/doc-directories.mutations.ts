@@ -3,7 +3,7 @@ export const docDirectoryCreate = `mutation CreateDocDirectory($input: DocDirect
     ... on DocDirectoryPayload {
       __typename
       directory {
-        content {
+        contents {
           directories {
             createdAt
             id
@@ -59,7 +59,7 @@ export const docDirectoryDelete = `mutation DeleteDocDirectory($input: DocDirect
     ... on DocDirectoryPayload {
       __typename
       directory {
-        content {
+        contents {
           directories {
             createdAt
             id
@@ -115,7 +115,7 @@ export const docDirectoryUpdate = `mutation UpdateDocDirectory($input: DocDirect
     ... on DocDirectoryPayload {
       __typename
       directory {
-        content {
+        contents {
           directories {
             createdAt
             id

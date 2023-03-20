@@ -57,7 +57,7 @@ export type DocFileConnectionResult = QueryResult<DocFileConnectionPayload>;
  * ===========================================================================
  */
 
-export type DocFileCreate = Pick<DocFile, 'content' | 'name'> & {
+export type DocFileCreate = Pick<DocFile, 'contents' | 'name'> & {
   parentPath?: string;
 };
 

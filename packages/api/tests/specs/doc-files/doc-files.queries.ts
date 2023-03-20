@@ -1,7 +1,7 @@
 export const docFileQuery = `query DocFile($id: String, $path: String) {
   doc {
     file(id: $id, path: $path) {
-      content
+      contents
       createdAt
       id
       name
@@ -29,7 +29,7 @@ export const docFilesQuery = `query DocFiles($after: String, $first: Int, $offse
       edges {
         cursor
         node {
-          content
+          contents
           createdAt
           id
           name

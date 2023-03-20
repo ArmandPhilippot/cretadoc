@@ -45,7 +45,7 @@ export const fileUpdate: GraphQLFieldConfig<
       context.loaders.doc.directory.byPath
     );
 
-    const { content, id, name, parentPath } = input;
+    const { contents, id, name, parentPath } = input;
 
     const maybeExistentDocFile = await context.loaders.doc.file.byId.load(id);
 
@@ -56,7 +56,7 @@ export const fileUpdate: GraphQLFieldConfig<
       return { errors: validationErrors };
 
     const file = await context.mutators.doc.file.update({
-      content: content ? sanitizeString(content) : undefined,
+      contents: contents ? sanitizeString(contents) : undefined,
       id,
       name,
       parentPath,

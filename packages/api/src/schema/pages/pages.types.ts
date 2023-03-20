@@ -6,10 +6,10 @@ export const PageType = new GraphQLObjectType<Page, APIContext>({
   description: 'A single page.',
   fields: () => {
     return {
-      content: {
+      contents: {
         type: GraphQLString,
-        description: 'The content of the page.',
-        resolve: ({ content }) => content,
+        description: 'The contents of the page.',
+        resolve: ({ contents }) => contents,
       },
       createdAt: {
         type: new GraphQLNonNull(GraphQLString),

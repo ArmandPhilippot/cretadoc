@@ -67,7 +67,7 @@ export class FileSystemRepository {
   public async getContentsOf(dir: string): Promise<Maybe<DirectoryContents>> {
     const requestedDir = await this.getDirectoryDataFrom(dir);
 
-    return requestedDir.content;
+    return requestedDir.contents;
   }
 
   /**
