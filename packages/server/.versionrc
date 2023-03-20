@@ -1,0 +1,5 @@
+{
+  "path": ".",
+  "tag-prefix": "@cretadoc/server@",
+  "releaseCommitMessageFormat": "chore(server): release v{{currentTag}}"
+}
