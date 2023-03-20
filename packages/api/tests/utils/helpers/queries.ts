@@ -9,6 +9,7 @@ import type {
   DocDirectoryDeleteResult,
   DocDirectoryUpdateInput,
   DocDirectoryUpdateResult,
+  DocEntry,
   DocFile,
   DocFileCreateInput,
   DocFileCreateResult,
@@ -39,6 +40,7 @@ import {
   docDirectoriesQuery,
   docDirectoryQuery,
 } from '../../specs/doc-directories/doc-directories.queries';
+import { docEntriesQuery } from '../../specs/doc-entries/doc-entries.queries';
 import {
   docFileCreate,
   docFileDelete,
@@ -73,6 +75,7 @@ export type Mutations = (typeof mutations)[number];
 export const queries = [
   docDirectoryQuery,
   docDirectoriesQuery,
+  docEntriesQuery,
   docFileQuery,
   docFilesQuery,
   pageQuery,
@@ -87,6 +90,7 @@ export type Variables = {
   [docDirectoryUpdate]: DocDirectoryUpdateInput;
   [docDirectoryQuery]: QueryInput<DocDirectory>;
   [docDirectoriesQuery]: ConnectionInput<DocDirectory>;
+  [docEntriesQuery]: ConnectionInput<DocEntry>;
   [docFileCreate]: DocFileCreateInput;
   [docFileDelete]: DocFileDeleteInput;
   [docFileUpdate]: DocFileUpdateInput;
@@ -105,6 +109,7 @@ export type Result = {
   [docDirectoryUpdate]: DocDirectoryUpdateResult;
   [docDirectoryQuery]: DocPayload;
   [docDirectoriesQuery]: DocPayload;
+  [docEntriesQuery]: DocPayload;
   [docFileCreate]: DocFileCreateResult;
   [docFileDelete]: DocFileDeleteResult;
   [docFileUpdate]: DocFileUpdateResult;
