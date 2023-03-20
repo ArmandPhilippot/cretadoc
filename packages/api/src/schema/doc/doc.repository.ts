@@ -15,6 +15,7 @@ import type {
   DocDirectoryUpdate,
   DocDirectoryWhereFields,
   DocEntry,
+  DocEntryInput,
   DocEntryKind,
   DocEntryParent,
   DocFile,
@@ -35,6 +36,15 @@ import {
   decodeBase64String,
   generateBase64String,
 } from '../../utils/helpers';
+
+type DocInput = DocDirectoryInput | DocEntryInput | DocFileInput;
+
+type DocReturn = DocDirectory | DocEntry | DocFile;
+
+type GetManyOptions<K extends Maybe<DocEntryKind>> = {
+  kind?: K;
+  parentPath?: string;
+};
 
 type ResolveReturnTypeFrom<Kind extends Maybe<DocEntryKind>> =
   Kind extends 'directory'
@@ -171,87 +181,110 @@ export class DocRepository extends FileSystemRepository {
   }
 
   /**
-   * Retrieve a documentation directory by looking for a value in a prop.
+   * Retrieve the expected entries in a directory path.
+   *
+   * @param {string} path - A directory path.
+   * @param {DocEntryKind} [kind] - The expected entry kind.
+   * @returns {Promise<Maybe<DocDirectory[] | DocFile[]> | DocEntry[]>}
+   */
+  async #findEntriesIn(
+    path: string,
+    kind?: DocEntryKind
+  ): Promise<Maybe<DocDirectory[] | DocFile[]> | DocEntry[]> {
+    if (kind === 'directory') return this.#getDirectoriesIn(path);
+    if (kind === 'file') return this.#getFilesIn(path);
+    return this.#getEntriesIn(path);
+  }
+
+  /**
+   * Retrieve a documentation entry by looking for a value in a prop.
    *
    * @param {P} prop - The prop name.
-   * @param {DocDirectoryInput[P]} value - The value to looking for.
-   * @returns {Promise<Maybe<DocDirectory>>} The matching doc directory.
+   * @param {DocInput[P]} value - The value to looking for.
+   * @param {DocEntryKind} [kind] - The expected entry kind.
+   * @returns {Promise<Maybe<DocReturn>>} The matching documentation entry.
    */
-  public async getDirectory<P extends keyof DocDirectoryInput>(
+  public async get<K extends undefined, P extends keyof DocEntryInput>(
     prop: P,
-    value: DocDirectoryInput[P]
-  ): Promise<Maybe<DocDirectory>> {
+    value: DocInput[P],
+    kind?: K
+  ): Promise<Maybe<DocEntry>>;
+  public async get<K extends 'directory', P extends keyof DocDirectoryInput>(
+    prop: P,
+    value: DocInput[P],
+    kind?: K
+  ): Promise<Maybe<DocDirectory>>;
+  public async get<K extends 'file', P extends keyof DocFileInput>(
+    prop: P,
+    value: DocInput[P],
+    kind?: K
+  ): Promise<Maybe<DocFile>>;
+  public async get<K extends Maybe<DocEntryKind>, P extends keyof DocInput>(
+    prop: P,
+    value: DocInput[P],
+    kind?: K
+  ): Promise<Maybe<DocReturn>>;
+  public async get<K extends Maybe<DocEntryKind>, P extends keyof DocInput>(
+    prop: P,
+    value: DocInput[P],
+    kind?: K
+  ): Promise<Maybe<DocReturn>> {
     const relativePath = prop === 'id' ? decodeBase64String(value) : value;
     const parent = this.#getParentOf(relativePath);
     const path = parent?.path
       ? join(this.getRootDir(), parent.path)
       : this.getRootDir();
-    const directories = await this.#getDirectoriesIn(path);
+    const entries = await this.#findEntriesIn(path, kind);
 
-    return directories?.find((dir) => dir[prop] === value);
+    return entries?.find((entry) => entry[prop] === value);
   }
 
   /**
-   * Retrieve many documentation directories by looking for values in a prop.
+   * Retrieve many documentation entries by looking for values in a prop.
    *
    * @param {P} prop - The prop name.
-   * @param {ReadonlyArray<DocDirectoryInput[P]>} values - The values.
-   * @param {string} [parentPath] - The parent relative path.
-   * @returns {Promise<Maybe<DocDirectory[]>>} The matching doc directories.
+   * @param {ReadonlyArray<DocInput[P]>} values - The values to looking for.
+   * @param {GetManyOptions<K>} [options] - Some options.
+   * @returns {Promise<Maybe<R[]>>} The matching documentation entries.
    */
-  public async getManyDirectory<P extends keyof DocDirectoryInput>(
+  public async getMany<K extends undefined, P extends keyof DocEntryInput>(
     prop: P,
-    values: ReadonlyArray<DocDirectoryInput[P]>,
-    parentPath?: string
-  ): Promise<Maybe<DocDirectory[]>> {
+    values: ReadonlyArray<DocInput[P]>,
+    options?: GetManyOptions<K>
+  ): Promise<Maybe<DocEntry[]>>;
+  public async getMany<
+    K extends 'directory',
+    P extends keyof DocDirectoryInput
+  >(
+    prop: P,
+    values: ReadonlyArray<DocInput[P]>,
+    options?: GetManyOptions<K>
+  ): Promise<Maybe<DocDirectory[]>>;
+  public async getMany<K extends 'file', P extends keyof DocFileInput>(
+    prop: P,
+    values: ReadonlyArray<DocInput[P]>,
+    options?: GetManyOptions<K>
+  ): Promise<Maybe<DocFile[]>>;
+  public async getMany<K extends Maybe<DocEntryKind>, P extends keyof DocInput>(
+    prop: P,
+    values: ReadonlyArray<DocInput[P]>,
+    options?: GetManyOptions<K>
+  ): Promise<Maybe<DocReturn[]>>;
+  public async getMany<K extends Maybe<DocEntryKind>, P extends keyof DocInput>(
+    prop: P,
+    values: ReadonlyArray<DocInput[P]>,
+    options?: GetManyOptions<K>
+  ): Promise<Maybe<DocReturn[]>> {
+    const { kind, parentPath } = options ?? {
+      kind: undefined,
+      parentPath: undefined,
+    };
     const path = parentPath
       ? join(this.getRootDir(), parentPath)
       : this.getRootDir();
-    const directories = await this.#getDirectoriesIn(path);
+    const entries = await this.#findEntriesIn(path, kind);
 
-    return directories?.filter((dir) => values.includes(dir[prop]));
-  }
-
-  /**
-   * Retrieve a documentation file by looking for a value in a prop.
-   *
-   * @param {P} prop - The prop name.
-   * @param {DocFileInput[P]} value - The value to looking for.
-   * @returns {Promise<Maybe<DocFile>>} The matching documentation file.
-   */
-  public async getFile<P extends keyof DocFileInput>(
-    prop: P,
-    value: DocFileInput[P]
-  ): Promise<Maybe<DocFile>> {
-    const relativePath = prop === 'id' ? decodeBase64String(value) : value;
-    const parent = this.#getParentOf(relativePath);
-    const path = parent?.path
-      ? join(this.getRootDir(), parent.path)
-      : this.getRootDir();
-    const files = await this.#getFilesIn(path);
-
-    return files?.find((file) => file[prop] === value);
-  }
-
-  /**
-   * Retrieve many documentation files by looking for values in a prop.
-   *
-   * @param {P} prop - The prop name.
-   * @param {ReadonlyArray<DocFileInput[P]>} values - The values to looking for.
-   * @param {string} [parentPath] - The parent relative path.
-   * @returns {Promise<Maybe<DocFile[]>>} The matching documentation files.
-   */
-  public async getManyFile<P extends keyof DocFileInput>(
-    prop: P,
-    values: ReadonlyArray<DocFileInput[P]>,
-    parentPath?: string
-  ): Promise<Maybe<DocFile[]>> {
-    const path = parentPath
-      ? join(this.getRootDir(), parentPath)
-      : this.getRootDir();
-    const files = await this.#getFilesIn(path);
-
-    return files?.filter((file) => values.includes(file[prop]));
+    return entries?.filter((entry) => values.includes(entry[prop]));
   }
 
   /**
@@ -325,22 +358,6 @@ export class DocRepository extends FileSystemRepository {
   }
 
   /**
-   * Retrieve the expected entries in a directory path.
-   *
-   * @param {string} path - A directory path.
-   * @param {DocEntryKind} [kind] - The expected entry kind.
-   * @returns {Promise<Maybe<DocDirectory[] | DocFile[]> | DocEntry[]>}
-   */
-  async #findEntriesIn(
-    path: string,
-    kind?: DocEntryKind
-  ): Promise<Maybe<DocDirectory[] | DocFile[]> | DocEntry[]> {
-    if (kind === 'directory') return this.#getDirectoriesIn(path);
-    if (kind === 'file') return this.#getFilesIn(path);
-    return this.#getEntriesIn(path);
-  }
-
-  /**
    * Find the documentation entries matching the given parameters.
    *
    * @param {ListInput<T>} params - The list parameters.
@@ -393,7 +410,7 @@ export class DocRepository extends FileSystemRepository {
     const dirPath = join(this.getRootDir(), relativeParentPath, name);
     await mkdir(dirPath, { recursive: true });
 
-    return this.getDirectory('path', this.getRelativePathFrom(dirPath));
+    return this.get('path', this.getRelativePathFrom(dirPath), 'directory');
   }
 
   /**
@@ -416,7 +433,7 @@ export class DocRepository extends FileSystemRepository {
         : absolutePath;
 
     const newRelativePath = this.getRelativePathFrom(newAbsolutePath);
-    const dir = await this.getDirectory('path', newRelativePath);
+    const dir = await this.get('path', newRelativePath, 'directory');
 
     return dir;
   }
@@ -435,7 +452,7 @@ export class DocRepository extends FileSystemRepository {
     const basePath = parentPath ?? './';
     const filePath = await this.createMarkdownFile(basePath, name, contents);
 
-    return this.getFile('path', this.getRelativePathFrom(filePath));
+    return this.get('path', this.getRelativePathFrom(filePath), 'file');
   }
 
   /**
@@ -464,7 +481,7 @@ export class DocRepository extends FileSystemRepository {
       });
 
     const newRelativePath = this.getRelativePathFrom(newAbsolutePath);
-    const file = await this.getFile('path', newRelativePath);
+    const file = await this.get('path', newRelativePath, 'file');
 
     return file;
   }

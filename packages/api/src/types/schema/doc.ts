@@ -7,7 +7,11 @@ import type {
   DocDirectoryMutators,
   DocDirectoryPayload,
 } from './doc-directories';
-import type { DocEntryConnectionPayload, DocEntryLoaders } from './doc-entries';
+import type {
+  DocEntryConnectionPayload,
+  DocEntryLoaders,
+  DocEntryPayload,
+} from './doc-entries';
 import type {
   DocFileConnectionPayload,
   DocFileLoaders,
@@ -17,6 +21,7 @@ import type {
 
 export type Doc = DocDirectoryPayload &
   DocDirectoryConnectionPayload &
+  DocEntryPayload &
   DocEntryConnectionPayload &
   DocFilePayload &
   DocFileConnectionPayload;

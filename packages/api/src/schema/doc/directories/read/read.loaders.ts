@@ -26,11 +26,10 @@ const getDocDirectoryBy = async <P extends keyof DocDirectoryInput>(
   } else relativePath = values[values.length - 1];
 
   const basePath = relativePath ? dirname(relativePath) : undefined;
-  const docDirectories = await repository.getManyDirectory(
-    prop,
-    values,
-    basePath
-  );
+  const docDirectories = await repository.getMany(prop, values, {
+    kind: 'directory',
+    parentPath: basePath,
+  });
 
   return values.map((value) =>
     docDirectories?.find((dir) => dir[prop] === value)

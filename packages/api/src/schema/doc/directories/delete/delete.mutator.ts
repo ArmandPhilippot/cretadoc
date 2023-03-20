@@ -18,9 +18,9 @@ export const deleteDocDirectory = async (
   let relativePath = path ?? '';
 
   if (id) {
-    directory = await repository.getDirectory('id', id);
+    directory = await repository.get('id', id, 'directory');
     relativePath = decodeBase64String(id);
-  } else if (path) directory = await repository.getDirectory('path', path);
+  } else if (path) directory = await repository.get('path', path, 'directory');
 
   await repository.del(relativePath, true);
 

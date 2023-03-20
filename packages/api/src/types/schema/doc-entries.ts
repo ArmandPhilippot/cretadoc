@@ -1,4 +1,5 @@
-import type { NullableOptionalKeysOf } from '@cretadoc/utils';
+import type { Maybe, NullableOptionalKeysOf } from '@cretadoc/utils';
+import type DataLoader from 'dataloader';
 import type { ListLoader, Payload } from '../generics';
 import type { Connection, QueryResult } from '../gql';
 import type { DocDirectory } from './doc-directories';
@@ -47,8 +48,20 @@ export type DocEntryConnectionResult = QueryResult<DocEntryConnectionPayload>;
  * ===========================================================================
  */
 
+export type DocEntryByIdLoader = DataLoader<
+  DocEntryInput['id'],
+  Maybe<DocEntry>
+>;
+
+export type DocEntryByPathLoader = DataLoader<
+  DocEntryInput['path'],
+  Maybe<DocEntry>
+>;
+
 export type DocEntryLoaders = {
   entry: {
+    byId: DocEntryByIdLoader;
+    byPath: DocEntryByPathLoader;
     list: ListLoader<DocEntry>;
   };
 };

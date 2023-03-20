@@ -1,6 +1,6 @@
 import { GraphQLObjectType } from 'graphql';
 import { directories, directory } from './directories/directories.queries';
-import { entries } from './entries/entries.queries';
+import { entries, entry } from './entries/entries.queries';
 import { file, files } from './files/files.queries';
 
 export const DocType = new GraphQLObjectType({
@@ -10,6 +10,7 @@ export const DocType = new GraphQLObjectType({
     return {
       directory,
       directories,
+      entry,
       entries,
       file,
       files,

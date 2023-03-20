@@ -26,7 +26,10 @@ const getDocFileBy = async <P extends keyof DocFileInput>(
   } else relativePath = values[values.length - 1];
 
   const basePath = relativePath ? dirname(relativePath) : undefined;
-  const docFiles = await repository.getManyFile(prop, values, basePath);
+  const docFiles = await repository.getMany(prop, values, {
+    kind: 'file',
+    parentPath: basePath,
+  });
 
   return values.map((value) => docFiles?.find((file) => file[prop] === value));
 };

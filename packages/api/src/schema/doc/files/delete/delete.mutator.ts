@@ -18,9 +18,9 @@ export const deleteDocFile = async (
   let relativePath = path ?? '';
 
   if (id) {
-    file = await repository.getFile('id', id);
+    file = await repository.get('id', id, 'file');
     relativePath = decodeBase64String(id);
-  } else if (path) file = await repository.getFile('path', path);
+  } else if (path) file = await repository.get('path', path, 'file');
 
   await repository.del(relativePath);
 
