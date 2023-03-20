@@ -66,13 +66,13 @@ const getRegularFile = async (
 
   if (!isValidExtension) return undefined;
 
-  const content = includeFileContents
+  const contents = includeFileContents
     ? await readFile(path, 'utf8')
     : undefined;
 
   return {
     ...commonData,
-    content,
+    contents,
     extension,
     name,
     type: 'file',
@@ -175,14 +175,14 @@ const getDirectory = async (
   const commonData = await getCommonData(path);
   const depthCount = 1;
   const updatedDepth = depth === undefined ? undefined : depth - depthCount;
-  const content = await getDirContents(path, {
+  const contents = await getDirContents(path, {
     depth: updatedDepth,
     ...options,
   });
 
   return {
     ...commonData,
-    content,
+    contents,
     name: basename(path),
     type: 'directory',
   };

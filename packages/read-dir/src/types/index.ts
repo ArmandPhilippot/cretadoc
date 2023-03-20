@@ -28,7 +28,10 @@ export type DirectoryContents = {
 };
 
 export type RegularFileOrDirectory<T extends ValidFileType> = Dates & {
-  content?: T extends 'directory' ? DirectoryContents : string;
+  /**
+   * The file or directory contents.
+   */
+  contents?: T extends 'directory' ? DirectoryContents : string;
   /**
    * The file extension.
    */
