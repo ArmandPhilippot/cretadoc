@@ -5,6 +5,7 @@ import {
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLString,
+  type GraphQLUnionType,
 } from 'graphql';
 import type { APIContext, Connection, Edge, PageInfo } from '../../../types';
 
@@ -15,7 +16,7 @@ import type { APIContext, Connection, Edge, PageInfo } from '../../../types';
  * @returns {GraphQLObjectType<Edge<T>, APIContext>} The edge type.
  */
 export const createEdgeType = <T>(
-  type: GraphQLObjectType<T, APIContext>
+  type: GraphQLObjectType<T, APIContext> | GraphQLUnionType
 ): GraphQLObjectType<Edge<T>, APIContext> =>
   new GraphQLObjectType<Edge<T>, APIContext>({
     name: `${type.name}Edge`,
@@ -86,7 +87,7 @@ export const createPageInfoType = (
  * @returns {GraphQLObjectType<Connection<T>, APIContext>} The connection type.
  */
 export const createConnectionType = <T>(
-  type: GraphQLObjectType<T, APIContext>
+  type: GraphQLObjectType<T, APIContext> | GraphQLUnionType
 ): GraphQLObjectType<Connection<T>, APIContext> => {
   const name = `${type.name}Connection`;
   const edgeType = createEdgeType(type);

@@ -14,6 +14,7 @@ import type {
   DocDirectoryOrderFields,
   DocDirectoryUpdate,
   DocDirectoryWhereFields,
+  DocEntry,
   DocEntryKind,
   DocEntryParent,
   DocFile,
@@ -34,6 +35,13 @@ import {
   decodeBase64String,
   generateBase64String,
 } from '../../utils/helpers';
+
+type ResolveReturnTypeFrom<Kind extends Maybe<DocEntryKind>> =
+  Kind extends 'directory'
+    ? DocDirectory
+    : Kind extends 'file'
+    ? DocFile
+    : DocEntry;
 
 export class DocRepository extends FileSystemRepository {
   constructor(dir: string) {
@@ -103,14 +111,63 @@ export class DocRepository extends FileSystemRepository {
   }
 
   /**
-   * Retrieve the documentation directories in a directory.
+   * Retrieve the converted documentation directories from a directory contents.
    *
-   * @returns {Promise<Maybe<DirectoryContents>>} The documentation directories.
+   * @param {Maybe<DirectoryContents>} contents - The directory contents.
+   * @returns {Maybe<DocDirectory[]>} The documentation directories.
+   */
+  #getDirectoriesFrom(
+    contents: Maybe<DirectoryContents>
+  ): Maybe<DocDirectory[]> {
+    return contents?.directories.map((dir) => this.#convert(dir));
+  }
+
+  /**
+   * Retrieve the documentation directories in the given path.
+   *
+   * @param {string} path - A directory path.
+   * @returns {Promise<Maybe<DocDirectory[]>>} The documentation directories.
    */
   async #getDirectoriesIn(path: string): Promise<Maybe<DocDirectory[]>> {
     const dirContents = await this.getContentsOf(path);
 
-    return dirContents?.directories.map((dir) => this.#convert(dir));
+    return this.#getDirectoriesFrom(dirContents);
+  }
+
+  /**
+   * Retrieve the converted documentation files from a directory contents.
+   *
+   * @param {Maybe<DirectoryContents>} contents - The directory contents.
+   * @returns {Maybe<DocFile[]>} The documentation files.
+   */
+  #getFilesFrom(contents: Maybe<DirectoryContents>): Maybe<DocFile[]> {
+    return contents?.files.map((file) => this.#convert(file));
+  }
+
+  /**
+   * Retrieve the documentation files in the given path.
+   *
+   * @param {string} path - A directory path.
+   * @returns {Promise<Maybe<DocFile[]>>} The documentation files.
+   */
+  async #getFilesIn(path: string): Promise<Maybe<DocFile[]>> {
+    const dirContents = await this.getContentsOf(path);
+
+    return this.#getFilesFrom(dirContents);
+  }
+
+  /**
+   * Retrieve the documentation entries in the given path.
+   *
+   * @param {string} path - A directory path.
+   * @returns {Promise<DocEntry[]>} The doc entries.
+   */
+  async #getEntriesIn(path: string): Promise<DocEntry[]> {
+    const dirContents = await this.getContentsOf(path);
+    const docDirectories = this.#getDirectoriesFrom(dirContents) ?? [];
+    const docFiles = this.#getFilesFrom(dirContents) ?? [];
+
+    return [...docDirectories, ...docFiles];
   }
 
   /**
@@ -153,17 +210,6 @@ export class DocRepository extends FileSystemRepository {
     const directories = await this.#getDirectoriesIn(path);
 
     return directories?.filter((dir) => values.includes(dir[prop]));
-  }
-
-  /**
-   * Retrieve the documentation files in a directory.
-   *
-   * @returns {Promise<Maybe<DirectoryContents>>} The documentation files.
-   */
-  async #getFilesIn(path: string): Promise<Maybe<DocFile[]>> {
-    const dirContents = await this.getContentsOf(path);
-
-    return dirContents?.files.map((file) => this.#convert(file));
   }
 
   /**
@@ -279,27 +325,42 @@ export class DocRepository extends FileSystemRepository {
   }
 
   /**
+   * Retrieve the expected entries in a directory path.
+   *
+   * @param {string} path - A directory path.
+   * @param {DocEntryKind} [kind] - The expected entry kind.
+   * @returns {Promise<Maybe<DocDirectory[] | DocFile[]> | DocEntry[]>}
+   */
+  async #findEntriesIn(
+    path: string,
+    kind?: DocEntryKind
+  ): Promise<Maybe<DocDirectory[] | DocFile[]> | DocEntry[]> {
+    if (kind === 'directory') return this.#getDirectoriesIn(path);
+    if (kind === 'file') return this.#getFilesIn(path);
+    return this.#getEntriesIn(path);
+  }
+
+  /**
    * Find the documentation entries matching the given parameters.
    *
    * @param {ListInput<T>} params - The list parameters.
+   * @param {K} [kind] - The expected entries kind.
    * @returns {Promise<ListReturn<T[]>>} The matching documentation entries.
    */
   public async find<
     K extends DocEntryKind,
-    T extends DocDirectory | DocFile = K extends 'directory'
-      ? DocDirectory
-      : DocFile
+    T extends DocDirectory | DocEntry | DocFile = ResolveReturnTypeFrom<K>
   >(
-    kind: K,
-    { first, after, orderBy, where }: ListInput<T>
+    { first, after, orderBy, where }: ListInput<T>,
+    kind?: K
   ): Promise<ListReturn<T[]>> {
     const path = where?.path
       ? join(this.getRootDir(), where.path)
       : this.getRootDir();
-    const entries: Maybe<T[]> =
-      kind === 'directory'
-        ? ((await this.#getDirectoriesIn(path)) as Maybe<T[]>)
-        : ((await this.#getFilesIn(path)) as Maybe<T[]>);
+    const entries: Maybe<T[]> = (await this.#findEntriesIn(
+      path,
+      kind
+    )) as Maybe<T[]>;
 
     if (!entries)
       return {

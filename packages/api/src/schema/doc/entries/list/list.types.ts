@@ -4,12 +4,12 @@ import {
   GraphQLString,
 } from 'graphql';
 import { createConnectionType, createOrderType } from '../../../../utils/gql';
-import { DocFileType } from '../files.types';
+import { DocEntryType } from '../entries.types';
 
-export const DocFileConnectionType = createConnectionType(DocFileType);
+export const DocEntryConnectionType = createConnectionType(DocEntryType);
 
-export const DocFileOrderFieldType = new GraphQLEnumType({
-  name: `DocFileOrderField`,
+export const DocEntryOrderFieldType = new GraphQLEnumType({
+  name: `DocEntryOrderField`,
   description: 'The ordering field.',
   values: {
     createdAt: {
@@ -27,21 +27,21 @@ export const DocFileOrderFieldType = new GraphQLEnumType({
   },
 });
 
-export const DocFileOrderType = createOrderType(
-  DocFileType.name,
-  DocFileOrderFieldType
+export const DocEntryOrderType = createOrderType(
+  DocEntryType.name,
+  DocEntryOrderFieldType
 );
 
-export const DocFileWhereInputType = new GraphQLInputObjectType({
-  name: 'DocFileWhereInput',
-  description: 'The arguments for filtering the files.',
+export const DocEntryWhereInputType = new GraphQLInputObjectType({
+  name: 'DocEntryWhereInput',
+  description: 'The arguments for filtering the entries.',
   fields: {
     createdAt: {
-      description: 'A substring of the creation date of the file.',
+      description: 'A substring of the creation date of the entry.',
       type: GraphQLString,
     },
     name: {
-      description: 'A substring of the file name.',
+      description: 'A substring of the entry name.',
       type: GraphQLString,
     },
     path: {
@@ -49,7 +49,7 @@ export const DocFileWhereInputType = new GraphQLInputObjectType({
       type: GraphQLString,
     },
     updatedAt: {
-      description: 'A substring of the last update date of the file.',
+      description: 'A substring of the last update date of the entry.',
       type: GraphQLString,
     },
   },
