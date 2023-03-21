@@ -1,11 +1,19 @@
+import { existsSync } from 'fs';
 import {
   deepFreeze,
   type Maybe,
   type PartialDeep,
   type ReadonlyDeep,
 } from '@cretadoc/utils';
-import type { ServerConfig } from '../types';
-import { DEFAULT_HOSTNAME, DEFAULT_MODE, DEFAULT_PORT } from './constants';
+import type { ServerConfig, StaticDirConfig } from '../types';
+import {
+  DEFAULT_HOSTNAME,
+  DEFAULT_MODE,
+  DEFAULT_PORT,
+  DEFAULT_STATIC_DIR_ENTRYPOINT,
+  DEFAULT_STATIC_DIR_ROUTE,
+} from './constants';
+import { invalid, missing } from './errors';
 
 /**
  * Retrieve the default config.
@@ -17,6 +25,30 @@ export const getDefaultConfig = (): ServerConfig => {
     hostname: DEFAULT_HOSTNAME,
     mode: DEFAULT_MODE,
     port: DEFAULT_PORT,
+    staticDir: undefined,
+  };
+};
+
+/**
+ * Merge the user configuration with some default values if needed.
+ *
+ * @param {PartialDeep<StaticDirConfig>} [userConfig] - The user config.
+ * @returns {Maybe<StaticDirConfig>} The merged config.
+ */
+export const mergeStaticDirConfig = (
+  userConfig?: PartialDeep<StaticDirConfig>
+): Maybe<StaticDirConfig> => {
+  if (!userConfig) return undefined;
+
+  if (!userConfig.path) throw new Error(missing.config.staticDir.path);
+
+  if (!existsSync(userConfig.path))
+    throw new Error(invalid.config.staticDir.path(userConfig.path));
+
+  return {
+    entrypoint: userConfig.entrypoint ?? DEFAULT_STATIC_DIR_ENTRYPOINT,
+    path: userConfig.path,
+    route: userConfig.route ?? DEFAULT_STATIC_DIR_ROUTE,
   };
 };
 
@@ -37,6 +69,7 @@ export const mergeDefaultConfigWith = (
     hostname: userConfig.hostname ?? defaultConfig.hostname,
     mode: userConfig.mode ?? defaultConfig.mode,
     port: userConfig.port ?? defaultConfig.port,
+    staticDir: mergeStaticDirConfig(userConfig.staticDir),
   };
 
   return deepFreeze(newConfig);
