@@ -13,13 +13,15 @@ export type ToRespondWithMatcher = {
 
 export async function toRespondWith(
   this: ReturnType<Vi.ExpectStatic['getState']>,
-  server: ServerReturn,
+  { server, endpoint }: { server: ServerReturn; endpoint?: string },
   expected: ExpectedResponse
 ): Promise<MatcherResult> {
   server.start();
 
-  const url = `http://${server.config.hostname}:${server.config.port}`;
-  const response = await request(url).get('/');
+  const path = endpoint ?? '/';
+  const response = await request(
+    `http://${server.config.hostname}:${server.config.port}`
+  ).get(path);
   let pass = true;
 
   if (!this.equals(response.statusCode, expected.statusCode)) pass = false;

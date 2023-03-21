@@ -4,6 +4,7 @@ import type { Maybe, PartialDeep } from '@cretadoc/utils';
 import express, { type Express } from 'express';
 import { loadDevMiddleware, loadProdMiddleware } from './middleware';
 import type {
+  APIConfig,
   ServerConfig,
   ServerMode,
   ServerReturn,
@@ -11,6 +12,20 @@ import type {
 } from './types';
 import { mergeDefaultConfigWith } from './utils/config';
 import { ENVIRONMENT } from './utils/constants';
+
+/**
+ * Serve the API.
+ *
+ * @param {Express} app - An Express application.
+ * @param {APIConfig} config - The API config.
+ */
+const serveAPI = (app: Express, { instance, route }: APIConfig) => {
+  app.use(route, (req, res) => {
+    void (async () => {
+      await instance(req, res);
+    })();
+  });
+};
 
 /**
  * Serve a static directory.
@@ -36,11 +51,13 @@ const serveStaticDir = (
  * Create an Express application.
  *
  * @param {ServerMode} mode - The server mode.
+ * @param {APIConfig} [api] - The API config.
  * @param {StaticDirConfig} [staticDir] - The static directory config.
  * @returns {Express} The express app.
  */
 const createExpressApp = (
   mode: ServerMode,
+  api?: APIConfig,
   staticDir?: StaticDirConfig
 ): Express => {
   const app = express();
@@ -49,6 +66,7 @@ const createExpressApp = (
   if (mode === ENVIRONMENT.PRODUCTION) loadProdMiddleware(app);
   else loadDevMiddleware(app);
 
+  if (api) serveAPI(app, api);
   if (staticDir) serveStaticDir(app, staticDir);
 
   return app;
@@ -64,8 +82,8 @@ export const createServer = (
   config?: PartialDeep<ServerConfig>
 ): ServerReturn => {
   const mergedConfig = mergeDefaultConfigWith(config);
-  const { hostname, mode, port, staticDir } = mergedConfig;
-  const app = createExpressApp(mode, staticDir);
+  const { api, hostname, mode, port, staticDir } = mergedConfig;
+  const app = createExpressApp(mode, api, staticDir);
   let server: Maybe<Server> = undefined;
 
   const start = () => {

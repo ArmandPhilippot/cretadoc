@@ -1,7 +1,20 @@
+import type { APIInstance } from '@cretadoc/api';
 import type { Maybe, ReadonlyDeep } from '@cretadoc/utils';
 import type { ENVIRONMENT } from 'src/utils/constants';
 
 export type ServerMode = (typeof ENVIRONMENT)[keyof typeof ENVIRONMENT];
+
+export type APIConfig = {
+  /**
+   * An API instance.
+   */
+  instance: APIInstance;
+  /**
+   * The route used to serve the API.
+   * @default '/api'
+   */
+  route: string;
+};
 
 export type StaticDirConfig = {
   /**
@@ -21,6 +34,11 @@ export type StaticDirConfig = {
 };
 
 export type ServerConfig = {
+  /**
+   * A configuration object to serve an API instance.
+   * @default undefined
+   */
+  api: Maybe<APIConfig>;
   /**
    * The server hostname.
    * @default "localhost"

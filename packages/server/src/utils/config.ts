@@ -5,8 +5,9 @@ import {
   type PartialDeep,
   type ReadonlyDeep,
 } from '@cretadoc/utils';
-import type { ServerConfig, StaticDirConfig } from '../types';
+import type { APIConfig, ServerConfig, StaticDirConfig } from '../types';
 import {
+  DEFAULT_API_ROUTE,
   DEFAULT_HOSTNAME,
   DEFAULT_MODE,
   DEFAULT_PORT,
@@ -22,6 +23,7 @@ import { invalid, missing } from './errors';
  */
 export const getDefaultConfig = (): ServerConfig => {
   return {
+    api: undefined,
     hostname: DEFAULT_HOSTNAME,
     mode: DEFAULT_MODE,
     port: DEFAULT_PORT,
@@ -30,7 +32,26 @@ export const getDefaultConfig = (): ServerConfig => {
 };
 
 /**
- * Merge the user configuration with some default values if needed.
+ * Merge the user API config with some default values if needed.
+ *
+ * @param {PartialDeep<APIConfig>} [userConfig] - The user config.
+ * @returns {Maybe<APIConfig>} The merged config.
+ */
+export const mergeAPIConfig = (
+  userConfig?: PartialDeep<APIConfig>
+): Maybe<APIConfig> => {
+  if (!userConfig) return undefined;
+
+  if (!userConfig.instance) throw new Error(missing.config.api.instance);
+
+  return {
+    instance: userConfig.instance,
+    route: userConfig.route ?? DEFAULT_API_ROUTE,
+  };
+};
+
+/**
+ * Merge the user static dir config with some default values if needed.
  *
  * @param {PartialDeep<StaticDirConfig>} [userConfig] - The user config.
  * @returns {Maybe<StaticDirConfig>} The merged config.
@@ -66,6 +87,7 @@ export const mergeDefaultConfigWith = (
   if (!userConfig) return deepFreeze(defaultConfig);
 
   const newConfig: ServerConfig = {
+    api: mergeAPIConfig(userConfig.api),
     hostname: userConfig.hostname ?? defaultConfig.hostname,
     mode: userConfig.mode ?? defaultConfig.mode,
     port: userConfig.port ?? defaultConfig.port,

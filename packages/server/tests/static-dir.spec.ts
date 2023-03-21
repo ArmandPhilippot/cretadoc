@@ -6,13 +6,13 @@ import { expect } from './utils';
 describe('static-dir', () => {
   it('serves the directory contents with default entrypoint', async () => {
     const path = new URL('./fixtures/static-dir/', import.meta.url).pathname;
-    const app = createServer({
+    const server = createServer({
       hostname: 'localhost',
       port: 4200,
       staticDir: { path },
     });
 
-    await expect(app).toRespondWith({
+    await expect({ server }).toRespondWith({
       statusCode: 200,
       text: 'Hello from Cretadoc default entrypoint!',
     });
@@ -21,13 +21,13 @@ describe('static-dir', () => {
 
   it('serves the directory contents with a custom entrypoint', async () => {
     const path = new URL('./fixtures/static-dir/', import.meta.url).pathname;
-    const app = createServer({
+    const server = createServer({
       hostname: 'localhost',
       port: 4200,
       staticDir: { entrypoint: 'custom.html', path },
     });
 
-    await expect(app).toRespondWith({
+    await expect({ server }).toRespondWith({
       statusCode: 200,
       text: 'Hello from Cretadoc custom entrypoint!',
     });
@@ -40,13 +40,13 @@ describe('static-dir', () => {
       './fixtures/static-dir/custom.html',
       import.meta.url
     ).pathname;
-    const app = createServer({
+    const server = createServer({
       hostname: 'localhost',
       port: 4200,
       staticDir: { entrypoint, path },
     });
 
-    await expect(app).toRespondWith({
+    await expect({ server }).toRespondWith({
       statusCode: 200,
       text: 'Hello from Cretadoc custom entrypoint!',
     });

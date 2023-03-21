@@ -9,6 +9,9 @@ export const invalid = {
 
 export const missing = {
   config: {
+    api: {
+      instance: 'An API instance is mandatory.',
+    },
     staticDir: {
       path: 'Static directory path is mandatory.',
     },
