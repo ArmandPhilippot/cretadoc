@@ -16,6 +16,40 @@ export type APIConfig = {
   route: string;
 };
 
+export type HMRConfig = {
+  /**
+   * The port used by Vite HMR (dev mode).
+   */
+  port: Maybe<number>;
+};
+
+export type SSRPlaceholders = {
+  /**
+   * The placeholder for main content.
+   */
+  content: string;
+};
+
+export type SSRConfig = {
+  /**
+   * A path to the server entrypoint.
+   */
+  entrypoint: string;
+  /**
+   * The HTML template placeholders.
+   */
+  placeholders: SSRPlaceholders;
+  /**
+   * The route used for serve-side rendering.
+   * @default '/'
+   */
+  route: string;
+  /**
+   * The path to a HTML file to use as template.
+   */
+  template: string;
+};
+
 export type StaticDirConfig = {
   /**
    * The static directory entrypoint.
@@ -27,8 +61,8 @@ export type StaticDirConfig = {
    */
   path: string;
   /**
-   * The route used to serve static directory.
-   * @default '/'
+   * The route used to serve the static directory.
+   * @default '/static'
    */
   route: string;
 };
@@ -39,6 +73,10 @@ export type ServerConfig = {
    * @default undefined
    */
   api: Maybe<APIConfig>;
+  /**
+   * The HMR configuration when using dev mode.
+   */
+  hmr: Maybe<HMRConfig>;
   /**
    * The server hostname.
    * @default "localhost"
@@ -54,6 +92,11 @@ export type ServerConfig = {
    * @default 3000
    */
   port: number;
+  /**
+   * The configuration to activate server-side rendering.
+   * @default undefined
+   */
+  ssr: Maybe<SSRConfig>;
   /**
    * A configuration object to serve static files.
    * @default undefined
@@ -75,3 +118,9 @@ export type ServerReturn = {
    */
   stop: () => void;
 };
+
+export type Render = {
+  html: string;
+};
+
+export type ServerRender = (url: string) => Promise<Render>;

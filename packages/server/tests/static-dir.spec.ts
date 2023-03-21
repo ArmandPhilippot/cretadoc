@@ -1,18 +1,19 @@
 import { describe, it } from 'vitest';
 import { createServer } from '../src';
+import { DEFAULT_STATIC_ROUTE } from '../src/utils/constants';
 import { invalid, missing } from '../src/utils/errors';
 import { expect } from './utils';
 
 describe('static-dir', () => {
   it('serves the directory contents with default entrypoint', async () => {
     const path = new URL('./fixtures/static-dir/', import.meta.url).pathname;
-    const server = createServer({
+    const server = await createServer({
       hostname: 'localhost',
       port: 4200,
       staticDir: { path },
     });
 
-    await expect({ server }).toRespondWith({
+    await expect({ server, endpoint: DEFAULT_STATIC_ROUTE }).toRespondWith({
       statusCode: 200,
       text: 'Hello from Cretadoc default entrypoint!',
     });
@@ -21,13 +22,13 @@ describe('static-dir', () => {
 
   it('serves the directory contents with a custom entrypoint', async () => {
     const path = new URL('./fixtures/static-dir/', import.meta.url).pathname;
-    const server = createServer({
+    const server = await createServer({
       hostname: 'localhost',
       port: 4200,
       staticDir: { entrypoint: 'custom.html', path },
     });
 
-    await expect({ server }).toRespondWith({
+    await expect({ server, endpoint: DEFAULT_STATIC_ROUTE }).toRespondWith({
       statusCode: 200,
       text: 'Hello from Cretadoc custom entrypoint!',
     });
@@ -40,13 +41,13 @@ describe('static-dir', () => {
       './fixtures/static-dir/custom.html',
       import.meta.url
     ).pathname;
-    const server = createServer({
+    const server = await createServer({
       hostname: 'localhost',
       port: 4200,
       staticDir: { entrypoint, path },
     });
 
-    await expect({ server }).toRespondWith({
+    await expect({ server, endpoint: DEFAULT_STATIC_ROUTE }).toRespondWith({
       statusCode: 200,
       text: 'Hello from Cretadoc custom entrypoint!',
     });
@@ -56,7 +57,7 @@ describe('static-dir', () => {
   it('serves the directory contents at a custom route', async () => {
     const path = new URL('./fixtures/static-dir/', import.meta.url).pathname;
     const route = '/custom';
-    const server = createServer({
+    const server = await createServer({
       hostname: 'localhost',
       port: 4200,
       staticDir: { path, route },
@@ -69,16 +70,18 @@ describe('static-dir', () => {
     expect.assertions(1);
   });
 
-  it('throws an error if the path is not provided', () => {
-    expect(() =>
+  it('throws an error if the path is not provided', async () => {
+    await expect(async () =>
       createServer({ staticDir: { entrypoint: 'any.html' } })
-    ).toThrowError(missing.config.staticDir.path);
+    ).rejects.toThrowError(missing.config.staticDir.path);
+    expect.assertions(1);
   });
 
-  it('throws an error if the path does not exist', () => {
+  it('throws an error if the path does not exist', async () => {
     const nonExistentPath = '/any-non-existent-path';
-    expect(() =>
+    await expect(async () =>
       createServer({ staticDir: { path: nonExistentPath } })
-    ).toThrowError(invalid.config.staticDir.path(nonExistentPath));
+    ).rejects.toThrowError(invalid.config.staticDir.path(nonExistentPath));
+    expect.assertions(1);
   });
 });

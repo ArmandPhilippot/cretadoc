@@ -1,72 +1,53 @@
 import type { Server } from 'http';
-import { join } from 'path';
 import type { Maybe, PartialDeep } from '@cretadoc/utils';
 import express, { type Express } from 'express';
+import { createServer as createViteServer, type ViteDevServer } from 'vite';
+import { serveAPI } from './api';
 import { loadDevMiddleware, loadProdMiddleware } from './middleware';
-import type {
-  APIConfig,
-  ServerConfig,
-  ServerMode,
-  ServerReturn,
-  StaticDirConfig,
-} from './types';
+import { renderWithSSR } from './ssr';
+import { serveStaticDir } from './static-dir';
+import type { HMRConfig, ServerConfig, ServerReturn } from './types';
 import { mergeDefaultConfigWith } from './utils/config';
 import { ENVIRONMENT } from './utils/constants';
 
 /**
- * Serve the API.
+ * Create a Vite server in middleware mode.
  *
- * @param {Express} app - An Express application.
- * @param {APIConfig} config - The API config.
+ * @param {HMRConfig} [hmr] - The HMR configuration.
+ * @returns {Promise<ViteDevServer>} The Vite server.
  */
-const serveAPI = (app: Express, { instance, route }: APIConfig) => {
-  app.use(route, (req, res) => {
-    void (async () => {
-      await instance(req, res);
-    })();
+const createDevServer = async (hmr?: HMRConfig): Promise<ViteDevServer> =>
+  createViteServer({
+    appType: 'custom',
+    server: { hmr, middlewareMode: true },
   });
-};
 
-/**
- * Serve a static directory.
- *
- * @param {Express} app - An Express application.
- * @param {StaticDirConfig} config - The static directory config.
- */
-const serveStaticDir = (
-  app: Express,
-  { entrypoint, path, route }: StaticDirConfig
-) => {
-  const absoluteEntrypoint = entrypoint.startsWith(path)
-    ? entrypoint
-    : join(path, entrypoint);
-
-  app.use(express['static'](path, { index: false }));
-  app.get(route, (_req, res) => {
-    res.sendFile(absoluteEntrypoint);
-  });
-};
+type ExpressAppConfig = Pick<ServerConfig, 'mode'> &
+  Maybe<Pick<ServerConfig, 'api' | 'hmr' | 'ssr' | 'staticDir'>>;
 
 /**
  * Create an Express application.
  *
- * @param {ServerMode} mode - The server mode.
- * @param {APIConfig} [api] - The API config.
- * @param {StaticDirConfig} [staticDir] - The static directory config.
+ * @param {ExpressAppConfig} config - The configuration.
  * @returns {Express} The express app.
  */
-const createExpressApp = (
-  mode: ServerMode,
-  api?: APIConfig,
-  staticDir?: StaticDirConfig
-): Express => {
+const createExpressApp = async ({
+  api,
+  hmr,
+  mode,
+  ssr,
+  staticDir,
+}: ExpressAppConfig): Promise<Express> => {
   const app = express();
   app.disable('x-powered-by');
 
+  const viteServer = await createDevServer(hmr);
+
   if (mode === ENVIRONMENT.PRODUCTION) loadProdMiddleware(app);
-  else loadDevMiddleware(app);
+  else loadDevMiddleware(app, viteServer);
 
   if (api) serveAPI(app, api);
+  if (ssr) renderWithSSR(app, viteServer, ssr);
   if (staticDir) serveStaticDir(app, staticDir);
 
   return app;
@@ -76,14 +57,14 @@ const createExpressApp = (
  * Create a new server.
  *
  * @param {PartialDeep<ServerConfig>} [config] - The server configuration.
- * @returns {ServerReturn} The config and methods to start/stop the server.
+ * @returns {Promise<ServerReturn>} The methods to start/stop the server.
  */
-export const createServer = (
+export const createServer = async (
   config?: PartialDeep<ServerConfig>
-): ServerReturn => {
+): Promise<ServerReturn> => {
   const mergedConfig = mergeDefaultConfigWith(config);
-  const { api, hostname, mode, port, staticDir } = mergedConfig;
-  const app = createExpressApp(mode, api, staticDir);
+  const { api, hostname, hmr, mode, port, ssr, staticDir } = mergedConfig;
+  const app = await createExpressApp({ api, hmr, mode, ssr, staticDir });
   let server: Maybe<Server> = undefined;
 
   const start = () => {

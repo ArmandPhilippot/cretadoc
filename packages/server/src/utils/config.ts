@@ -5,14 +5,21 @@ import {
   type PartialDeep,
   type ReadonlyDeep,
 } from '@cretadoc/utils';
-import type { APIConfig, ServerConfig, StaticDirConfig } from '../types';
+import type {
+  APIConfig,
+  HMRConfig,
+  ServerConfig,
+  SSRConfig,
+  StaticDirConfig,
+} from '../types';
 import {
   DEFAULT_API_ROUTE,
+  DEFAULT_ENTRYPOINT_FILE,
   DEFAULT_HOSTNAME,
   DEFAULT_MODE,
   DEFAULT_PORT,
-  DEFAULT_STATIC_DIR_ENTRYPOINT,
-  DEFAULT_STATIC_DIR_ROUTE,
+  DEFAULT_SSR_ROUTE,
+  DEFAULT_STATIC_ROUTE,
 } from './constants';
 import { invalid, missing } from './errors';
 
@@ -24,9 +31,11 @@ import { invalid, missing } from './errors';
 export const getDefaultConfig = (): ServerConfig => {
   return {
     api: undefined,
+    hmr: undefined,
     hostname: DEFAULT_HOSTNAME,
     mode: DEFAULT_MODE,
     port: DEFAULT_PORT,
+    ssr: undefined,
     staticDir: undefined,
   };
 };
@@ -37,7 +46,7 @@ export const getDefaultConfig = (): ServerConfig => {
  * @param {PartialDeep<APIConfig>} [userConfig] - The user config.
  * @returns {Maybe<APIConfig>} The merged config.
  */
-export const mergeAPIConfig = (
+const mergeAPIConfig = (
   userConfig?: PartialDeep<APIConfig>
 ): Maybe<APIConfig> => {
   if (!userConfig) return undefined;
@@ -51,12 +60,12 @@ export const mergeAPIConfig = (
 };
 
 /**
- * Merge the user static dir config with some default values if needed.
+ * Merge the user static directory config with some default values if needed.
  *
  * @param {PartialDeep<StaticDirConfig>} [userConfig] - The user config.
  * @returns {Maybe<StaticDirConfig>} The merged config.
  */
-export const mergeStaticDirConfig = (
+const mergeStaticDirConfig = (
   userConfig?: PartialDeep<StaticDirConfig>
 ): Maybe<StaticDirConfig> => {
   if (!userConfig) return undefined;
@@ -67,9 +76,53 @@ export const mergeStaticDirConfig = (
     throw new Error(invalid.config.staticDir.path(userConfig.path));
 
   return {
-    entrypoint: userConfig.entrypoint ?? DEFAULT_STATIC_DIR_ENTRYPOINT,
+    entrypoint: userConfig.entrypoint ?? DEFAULT_ENTRYPOINT_FILE,
     path: userConfig.path,
-    route: userConfig.route ?? DEFAULT_STATIC_DIR_ROUTE,
+    route: userConfig.route ?? DEFAULT_STATIC_ROUTE,
+  };
+};
+
+/**
+ * Merge the user HMR config with some default values if needed.
+ *
+ * @param {PartialDeep<HMRConfig>} [userConfig] - The user config.
+ * @returns {Maybe<HMRConfig>} The merged config.
+ */
+const mergeHMRConfig = (
+  userConfig?: PartialDeep<HMRConfig>
+): Maybe<HMRConfig> => {
+  if (!userConfig) return undefined;
+
+  return {
+    port: userConfig.port,
+  };
+};
+
+/**
+ * Merge the user SSR config with some default values if needed.
+ *
+ * @param {PartialDeep<SSRConfig>} [userConfig] - The user config.
+ * @returns {Maybe<SSRConfig>} The merged config.
+ */
+const mergeSSRConfig = (
+  userConfig?: PartialDeep<SSRConfig>
+): Maybe<SSRConfig> => {
+  if (!userConfig) return undefined;
+
+  if (!userConfig.entrypoint) throw new Error(missing.config.ssr.entrypoint);
+
+  if (!userConfig.placeholders?.content)
+    throw new Error(missing.config.ssr.placeholders);
+
+  if (!userConfig.template) throw new Error(missing.config.ssr.template);
+
+  return {
+    entrypoint: userConfig.entrypoint,
+    placeholders: {
+      content: userConfig.placeholders.content,
+    },
+    route: userConfig.route ?? DEFAULT_SSR_ROUTE,
+    template: userConfig.template,
   };
 };
 
@@ -88,9 +141,11 @@ export const mergeDefaultConfigWith = (
 
   const newConfig: ServerConfig = {
     api: mergeAPIConfig(userConfig.api),
+    hmr: mergeHMRConfig(userConfig.hmr),
     hostname: userConfig.hostname ?? defaultConfig.hostname,
     mode: userConfig.mode ?? defaultConfig.mode,
     port: userConfig.port ?? defaultConfig.port,
+    ssr: mergeSSRConfig(userConfig.ssr),
     staticDir: mergeStaticDirConfig(userConfig.staticDir),
   };
 

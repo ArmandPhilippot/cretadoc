@@ -8,7 +8,7 @@ import { expect } from './utils';
 describe('api', () => {
   it('serves the api with default route', async () => {
     const api = createAPI({ endpoint: DEFAULT_API_ROUTE });
-    const server = createServer({
+    const server = await createServer({
       api: {
         instance: api,
       },
@@ -26,7 +26,7 @@ describe('api', () => {
   it('serves the api with a custom route', async () => {
     const endpoint = '/custom';
     const api = createAPI({ endpoint });
-    const server = createServer({
+    const server = await createServer({
       api: {
         instance: api,
         route: endpoint,
@@ -42,9 +42,10 @@ describe('api', () => {
     expect.assertions(1);
   });
 
-  it('throws an error if the API instance is not provided', () => {
-    expect(() => createServer({ api: { route: '/anyRoute' } })).toThrowError(
-      missing.config.api.instance
-    );
+  it('throws an error if the API instance is not provided', async () => {
+    await expect(async () =>
+      createServer({ api: { route: '/anyRoute' } })
+    ).rejects.toThrowError(missing.config.api.instance);
+    expect.assertions(1);
   });
 });
