@@ -70,8 +70,8 @@ describe('read-dir', () => {
   it('returns the directory data', async () => {
     const dir = await readDir(fixturesPath);
 
-    expect(dir.content?.directories.length).toBe(rootDirectories.length);
-    expect(dir.content?.files.length).toBe(rootFiles.length);
+    expect(dir.contents?.directories.length).toBe(rootDirectories.length);
+    expect(dir.contents?.files.length).toBe(rootFiles.length);
     expect(dir.createdAt).toBeTruthy();
     expect(dir.id).toBe(generateIdFrom(fixturesPath));
     expect(dir.name).toBe(basename(fixturesPath));
@@ -84,11 +84,11 @@ describe('read-dir', () => {
   it('returns the files contents if the option is set', async () => {
     const dir = await readDir(fixturesPath, { includeFileContents: true });
 
-    expect(dir.content?.files.every((file) => file.content !== undefined)).toBe(
-      true
-    );
     expect(
-      dir.content?.files.find((file) => file.name === 'README')?.content ===
+      dir.contents?.files.every((file) => file.contents !== undefined)
+    ).toBe(true);
+    expect(
+      dir.contents?.files.find((file) => file.name === 'README')?.contents ===
         readmeContent
     ).toBe(true);
     expect.assertions(2);
@@ -102,10 +102,10 @@ describe('read-dir', () => {
     const isMarkdownFile = (file: RegularFile) =>
       file.extension === markdownExtension;
     const isDirOnlyHasMarkdownFiles = (subDir: Directory) =>
-      subDir.content?.files.every(isMarkdownFile);
+      subDir.contents?.files.every(isMarkdownFile);
 
-    expect(dir.content?.files.every(isMarkdownFile)).toBe(true);
-    expect(dir.content?.directories.every(isDirOnlyHasMarkdownFiles)).toBe(
+    expect(dir.contents?.files.every(isMarkdownFile)).toBe(true);
+    expect(dir.contents?.directories.every(isDirOnlyHasMarkdownFiles)).toBe(
       true
     );
     expect.assertions(2);
@@ -116,21 +116,21 @@ describe('read-dir', () => {
       depth: 0,
     });
 
-    expect(rootDirOnly.content).toBeUndefined();
+    expect(rootDirOnly.contents).toBeUndefined();
 
     const rootDirAndDirectChildren = await readDir(fixturesPath, {
       depth: 1,
     });
 
-    expect(rootDirAndDirectChildren.content?.directories.length).toBe(
+    expect(rootDirAndDirectChildren.contents?.directories.length).toBe(
       rootDirectories.length
     );
-    expect(rootDirAndDirectChildren.content?.files.length).toBe(
+    expect(rootDirAndDirectChildren.contents?.files.length).toBe(
       rootFiles.length
     );
     expect(
-      rootDirAndDirectChildren.content?.directories.every(
-        (subDir) => subDir.content === undefined
+      rootDirAndDirectChildren.contents?.directories.every(
+        (subDir) => subDir.contents === undefined
       )
     ).toBe(true);
 
