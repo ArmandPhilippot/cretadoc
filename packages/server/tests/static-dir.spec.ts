@@ -53,6 +53,22 @@ describe('static-dir', () => {
     expect.assertions(1);
   });
 
+  it('serves the directory contents at a custom route', async () => {
+    const path = new URL('./fixtures/static-dir/', import.meta.url).pathname;
+    const route = '/custom';
+    const server = createServer({
+      hostname: 'localhost',
+      port: 4200,
+      staticDir: { path, route },
+    });
+
+    await expect({ server, endpoint: route }).toRespondWith({
+      statusCode: 200,
+      text: 'Hello from Cretadoc default entrypoint!',
+    });
+    expect.assertions(1);
+  });
+
   it('throws an error if the path is not provided', () => {
     expect(() =>
       createServer({ staticDir: { entrypoint: 'any.html' } })
