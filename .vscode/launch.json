@@ -19,6 +19,24 @@
       ],
       "args": ["api.ts"],
       "postDebugTask": "API: clean fixtures"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug: Server",
+      "localRoot": "${workspaceFolder}/packages/server/",
+      "skipFiles": [
+        "<node_internals>/**",
+        "${workspaceFolder}/**/node_modules/**/*.js"
+      ],
+      "runtimeArgs": [
+        "--experimental-specifier-resolution=node",
+        "--loader",
+        "ts-node/esm",
+        "-r",
+        "ts-node/register"
+      ],
+      "args": ["server.ts"]
     }
   ]
 }
