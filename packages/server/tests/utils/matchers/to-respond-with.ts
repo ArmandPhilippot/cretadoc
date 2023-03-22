@@ -5,10 +5,20 @@ import type { MatcherResult } from '../../types';
 type ExpectedResponse = {
   statusCode: number;
   text: string | RegExp;
+  textShouldMatch?: boolean;
 };
 
 export type ToRespondWithMatcher = {
   toRespondWith: (expected: ExpectedResponse) => Promise<MatcherResult>;
+};
+
+const isExpectedText = (received: string, expected: ExpectedResponse) => {
+  const shouldMatch =
+    expected.textShouldMatch === undefined || expected.textShouldMatch;
+  const isMatching = !!received.match(expected.text)?.length;
+
+  if ((shouldMatch && isMatching) || (!shouldMatch && !isMatching)) return true;
+  return false;
 };
 
 export async function toRespondWith(
@@ -25,7 +35,7 @@ export async function toRespondWith(
   let pass = true;
 
   if (!this.equals(response.statusCode, expected.statusCode)) pass = false;
-  if (!response.text.match(expected.text)) pass = false;
+  if (!isExpectedText(response.text, expected)) pass = false;
 
   server.stop();
 

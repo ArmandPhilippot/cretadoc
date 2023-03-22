@@ -7,7 +7,12 @@ import type {
   Response as ExpressResponse,
 } from 'express';
 import type { ViteDevServer } from 'vite';
-import type { ServerRender, SSRConfig } from '../types';
+import type {
+  Render,
+  ServerRender,
+  SSRConfig,
+  SSRPlaceholders,
+} from '../types';
 import { SUCCESS_CODE } from '../utils/constants';
 import { invalid } from '../utils/errors';
 
@@ -47,6 +52,33 @@ const loadRenderMethod = async (
   return loadedEntrypoint;
 };
 
+/**
+ * Replace the placeholders with rendered contents.
+ *
+ * @param {string} template - The HTML template.
+ * @param {SSRPlaceholders} placeholders - The SSR placeholders.
+ * @param {Render} rendered - The rendered contents.
+ * @returns {string} The generated HTML.
+ */
+const generateHTMLContents = (
+  template: string,
+  placeholders: SSRPlaceholders,
+  rendered: Render
+) => {
+  let html = template.replace(placeholders.content, rendered.html);
+
+  if (placeholders.initialState) {
+    const stateScript = rendered.initialState
+      ? `\n<script>window.__INITIAL_STATE__=${JSON.stringify(
+          rendered.initialState
+        )}</script>`
+      : '';
+    html = html.replace(placeholders.initialState, stateScript);
+  }
+
+  return html;
+};
+
 export type ServerHandlers = {
   req: ExpressRequest;
   res: ExpressResponse;
@@ -72,8 +104,8 @@ const renderHTML = async (
       htmlTemplate
     );
     const { render } = await loadRenderMethod(viteServer, entrypoint);
-    const { html: appHtml } = await render(req.originalUrl);
-    const html = template.replace(placeholders.content, appHtml);
+    const rendered = await render(req.originalUrl);
+    const html = generateHTMLContents(template, placeholders, rendered);
 
     res.status(SUCCESS_CODE).set({ 'Content-Type': 'text/html' }).end(html);
   } catch (e) {

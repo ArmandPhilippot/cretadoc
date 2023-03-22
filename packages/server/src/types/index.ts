@@ -28,6 +28,10 @@ export type SSRPlaceholders = {
    * The placeholder for main content.
    */
   content: string;
+  /**
+   * The placeholder for state shared between server & client.
+   */
+  initialState: Maybe<string>;
 };
 
 export type SSRConfig = {
@@ -120,6 +124,7 @@ export type ServerReturn = {
 };
 
 export type Render = {
+  initialState?: Record<string, unknown>;
   html: string;
 };
 
