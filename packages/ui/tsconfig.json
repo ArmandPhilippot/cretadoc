@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    /* Projects */
+    "tsBuildInfoFile": "./.tsbuildinfo",
+
+    /* Modules */
+    "baseUrl": "./",
+
+    /* Emit */
+    "declaration": false,
+    "declarationMap": false,
+    "outDir": "dist"
+  }
+}
