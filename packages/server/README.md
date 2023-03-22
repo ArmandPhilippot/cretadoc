@@ -119,7 +119,7 @@ The Cretadoc server can use three different placeholders to render your contents
 
 - `content` (mandatory): The placeholder for main content (inside `<body>`),
 - `initialState` (optional): This placeholder is used to share a state between the server and the client. You need to provide an object to use it.
-- `preloadedLinks` (optional): By providing an array of file paths, we can add them in different HTML `link` elements with `rel="preload"` attribute. It is useful if you want to preload some fonts or scripts for example.
+- `preloadedLinks` (optional): An array of URL (e.g., `/assets/your-file.css`), we can add them as `href` in different HTML `link` elements with `rel="preload"` attribute. It is useful if you want to preload some fonts or scripts for example.
 
 ### Static directory configuration
 
@@ -128,6 +128,103 @@ You can use the Cretadoc server to serve a static directory. The `staticDir` key
 - `entrypoint`: A HTML file used as entrypoint (default is: `index.html`). It must be inside the given path.
 - `path`: The (mandatory) static directory path.
 - `route`: The route used to serve the static directory (default is: `/static`).
+
+## Examples
+
+These examples assume that you have already imported the `@cretadoc/server` package in the file. See the `Usage` section above.
+
+### Serve a static directory at `/public` route.
+
+```javascript
+const server = await createServer({
+  mode: 'production',
+  port: 8080,
+  staticDir: {
+    entrypoint: 'main.html',
+    path: '/home/username/sites/project/static/',
+    route: '/public',
+  },
+});
+```
+
+### Use SSR to render the files.
+
+```javascript
+const server = await createServer({
+  hmr: {
+    port: 24569,
+  },
+  mode: 'development',
+  port: 6000,
+  ssr: {
+    entrypoint: '/home/username/sites/project/entry-server.tsx',
+    placeholders: {
+      content: '<!-- rendered-content -->',
+    },
+    template: '/home/username/sites/project/index.html',
+  },
+});
+```
+
+The `entry-server.tsx` file must export a function that accepts an url as parameter and that returns a string.
+
+Example:
+
+```tsx
+import { StrictMode } from 'react';
+import ReactDOMServer from 'react-dom/server';
+import { App } from './app';
+
+export const render = (url: string) => {
+  return ReactDOMServer.renderToString(
+    <StrictMode>
+      <App />
+    </StrictMode>
+  );
+};
+```
+
+In the `entry-server.tsx` file, you can also export two other variables: `initialState` and `preloadedLinks`.
+
+Example:
+
+```tsx
+export const initialState = {
+  foo: 'bar',
+};
+
+export const preloadedLinks = [
+  '/an-important-script.js',
+  '/your-stylesheet.css',
+];
+```
+
+If you choose to export an initial state and/or some preloaded links, you need to modify the server configuration to add the matching placeholders:
+
+```ts
+const app = await createServer({
+  ...yourPreviousConfig,
+  ssr: {
+    placeholders: {
+      content: '<!-- rendered-content -->',
+      initialState: '<!-- initial-state -->',
+      preloadedLinks: '<!-- preloaded-links -->',
+    },
+  },
+});
+```
+
+### Use the API route
+
+```javascript
+import { createAPI } from '@cretadoc/api';
+import { createServer } from '@cretadoc/server';
+
+const api = createAPI();
+const app = await createServer({
+  api: { instance: api, route: '/graphql' },
+});
+```
 
 ## License
 
