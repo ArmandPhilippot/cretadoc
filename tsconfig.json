@@ -13,7 +13,7 @@
     /* Modules */
     "module": "ESNext",
     "rootDir": ".",
-    "moduleResolution": "nodenext",
+    "moduleResolution": "node", // Issue to resolve some types with Nodenext
     "baseUrl": ".",
     "resolveJsonModule": true,
 
@@ -49,7 +49,7 @@
     "alwaysStrict": true,
     "noUnusedLocals": false, // Prefer ESlint instead
     "noUnusedParameters": false, // Prefer ESlint instead
-    "exactOptionalPropertyTypes": true,
+    "exactOptionalPropertyTypes": false, // Issue with Rollup...
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,

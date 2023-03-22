@@ -6,14 +6,10 @@
 
     /* Modules */
     "baseUrl": "./",
-    "moduleResolution": "node", // Nodenext does not resolve some types
 
     /* Emit */
     "declaration": false,
     "declarationMap": false,
-    "outDir": "dist",
-
-    /* Type Checking */
-    "exactOptionalPropertyTypes": false // Issue with Rollup...
+    "outDir": "dist"
   }
 }
