@@ -8,7 +8,7 @@ module.exports = {
   'react/forbid-foreign-prop-types': 'off',
   'react/jsx-filename-extension': [
     'error',
-    { allow: 'as-needed', extensions: ['.ts', '.tsx'] },
+    { allow: 'as-needed', extensions: ['.tsx'] },
   ],
   'react/no-unused-prop-types': 'off',
   'react/prop-types': 'off',

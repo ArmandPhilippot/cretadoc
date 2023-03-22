@@ -53,7 +53,7 @@ module.exports = {
   'react/jsx-equals-spacing': ['warn', 'never'],
   'react/jsx-filename-extension': [
     'error',
-    { allow: 'as-needed', extensions: ['.js', '.jsx'] },
+    { allow: 'as-needed', extensions: ['.jsx'] },
   ],
   'react/jsx-first-prop-new-line': 'off',
   'react/jsx-fragments': ['error', 'syntax'],
@@ -89,7 +89,7 @@ module.exports = {
   'react/jsx-no-literals': [
     'warn',
     {
-      allowedStrings: [],
+      allowedStrings: ['button', 'reset', 'submit'],
       ignoreProps: false,
       noAttributeStrings: true,
       noStrings: true,
