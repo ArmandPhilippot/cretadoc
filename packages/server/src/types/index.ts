@@ -32,6 +32,10 @@ export type SSRPlaceholders = {
    * The placeholder for state shared between server & client.
    */
   initialState: Maybe<string>;
+  /**
+   * The placeholder for preloaded links.
+   */
+  preloadedLinks: Maybe<string>;
 };
 
 export type SSRConfig = {
@@ -124,8 +128,18 @@ export type ServerReturn = {
 };
 
 export type Render = {
+  /**
+   * The initial state to share between client and server.
+   */
   initialState?: Record<string, unknown>;
+  /**
+   * The html contents.
+   */
   html: string;
+  /**
+   * The links to preload.
+   */
+  preloadedLinks?: string[];
 };
 
 export type ServerRender = (url: string) => Promise<Render>;

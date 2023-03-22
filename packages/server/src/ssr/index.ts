@@ -15,6 +15,7 @@ import type {
 } from '../types';
 import { SUCCESS_CODE } from '../utils/constants';
 import { invalid } from '../utils/errors';
+import { getPreloadLinkElements } from '../utils/preloaded-links';
 
 type RenderImport = {
   render: ServerRender;
@@ -64,7 +65,7 @@ const generateHTMLContents = (
   template: string,
   placeholders: SSRPlaceholders,
   rendered: Render
-) => {
+): string => {
   let html = template.replace(placeholders.content, rendered.html);
 
   if (placeholders.initialState) {
@@ -74,6 +75,13 @@ const generateHTMLContents = (
         )}</script>`
       : '';
     html = html.replace(placeholders.initialState, stateScript);
+  }
+
+  if (placeholders.preloadedLinks) {
+    const preloadedLinks = rendered.preloadedLinks
+      ? getPreloadLinkElements(rendered.preloadedLinks)
+      : '';
+    html = html.replace(placeholders.preloadedLinks, preloadedLinks);
   }
 
   return html;

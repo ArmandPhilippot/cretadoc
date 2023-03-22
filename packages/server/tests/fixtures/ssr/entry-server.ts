@@ -6,4 +6,10 @@ export const render: ServerRender = async () =>
     initialState: {
       foo: 'bar',
     },
+    preloadedLinks: [
+      '/any-style.css',
+      '/any-script.js',
+      '/any-font.woff2',
+      '/invalid-file.txt',
+    ],
   });

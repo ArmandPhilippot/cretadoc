@@ -121,6 +121,7 @@ const mergeSSRConfig = (
     placeholders: {
       content: userConfig.placeholders.content,
       initialState: userConfig.placeholders.initialState,
+      preloadedLinks: userConfig.placeholders.preloadedLinks,
     },
     route: userConfig.route ?? DEFAULT_SSR_ROUTE,
     template: userConfig.template,

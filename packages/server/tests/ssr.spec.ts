@@ -1,9 +1,10 @@
+/* eslint-disable max-statements */
 import { describe, it } from 'vitest';
 import { createServer } from '../src';
 import { DEFAULT_SSR_ROUTE } from '../src/utils/constants';
 import { invalid, missing } from '../src/utils/errors';
 import { render } from './fixtures/ssr/entry-server';
-import { render as renderWithoutState } from './fixtures/ssr/entry-server-without-state';
+import { render as renderWithoutState } from './fixtures/ssr/entry-server-html-only';
 import { expect } from './utils';
 
 describe('ssr', () => {
@@ -27,9 +28,11 @@ describe('ssr', () => {
       },
     });
 
+    const { html } = await render('');
+
     await expect({ server, endpoint: DEFAULT_SSR_ROUTE }).toRespondWith({
       statusCode: 200,
-      text: (await render('')).html,
+      text: html,
     });
     expect.assertions(1);
   });
@@ -126,7 +129,7 @@ describe('ssr', () => {
   it('does not render the initial state if it is not provided', async () => {
     const contentPlaceholder = '<!-- ssr-outlet -->';
     const serverEntrypoint = new URL(
-      './fixtures/ssr/entry-server-without-state.ts',
+      './fixtures/ssr/entry-server-html-only.ts',
       import.meta.url
     ).pathname;
     const template = new URL('./fixtures/ssr/index.html', import.meta.url)
@@ -150,6 +153,64 @@ describe('ssr', () => {
       text: `\n<script>window.__INITIAL_STATE__=${JSON.stringify(
         initialState
       )}</script>`,
+      textShouldMatch: false,
+    });
+    expect.assertions(1);
+  });
+
+  it('renders the links to preload in document head', async () => {
+    const contentPlaceholder = '<!-- ssr-outlet -->';
+    const serverEntrypoint = new URL(
+      './fixtures/ssr/entry-server.ts',
+      import.meta.url
+    ).pathname;
+    const template = new URL('./fixtures/ssr/index.html', import.meta.url)
+      .pathname;
+    const server = await createServer({
+      hostname: 'localhost',
+      port: 4300,
+      ssr: {
+        entrypoint: serverEntrypoint,
+        placeholders: {
+          content: contentPlaceholder,
+          preloadedLinks: '<!-- ssr-preload-links -->',
+        },
+        template,
+      },
+    });
+
+    await expect({ server, endpoint: DEFAULT_SSR_ROUTE }).toRespondWith({
+      statusCode: 200,
+      text: 'rel="preload"',
+      textShouldMatch: true,
+    });
+    expect.assertions(1);
+  });
+
+  it('does not render the links in document head if not provided', async () => {
+    const contentPlaceholder = '<!-- ssr-outlet -->';
+    const serverEntrypoint = new URL(
+      './fixtures/ssr/entry-server-html-only.ts',
+      import.meta.url
+    ).pathname;
+    const template = new URL('./fixtures/ssr/index.html', import.meta.url)
+      .pathname;
+    const server = await createServer({
+      hostname: 'localhost',
+      port: 4300,
+      ssr: {
+        entrypoint: serverEntrypoint,
+        placeholders: {
+          content: contentPlaceholder,
+          preloadedLinks: '<!-- ssr-preload-links -->',
+        },
+        template,
+      },
+    });
+
+    await expect({ server, endpoint: DEFAULT_SSR_ROUTE }).toRespondWith({
+      statusCode: 200,
+      text: 'rel="preload"',
       textShouldMatch: false,
     });
     expect.assertions(1);
