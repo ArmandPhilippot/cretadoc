@@ -250,6 +250,8 @@ importers:
       '@typescript-eslint/eslint-plugin': ^5.56.0
       '@typescript-eslint/parser': ^5.56.0
       '@vanilla-extract/css': ^1.10.0
+      '@vanilla-extract/dynamic': ^2.0.3
+      '@vanilla-extract/recipes': ^0.4.0
       '@vanilla-extract/vite-plugin': ^3.8.0
       '@vitejs/plugin-react': ^3.1.0
       '@vitest/coverage-c8': ^0.29.7
@@ -271,6 +273,10 @@ importers:
       typescript: ^5.0.2
       vite: ^4.2.1
       vitest: ^0.29.7
+    dependencies:
+      '@vanilla-extract/css': 1.10.0
+      '@vanilla-extract/dynamic': 2.0.3
+      '@vanilla-extract/recipes': 0.4.0_qfizfuqympj3byv36k7ie7wo3i
     devDependencies:
       '@babel/core': 7.21.3
       '@cretadoc/eslint-config': link:../eslint-config
@@ -301,7 +307,6 @@ importers:
       '@types/testing-library__jest-dom': 5.14.5
       '@typescript-eslint/eslint-plugin': 5.56.0_2hcjazgfnbtq42tcc73br2vup4
       '@typescript-eslint/parser': 5.56.0_j4766f7ecgqbon3u7zlxn5zszu
-      '@vanilla-extract/css': 1.10.0
       '@vanilla-extract/vite-plugin': 3.8.0_vite@4.2.1
       '@vitejs/plugin-react': 3.1.0_vite@4.2.1
       '@vitest/coverage-c8': 0.29.7_vitest@0.29.7
@@ -3057,7 +3062,6 @@ packages:
       {
         integrity: sha512-14FtKiHhy2QoPIzdTcvh//8OyBlknNs2nXRwIhG904opCby3l+9Xaf/wuPvICBF0rc1ZCNBd3nKe9cd2mecVkQ==,
       }
-    dev: true
 
   /@envelop/core/3.0.6:
     resolution:
@@ -7228,7 +7232,15 @@ packages:
       deepmerge: 4.3.1
       media-query-parser: 2.0.2
       outdent: 0.8.0
-    dev: true
+
+  /@vanilla-extract/dynamic/2.0.3:
+    resolution:
+      {
+        integrity: sha512-Rglfw2gXAYiBzAQ4jgUG7rBgE2c88e/zcG27ZVoIqMHVq56wf2C1katGMm1yFMNBgzqM7oBNYzz4YOMzznydkg==,
+      }
+    dependencies:
+      '@vanilla-extract/private': 1.0.3
+    dev: false
 
   /@vanilla-extract/integration/6.2.1:
     resolution:
@@ -7264,7 +7276,17 @@ packages:
       {
         integrity: sha512-17kVyLq3ePTKOkveHxXuIJZtGYs+cSoev7BlP+Lf4916qfDhk/HBjvlYDe8egrea7LNPHKwSZJK/bzZC+Q6AwQ==,
       }
-    dev: true
+
+  /@vanilla-extract/recipes/0.4.0_qfizfuqympj3byv36k7ie7wo3i:
+    resolution:
+      {
+        integrity: sha512-gFgB7BofUYbtbxINHK6DhMv1JDFDXp/YI/Xm+cqKar+1I/2dfxPepeDxSexL6YB4ftfeaDw8Kn5zydMvHcGOEQ==,
+      }
+    peerDependencies:
+      '@vanilla-extract/css': ^1.0.0
+    dependencies:
+      '@vanilla-extract/css': 1.10.0
+    dev: false
 
   /@vanilla-extract/vite-plugin/3.8.0_vite@4.2.1:
     resolution:
@@ -7334,7 +7356,7 @@ packages:
       c8: 7.13.0
       picocolors: 1.0.0
       std-env: 3.3.2
-      vitest: 0.29.7
+      vitest: 0.29.7_jsdom@21.1.1
     dev: true
 
   /@vitest/expect/0.29.2:
@@ -7968,7 +7990,6 @@ packages:
       {
         integrity: sha512-hCOfMzbFx5IDutmWLAt6MZwOUjIfSM9G9FyVxytmE4Rs/5YDPWQrD/+IR1w+FweD9H2oOZEnv36TmkjhNURBVA==,
       }
-    dev: true
 
   /airbnb-js-shims/2.2.1:
     resolution:
@@ -10780,7 +10801,6 @@ packages:
         integrity: sha512-arSMRWIIFY0hV8pIxZMEfmMI47Wj3R/aWpZDDxWYCPEiOMv6tfOrnpDtgxBYPEQD4V0Y/958+1TdC3iWTFcUPw==,
       }
     engines: { node: '>= 6' }
-    dev: true
 
   /css-what/6.1.0:
     resolution:
@@ -10804,7 +10824,6 @@ packages:
       }
     engines: { node: '>=4' }
     hasBin: true
-    dev: true
 
   /cssstyle/3.0.0:
     resolution:
@@ -10821,7 +10840,6 @@ packages:
       {
         integrity: sha512-DJR/VvkAvSZW9bTouZue2sSxDwdTN92uHjqeKVm+0dAqdfNykRzQ95tay8aXMBAAPpUiq4Qcug2L7neoRh2Egw==,
       }
-    dev: true
 
   /currently-unhandled/0.4.1:
     resolution:
@@ -11025,7 +11043,6 @@ packages:
       {
         integrity: sha512-Rn+RuwkmkDwCi2/oXOFS9Gsr5lJZu/yTGpK7wAaAIE75CC+LCGEZHpY6VQJa/RoJcrmaA/docWJZvYohlNkWPA==,
       }
-    dev: true
 
   /deepmerge/4.3.1:
     resolution:
@@ -11033,7 +11050,6 @@ packages:
         integrity: sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==,
       }
     engines: { node: '>=0.10.0' }
-    dev: true
 
   /default-browser-id/1.0.4:
     resolution:
@@ -16664,7 +16680,6 @@ packages:
       }
     dependencies:
       '@babel/runtime': 7.21.0
-    dev: true
 
   /media-typer/0.3.0:
     resolution:
@@ -18007,7 +18022,6 @@ packages:
       {
         integrity: sha512-KiOAIsdpUTcAXuykya5fnVVT+/5uS0Q1mrkRHcF89tpieSmY33O/tmc54CqwA+bfhbtEfZUNLHaPUiB9X3jt1A==,
       }
-    dev: true
 
   /p-all/2.1.0:
     resolution:
@@ -20101,7 +20115,6 @@ packages:
     hasBin: true
     optionalDependencies:
       fsevents: 2.3.2
-    dev: true
 
   /rollup/3.20.1:
     resolution:
@@ -20112,6 +20125,7 @@ packages:
     hasBin: true
     optionalDependencies:
       fsevents: 2.3.2
+    dev: true
 
   /rrweb-cssom/0.6.0:
     resolution:
@@ -22885,7 +22899,7 @@ packages:
       esbuild: 0.17.12
       postcss: 8.4.21
       resolve: 1.22.1
-      rollup: 3.20.1
+      rollup: 3.20.0
     optionalDependencies:
       fsevents: 2.3.2
 

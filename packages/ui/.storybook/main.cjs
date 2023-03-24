@@ -18,6 +18,7 @@ module.exports = {
     builder: '@storybook/builder-vite',
   },
   features: {
+    buildStoriesJson: true,
     storyStoreV7: true,
   },
   async viteFinal(config) {
