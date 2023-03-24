@@ -1,4 +1,5 @@
 import { themes } from './library';
+import { buildThemes } from './utils/helpers';
 
-export { themes };
+export { buildThemes, themes };
 export * from './types';
