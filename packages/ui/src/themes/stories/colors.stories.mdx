@@ -1,0 +1,118 @@
+import { Meta, Story } from '@storybook/addon-docs';
+import { Color, PrimaryColor } from './components/color';
+import { PreviewList } from './components/preview-list';
+
+<Meta title="Themes/Tokens/Colors" />
+
+# Colors
+
+You can define your theme colors using design tokens. They are divided in four categories:
+
+- background
+- borders
+- foreground
+- primary
+
+These categories use a semantic palette to help you identify the intended usage.
+
+## Background
+
+Background design tokens define the colors used as background in Cretadoc interfaces.
+
+<Story name="Background">
+  <PreviewList>
+    <Color token="color.background.critical" />
+    <Color token="color.background.info" />
+    <Color token="color.background.inverted.base" />
+    <Color token="color.background.inverted.dark" />
+    <Color token="color.background.inverted.light" />
+    <Color token="color.background.muted" />
+    <Color token="color.background.regular.base" />
+    <Color token="color.background.regular.dark" />
+    <Color token="color.background.regular.light" />
+    <Color token="color.background.success" />
+    <Color token="color.background.warning" />
+  </PreviewList>
+</Story>
+
+## Borders
+
+Borders design tokens define the color of the borders used in Cretadoc interfaces.
+
+<Story name="Borders">
+  <PreviewList>
+    <Color token="color.borders.critical" />
+    <Color token="color.borders.info" />
+    <Color token="color.borders.inverted.base" />
+    <Color token="color.borders.inverted.dark" />
+    <Color token="color.borders.inverted.light" />
+    <Color token="color.borders.muted" />
+    <Color token="color.borders.regular.base" />
+    <Color token="color.borders.regular.dark" />
+    <Color token="color.borders.regular.light" />
+    <Color token="color.borders.success" />
+    <Color token="color.borders.warning" />
+  </PreviewList>
+</Story>
+
+## Foreground
+
+Foreground tokens are used to define text and icon colors. Most of them are used on a regular background:
+
+<Story name="Foreground">
+  <PreviewList>
+    <Color token="color.foreground.critical">Sample</Color>
+    <Color token="color.foreground.info">Sample</Color>
+    <Color token="color.foreground.inverted.base">Sample</Color>
+    <Color token="color.foreground.inverted.dark">Sample</Color>
+    <Color token="color.foreground.inverted.light">Sample</Color>
+    <Color token="color.foreground.muted">Sample</Color>
+    <Color token="color.foreground.regular.base">Sample</Color>
+    <Color token="color.foreground.regular.dark">Sample</Color>
+    <Color token="color.foreground.regular.light">Sample</Color>
+    <Color token="color.foreground.success">Sample</Color>
+    <Color token="color.foreground.warning">Sample</Color>
+  </PreviewList>
+</Story>
+
+We also provide special tokens when foreground is used on a non-regular background: each token starts with `on` keyword.
+
+<Story name="ForegroundOn">
+  <PreviewList>
+    <Color token="color.foreground.onCritical">Sample</Color>
+    <Color token="color.foreground.onInfo">Sample</Color>
+    <Color token="color.foreground.onInverted.base">Sample</Color>
+    <Color token="color.foreground.onInverted.dark">Sample</Color>
+    <Color token="color.foreground.onInverted.light">Sample</Color>
+    <Color token="color.foreground.onMuted">Sample</Color>
+    <Color token="color.foreground.onPrimary.base">Sample</Color>
+    <Color token="color.foreground.onPrimary.dark">Sample</Color>
+    <Color token="color.foreground.onPrimary.light">Sample</Color>
+    <Color token="color.foreground.onSuccess">Sample</Color>
+    <Color token="color.foreground.onWarning">Sample</Color>
+  </PreviewList>
+</Story>
+
+## Primary
+
+Primary tokens define the colors used to highligh calls to action for example. They can be used as foreground color, background color and eventually as border color. The primary color is usually your brand primary color.
+
+<Story name="Primary">
+  <PreviewList wrapAfter={3}>
+    <PrimaryColor context="foreground" token="color.primary.base">
+      Sample
+    </PrimaryColor>
+    <PrimaryColor context="foreground" token="color.primary.dark">
+      Sample
+    </PrimaryColor>
+    <PrimaryColor context="foreground" token="color.primary.light">
+      Sample
+    </PrimaryColor>
+    <PrimaryColor context="background" token="color.primary.base" />
+    <PrimaryColor context="background" token="color.primary.dark" />
+    <PrimaryColor context="background" token="color.primary.light" />
+    <PrimaryColor context="borders" token="color.primary.base" />
+    <PrimaryColor context="borders" token="color.primary.dark" />
+    <PrimaryColor context="borders" token="color.primary.light" />
+  </PreviewList>
+</Story>
