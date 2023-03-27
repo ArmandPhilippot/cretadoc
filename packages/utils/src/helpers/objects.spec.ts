@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 /* eslint-disable max-statements */
 import { describe, expect, expectTypeOf, it } from 'vitest';
-import { deepFreeze, isObjKeyExist } from './objects';
+import { deepFreeze, getValueByKeyPath, isObjKeyExist } from './objects';
 
 describe('deep-freeze', () => {
   it('returns a frozen object', () => {
@@ -128,6 +128,31 @@ describe('deep-freeze', () => {
     expect(() => deepFreeze('foo')).toThrowError(
       'The argument must be an object.'
     );
+  });
+});
+
+describe('get-value-by-key-path', () => {
+  const obj = {
+    foo: 'adipisci',
+    bar: {
+      baz: 42,
+      nested: {
+        qux: false,
+      },
+    },
+  };
+
+  it('returns the value of first level keys', () => {
+    const result = getValueByKeyPath(obj, 'foo');
+    expect(result).toBe(obj.foo);
+  });
+
+  it('returns the value of nested level keys', () => {
+    const barBaz = getValueByKeyPath(obj, 'bar.baz');
+    expect(barBaz).toBe(obj.bar.baz);
+
+    const barNestedQux = getValueByKeyPath(obj, 'bar.nested.qux');
+    expect(barNestedQux).toBe(obj.bar.nested.qux);
   });
 });
 

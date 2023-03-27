@@ -1,4 +1,4 @@
-import type { ReadonlyDeep } from '../types';
+import type { KeyPathIn, KeyPathValueIn, ReadonlyDeep } from '../types';
 import { isObject } from './types';
 
 /**
@@ -20,6 +20,36 @@ export const deepFreeze = <T extends Record<number | string | symbol, unknown>>(
   }
 
   return Object.freeze(immutableObj) as ReadonlyDeep<T>;
+};
+
+/**
+ * Retrieve a value in an object using a key path.
+ *
+ * @param {T} obj - An object.
+ * @param {P} path - A key path in dot notation.
+ * @returns {KeyPathValueIn<T, P>} The key path value.
+ */
+export const getValueByKeyPath = <
+  T extends Record<string, unknown>,
+  P extends KeyPathIn<T>
+>(
+  obj: T,
+  path: P
+): KeyPathValueIn<T, P> => {
+  const sep = '.';
+  const firstSepIndex = path.indexOf(sep);
+
+  if (firstSepIndex === -1) return obj[path] as KeyPathValueIn<T, P>;
+
+  const firstKey = path.slice(0, firstSepIndex);
+  const value = obj[firstKey];
+
+  if (isObject(value)) {
+    const updatedPath = path.replace(`${firstKey}${sep}`, '');
+    return getValueByKeyPath(value, updatedPath) as KeyPathValueIn<T, P>;
+  }
+
+  return value as KeyPathValueIn<T, P>;
 };
 
 /**
