@@ -3,10 +3,12 @@ import { createGlobalThemeContract } from '@vanilla-extract/css';
 import type { ThemeTokens } from '../types';
 import { THEME_VARS_PREFIX } from '../utils/constants';
 import { border, color } from './tokens';
+import { font } from './tokens/font';
 
 const themeContract: ReplaceTypesIn<ThemeTokens, string> = {
   border,
   color,
+  font,
 };
 
 /**

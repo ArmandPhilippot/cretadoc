@@ -7,12 +7,24 @@ type PreviewListProps = {
    */
   children: ReactNode[];
   /**
+   * Should the preview list be bordered?
+   *
+   * @default false
+   */
+  isBordered?: boolean;
+  /**
    * Wrap after the given number of elements.
    */
   wrapAfter?: number;
 };
 
-export const PreviewList: FC<PreviewListProps> = ({ children, wrapAfter }) => {
+export const PreviewList: FC<PreviewListProps> = ({
+  children,
+  isBordered = false,
+  wrapAfter,
+}) => {
+  const wrapperClassName = styles.wrapper({ isBordered });
+
   const isLineBreakRequired = (currentElCount: number) => {
     if (!wrapAfter) return false;
 
@@ -20,7 +32,7 @@ export const PreviewList: FC<PreviewListProps> = ({ children, wrapAfter }) => {
   };
 
   return (
-    <div className={styles.wrapper}>
+    <div className={wrapperClassName}>
       {Children.map(children, (child, index) => (
         <>
           {child}

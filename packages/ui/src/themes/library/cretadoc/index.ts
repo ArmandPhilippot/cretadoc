@@ -1,10 +1,12 @@
 import type { Theme, ThemeTokens } from '../../types';
 import { border } from './border';
 import { darkColor, lightColor } from './color';
+import { font } from './font';
 
 const cretadocLightTokens: ThemeTokens = {
   border,
   color: lightColor,
+  font,
 };
 
 export const cretadocLight: Theme = {
@@ -21,6 +23,7 @@ export const cretadocLight: Theme = {
 const cretadocDarkTokens: ThemeTokens = {
   border,
   color: darkColor,
+  font,
 };
 
 export const cretadocDark: Theme = {

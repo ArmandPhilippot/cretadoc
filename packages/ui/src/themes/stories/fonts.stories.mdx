@@ -1,0 +1,129 @@
+import { Meta, Story } from '@storybook/addon-docs';
+import { Font } from './components/font';
+import { PreviewList } from './components/preview-list';
+
+<Meta title="Themes/Tokens/Fonts" />
+
+# Fonts
+
+A font can be decomposed in five values:
+
+- a family,
+- a size,
+- a weight,
+- a letter-spacing,
+- a line-height.
+
+## Family
+
+Cretadoc interfaces use two different font-family. The monospace version is usually used to display code samples.
+
+<Story name="Family">
+  <PreviewList isBordered wrapAfter={1}>
+    <Font orientation="inline" token="font.family.regular">
+      The quick brown fox jumps over a lazy dog.
+    </Font>
+    <Font orientation="inline" token="font.family.monospace">
+      The quick brown fox jumps over a lazy dog.
+    </Font>
+  </PreviewList>
+</Story>
+
+## Size
+
+Cretadoc interfaces use six different font sizes.
+
+<Story name="Size">
+  <PreviewList isBordered wrapAfter={1}>
+    <Font orientation="inline" token="font.size.xs">
+      The quick brown fox jumps over a lazy dog.
+    </Font>
+    <Font orientation="inline" token="font.size.sm">
+      The quick brown fox jumps over a lazy dog.
+    </Font>
+    <Font orientation="inline" token="font.size.md">
+      The quick brown fox jumps over a lazy dog.
+    </Font>
+    <Font orientation="inline" token="font.size.lg">
+      The quick brown fox jumps over a lazy dog.
+    </Font>
+    <Font orientation="inline" token="font.size.xl">
+      The quick brown fox jumps over a lazy dog.
+    </Font>
+    <Font orientation="inline" token="font.size.xxl">
+      The quick brown fox jumps over a lazy dog.
+    </Font>
+  </PreviewList>
+</Story>
+
+## Weight
+
+Cretadoc interfaces use three different weight for fonts.
+
+<Story name="Weight">
+  <PreviewList isBordered wrapAfter={1}>
+    <Font orientation="inline" token="font.weight.light">
+      The quick brown fox jumps over a lazy dog.
+    </Font>
+    <Font orientation="inline" token="font.weight.regular">
+      The quick brown fox jumps over a lazy dog.
+    </Font>
+    <Font orientation="inline" token="font.weight.strong">
+      The quick brown fox jumps over a lazy dog.
+    </Font>
+  </PreviewList>
+</Story>
+
+## Letter spacing
+
+Cretadoc interfaces can use three different letter-spacing sizes.
+
+<Story name="LetterSpacing">
+  <PreviewList isBordered wrapAfter={1}>
+    <Font orientation="inline" token="font.letterSpacing.narrow">
+      The quick brown fox jumps over a lazy dog.
+    </Font>
+    <Font orientation="inline" token="font.letterSpacing.regular">
+      The quick brown fox jumps over a lazy dog.
+    </Font>
+    <Font orientation="inline" token="font.letterSpacing.spaced">
+      The quick brown fox jumps over a lazy dog.
+    </Font>
+  </PreviewList>
+</Story>
+
+## Line-height
+
+Cretadoc interfaces can use three different line-height. For example, code sample lines are less spaced than regular text.
+
+<Story name="LineHeight">
+  <PreviewList isBordered wrapAfter={1}>
+    <Font token="font.lineHeight.sm">
+      Eos aut corrupti autem ut quia voluptatibus id adipisci est. Qui
+      consequuntur distinctio modi quaerat ea non cumque. Libero eos reiciendis
+      nostrum. Inventore nesciunt dolor odit. Voluptatibus veniam totam tempore
+      praesentium nihil consequuntur voluptatem non sed. Accusantium doloremque
+      exercitationem veritatis est. Animi a at nisi. Explicabo laboriosam aut
+      aliquam. Odit fugiat quia facere numquam excepturi voluptas. Ut sunt
+      quibusdam non natus consequatur qui.
+    </Font>
+    <Font token="font.lineHeight.md">
+      Eos aut corrupti autem ut quia voluptatibus id adipisci est. Qui
+      consequuntur distinctio modi quaerat ea non cumque. Libero eos reiciendis
+      nostrum. Inventore nesciunt dolor odit. Voluptatibus veniam totam tempore
+      praesentium nihil consequuntur voluptatem non sed. Accusantium doloremque
+      exercitationem veritatis est. Animi a at nisi. Explicabo laboriosam aut
+      aliquam. Odit fugiat quia facere numquam excepturi voluptas. Ut sunt
+      quibusdam non natus consequatur qui.
+    </Font>
+    <Font token="font.lineHeight.lg">
+      Eos aut corrupti autem ut quia voluptatibus id adipisci est. Qui
+      consequuntur distinctio modi quaerat ea non cumque. Libero eos reiciendis
+      nostrum. Inventore nesciunt dolor odit. Voluptatibus veniam totam tempore
+      praesentium nihil consequuntur voluptatem non sed. Accusantium doloremque
+      exercitationem veritatis est. Animi a at nisi. Explicabo laboriosam aut
+      aliquam. Odit fugiat quia facere numquam excepturi voluptas. Ut sunt
+      quibusdam non natus consequatur qui.
+    </Font>
+  </PreviewList>
+</Story>

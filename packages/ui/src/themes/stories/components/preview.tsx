@@ -7,6 +7,10 @@ export type PreviewProps = Pick<
   HTMLAttributes<HTMLDivElement>,
   'children' | 'className' | 'style'
 > & {
+  /**
+   * @default 'stack'
+   */
+  orientation?: `inline` | 'stack';
   token: KeyPathIn<typeof contract>;
 };
 
@@ -16,17 +20,19 @@ export type PreviewProps = Pick<
 export const Preview: FC<PreviewProps> = ({
   children,
   className = '',
+  orientation = 'stack',
   token,
   ...props
 }) => {
   const previewClassName = `${styles.preview} ${className}`;
+  const wrapperClassName = styles.wrapper({ orientation });
 
   return (
-    <div className={styles.wrapper}>
+    <div className={wrapperClassName}>
+      <code className={styles.token}>{token}</code>
       <div {...props} className={previewClassName}>
         {children}
       </div>
-      <code className={styles.token}>{token}</code>
     </div>
   );
 };

@@ -1,9 +1,21 @@
 import { style } from '@vanilla-extract/css';
+import { recipe } from '@vanilla-extract/recipes';
 
-export const wrapper = style({
-  display: 'flex',
-  flexFlow: 'column wrap',
-  placeItems: 'center',
+export const wrapper = recipe({
+  base: {
+    display: 'flex',
+    placeItems: 'center',
+  },
+  variants: {
+    orientation: {
+      inline: {
+        flexFlow: 'row wrap',
+      },
+      stack: {
+        flexFlow: 'column wrap',
+      },
+    },
+  },
 });
 
 export const preview = style({
