@@ -2,9 +2,10 @@ import type { Nullable, ReplaceTypesIn } from '@cretadoc/utils';
 import { createGlobalThemeContract } from '@vanilla-extract/css';
 import type { ThemeTokens } from '../types';
 import { THEME_VARS_PREFIX } from '../utils/constants';
-import { color } from './tokens';
+import { border, color } from './tokens';
 
 const themeContract: ReplaceTypesIn<ThemeTokens, string> = {
+  border,
   color,
 };
 

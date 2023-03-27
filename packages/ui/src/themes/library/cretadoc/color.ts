@@ -28,7 +28,7 @@ export const lightColor: ColorTokens = {
     },
     muted: 'antiquewhite',
     regular: {
-      base: 'aliceblue',
+      base: 'blueviolet',
       dark: 'aliceblue',
       light: 'aliceblue',
     },
@@ -102,7 +102,7 @@ export const darkColor: ColorTokens = {
     },
     muted: 'antiquewhite',
     regular: {
-      base: 'aliceblue',
+      base: 'blueviolet',
       dark: 'aliceblue',
       light: 'aliceblue',
     },
