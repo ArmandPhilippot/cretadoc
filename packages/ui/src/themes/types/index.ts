@@ -1,4 +1,5 @@
 import type {
+  AnimationTokens,
   BorderTokens,
   ColorTokens,
   FontTokens,
@@ -8,6 +9,10 @@ import type {
 export type ThemeScheme = 'dark' | 'light';
 
 export type ThemeTokens = {
+  /**
+   * The design tokens to define the animations.
+   */
+  animation: AnimationTokens;
   /**
    * The design tokens to define the borders.
    */

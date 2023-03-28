@@ -1,10 +1,12 @@
 import type { Theme, ThemeTokens } from '../../types';
+import { animation } from './animation';
 import { border } from './border';
 import { darkColor, lightColor } from './color';
 import { font } from './font';
 import { spacing } from './spacing';
 
 const cretadocLightTokens: ThemeTokens = {
+  animation,
   border,
   color: lightColor,
   font,
@@ -23,6 +25,7 @@ export const cretadocLight: Theme = {
 };
 
 const cretadocDarkTokens: ThemeTokens = {
+  animation,
   border,
   color: darkColor,
   font,

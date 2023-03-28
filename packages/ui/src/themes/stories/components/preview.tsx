@@ -11,7 +11,7 @@ export type PreviewProps = Pick<
    * @default 'stack'
    */
   orientation?: `inline` | 'stack';
-  token: KeyPathIn<typeof contract>;
+  token?: KeyPathIn<typeof contract>;
 };
 
 /**
@@ -29,7 +29,7 @@ export const Preview: FC<PreviewProps> = ({
 
   return (
     <div className={wrapperClassName}>
-      <code className={styles.token}>{token}</code>
+      {token ? <code className={styles.token}>{token}</code> : null}
       <div {...props} className={previewClassName}>
         {children}
       </div>

@@ -1,6 +1,9 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    /* Language and Environment */
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+
     /* Projects */
     "tsBuildInfoFile": "./.tsbuildinfo",
 

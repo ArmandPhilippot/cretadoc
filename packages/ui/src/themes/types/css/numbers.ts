@@ -1,4 +1,4 @@
-import type { LengthUnit } from './units';
+import type { LengthUnit, TimeUnit } from './units';
 
 export type NumberPrefix = '+' | '-' | '';
 export type PositiveLength = `${Exclude<
@@ -12,3 +12,4 @@ export type NegativeLength = `${Extract<
 export type Length = '0' | PositiveLength | NegativeLength;
 export type Percentage = `${NumberPrefix}${number}%`;
 export type LengthPercentage = Length | Percentage;
+export type Time = `${NumberPrefix}${number}${TimeUnit}`;
