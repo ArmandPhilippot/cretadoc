@@ -1,4 +1,9 @@
-import type { BorderTokens, ColorTokens, FontTokens } from './tokens';
+import type {
+  BorderTokens,
+  ColorTokens,
+  FontTokens,
+  SpacingTokens,
+} from './tokens';
 
 export type ThemeScheme = 'dark' | 'light';
 
@@ -15,6 +20,10 @@ export type ThemeTokens = {
    * The design tokens to define the fonts.
    */
   font: FontTokens;
+  /**
+   * The design tokens to define the spacings.
+   */
+  spacing: SpacingTokens;
 };
 
 export type ThemeAuthor = {

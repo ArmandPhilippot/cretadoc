@@ -1,0 +1,60 @@
+import { Meta, Story } from '@storybook/addon-docs';
+import { Margin, Padding, Spacing } from './components/spacing';
+import { PreviewList } from './components/preview-list';
+
+<Meta title="Themes/Tokens/Spacings" />
+
+# Spacings
+
+A spacing can be used as:
+
+- margin (or gap with flexbox and grid),
+- padding.
+
+## Spacing
+
+You can see a preview of the spacing sizes below. Each size is represented by the height of the colored box.
+
+<Story name="Spacing">
+  <PreviewList>
+    <Spacing token="spacing.xxs" />
+    <Spacing token="spacing.xs" />
+    <Spacing token="spacing.sm" />
+    <Spacing token="spacing.md" />
+    <Spacing token="spacing.lg" />
+    <Spacing token="spacing.xl" />
+    <Spacing token="spacing.xxl" />
+  </PreviewList>
+</Story>
+
+## Margin
+
+You can see a preview of the margin sizes below. Each margin is represented by the space between the two colored boxes.
+
+<Story name="Margin">
+  <PreviewList wrapAfter={1}>
+    <Margin token="spacing.xxs" />
+    <Margin token="spacing.xs" />
+    <Margin token="spacing.sm" />
+    <Margin token="spacing.md" />
+    <Margin token="spacing.lg" />
+    <Margin token="spacing.xl" />
+    <Margin token="spacing.xxl" />
+  </PreviewList>
+</Story>
+
+## Padding
+
+You can see a preview of the padding sizes below. Each padding is represented by the colored border around the box.
+
+<Story name="Padding">
+  <PreviewList>
+    <Padding token="spacing.xxs" />
+    <Padding token="spacing.xs" />
+    <Padding token="spacing.sm" />
+    <Padding token="spacing.md" />
+    <Padding token="spacing.lg" />
+    <Padding token="spacing.xl" />
+    <Padding token="spacing.xxl" />
+  </PreviewList>
+</Story>

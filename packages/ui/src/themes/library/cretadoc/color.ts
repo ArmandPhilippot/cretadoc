@@ -68,7 +68,7 @@ export const lightColor: ColorTokens = {
     warning: 'aliceblue',
   },
   primary: {
-    base: 'aliceblue',
+    base: 'blue',
     dark: 'aliceblue',
     light: 'aliceblue',
   },
@@ -142,7 +142,7 @@ export const darkColor: ColorTokens = {
     warning: 'aliceblue',
   },
   primary: {
-    base: 'aliceblue',
+    base: 'blue',
     dark: 'aliceblue',
     light: 'aliceblue',
   },
