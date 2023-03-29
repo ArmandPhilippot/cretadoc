@@ -1,0 +1,56 @@
+import { Meta, Story } from '@storybook/addon-docs';
+import { Shadow } from './components/shadow';
+import { PreviewList } from './components/preview-list';
+
+<Meta title="Themes/Tokens/Shadows" />
+
+# Shadows
+
+A shadow can be decomposed as follow:
+
+- a color,
+- a direction,
+- an elevation.
+
+## Color
+
+The shadow's color should be adapted to the element's color to create harmonious interfaces.
+
+<Story name="Color">
+  <PreviewList>
+    <Shadow token="shadow.critical.bottom.left.raised" />
+    <Shadow token="shadow.info.bottom.left.raised" />
+    <Shadow token="shadow.inverted.bottom.left.raised" />
+    <Shadow token="shadow.muted.bottom.left.raised" />
+    <Shadow token="shadow.regular.bottom.left.raised" />
+    <Shadow token="shadow.success.bottom.left.raised" />
+    <Shadow token="shadow.warning.bottom.left.raised" />
+  </PreviewList>
+</Story>
+
+## Direction
+
+Depending on the element position, the "light" orientation is not always the same. So, Cretadoc provides six different keys to define the shadow position.
+
+<Story name="Direction">
+  <PreviewList>
+    <Shadow token="shadow.regular.top.left.raised" />
+    <Shadow token="shadow.regular.top.center.raised" />
+    <Shadow token="shadow.regular.top.right.raised" />
+    <Shadow token="shadow.regular.bottom.left.raised" />
+    <Shadow token="shadow.regular.bottom.center.raised" />
+    <Shadow token="shadow.regular.bottom.right.raised" />
+  </PreviewList>
+</Story>
+
+## Elevation
+
+To create contrast, shadows should not have the same elevation. So, Cretadoc provides three different tokens to illustrate the difference.
+
+<Story name="Elevation">
+  <PreviewList>
+    <Shadow token="shadow.regular.bottom.left.raised" />
+    <Shadow token="shadow.regular.bottom.left.elevated" />
+    <Shadow token="shadow.regular.bottom.left.floating" />
+  </PreviewList>
+</Story>

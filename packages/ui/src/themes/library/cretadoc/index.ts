@@ -1,23 +1,27 @@
-import type { Theme, ThemeTokens } from '../../types';
+import type { Theme, ThemeAuthor, ThemeTokens } from '../../types';
 import { animation } from './animation';
 import { border } from './border';
 import { darkColor, lightColor } from './color';
 import { font } from './font';
+import { shadow } from './shadow';
 import { spacing } from './spacing';
+
+const cretadocAuthor: ThemeAuthor = {
+  name: 'Cretadoc',
+  website: 'https://github.com/ArmandPhilippot/cretadoc',
+};
 
 const cretadocLightTokens: ThemeTokens = {
   animation,
   border,
   color: lightColor,
   font,
+  shadow,
   spacing,
 };
 
 export const cretadocLight: Theme = {
-  author: {
-    name: 'Cretadoc',
-    website: 'https://github.com/ArmandPhilippot/cretadoc',
-  },
+  author: cretadocAuthor,
   id: 'cretadoc-light',
   name: 'Cretadoc Light',
   scheme: 'light',
@@ -29,14 +33,12 @@ const cretadocDarkTokens: ThemeTokens = {
   border,
   color: darkColor,
   font,
+  shadow,
   spacing,
 };
 
 export const cretadocDark: Theme = {
-  author: {
-    name: 'Cretadoc',
-    website: 'https://github.com/ArmandPhilippot/cretadoc',
-  },
+  author: cretadocAuthor,
   id: 'cretadoc-dark',
   name: 'Cretadoc Dark',
   scheme: 'dark',
