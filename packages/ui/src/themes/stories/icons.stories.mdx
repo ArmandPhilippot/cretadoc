@@ -1,0 +1,25 @@
+import { Meta, Story } from '@storybook/addon-docs';
+import { Icon } from './components/icon';
+import { PreviewList } from './components/preview-list';
+
+<Meta title="Themes/Tokens/Icons" />
+
+# Icons
+
+Cretadoc does not provide a way for theme authors to control the icons used inside the interfaces. However, you can adjust their size.
+
+## Size
+
+<Story name="Size">
+  <PreviewList>
+    <Icon token="icon.size.xs" />
+    <Icon token="icon.size.sm" />
+    <Icon token="icon.size.md" />
+    <Icon token="icon.size.lg" />
+    <Icon token="icon.size.xl" />
+  </PreviewList>
+</Story>
+
+## Color
+
+Color design tokens are defined separately: we use the same colors as the foreground. You can learn more on [Colors](./?path=/docs/themes-tokens-colors--foreground) page.

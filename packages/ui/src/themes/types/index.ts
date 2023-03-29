@@ -3,6 +3,7 @@ import type {
   BorderTokens,
   ColorTokens,
   FontTokens,
+  IconTokens,
   ShadowTokens,
   SpacingTokens,
 } from './tokens';
@@ -26,6 +27,10 @@ export type ThemeTokens = {
    * The design tokens to define the fonts.
    */
   font: FontTokens;
+  /**
+   * The design tokens to define the icons.
+   */
+  icon: IconTokens;
   /**
    * The design tokens to define the shadows.
    */

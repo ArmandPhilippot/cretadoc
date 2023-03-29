@@ -3,6 +3,7 @@ import { animation } from './animation';
 import { border } from './border';
 import { darkColor, lightColor } from './color';
 import { font } from './font';
+import { icon } from './icon';
 import { shadow } from './shadow';
 import { spacing } from './spacing';
 
@@ -16,6 +17,7 @@ const cretadocLightTokens: ThemeTokens = {
   border,
   color: lightColor,
   font,
+  icon,
   shadow,
   spacing,
 };
@@ -33,6 +35,7 @@ const cretadocDarkTokens: ThemeTokens = {
   border,
   color: darkColor,
   font,
+  icon,
   shadow,
   spacing,
 };
