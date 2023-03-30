@@ -162,7 +162,7 @@ export const PrimaryColor: FC<PrimaryColorProps> = ({
       {...props}
       token={token}
       className={previewClassName}
-      style={previewStyles}
+      style={assignInlineVars(previewStyles)}
     />
   );
 };
