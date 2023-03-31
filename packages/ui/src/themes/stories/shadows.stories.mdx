@@ -1,5 +1,5 @@
 import { Meta, Story } from '@storybook/addon-docs';
-import { Shadow } from './components/shadow';
+import { NoShadow, Shadow } from './components/shadow';
 import { PreviewList } from './components/preview-list';
 
 <Meta title="Themes/Tokens/Shadows" parameters={{ layout: 'full' }} />
@@ -48,9 +48,15 @@ Depending on the element position, the "light" orientation is not always the sam
 To create contrast, shadows should not have the same elevation. So, Cretadoc provides three different tokens to illustrate the difference.
 
 <Story name="Elevation">
-  <PreviewList>
-    <Shadow token="shadow.regular.bottom.left.raised" />
-    <Shadow token="shadow.regular.bottom.left.elevated" />
-    <Shadow token="shadow.regular.bottom.left.floating" />
-  </PreviewList>
+  <div>
+    First an example without shadow so you can compare with the tokens applied:
+    <PreviewList>
+      <NoShadow />
+    </PreviewList>
+    <PreviewList>
+      <Shadow token="shadow.regular.bottom.left.raised" />
+      <Shadow token="shadow.regular.bottom.left.elevated" />
+      <Shadow token="shadow.regular.bottom.left.floating" />
+    </PreviewList>
+  </div>
 </Story>

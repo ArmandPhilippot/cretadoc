@@ -50,7 +50,18 @@ export const Shadow: FC<ShadowProps> = ({ token }) => {
 
   return (
     <Preview style={previewStyles} token={token}>
-      <div className={styles.box} />
+      <div className={styles.box({ hasShadow: true })} />
     </Preview>
   );
 };
+
+/**
+ * NoShadow component
+ *
+ * Use it to show a preview of a box without shadow.
+ */
+export const NoShadow: FC = () => (
+  <Preview>
+    <div className={styles.box({ hasShadow: false })} />
+  </Preview>
+);
