@@ -4,8 +4,8 @@ export const animation: AnimationTokens = {
   duration: {
     fast: '100ms',
     medium: '250ms',
-    slow: '300ms',
-    slower: '800ms',
+    slow: '400ms',
+    slower: '850ms',
   },
   timing: {
     easeIn: 'ease-in',

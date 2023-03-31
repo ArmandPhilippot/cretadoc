@@ -9,8 +9,8 @@ export const border: BorderTokens = {
   },
   size: {
     sm: '1px',
-    md: '3px',
-    lg: '5px',
+    md: '2px',
+    lg: '3px',
   },
   style: {
     regular: 'solid',
