@@ -10,6 +10,7 @@ export const preview = recipe({
   base: {
     background: fallbackVar(background, contract.color.background.regular.base),
     color: fallbackVar(foreground, contract.color.foreground.regular.base),
+    minWidth: 250,
   },
   variants: {
     hasBorders: {
@@ -17,7 +18,7 @@ export const preview = recipe({
       true: {
         borderColor,
         borderStyle: 'solid',
-        borderWidth: 3,
+        borderWidth: contract.border.size.md,
       },
     },
   },

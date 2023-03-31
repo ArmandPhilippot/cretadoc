@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/addon-docs';
 import { Font } from './components/font';
 import { PreviewList } from './components/preview-list';
 
-<Meta title="Themes/Tokens/Fonts" />
+<Meta title="Themes/Tokens/Fonts" parameters={{ layout: 'full' }} />
 
 # Fonts
 
@@ -19,7 +19,7 @@ A font can be decomposed in five values:
 Cretadoc interfaces use two different font-family. The monospace version is usually used to display code samples.
 
 <Story name="Family">
-  <PreviewList isBordered wrapAfter={1}>
+  <PreviewList itemsPerRow={1}>
     <Font orientation="inline" token="font.family.regular">
       The quick brown fox jumps over a lazy dog.
     </Font>
@@ -34,7 +34,7 @@ Cretadoc interfaces use two different font-family. The monospace version is usua
 Cretadoc interfaces use six different font sizes.
 
 <Story name="Size">
-  <PreviewList isBordered wrapAfter={1}>
+  <PreviewList itemsPerRow={1}>
     <Font orientation="inline" token="font.size.xs">
       The quick brown fox jumps over a lazy dog.
     </Font>
@@ -61,7 +61,7 @@ Cretadoc interfaces use six different font sizes.
 Cretadoc interfaces use three different weight for fonts.
 
 <Story name="Weight">
-  <PreviewList isBordered wrapAfter={1}>
+  <PreviewList itemsPerRow={1}>
     <Font orientation="inline" token="font.weight.light">
       The quick brown fox jumps over a lazy dog.
     </Font>
@@ -79,7 +79,7 @@ Cretadoc interfaces use three different weight for fonts.
 Cretadoc interfaces can use three different letter-spacing sizes.
 
 <Story name="LetterSpacing">
-  <PreviewList isBordered wrapAfter={1}>
+  <PreviewList itemsPerRow={1}>
     <Font orientation="inline" token="font.letterSpacing.narrow">
       The quick brown fox jumps over a lazy dog.
     </Font>
@@ -97,7 +97,7 @@ Cretadoc interfaces can use three different letter-spacing sizes.
 Cretadoc interfaces can use three different line-height. For example, code sample lines are less spaced than regular text.
 
 <Story name="LineHeight">
-  <PreviewList isBordered wrapAfter={1}>
+  <PreviewList itemsPerRow={1}>
     <Font token="font.lineHeight.sm">
       Eos aut corrupti autem ut quia voluptatibus id adipisci est. Qui
       consequuntur distinctio modi quaerat ea non cumque. Libero eos reiciendis

@@ -40,9 +40,10 @@ export const Border: FC<BorderProps> = ({ token, ...props }) => {
   return (
     <Preview
       {...props}
-      token={token}
       className={previewClassName}
+      minHeight={80}
       style={previewStyles}
+      token={token}
     />
   );
 };

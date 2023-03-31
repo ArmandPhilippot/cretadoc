@@ -212,7 +212,7 @@ export const InfiniteAnimation: FC<InfiniteAnimationProps> = ({
   );
 
   return (
-    <Preview className={styles.animationPreview} style={previewStyles}>
+    <Preview className={styles.preview} style={previewStyles}>
       <div className={styles.boxWrapper}>
         <div className={styles.animatedBox} />
       </div>
@@ -278,7 +278,7 @@ export const Transition: FC<TransitionProps> = ({
   });
 
   return (
-    <Preview className={styles.animationPreview} style={previewStyles}>
+    <Preview className={styles.preview} style={previewStyles}>
       <div className={styles.boxWrapper}>
         <div className={styles.transitionedBox}>{body}</div>
       </div>

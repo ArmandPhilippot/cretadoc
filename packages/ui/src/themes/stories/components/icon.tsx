@@ -38,7 +38,7 @@ export const Icon: FC<IconProps> = ({ token }) => {
   });
 
   return (
-    <Preview style={previewStyles} token={token}>
+    <Preview className={styles.preview} style={previewStyles} token={token}>
       <SearchIcon />
     </Preview>
   );

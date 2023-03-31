@@ -119,15 +119,22 @@ type ColorProps = Pick<PreviewProps, 'children'> & {
  */
 export const Color: FC<ColorProps> = ({ token, ...props }) => {
   const hasBorders = token.startsWith('color.borders');
-  const previewClassName = styles.preview({ hasBorders });
+  const isForegroundOnly =
+    token.startsWith('color.foreground') &&
+    !token.startsWith('color.foreground.on');
+  const minHeight = 80;
+  const previewClassName = styles.preview({
+    hasBorders,
+  });
   const previewStyles = getPreviewStylesFrom(token);
 
   return (
     <Preview
       {...props}
-      token={token}
       className={previewClassName}
+      minHeight={isForegroundOnly ? undefined : minHeight}
       style={assignInlineVars(previewStyles)}
+      token={token}
     />
   );
 };
@@ -154,15 +161,20 @@ export const PrimaryColor: FC<PrimaryColorProps> = ({
   ...props
 }) => {
   const hasBorders = context === 'borders';
-  const previewClassName = styles.preview({ hasBorders });
+  const isForegroundOnly = context === 'foreground';
+  const minHeight = 80;
+  const previewClassName = styles.preview({
+    hasBorders,
+  });
   const previewStyles = getPreviewStylesFrom(token, context);
 
   return (
     <Preview
       {...props}
-      token={token}
       className={previewClassName}
+      minHeight={isForegroundOnly ? undefined : minHeight}
       style={assignInlineVars(previewStyles)}
+      token={token}
     />
   );
 };

@@ -107,7 +107,9 @@ The 6 levels of heading (`h1`, `h2`, ...) are supported. Note that `1` is the hi
 In some cases you might want to use heading styles but semantically it is not right. Then, you can use the `isFake` attribute to simulate a heading.
 
 <Canvas isColumn>
-  A h2 element:
+  <div style={{ marginInline: '1rem', marginBlock: '0.5rem' }}>
+    A h2 element:
+  </div>
   <Story
     name="Kind/Real"
     args={{
@@ -115,7 +117,9 @@ In some cases you might want to use heading styles but semantically it is not ri
       level: 2,
     }}
   />
-  A fake h2 element:
+  <div style={{ marginInline: '1rem', marginBlock: '0.5rem' }}>
+    A fake h2 element:
+  </div>
   <Story
     name="Kind/Fake"
     args={{

@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/addon-docs';
 import { Margin, Padding, Spacing } from './components/spacing';
 import { PreviewList } from './components/preview-list';
 
-<Meta title="Themes/Tokens/Spacings" />
+<Meta title="Themes/Tokens/Spacings" parameters={{ layout: 'full' }} />
 
 # Spacings
 
@@ -32,7 +32,7 @@ You can see a preview of the spacing sizes below. Each size is represented by th
 You can see a preview of the margin sizes below. Each margin is represented by the space between the two colored boxes.
 
 <Story name="Margin">
-  <PreviewList wrapAfter={1}>
+  <PreviewList itemsPerRow={1}>
     <Margin token="spacing.xxs" />
     <Margin token="spacing.xs" />
     <Margin token="spacing.sm" />
@@ -48,7 +48,7 @@ You can see a preview of the margin sizes below. Each margin is represented by t
 You can see a preview of the padding sizes below. Each padding is represented by the colored border around the box.
 
 <Story name="Padding">
-  <PreviewList>
+  <PreviewList itemsPerRow={1}>
     <Padding token="spacing.xxs" />
     <Padding token="spacing.xs" />
     <Padding token="spacing.sm" />

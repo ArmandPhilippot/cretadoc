@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/addon-docs';
 import { Color, PrimaryColor } from './components/color';
 import { PreviewList } from './components/preview-list';
 
-<Meta title="Themes/Tokens/Colors" />
+<Meta title="Themes/Tokens/Colors" parameters={{ layout: 'full' }} />
 
 # Colors
 
@@ -20,7 +20,7 @@ These categories use a semantic palette to help you identify the intended usage.
 Background design tokens define the colors used as background in Cretadoc interfaces.
 
 <Story name="Background">
-  <PreviewList>
+  <PreviewList itemsPerRow={3}>
     <Color token="color.background.critical" />
     <Color token="color.background.info" />
     <Color token="color.background.inverted.base" />
@@ -40,7 +40,7 @@ Background design tokens define the colors used as background in Cretadoc interf
 Borders design tokens define the color of the borders used in Cretadoc interfaces.
 
 <Story name="Borders">
-  <PreviewList>
+  <PreviewList itemsPerRow={3}>
     <Color token="color.borders.critical" />
     <Color token="color.borders.info" />
     <Color token="color.borders.inverted.base" />
@@ -60,7 +60,7 @@ Borders design tokens define the color of the borders used in Cretadoc interface
 Foreground tokens are used to define text and icon colors. Most of them are used on a regular background:
 
 <Story name="Foreground">
-  <PreviewList>
+  <PreviewList itemsPerRow={3}>
     <Color token="color.foreground.critical">Sample</Color>
     <Color token="color.foreground.info">Sample</Color>
     <Color token="color.foreground.inverted.base">Sample</Color>
@@ -78,7 +78,7 @@ Foreground tokens are used to define text and icon colors. Most of them are used
 We also provide special tokens when foreground is used on a non-regular background: each token starts with `on` keyword.
 
 <Story name="ForegroundOn">
-  <PreviewList>
+  <PreviewList itemsPerRow={3}>
     <Color token="color.foreground.onCritical">Sample</Color>
     <Color token="color.foreground.onInfo">Sample</Color>
     <Color token="color.foreground.onInverted.base">Sample</Color>
@@ -98,7 +98,7 @@ We also provide special tokens when foreground is used on a non-regular backgrou
 Primary tokens define the colors used to highligh calls to action for example. They can be used as foreground color, background color and eventually as border color. The primary color is usually your brand primary color.
 
 <Story name="Primary">
-  <PreviewList wrapAfter={3}>
+  <PreviewList itemsPerRow={3}>
     <PrimaryColor context="foreground" token="color.primary.base">
       Sample
     </PrimaryColor>

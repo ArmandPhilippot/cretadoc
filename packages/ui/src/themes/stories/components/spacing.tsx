@@ -45,6 +45,7 @@ export const Margin: FC<SpacingProps> = ({ token }) => {
   return (
     <Preview
       className={styles.marginPreview}
+      minHeight={50}
       style={previewStyles}
       token={token}
     >

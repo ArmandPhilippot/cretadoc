@@ -11,7 +11,7 @@ import type { Themes } from '../types';
  */
 export const buildThemes = (themesList: Themes): void => {
   for (const theme of Object.values(themesList))
-    createGlobalTheme(`[data-theme='${theme.id}'] *`, contract, theme.tokens);
+    createGlobalTheme(`[data-theme='${theme.id}']`, contract, theme.tokens);
 };
 
 /**

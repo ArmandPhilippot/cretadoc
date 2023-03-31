@@ -6,15 +6,13 @@ export const duration = createVar();
 export const playState = createVar();
 export const timing = createVar();
 
+export const preview = style({});
+
 export const form = style({
   display: 'grid',
   gridTemplateColumns: 'repeat(2, auto)',
   gap: '1rem',
-});
-
-export const animationPreview = style({
-  gap: '3rem',
-  justifyContent: 'start !important',
+  paddingBlock: '1rem',
 });
 
 export const rotate = keyframes({
@@ -28,12 +26,13 @@ export const slideIn = keyframes({
 });
 
 export const boxWrapper = style({
-  width: '100%',
+  minWidth: 200,
 });
 
 export const animatedBox = style({
   width: 50,
   height: 50,
+  margin: '1rem',
   background: contract.color.primary.base,
   animationDuration: duration,
   animationIterationCount: 'infinite',
@@ -46,7 +45,6 @@ export const transitionedBox = style({
   display: 'flex',
   placeItems: 'center',
   justifyContent: 'center',
-  width: '100%',
   height: 50,
   marginRight: 0,
   background: contract.color.primary.base,
@@ -56,7 +54,7 @@ export const transitionedBox = style({
   transitionTimingFunction: timing,
   selectors: {
     [`${boxWrapper}:hover &`]: {
-      marginRight: -200,
+      marginRight: -150,
     },
   },
 });

@@ -12,7 +12,6 @@ export const lineHeight = createVar();
 export const preview = recipe({
   base: {
     minHeight: 'auto !important',
-    paddingInline: '1rem',
     background: contract.color.background.regular.base,
     color: fallbackVar(fontColor, contract.color.foreground.regular.base),
     fontFamily: fallbackVar(fontFamily, contract.font.family.regular),

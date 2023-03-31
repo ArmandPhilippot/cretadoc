@@ -1,36 +1,45 @@
-import { style } from '@vanilla-extract/css';
+import { createVar, style } from '@vanilla-extract/css';
 import { recipe } from '@vanilla-extract/recipes';
+import { contract } from '../../contract';
+
+export const minHeight = createVar();
 
 export const wrapper = recipe({
   base: {
     display: 'flex',
-    placeItems: 'center',
   },
   variants: {
     orientation: {
       inline: {
         flexFlow: 'row wrap',
+        alignItems: 'center',
+        gap: '1rem',
       },
       stack: {
         flexFlow: 'column wrap',
+        gap: '0.3rem',
       },
     },
   },
 });
 
-export const preview = style({
-  display: 'flex',
-  flexFlow: 'row wrap',
-  placeItems: 'center',
-  justifyContent: 'center',
-  minWidth: 250,
-  minHeight: 100,
-});
-
 export const token = style({
   display: 'block',
-  fontSize: 12,
-  fontWeight: 600,
-  textAlign: 'center',
-  marginBlock: 10,
+  fontFamily: contract.font.family.monospace,
+  fontSize: contract.font.size.sm,
+  fontWeight: contract.font.weight.strong,
+});
+
+export const child = recipe({
+  variants: {
+    hasMinHeight: {
+      false: {},
+      true: {
+        display: 'flex',
+        placeContent: 'center',
+        placeItems: 'center',
+        minHeight,
+      },
+    },
+  },
 });
