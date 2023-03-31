@@ -68,7 +68,9 @@ export type ColorTokens = {
   /**
    * The tokens to define foregrounds colors.
    */
-  foreground: ColorContextTokens & OnColorContextTokens & OnPrimaryColorTokens;
+  foreground: Omit<ColorContextTokens, 'inverted'> &
+    OnColorContextTokens &
+    OnPrimaryColorTokens;
   /**
    * The tokens to define the primary colors.
    */

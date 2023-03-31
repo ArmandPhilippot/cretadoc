@@ -38,11 +38,6 @@ export const lightColor: ColorTokens = {
   foreground: {
     critical: 'hsl(5,60%,22%)',
     info: 'hsl(182,60%,22%)',
-    inverted: {
-      base: 'hsl(0,0%,100%)',
-      dark: 'hsl(204,4%,89%)',
-      light: 'hsl(204,6%,97%)',
-    },
     muted: 'hsl(204,7%,35%)',
     onCritical: 'hsl(5,60%,22%)',
     onInfo: 'hsl(182,60%,22%)',
@@ -112,11 +107,6 @@ export const darkColor: ColorTokens = {
   foreground: {
     critical: 'hsl(5,70%,90%)',
     info: 'hsl(182,70%,90%)',
-    inverted: {
-      base: 'hsl(204,7%,20%)',
-      dark: 'hsl(204,17%,10%)',
-      light: 'hsl(204,7%,30%)',
-    },
     muted: 'hsl(196,19%,88%)',
     onCritical: 'hsl(5,60%,22%)',
     onInfo: 'hsl(182,60%,22%)',

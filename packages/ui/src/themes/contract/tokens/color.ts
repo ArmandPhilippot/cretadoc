@@ -39,11 +39,6 @@ export const color: ReplaceTypesIn<ColorTokens, string> = {
   foreground: {
     critical: 'color-foreground-critical',
     info: 'color-foreground-info',
-    inverted: {
-      base: 'color-foreground-inverted',
-      dark: 'color-foreground-inverted-dark',
-      light: 'color-foreground-inverted-light',
-    },
     muted: 'color-foreground-muted',
     onCritical: 'color-foreground-on-critical',
     onInfo: 'color-foreground-on-info',
