@@ -2,7 +2,9 @@ import { DecoratorFn } from '@storybook/react';
 import { DecoratorFunction } from '@storybook/addons';
 import { StoryFnReactReturnType } from '@storybook/react/dist/ts3.9/client/preview/types';
 import { themes } from '../src';
+import * as styles from './styles.css';
 import './themes.css';
+import cretadoc from './themes/cretadoc';
 
 const customThemes = Object.values(themes).map((theme) => {
   return {
@@ -19,7 +21,7 @@ const defaultTheme =
 export const globalTypes = {
   theme: {
     name: 'Theme',
-    description: 'Switch theme',
+    description: 'Switch the global theme for components',
     defaultValue: defaultTheme?.value,
     toolbar: {
       icon: 'paintbrush',
@@ -38,6 +40,9 @@ export const parameters = {
       date: /Date$/,
     },
   },
+  docs: {
+    theme: cretadoc,
+  },
   layout: 'fullscreen',
   viewMode: 'docs',
 };
@@ -46,8 +51,12 @@ export const withGlobalDecorator: DecoratorFunction<StoryFnReactReturnType> = (
   Story,
   context
 ) => {
+  const containerClassName = styles.container({
+    fullscreen: context.parameters['layout'] === 'full' ? 'on' : 'off',
+  });
+
   return (
-    <div data-theme={context.globals['theme']}>
+    <div className={containerClassName} data-theme={context.globals['theme']}>
       <Story />
     </div>
   );

@@ -4,8 +4,9 @@ cretadoc
 dotenv
 eslintcache
 graphiql
-pnpm
 nodenext
+pnpm
+sbdocs
 sublicensable
 versionrc
 waivable

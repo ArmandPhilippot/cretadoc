@@ -243,6 +243,7 @@ importers:
       '@storybook/preview-web': ^6.5.16
       '@storybook/react': ^6.5.16
       '@storybook/testing-library': ^0.0.13
+      '@storybook/theming': ^6.5.16
       '@testing-library/jest-dom': ^5.16.5
       '@testing-library/react': ^14.0.0
       '@types/react': ^18.0.28
@@ -274,6 +275,7 @@ importers:
       vite: ^4.2.1
       vitest: ^0.29.7
     dependencies:
+      '@cretadoc/utils': link:../utils
       '@vanilla-extract/css': 1.10.0
       '@vanilla-extract/dynamic': 2.0.3
       '@vanilla-extract/recipes': 0.4.0_qfizfuqympj3byv36k7ie7wo3i
@@ -281,7 +283,6 @@ importers:
       '@babel/core': 7.21.3
       '@cretadoc/eslint-config': link:../eslint-config
       '@cretadoc/prettier-config': link:../prettier-config
-      '@cretadoc/utils': link:../utils
       '@mdx-js/react': 2.3.0_react@18.2.0
       '@storybook/addon-a11y': 6.5.16_biqbaboplfbrettd7655fr4n2y
       '@storybook/addon-actions': 6.5.16_biqbaboplfbrettd7655fr4n2y
@@ -301,6 +302,7 @@ importers:
       '@storybook/preview-web': 6.5.16_biqbaboplfbrettd7655fr4n2y
       '@storybook/react': 6.5.16_zp54eb77dqrgjvufdlsydgq2ua
       '@storybook/testing-library': 0.0.13_biqbaboplfbrettd7655fr4n2y
+      '@storybook/theming': 6.5.16_biqbaboplfbrettd7655fr4n2y
       '@testing-library/jest-dom': 5.16.5
       '@testing-library/react': 14.0.0_biqbaboplfbrettd7655fr4n2y
       '@types/react': 18.0.28

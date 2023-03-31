@@ -1,3 +1,33 @@
 <script>
   window.global = window;
 </script>
+
+<style>
+  html,
+  body,
+  #root {
+    display: flex;
+    width: 100%;
+    min-height: 100%;
+  }
+
+  html,
+  body {
+    padding: 0;
+    margin: 0;
+  }
+
+  #root {
+    margin: 0;
+    flex: 1;
+  }
+
+  .sbdocs > .docs-story > div:first-child {
+    padding: 0;
+    margin: 0;
+  }
+
+  .sbdocs > .docs-story .innerZoomElementWrapper > * {
+    border: none !important;
+  }
+</style>
