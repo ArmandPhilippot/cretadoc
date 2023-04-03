@@ -1,0 +1,428 @@
+import { ArgsTable, Canvas, Meta, Story } from '@storybook/addon-docs';
+import { ListItem } from './list-item';
+
+<Meta
+  title="Components/Atoms/List Item"
+  component={ListItem}
+  args={{
+    borderColor: 'regular',
+    borderSize: 'sm',
+    hasMarker: true,
+    isBordered: false,
+    paddingBlock: 'xxs',
+    paddingInline: 'xs',
+  }}
+  argTypes={{
+    border: {
+      control: {
+        type: 'select',
+      },
+      if: { arg: 'isBordered', eq: true },
+      description: 'Add borders around the item.',
+      options: ['bottom', 'left', 'right', 'top', 'inline', 'block', 'all'],
+      table: {
+        category: 'Options',
+        defaultValue: { summary: 'all' },
+      },
+      type: {
+        name: 'string',
+        required: false,
+      },
+    },
+    borderColor: {
+      control: {
+        type: 'select',
+      },
+      if: { arg: 'isBordered', eq: true },
+      description: 'Define the borders color.',
+      options: [
+        'critical',
+        'info',
+        'inverted',
+        'muted',
+        'regular',
+        'success',
+        'warning',
+      ],
+      table: {
+        category: 'Options',
+        defaultValue: { summary: 'regular' },
+      },
+      type: {
+        name: 'string',
+        required: false,
+      },
+    },
+    borderSize: {
+      control: {
+        type: 'select',
+      },
+      if: { arg: 'isBordered', eq: true },
+      description: 'Define the borders size.',
+      options: ['sm', 'md', 'lg'],
+      table: {
+        category: 'Options',
+        defaultValue: { summary: 'sm' },
+      },
+      type: {
+        name: 'string',
+        required: false,
+      },
+    },
+    isBordered: {
+      control: {
+        type: 'boolean',
+      },
+      description: 'Add borders around the list item.',
+      table: {
+        category: 'Options',
+        defaultValue: { summary: false },
+      },
+      type: {
+        name: 'boolean',
+        required: false,
+      },
+    },
+    hasMarker: {
+      control: {
+        type: 'boolean',
+      },
+      description: 'Show a marker in front of the list item.',
+      table: {
+        category: 'Options',
+        defaultValue: { summary: true },
+      },
+      type: {
+        name: 'boolean',
+        required: false,
+      },
+    },
+    marker: {
+      control: {
+        type: 'text',
+      },
+      if: { arg: 'hasMarker', eq: true },
+      description: 'Define the marker to use in front of the list item.',
+      table: {
+        category: 'Options',
+      },
+      type: {
+        name: 'string',
+        required: false,
+      },
+    },
+    paddingBlock: {
+      control: {
+        type: 'select',
+      },
+      options: ['xxs', 'xs', 'sm', 'md', 'lg', 'xl', 'xxl'],
+      if: { arg: 'isBordered', eq: true },
+      description: 'Define the block padding when using borders.',
+      table: {
+        category: 'Options',
+        defaultValue: { summary: 'xxs' },
+      },
+      type: {
+        name: 'string',
+        required: false,
+      },
+    },
+    paddingInline: {
+      control: {
+        type: 'select',
+      },
+      options: ['xxs', 'xs', 'sm', 'md', 'lg', 'xl', 'xxl'],
+      if: { arg: 'isBordered', eq: true },
+      description: 'Define the inline padding  when using borders.',
+      table: {
+        category: 'Options',
+        defaultValue: { summary: 'xs' },
+      },
+      type: {
+        name: 'string',
+        required: false,
+      },
+    },
+  }}
+/>
+
+export const Template = ({ border, ...args }) => (
+  <ul style={{ padding: 0, margin: 0 }}>
+    <ListItem {...args} border={border === 'all' ? undefined : border} />
+  </ul>
+);
+
+# List Item
+
+A list item can be used inside an ordered list or unordered list to display some data.
+
+## Borders
+
+A list item can be bordered or not:
+
+<Canvas>
+  <Story
+    name="Borders - None"
+    args={{
+      children: 'item',
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Borders - All"
+    args={{
+      children: 'item',
+      isBordered: true,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+### Borders position
+
+You can also define the desired borders:
+
+<Canvas>
+  <Story
+    name="Borders - Position: Bottom"
+    args={{
+      border: 'bottom',
+      children: 'item',
+      isBordered: true,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Borders - Position: Left"
+    args={{
+      border: 'left',
+      children: 'item',
+      isBordered: true,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Borders - Position: Right"
+    args={{
+      border: 'right',
+      children: 'item',
+      isBordered: true,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Borders - Position: Top"
+    args={{
+      border: 'top',
+      children: 'item',
+      isBordered: true,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Borders - Position: Inline"
+    args={{
+      border: 'inline',
+      children: 'item',
+      isBordered: true,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Borders - Position: Block"
+    args={{
+      border: 'block',
+      children: 'item',
+      isBordered: true,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+### Borders color
+
+The component also allows you to define the color of the border:
+
+<Canvas>
+  <Story
+    name="Borders - Color: Critical"
+    args={{
+      borderColor: 'critical',
+      children: 'item',
+      isBordered: true,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Borders - Color: Info"
+    args={{
+      borderColor: 'info',
+      children: 'item',
+      isBordered: true,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Borders - Color: Inverted"
+    args={{
+      borderColor: 'inverted',
+      children: 'item',
+      isBordered: true,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Borders - Color: Muted"
+    args={{
+      borderColor: 'muted',
+      children: 'item',
+      isBordered: true,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Borders - Color: Regular"
+    args={{
+      borderColor: 'regular',
+      children: 'item',
+      isBordered: true,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Borders - Color: Success"
+    args={{
+      borderColor: 'success',
+      children: 'item',
+      isBordered: true,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Borders - Color: Warning"
+    args={{
+      borderColor: 'warning',
+      children: 'item',
+      isBordered: true,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+### Borders size
+
+You can also define the size of the borders:
+
+<Canvas>
+  <Story
+    name="Borders - Size: Small"
+    args={{
+      borderSize: 'sm',
+      children: 'item',
+      isBordered: true,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Borders - Size: Medium"
+    args={{
+      borderSize: 'md',
+      children: 'item',
+      isBordered: true,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Borders - Size: Large"
+    args={{
+      borderSize: 'lg',
+      children: 'item',
+      isBordered: true,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+## Marker
+
+A list item can have a marker or not:
+
+<Canvas>
+  <Story
+    name="Marker - Visible"
+    args={{
+      children: 'item',
+      hasMarker: true,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Marker - Hidden"
+    args={{
+      children: 'item',
+      hasMarker: false,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+You can also use a custom marker like a [CSS keyword](https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-type) or an unicode emoji.
+
+<Canvas>
+  <Story
+    name="Marker - Custom: CSS Keyword"
+    args={{
+      children: 'item',
+      hasMarker: true,
+      marker: 'circle',
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Marker - Custom: Unicode"
+    args={{
+      children: 'item',
+      hasMarker: true,
+      marker: '"\\1F44D  "',
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+## Playground
+
+<Canvas>
+  <Story
+    name="Playground"
+    args={{
+      border: 'all',
+      children: 'item',
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+<ArgsTable story="Playground" />
