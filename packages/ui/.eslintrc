@@ -1,4 +1,8 @@
 {
   "root": true,
-  "extends": ["@cretadoc/eslint-config/react"]
+  "extends": ["@cretadoc/eslint-config/react"],
+  "rules": {
+    // Useful for translation but too constraining for a components library.
+    "react/jsx-no-literals": "off"
+  }
 }
