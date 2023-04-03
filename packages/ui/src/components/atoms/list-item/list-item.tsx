@@ -51,6 +51,12 @@ export type ListItemProps = LiHTMLAttributes<HTMLLIElement> & {
    */
   isBordered?: boolean;
   /**
+   * Is the list item in an inlined list?
+   *
+   * @default false
+   */
+  isInline?: boolean;
+  /**
    * Define the marker to use when `hasMarker` is set. You can also use a
    * keyword predefined by `list-style-type`.
    */
@@ -110,6 +116,7 @@ export const ListItem: FC<ListItemProps> = ({
   className = '',
   hasMarker = true,
   isBordered = false,
+  isInline = false,
   marker,
   paddingBlock = 'xxs',
   paddingInline = 'xs',
@@ -120,6 +127,7 @@ export const ListItem: FC<ListItemProps> = ({
     border: getBordersStyles({ border, isBordered }),
     hasMarker,
     isBordered,
+    isInline,
   });
   const itemStyles = assignInlineVars({
     [styles.borderColor]: getBordersColor(borderColor),

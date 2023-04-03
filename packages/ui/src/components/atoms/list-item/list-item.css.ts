@@ -6,12 +6,38 @@ export const borderColor = createVar();
 export const borderSize = createVar();
 
 const borderStyle = `${borderSize} ${contract.border.style.regular} ${borderColor}`;
-const borderInline = style({ borderInline: borderStyle });
-const borderBlock = style({
-  borderBlock: borderStyle,
-  selectors: {
-    '&:not(:first-child)': {
-      marginTop: `calc(${borderSize} * -1)`,
+const borderInline = recipe({
+  base: {
+    borderInline: borderStyle,
+  },
+  variants: {
+    isInline: {
+      false: {},
+      true: {
+        selectors: {
+          '&:not(:first-child)': {
+            marginInlineStart: `calc(${borderSize} * -1)`,
+          },
+        },
+      },
+    },
+  },
+});
+
+const borderBlock = recipe({
+  base: {
+    borderBlock: borderStyle,
+  },
+  variants: {
+    isInline: {
+      false: {
+        selectors: {
+          '&:not(:first-child)': {
+            marginBlockStart: `calc(${borderSize} * -1)`,
+          },
+        },
+      },
+      true: {},
     },
   },
 });
@@ -25,10 +51,10 @@ export const item = recipe({
   base: {},
   variants: {
     border: {
-      all: [borderInline, borderBlock],
-      block: borderBlock,
+      all: {},
+      block: {},
       bottom: style({ borderBottom: borderStyle }),
-      inline: borderInline,
+      inline: {},
       left: style({ borderLeft: borderStyle }),
       right: style({ borderRight: borderStyle }),
       top: style({ borderTop: borderStyle }),
@@ -50,6 +76,10 @@ export const item = recipe({
         paddingInline,
       },
     },
+    isInline: {
+      false: {},
+      true: {},
+    },
   },
   compoundVariants: [
     {
@@ -57,6 +87,36 @@ export const item = recipe({
       style: {
         listStylePosition: 'inside',
       },
+    },
+    {
+      variants: { border: 'all', isInline: true },
+      style: [
+        borderInline({ isInline: true }),
+        borderBlock({ isInline: true }),
+      ],
+    },
+    {
+      variants: { border: 'all', isInline: false },
+      style: [
+        borderInline({ isInline: false }),
+        borderBlock({ isInline: false }),
+      ],
+    },
+    {
+      variants: { border: 'block', isInline: true },
+      style: borderBlock({ isInline: true }),
+    },
+    {
+      variants: { border: 'block', isInline: false },
+      style: borderBlock({ isInline: false }),
+    },
+    {
+      variants: { border: 'inline', isInline: true },
+      style: borderInline({ isInline: true }),
+    },
+    {
+      variants: { border: 'inline', isInline: false },
+      style: borderInline({ isInline: false }),
     },
   ],
 });
