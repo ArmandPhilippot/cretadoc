@@ -1,0 +1,78 @@
+import { ArgsTable, Canvas, Meta, Story } from '@storybook/addon-docs';
+import { VisuallyHidden } from './visually-hidden';
+
+<Meta
+  title="Components/Atoms/VisuallyHidden"
+  component={VisuallyHidden}
+  args={{ isFocusable: false }}
+  argTypes={{
+    children: {
+      control: {
+        type: 'text',
+      },
+      description: 'The content to hide visually.',
+      type: {
+        name: 'string',
+        required: true,
+      },
+    },
+    isFocusable: {
+      control: {
+        type: 'boolean',
+      },
+      description:
+        'Determine if the content should be visible when the focus is inside.',
+      table: {
+        category: 'Options',
+        defaultValue: { summary: false },
+      },
+      type: {
+        name: 'boolean',
+        required: false,
+      },
+    },
+  }}
+/>
+
+export const Template = (args) => <VisuallyHidden {...args} />;
+
+# Visually Hidden
+
+A `VisuallyHidden` component is commonly used for accessibility. It allows you to include some contents in your page without making them visible.
+
+## Focusable
+
+Depending on what you want to hide, sometimes the content should be focusable. It is for example useful with "skip" links.
+
+<Canvas withSource="open">
+  <Story name="Not focusable">
+    <VisuallyHidden>Some content not focusable.</VisuallyHidden>
+  </Story>
+  <Story name="Focusable">
+    <VisuallyHidden isFocusable>
+      <a href="#">A skip to content link</a>
+    </VisuallyHidden>
+  </Story>
+  <Story name="Deep focusable">
+    <VisuallyHidden isFocusable>
+      <div>
+        A hidden container with <a href="#">a link</a> inside it.
+      </div>
+    </VisuallyHidden>
+  </Story>
+</Canvas>
+
+## Playground
+
+<Canvas>
+  <Story
+    name="Playground"
+    args={{
+      children: 'A visually hidden content.',
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+<ArgsTable story="Playground" />
