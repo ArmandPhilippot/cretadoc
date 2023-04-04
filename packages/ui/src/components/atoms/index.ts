@@ -1,4 +1,5 @@
 export * from './button';
+export * from './description-list';
 export * from './icon';
 export * from './image';
 export * from './link';
