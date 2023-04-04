@@ -3,7 +3,12 @@ import { describe, expect, it } from 'vitest';
 import { Icon } from './icon';
 
 describe('icon', () => {
-  it('renders an svg icon', () => {
+  it('renders a cross svg icon', () => {
+    const { container } = render(<Icon shape="cross" />);
+    expect(container.querySelector('svg')).toBeInTheDocument();
+  });
+
+  it('renders a hamburger svg icon', () => {
     const { container } = render(<Icon shape="hamburger" />);
     expect(container.querySelector('svg')).toBeInTheDocument();
   });

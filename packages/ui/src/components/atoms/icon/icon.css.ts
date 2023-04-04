@@ -11,6 +11,10 @@ export const icon = recipe({
   },
   variants: {
     shape: {
+      cross: {
+        stroke: iconColor,
+        strokeWidth: 2,
+      },
       hamburger: {
         stroke: iconColor,
         strokeWidth: 2,

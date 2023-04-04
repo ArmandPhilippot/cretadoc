@@ -49,7 +49,7 @@ import { Icon } from './icon';
       control: {
         type: 'select',
       },
-      options: ['hamburger'],
+      options: ['cross', 'hamburger'],
       description: 'Set the icon shape.',
       type: {
         name: 'string',
@@ -98,6 +98,14 @@ An `Icon` component is commonly used for accessibility. It allows you to include
 An icon can have multiple shapes:
 
 <Canvas>
+  <Story
+    name="Shape: Cross"
+    args={{
+      shape: 'cross',
+    }}
+  >
+    {Template.bind({})}
+  </Story>
   <Story
     name="Shape: Hamburger"
     args={{
