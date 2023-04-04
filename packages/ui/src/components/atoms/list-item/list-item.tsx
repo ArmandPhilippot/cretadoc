@@ -7,6 +7,7 @@ import type {
   SpacingTokens,
 } from '../../../themes/types/tokens';
 import type { Position } from '../../types';
+import { getColorFromTokenKey } from '../../utils/helpers';
 import * as styles from './list-item.css';
 
 export type ListItemBorderPosition =
@@ -94,18 +95,6 @@ const getBordersStyles = ({
 };
 
 /**
- * Retrieve the borders color from user input.
- *
- * @param {ListItemBorderColor} color - The user input.
- * @returns {string} The CSS variable that defines the color.
- */
-const getBordersColor = (color: ListItemBorderColor) => {
-  if (color === 'regular') return contract.color.borders.regular.base;
-  if (color === 'inverted') return contract.color.borders.inverted.base;
-  return contract.color.borders[color];
-};
-
-/**
  * ListItem component.
  */
 export const ListItem: FC<ListItemProps> = ({
@@ -122,7 +111,6 @@ export const ListItem: FC<ListItemProps> = ({
   paddingInline = 'xs',
   ...props
 }) => {
-  console.log('paddingBlock', paddingBlock);
   const itemClassName = styles.item({
     border: getBordersStyles({ border, isBordered }),
     hasMarker,
@@ -130,7 +118,7 @@ export const ListItem: FC<ListItemProps> = ({
     isInline,
   });
   const itemStyles = assignInlineVars({
-    [styles.borderColor]: getBordersColor(borderColor),
+    [styles.borderColor]: getColorFromTokenKey(borderColor),
     [styles.borderSize]: contract.border.size[borderSize],
     [styles.marker]: marker ?? '',
     [styles.paddingBlock]: contract.spacing[paddingBlock],

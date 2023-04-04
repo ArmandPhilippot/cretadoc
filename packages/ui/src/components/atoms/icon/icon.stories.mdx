@@ -1,0 +1,262 @@
+import { ArgsTable, Canvas, Meta, Story } from '@storybook/addon-docs';
+import { Icon } from './icon';
+
+<Meta
+  title="Components/Atoms/Icon"
+  component={Icon}
+  args={{
+    shape: 'hamburger',
+  }}
+  argTypes={{
+    color: {
+      control: {
+        type: 'select',
+      },
+      options: [
+        'critical',
+        'info',
+        'inverted',
+        'muted',
+        'primary',
+        'regular',
+        'success',
+        'warning',
+      ],
+      description: 'Set the color of the icon.',
+      table: {
+        category: 'Options',
+        defaultValue: { summary: 'regular' },
+      },
+      type: {
+        name: 'string',
+        required: false,
+      },
+    },
+    description: {
+      control: {
+        type: 'text',
+      },
+      description: 'Describe the icon.',
+      table: {
+        category: 'Accessibility',
+      },
+      type: {
+        name: 'string',
+        required: false,
+      },
+    },
+    shape: {
+      control: {
+        type: 'select',
+      },
+      options: ['hamburger'],
+      description: 'Set the icon shape.',
+      type: {
+        name: 'string',
+        required: true,
+      },
+    },
+    size: {
+      control: {
+        type: 'select',
+      },
+      options: ['xs', 'sm', 'md', 'lg', 'xl'],
+      description: 'Set the size of the icon.',
+      table: {
+        category: 'Options',
+        defaultValue: { summary: 'md' },
+      },
+      type: {
+        name: 'string',
+        required: false,
+      },
+    },
+    title: {
+      control: {
+        type: 'text',
+      },
+      description: 'Define a title for the icon.',
+      table: {
+        category: 'Accessibility',
+      },
+      type: {
+        name: 'string',
+        required: false,
+      },
+    },
+  }}
+/>
+
+export const Template = (args) => <Icon {...args} />;
+
+# Icon
+
+An `Icon` component is commonly used for accessibility. It allows you to include some contents in your page without making them visible.
+
+## Shape
+
+An icon can have multiple shapes:
+
+<Canvas>
+  <Story
+    name="Shape: Hamburger"
+    args={{
+      shape: 'hamburger',
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+## Size
+
+An icon can have multiple sizes:
+
+<Canvas>
+  <Story
+    name="Size: Extra small"
+    args={{
+      size: 'xs',
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Size: Small"
+    args={{
+      size: 'sm',
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Size: Medium"
+    args={{
+      size: 'md',
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Size: Large"
+    args={{
+      size: 'lg',
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Size: Extra large"
+    args={{
+      size: 'xl',
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+## Color
+
+An icon can have multiple colors:
+
+<Canvas>
+  <Story
+    name="Color: Critical"
+    args={{
+      color: 'critical',
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Color: Info"
+    args={{
+      color: 'info',
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Color: Inverted"
+    args={{
+      color: 'inverted',
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Color: Muted"
+    args={{
+      color: 'muted',
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Color: Primary"
+    args={{
+      color: 'primary',
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Color: Regular"
+    args={{
+      color: 'regular',
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Color: Success"
+    args={{
+      color: 'success',
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Color: Warning"
+    args={{
+      color: 'warning',
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+## Accessibility
+
+The Icon component provides some attributes to adjust the accessibility. It is up to you to define if the icon should be hidden for assistive technology or if an accessible name should be given.
+
+The accessible name can be provided with one of:
+
+- `aria-label`,
+- `aria-labelledby`,
+- `title`.
+
+You can also add a longer description with one of:
+
+- `aria-describedby`,
+- `description`.
+
+If you provide an accessible name, you should also set the role to `img`.
+
+If you think that the icon should be hidden then, you should use the `aria-hidden` attribute.
+
+## Playground
+
+<Canvas>
+  <Story
+    name="Playground"
+    args={{
+      color: 'regular',
+      size: 'md',
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+<ArgsTable story="Playground" />
