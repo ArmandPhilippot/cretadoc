@@ -1,13 +1,13 @@
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import type { FC, LiHTMLAttributes } from 'react';
-import { contract } from '../../../themes';
+import { contract } from '../../../../themes';
 import type {
   BorderSizeTokens,
   ColorContextTokens,
   SpacingTokens,
-} from '../../../themes/types/tokens';
-import type { Position } from '../../types';
-import { getColorFromTokenKey } from '../../utils/helpers';
+} from '../../../../themes/types/tokens';
+import type { Position } from '../../../types';
+import { getColorFromTokenKey } from '../../../utils/helpers';
 import * as styles from './list-item.css';
 
 export type ListItemBorderPosition =

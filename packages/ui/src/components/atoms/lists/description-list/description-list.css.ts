@@ -1,6 +1,6 @@
 import { createVar, style } from '@vanilla-extract/css';
 import { recipe } from '@vanilla-extract/recipes';
-import { contract } from '../../../themes';
+import { contract } from '../../../../themes';
 
 export const listSpacing = createVar();
 

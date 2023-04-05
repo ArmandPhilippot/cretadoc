@@ -8,8 +8,8 @@ import {
   Children,
   cloneElement,
 } from 'react';
-import { contract } from '../../../themes';
-import type { SpacingTokens } from '../../../themes/types/tokens';
+import { contract } from '../../../../themes';
+import type { SpacingTokens } from '../../../../themes/types/tokens';
 import type {
   ListItemBorderColor,
   ListItemBorderPosition,
