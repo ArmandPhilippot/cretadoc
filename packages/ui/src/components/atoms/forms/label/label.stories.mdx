@@ -1,0 +1,176 @@
+import { ArgsTable, Canvas, Meta, Story } from '@storybook/addon-docs';
+import { Label } from './label';
+
+<Meta
+  title="Components/Atoms/Forms/Label"
+  component={Label}
+  args={{
+    color: 'regular',
+    isRequired: false,
+    requiredSymbol: ' *',
+    size: 'md',
+  }}
+  argTypes={{
+    children: {
+      control: {
+        type: 'text',
+      },
+      description: 'The label body.',
+      type: {
+        name: 'string',
+        required: true,
+      },
+    },
+    color: {
+      control: {
+        type: 'select',
+      },
+      options: [
+        'critical',
+        'info',
+        'inverted',
+        'muted',
+        'primary',
+        'regular',
+        'success',
+        'warning',
+      ],
+      description: 'Set the color of the label.',
+      table: {
+        category: 'Options',
+        defaultValue: { summary: 'regular' },
+      },
+      type: {
+        name: 'string',
+        required: false,
+      },
+    },
+    isRequired: {
+      control: {
+        type: 'boolean',
+      },
+      description: 'Should the associated form element be required?',
+      table: {
+        category: 'Options',
+        defaultValue: { summary: false },
+      },
+      type: {
+        name: 'boolean',
+        required: false,
+      },
+    },
+    requiredSymbol: {
+      control: {
+        type: 'text',
+      },
+      description: 'Define the symbol to use when the field is required.',
+      table: {
+        category: 'Options',
+        defaultValue: { summary: ' *' },
+        type: {
+          name: 'string',
+          required: false,
+        },
+      },
+    },
+    size: {
+      control: {
+        type: 'select',
+      },
+      options: ['xs', 'sm', 'md', 'lg'],
+      description: 'Set the size of the label.',
+      table: {
+        category: 'Options',
+        defaultValue: { summary: 'md' },
+      },
+      type: {
+        name: 'string',
+        required: false,
+      },
+    },
+  }}
+/>
+
+export const Template = (args) => <Label {...args} />;
+
+# Label
+
+A label represents a caption for an item in a user interface. It should be associated with an input.
+
+## State
+
+A field can be either required or not. The label reflect this state.
+
+<Canvas>
+  <Story name="State: not required">
+    <Label>Label name</Label>
+  </Story>
+  <Story name="State: required">
+    <Label isRequired>Label name</Label>
+  </Story>
+</Canvas>
+
+## Color
+
+The label can have a different color than the foreground. It could be used, for example, to indicate a valid or non-valid field.
+
+<Canvas>
+  <Story name="Color: critical">
+    <Label color="critical">Label name</Label>
+  </Story>
+  <Story name="Color: info">
+    <Label color="info">Label name</Label>
+  </Story>
+  <Story name="Color: inverted">
+    <Label color="inverted">Label name</Label>
+  </Story>
+  <Story name="Color: muted">
+    <Label color="muted">Label name</Label>
+  </Story>
+  <Story name="Color: primary">
+    <Label color="primary">Label name</Label>
+  </Story>
+  <Story name="Color: regular">
+    <Label color="regular">Label name</Label>
+  </Story>
+  <Story name="Color: success">
+    <Label color="success">Label name</Label>
+  </Story>
+  <Story name="Color: warning">
+    <Label color="warning">Label name</Label>
+  </Story>
+</Canvas>
+
+## Size
+
+You can also control the font-size used for the label:
+
+<Canvas>
+  <Story name="Size: extra small">
+    <Label size="xs">Label name</Label>
+  </Story>
+  <Story name="Size: small">
+    <Label size="sm">Label name</Label>
+  </Story>
+  <Story name="Size: medium">
+    <Label size="md">Label name</Label>
+  </Story>
+  <Story name="Size: large">
+    <Label size="lg">Label name</Label>
+  </Story>
+</Canvas>
+
+## Playground
+
+<Canvas>
+  <Story
+    name="Playground"
+    args={{
+      children: 'A label',
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+<ArgsTable story="Playground" />
