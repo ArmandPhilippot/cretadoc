@@ -14,7 +14,7 @@ export type LabelSize = Exclude<keyof FontSizeTokens, 'xl' | 'xxl'>;
 
 export type LabelProps = LabelHTMLAttributes<HTMLLabelElement> & {
   /**
-   * Set the icon color.
+   * Set the label color.
    *
    * Use either the same color as the text or the theme primary color.
    *
@@ -34,7 +34,7 @@ export type LabelProps = LabelHTMLAttributes<HTMLLabelElement> & {
    */
   requiredSymbol?: ReactNode;
   /**
-   * Set the icon size.
+   * Set the label size.
    *
    * @default 'md'
    */
