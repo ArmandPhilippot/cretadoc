@@ -1,0 +1,66 @@
+import { ArgsTable, Canvas, Meta, Story } from '@storybook/addon-docs';
+import { Field } from '../field';
+import { Fieldset } from './fieldset';
+
+<Meta
+  title="Components/Atoms/Forms/Fieldset"
+  component={Fieldset}
+  args={{
+    isDisabled: false,
+  }}
+  argTypes={{
+    isDisabled: {
+      control: {
+        type: 'boolean',
+      },
+      description: 'Should the entire fieldset be disabled?',
+      table: {
+        category: 'Options',
+        defaultValue: { summary: false },
+      },
+      type: {
+        name: 'boolean',
+        required: false,
+      },
+    },
+  }}
+/>
+
+export const Template = (args) => (
+  <Fieldset {...args}>
+    <Field
+      id="text-field"
+      name="text-field"
+      style={{ display: 'block', marginBottom: '1rem' }}
+      type="text"
+    />
+    <Field id="number-field" name="number-field" type="number" />
+  </Fieldset>
+);
+
+# Fieldset
+
+A fieldset is used to group several controls within a form.
+
+## State
+
+A fieldset can be either enabled or disabled:
+
+<Canvas>
+  <Story name="State: enabled" args={{}}>
+    {Template.bind({})}
+  </Story>
+  <Story name="State: disabled" args={{ isDisabled: true }}>
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+## Playground
+
+<Canvas>
+  <Story name="Playground" args={{}}>
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+<ArgsTable story="Playground" />
