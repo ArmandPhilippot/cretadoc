@@ -68,7 +68,7 @@ export const button = recipe({
       variants: { kind: 'primary', state: 'regular' },
       style: {
         backgroundColor: contract.color.primary.base,
-        borderColor: contract.color.primary.light,
+        borderColor: contract.color.primary.base,
         color: contract.color.foreground.onPrimary.base,
         ':hover': {
           backgroundColor: contract.color.primary.light,

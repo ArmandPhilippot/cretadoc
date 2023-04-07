@@ -1,4 +1,8 @@
-import type { ButtonHTMLAttributes, FC } from 'react';
+import {
+  type ButtonHTMLAttributes,
+  type ForwardRefRenderFunction,
+  forwardRef,
+} from 'react';
 import * as styles from './button.css';
 
 export type ButtonKind = 'neutral' | 'primary' | 'secondary';
@@ -27,18 +31,21 @@ export type ButtonProps = Omit<
   kind?: ButtonKind;
 };
 
-/**
- * Button component.
- */
-export const Button: FC<ButtonProps> = ({
-  children,
-  className = '',
-  isDisabled = false,
-  isLoading = false,
-  kind = 'secondary',
-  type = 'button',
-  ...props
-}) => {
+const ButtonWithRef: ForwardRefRenderFunction<
+  HTMLButtonElement,
+  ButtonProps
+> = (
+  {
+    children,
+    className = '',
+    isDisabled = false,
+    isLoading = false,
+    kind = 'secondary',
+    type = 'button',
+    ...props
+  },
+  ref
+) => {
   const buttonClassName = `${styles.button({
     kind,
     state: isDisabled ? 'disabled' : isLoading ? 'loading' : 'regular',
@@ -49,6 +56,7 @@ export const Button: FC<ButtonProps> = ({
       {...props}
       className={buttonClassName}
       disabled={isDisabled || isLoading}
+      ref={ref}
       // eslint-disable-next-line react/button-has-type -- Default value is set.
       type={type}
     >
@@ -56,3 +64,8 @@ export const Button: FC<ButtonProps> = ({
     </button>
   );
 };
+
+/**
+ * Button component.
+ */
+export const Button = forwardRef(ButtonWithRef);
