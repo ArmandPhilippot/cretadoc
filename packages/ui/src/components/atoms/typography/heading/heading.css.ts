@@ -3,8 +3,7 @@ import { contract } from '../../../../themes';
 
 export const heading = recipe({
   base: {
-    marginBottom: contract.spacing.md,
-    marginTop: 0,
+    margin: 0,
     color: contract.color.foreground.regular.base,
     fontWeight: contract.font.weight.regular,
     selectors: {
