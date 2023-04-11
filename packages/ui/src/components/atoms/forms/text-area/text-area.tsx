@@ -4,10 +4,13 @@ import {
   type TextareaHTMLAttributes,
 } from 'react';
 
-export type TextAreaProps = Omit<
+type AllowedTextAreaProps = Omit<
   TextareaHTMLAttributes<HTMLTextAreaElement>,
   'disabled' | 'readOnly' | 'required'
-> & {
+> &
+  Required<Pick<TextareaHTMLAttributes<HTMLTextAreaElement>, 'id' | 'name'>>;
+
+export type TextAreaProps = AllowedTextAreaProps & {
   /**
    * Should the field be disabled?
    *

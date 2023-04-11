@@ -37,7 +37,8 @@ type AllowedInputProps = Omit<
   | 'src'
   | 'type'
   | 'width'
->;
+> &
+  Required<Pick<InputHTMLAttributes<HTMLInputElement>, 'id' | 'name'>>;
 
 export type RangeFieldProps = Omit<
   AllowedInputProps,

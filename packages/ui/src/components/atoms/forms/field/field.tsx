@@ -3,9 +3,9 @@ import { Input, type InputProps, type InputType } from '../input';
 import { TextArea, type TextAreaProps } from '../text-area';
 import * as styles from './field.css';
 
-type FieldType = InputType | 'textarea';
+export type FieldType = InputType | 'textarea';
 
-type FieldProps<T extends FieldType> = T extends InputType
+export type FieldProps<T extends FieldType> = T extends InputType
   ? InputProps<T>
   : TextAreaProps & { type: 'textarea' };
 

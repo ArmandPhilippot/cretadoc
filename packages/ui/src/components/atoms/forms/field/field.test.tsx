@@ -5,12 +5,12 @@ import { Field } from './field';
 
 describe('field', () => {
   it('renders an input', () => {
-    render(<Field type="text" />);
+    render(<Field id="input-field" name="input-field" type="text" />);
     expect(screenTL.getByRole('textbox')).toBeInTheDocument();
   });
 
   it('renders a textarea', () => {
-    render(<Field type="textarea" />);
+    render(<Field id="textarea-field" name="textarea-field" type="textarea" />);
     expect(screenTL.getByRole('textbox')).toBeInTheDocument();
   });
 });
