@@ -1,0 +1,182 @@
+import { ArgsTable, Canvas, Meta, Story } from '@storybook/addon-docs';
+import { Fragment } from 'react';
+import { Link } from '../../atoms';
+import { Colophon } from './colophon';
+
+<Meta
+  title="Components/Molecules/Colophon"
+  component={Colophon}
+  args={{}}
+  argTypes={{
+    alignment: {
+      control: {
+        type: 'select',
+      },
+      options: ['center', 'left', 'right'],
+      description: 'Define the contents alignment.',
+      table: {
+        category: 'Options',
+        defaultValue: { summary: 'left' },
+      },
+      type: {
+        name: 'string',
+        required: false,
+      },
+    },
+    copyright: {
+      control: {
+        type: 'text',
+      },
+      description: 'Define the copyright notice.',
+      table: {
+        category: 'Options',
+      },
+      type: {
+        name: 'string',
+        required: false,
+      },
+    },
+    generator: {
+      control: {
+        type: 'text',
+      },
+      description: 'Define the generator information.',
+      table: {
+        category: 'Options',
+      },
+      type: {
+        name: 'string',
+        required: false,
+      },
+    },
+    legalNotice: {
+      description: 'Define the legal notice data.',
+      table: {
+        category: 'Options',
+      },
+      type: {
+        name: 'object',
+        required: false,
+      },
+    },
+  }}
+/>
+
+export const Template = (args) => <Colophon {...args} />;
+
+# Colophon
+
+A colophon is commonly used in the website footer to print some copyright information and/or legal notice link.
+
+## Contents
+
+A colophon can have:
+
+- a copyright notice,
+- a generator information,
+- a legal notice link.
+
+<Canvas isColumn>
+  <Story
+    name="Copyright"
+    args={{
+      copyright: '© 2023 Cretadoc',
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Generator"
+    args={{
+      generator: (
+        <Fragment>
+          Built with{' '}
+          <Link to="https://github.com/ArmandPhilippot/cretadoc">Cretadoc</Link>
+          .
+        </Fragment>
+      ),
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Legal Notice"
+    args={{
+      legalNotice: { label: 'Legal notice', link: '#' },
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+You can also combine these attributes. For example:
+
+<Canvas>
+  <Story
+    name="Copyright & Legal Notice"
+    args={{
+      copyright: '© 2023 Cretadoc',
+      legalNotice: { label: 'Legal notice', link: '#' },
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+## Alignment
+
+For design purposes, you can also choose the alignment of the colophon contents.
+
+<Canvas isColumn>
+  <Story
+    name="Alignment: left"
+    args={{
+      alignment: 'left',
+      copyright: '© 2023 Cretadoc',
+      generator: 'Built with Cretadoc.',
+      legalNotice: { label: 'Legal notice', link: '#' },
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Alignment: center"
+    args={{
+      alignment: 'center',
+      copyright: '© 2023 Cretadoc',
+      generator: 'Built with Cretadoc.',
+      legalNotice: { label: 'Legal notice', link: '#' },
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Alignment: right"
+    args={{
+      alignment: 'right',
+      copyright: '© 2023 Cretadoc',
+      generator: 'Built with Cretadoc.',
+      legalNotice: { label: 'Legal notice', link: '#' },
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+## Playground
+
+<Canvas>
+  <Story
+    name="Playground"
+    args={{
+      alignment: 'left',
+      copyright: '© 2023 Cretadoc',
+      generator: 'Built with Cretadoc.',
+      legalNotice: { label: 'Legal notice', link: '#' },
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+<ArgsTable story="Playground" />
