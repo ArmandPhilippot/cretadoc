@@ -1,0 +1,81 @@
+import { ArgsTable, Canvas, Meta, Story } from '@storybook/addon-docs';
+import { Card } from '../../molecules/card';
+import * as CardStories from '../../molecules/card/card.stories.mdx';
+import { CardsList } from './cards-list';
+
+<Meta
+  title="Components/Organisms/Cards List"
+  component={CardsList}
+  args={{
+    isOrdered: false,
+  }}
+  argTypes={{
+    maxCardWidth: {
+      control: {
+        type: 'text',
+      },
+      description:
+        'Define the max width of a card: a length or percentage with unit.',
+      table: {
+        category: 'Options',
+        defaultValue: { summary: '35ch' },
+      },
+      type: {
+        name: 'string',
+        required: false,
+      },
+    },
+  }}
+/>
+
+export const PlaygroundTemplate = ({ cardsNumber, maxCardWidth, ...args }) => {
+  const cards = Array.from({ length: cardsNumber });
+  return (
+    <CardsList maxCardWidth={maxCardWidth}>
+      {cards.map((card) => (
+        <CardStories.playground {...args} key={card} />
+      ))}
+    </CardsList>
+  );
+};
+
+# Cards List
+
+A `<CardsList />` component is used to display a collection of [`<Cards />`](/?path=/docs/components-molecules-card--contents-cover-only).
+
+## Playground
+
+<Canvas>
+  <Story
+    name="Playground"
+    argTypes={{
+      ...CardStories.default.argTypes,
+      cardsNumber: {
+        control: {
+          type: 'number',
+          min: 1,
+        },
+        description: 'Define the numbers of cards.',
+        table: {
+          category: 'Story-only options',
+          table: {
+            defaultValue: { summary: 3 },
+          },
+        },
+        type: {
+          name: 'number',
+          required: false,
+        },
+      },
+    }}
+    args={{
+      ...CardStories.playground.args,
+      cardsNumber: 3,
+      maxCardWidth: '35ch',
+    }}
+  >
+    {PlaygroundTemplate.bind({})}
+  </Story>
+</Canvas>
+
+<ArgsTable story="Playground" />
