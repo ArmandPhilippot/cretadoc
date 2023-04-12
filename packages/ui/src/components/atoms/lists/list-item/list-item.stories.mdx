@@ -149,6 +149,7 @@ import { ListItem } from './list-item';
 export const Template = ({ border, ...args }) => (
   <ul style={{ padding: 0, margin: 0 }}>
     <ListItem {...args} border={border === 'all' ? undefined : border} />
+    <ListItem {...args} border={border === 'all' ? undefined : border} />
   </ul>
 );
 

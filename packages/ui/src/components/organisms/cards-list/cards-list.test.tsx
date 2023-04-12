@@ -5,13 +5,17 @@ import { CardsList } from './cards-list';
 
 describe('cards-list', () => {
   it('renders the right number of cards', () => {
-    const cards = ['Card1', 'Card2', 'Card3', 'Card4'];
+    const cardsNumber = 5;
+    const cards = Array.from({ length: cardsNumber }, (_v, k) => k);
     render(
-      <CardsList>
-        {cards.map((card) => (
-          <Card key={card} excerpt={card} />
-        ))}
-      </CardsList>
+      <CardsList
+        items={cards.map((id) => {
+          return {
+            id: `card-${id}`,
+            card: <Card excerpt="voluptatum iste fugit" />,
+          };
+        })}
+      />
     );
     expect(screenTL.getAllByRole('listitem')).toHaveLength(cards.length);
   });

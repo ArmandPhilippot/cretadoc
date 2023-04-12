@@ -1,4 +1,4 @@
-import { style } from '@vanilla-extract/css';
+import { globalStyle, style } from '@vanilla-extract/css';
 import { contract } from '../../../themes';
 
 export const branding = style({
@@ -24,6 +24,10 @@ export const logo = style({
       opacity: 0.85,
     },
   },
+});
+
+globalStyle(`${logo} > img`, {
+  maxHeight: 'inherit',
 });
 
 export const brand = style({

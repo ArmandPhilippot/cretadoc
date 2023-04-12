@@ -1,4 +1,4 @@
-import { type FC, type ReactElement, cloneElement } from 'react';
+import type { FC, ReactElement } from 'react';
 import { Link, type ImageProps, type LinkProps } from '../../atoms';
 import * as styles from './branding.css';
 
@@ -23,12 +23,7 @@ export const Branding: FC<BrandingProps> = ({
   ...props
 }) => (
   <Link {...props} className={`${styles.branding} ${className}`}>
-    {logo
-      ? cloneElement(logo, {
-          ...logo.props,
-          className: `${styles.logo} ${logo.props.className ?? ''}`,
-        })
-      : null}
+    {logo ? <div className={styles.logo}>{logo}</div> : null}
     <div className={styles.brand}>{brand}</div>
   </Link>
 );

@@ -16,17 +16,16 @@ export const list = recipe({
   },
   variants: {
     hasMarker: {
-      false: {},
-      true: {},
-    },
-    isBordered: {
-      false: {},
+      false: {
+        listStyleType: 'none',
+      },
       true: {},
     },
     isInline: {
       false: {
         selectors: {
           '& &': {
+            paddingBlockStart: contract.spacing.xxs,
             paddingInlineStart: contract.spacing.md,
           },
         },
@@ -47,22 +46,12 @@ export const list = recipe({
   },
   compoundVariants: [
     {
-      variants: { hasMarker: true, isBordered: false, isInline: false },
+      variants: { hasMarker: true, isInline: false },
       style: {
         paddingInlineStart: contract.spacing.sm,
       },
     },
   ],
-});
-
-export const item = recipe({
-  base: {
-    selectors: {
-      [`${list({ isInline: false }).split(' ')[1] ?? ''} &`]: {
-        marginBottom: itemSpacing,
-      },
-    },
-  },
 });
 
 globalStyle(

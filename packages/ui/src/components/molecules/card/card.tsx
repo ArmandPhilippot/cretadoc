@@ -1,9 +1,4 @@
-import {
-  type FC,
-  type HTMLAttributes,
-  type ReactElement,
-  cloneElement,
-} from 'react';
+import type { FC, HTMLAttributes, ReactElement } from 'react';
 import type {
   ButtonProps,
   HeadingProps,
@@ -38,20 +33,8 @@ export const Card: FC<CardProps> = ({
 
   return (
     <div {...props} className={`${cardClassName} ${className}`}>
-      {cover ? (
-        <div className={styles.cover}>
-          {cloneElement(cover, {
-            ...cover.props,
-            className: `${styles.coverImg} ${cover.props.className ?? ''}`,
-          })}
-        </div>
-      ) : null}
-      {heading
-        ? cloneElement(heading, {
-            ...heading.props,
-            className: `${styles.heading} ${heading.props.className ?? ''}`,
-          })
-        : null}
+      {cover ? <div className={styles.cover}>{cover}</div> : null}
+      {heading ? <div className={styles.heading}>{heading}</div> : null}
       {excerpt ? <div className={styles.excerpt}>{excerpt}</div> : null}
       {actions ? <div className={styles.actions}>{actions}</div> : null}
     </div>

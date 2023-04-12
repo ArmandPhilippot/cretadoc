@@ -1,4 +1,4 @@
-import { style } from '@vanilla-extract/css';
+import { globalStyle, style } from '@vanilla-extract/css';
 import { recipe } from '@vanilla-extract/recipes';
 import { contract } from '../../../themes';
 
@@ -16,7 +16,7 @@ export const cover = style({
   maxHeight: 150,
 });
 
-export const coverImg = style({
+globalStyle(`${cover} > img`, {
   width: '100%',
   maxHeight: 'inherit',
   objectFit: 'cover',
@@ -25,6 +25,11 @@ export const coverImg = style({
 
 export const heading = style({
   margin: contract.spacing.md,
+  fontSize: contract.font.size.xl,
+});
+
+globalStyle(`${heading} > *`, {
+  fontSize: 'inherit',
 });
 
 export const excerpt = style({

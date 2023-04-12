@@ -11,7 +11,6 @@ import { List } from './list';
     isInline: false,
   }}
   argTypes={{
-    ...ListItemStories.argTypes,
     children: {
       description: 'Define the list items.',
       type: {
@@ -121,7 +120,7 @@ You can use one or more lists inside a list.
 
 ## Markers
 
-The list items can have a marker in front of them or not:
+The list can control the items marker visibility:
 
 <Canvas>
   <Story name="Marker - Visible">
@@ -135,221 +134,6 @@ The list items can have a marker in front of them or not:
     <List hasMarker={false}>
       <ListItem>First</ListItem>
       <ListItem>Second</ListItem>
-      <ListItem>Third</ListItem>
-    </List>
-  </Story>
-</Canvas>
-
-You can also use a custom marker either by using a [CSS keyword](https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-type) or an unicode emoji for example:
-
-<Canvas>
-  <Story name="Marker - Custom: CSS Keyword">
-    <List marker="circle">
-      <ListItem>First</ListItem>
-      <ListItem>Second</ListItem>
-      <ListItem>Third</ListItem>
-    </List>
-  </Story>
-  <Story name="Marker - Custom: Emoji">
-    <List marker={'"\\1F44D  "'}>
-      <ListItem>First</ListItem>
-      <ListItem>Second</ListItem>
-      <ListItem>Third</ListItem>
-    </List>
-  </Story>
-</Canvas>
-
-It is also possible to mix markers by specifying a different marker on a list item:
-
-<Canvas>
-  <Story name="Marker - Custom: Mixed">
-    <List marker="square">
-      <ListItem>First</ListItem>
-      <ListItem marker={'"\\1F44D  "'}>Second</ListItem>
-      <ListItem>Third</ListItem>
-    </List>
-  </Story>
-</Canvas>
-
-## Borders
-
-The list items can be bordered or not:
-
-<Canvas>
-  <Story name="Borders - None">
-    <List>
-      <ListItem>First</ListItem>
-      <ListItem>Second</ListItem>
-      <ListItem>Third</ListItem>
-    </List>
-  </Story>
-  <Story name="Borders - All">
-    <List isBordered>
-      <ListItem>First</ListItem>
-      <ListItem>Second</ListItem>
-      <ListItem>Third</ListItem>
-    </List>
-  </Story>
-</Canvas>
-
-### Borders position
-
-You can also define the desired borders:
-
-<Canvas>
-  <Story name="Borders - Position: Bottom">
-    <List isBordered border="bottom">
-      <ListItem>First</ListItem>
-      <ListItem>Second</ListItem>
-      <ListItem>Third</ListItem>
-    </List>
-  </Story>
-  <Story name="Borders - Position: Left">
-    <List isBordered border="left">
-      <ListItem>First</ListItem>
-      <ListItem>Second</ListItem>
-      <ListItem>Third</ListItem>
-    </List>
-  </Story>
-  <Story name="Borders - Position: Right">
-    <List isBordered border="right">
-      <ListItem>First</ListItem>
-      <ListItem>Second</ListItem>
-      <ListItem>Third</ListItem>
-    </List>
-  </Story>
-  <Story name="Borders - Position: Top">
-    <List isBordered border="top">
-      <ListItem>First</ListItem>
-      <ListItem>Second</ListItem>
-      <ListItem>Third</ListItem>
-    </List>
-  </Story>
-  <Story name="Borders - Position: Inline">
-    <List isBordered border="inline">
-      <ListItem>First</ListItem>
-      <ListItem>Second</ListItem>
-      <ListItem>Third</ListItem>
-    </List>
-  </Story>
-  <Story name="Borders - Position: Block">
-    <List isBordered border="block">
-      <ListItem>First</ListItem>
-      <ListItem>Second</ListItem>
-      <ListItem>Third</ListItem>
-    </List>
-  </Story>
-</Canvas>
-
-It is also possible to mix borders by specifying a different border position on a list item:
-
-<Canvas>
-  <Story name="Borders - Position: Mixed">
-    <List isBordered border="block">
-      <ListItem>First</ListItem>
-      <ListItem border="left">Second</ListItem>
-      <ListItem>Third</ListItem>
-    </List>
-  </Story>
-</Canvas>
-
-### Borders size
-
-You can also define the size of the borders:
-
-<Canvas>
-  <Story name="Borders - Size: Small">
-    <List isBordered borderSize="sm">
-      <ListItem>First</ListItem>
-      <ListItem>Second</ListItem>
-      <ListItem>Third</ListItem>
-    </List>
-  </Story>
-  <Story name="Borders - Size: Medium">
-    <List isBordered borderSize="md">
-      <ListItem>First</ListItem>
-      <ListItem>Second</ListItem>
-      <ListItem>Third</ListItem>
-    </List>
-  </Story>
-  <Story name="Borders - Size: Large">
-    <List isBordered borderSize="lg">
-      <ListItem>First</ListItem>
-      <ListItem>Second</ListItem>
-      <ListItem>Third</ListItem>
-    </List>
-  </Story>
-</Canvas>
-
-### Borders color
-
-You can also define the color of the borders:
-
-<Canvas>
-  <Story name="Borders - Color: Critical">
-    <List isBordered borderColor="critical">
-      <ListItem>First</ListItem>
-      <ListItem>Second</ListItem>
-      <ListItem>Third</ListItem>
-    </List>
-  </Story>
-  <Story name="Borders - Color: Info">
-    <List isBordered borderColor="info">
-      <ListItem>First</ListItem>
-      <ListItem>Second</ListItem>
-      <ListItem>Third</ListItem>
-    </List>
-  </Story>
-  <Story name="Borders - Color: Inverted">
-    <List isBordered borderColor="inverted">
-      <ListItem>First</ListItem>
-      <ListItem>Second</ListItem>
-      <ListItem>Third</ListItem>
-    </List>
-  </Story>
-  <Story name="Borders - Color: Muted">
-    <List isBordered borderColor="muted">
-      <ListItem>First</ListItem>
-      <ListItem>Second</ListItem>
-      <ListItem>Third</ListItem>
-    </List>
-  </Story>
-  <Story name="Borders - Color: Regular">
-    <List isBordered borderColor="regular">
-      <ListItem>First</ListItem>
-      <ListItem>Second</ListItem>
-      <ListItem>Third</ListItem>
-    </List>
-  </Story>
-  <Story name="Borders - Color: Success">
-    <List isBordered borderColor="success">
-      <ListItem>First</ListItem>
-      <ListItem>Second</ListItem>
-      <ListItem>Third</ListItem>
-    </List>
-  </Story>
-  <Story name="Borders - Color: Warning">
-    <List isBordered borderColor="warning">
-      <ListItem>First</ListItem>
-      <ListItem>Second</ListItem>
-      <ListItem>Third</ListItem>
-    </List>
-  </Story>
-</Canvas>
-
-It is also possible to mix the colors:
-
-<Canvas>
-  <Story name="Borders - Color: Mixed">
-    <List
-      hasMarker={false}
-      isBordered
-      border="left"
-      borderColor="success"
-      borderSize="lg"
-    >
-      <ListItem>First</ListItem>
-      <ListItem borderColor="critical">Second</ListItem>
       <ListItem>Third</ListItem>
     </List>
   </Story>
@@ -396,18 +180,12 @@ You can also use a nested list inside an inline list:
   <Story
     name="Playground"
     args={{
-      border: 'all',
-      borderColor: 'regular',
-      borderSize: 'sm',
       children: [
         <ListItem key="first">First</ListItem>,
         <ListItem key="second">Second</ListItem>,
         <ListItem key="third">Third</ListItem>,
       ],
-      isBordered: false,
       isOrdered: false,
-      paddingBlock: 'xxs',
-      paddingInline: 'xs',
     }}
   >
     {Template.bind({})}
