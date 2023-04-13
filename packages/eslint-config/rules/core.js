@@ -171,7 +171,11 @@ module.exports = {
   'no-unused-private-class-members': 'error',
   'no-unused-vars': [
     'error',
-    { argsIgnorePattern: '^_', ignoreRestSiblings: true },
+    {
+      argsIgnorePattern: '^_',
+      ignoreRestSiblings: true,
+      varsIgnorePattern: '^_',
+    },
   ],
   'no-use-before-define': [
     'error',
