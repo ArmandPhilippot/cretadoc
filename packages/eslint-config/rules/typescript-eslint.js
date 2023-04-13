@@ -172,7 +172,7 @@ module.exports = {
     {
       builtinGlobals: true,
       hoist: 'functions',
-      allow: [],
+      allow: ['name'],
       ignoreOnInitialization: false,
     },
   ],
