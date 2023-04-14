@@ -1,0 +1,20 @@
+import { Meta, Story } from '@storybook/blocks';
+import * as AnimationsStories from './animations.stories';
+
+<Meta of={AnimationsStories} />
+
+# Animations
+
+An animation can be decomposed as a duration and a timing function.
+
+## Animation
+
+Use the form below to test the different combinations between durations and timing functions on animations.
+
+<Story of={AnimationsStories.AnimationCSS} />
+
+## Transition
+
+Use the form below to test the different combinations between durations and timing functions on transitions.
+
+<Story of={AnimationsStories.TransitionCSS} />

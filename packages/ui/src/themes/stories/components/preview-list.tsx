@@ -5,7 +5,7 @@ type PreviewListProps = {
   /**
    * The children.
    */
-  children: ReactNode[];
+  children: ReactNode | ReactNode[];
   /**
    * Create a new line after the given number of elements.
    */
@@ -24,14 +24,16 @@ export const PreviewList: FC<PreviewListProps> = ({
 
   return (
     <div className={styles.wrapper}>
-      {Children.map(children, (child, index) => (
-        <>
-          {child}
-          {isLineBreakRequired(index + 1, children.length) ? (
-            <hr className={styles.lineBreak} />
-          ) : null}
-        </>
-      ))}
+      {Array.isArray(children)
+        ? Children.map(children, (child, index) => (
+            <>
+              {child}
+              {isLineBreakRequired(index + 1, children.length) ? (
+                <hr className={styles.lineBreak} />
+              ) : null}
+            </>
+          ))
+        : children}
     </div>
   );
 };

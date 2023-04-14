@@ -1,0 +1,34 @@
+import { Meta, Story } from '@storybook/blocks';
+import * as ShadowsStories from './shadows.stories';
+
+<Meta of={ShadowsStories} />
+
+# Shadows
+
+A shadow can be decomposed as follow:
+
+- a color,
+- a direction,
+- an elevation.
+
+## Color
+
+The shadow's color should be adapted to the element's color to create harmonious interfaces.
+
+<Story of={ShadowsStories.Color} />
+
+## Direction
+
+Depending on the element position, the "light" orientation is not always the same. So, Cretadoc provides six different keys to define the shadow position.
+
+<Story of={ShadowsStories.Direction} />
+
+## Elevation
+
+To create contrast, shadows should not have the same elevation. So, Cretadoc provides three different tokens to illustrate the difference.
+
+First an example without shadow so you can compare with the tokens applied:
+
+<Story of={ShadowsStories.WithoutShadow} />
+
+<Story of={ShadowsStories.Elevation} />

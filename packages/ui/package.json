@@ -75,6 +75,7 @@
     "@storybook/addon-links": "^7.0.4",
     "@storybook/blocks": "^7.0.4",
     "@storybook/builder-vite": "^7.0.4",
+    "@storybook/client-api": "^7.0.4",
     "@storybook/manager-api": "^7.0.4",
     "@storybook/react": "^7.0.4",
     "@storybook/react-vite": "^7.0.4",

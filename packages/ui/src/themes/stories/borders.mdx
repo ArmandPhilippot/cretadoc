@@ -1,0 +1,35 @@
+import { Meta, Story } from '@storybook/blocks';
+import * as BordersStories from './borders.stories';
+
+<Meta of={BordersStories} />
+
+# Borders
+
+A border can be decomposed in four values:
+
+- a color,
+- a radius,
+- a style,
+- a width.
+
+## Color
+
+Color design tokens are defined separately, you can learn more on [Colors](/docs/themes-tokens-colors--docs) page.
+
+## Radius
+
+Cretadoc interfaces use four different shapes of borders.
+
+<Story of={BordersStories.Radius} />
+
+## Size
+
+Cretadoc interfaces use three different sizes of borders.
+
+<Story of={BordersStories.Size} />
+
+## Style
+
+Only one style of borders is used inside Cretadoc interfaces. The value of `border.style.regular` can be any CSS keyword accepted in `style` attribute.
+
+<Story of={BordersStories.Style} />

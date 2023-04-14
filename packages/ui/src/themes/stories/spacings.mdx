@@ -1,0 +1,29 @@
+import { Meta, Story } from '@storybook/blocks';
+import * as SpacingsStories from './spacings.stories';
+
+<Meta of={SpacingsStories} />
+
+# Spacings
+
+A spacing can be used as:
+
+- margin (or gap with flexbox and grid),
+- padding.
+
+## Spacing
+
+You can see a preview of the spacing sizes below. Each size is represented by the height of the colored box.
+
+<Story of={SpacingsStories.SpacingPreview} />
+
+## Margin
+
+You can see a preview of the margin sizes below. Each margin is represented by the space between the two colored boxes.
+
+<Story of={SpacingsStories.MarginPreview} />
+
+## Padding
+
+You can see a preview of the padding sizes below. Each padding is represented by the colored border around the box.
+
+<Story of={SpacingsStories.PaddingPreview} />

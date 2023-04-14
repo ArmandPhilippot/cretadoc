@@ -1,0 +1,44 @@
+import { Meta, Story } from '@storybook/blocks';
+import * as FontsStories from './fonts.stories';
+
+<Meta of={FontsStories} />
+
+# Fonts
+
+A font can be decomposed in five values:
+
+- a family,
+- a size,
+- a weight,
+- a letter-spacing,
+- a line-height.
+
+## Family
+
+Cretadoc interfaces use two different font-family. The monospace version is usually used to display code samples.
+
+<Story of={FontsStories.Family} />
+
+## Size
+
+Cretadoc interfaces use six different font sizes.
+
+<Story of={FontsStories.Size} />
+
+## Weight
+
+Cretadoc interfaces use three different weight for fonts.
+
+<Story of={FontsStories.Weight} />
+
+## Letter spacing
+
+Cretadoc interfaces can use three different letter-spacing sizes.
+
+<Story of={FontsStories.LetterSpacing} />
+
+## Line-height
+
+Cretadoc interfaces can use three different line-height. For example, code sample lines are less spaced than regular text.
+
+<Story of={FontsStories.LineHeight} />
