@@ -36,9 +36,9 @@ const preview: Preview = {
       description: 'Switch the global theme for components',
       defaultValue: defaultTheme?.value,
       toolbar: {
+        title: 'Theme',
         icon: 'paintbrush',
         items: customThemes,
-        name: true,
         dynamicTitle: true,
       },
     },
