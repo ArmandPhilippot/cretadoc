@@ -1,0 +1,26 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as TermStories from './term.stories';
+
+<Meta of={TermStories} />
+
+# Term
+
+A `<Term />` is used in a `<DescriptionList />`. A `<Description />` must follow but it is possible to use several terms in a row.
+
+<Primary />
+
+## Colors
+
+If needed, you can apply color on terms.
+
+<Canvas of={TermStories.ColorCritical} />
+<Canvas of={TermStories.ColorInfo} />
+<Canvas of={TermStories.ColorInverted} />
+<Canvas of={TermStories.ColorMuted} />
+<Canvas of={TermStories.ColorRegular} />
+<Canvas of={TermStories.ColorSuccess} />
+<Canvas of={TermStories.ColorWarning} />
+
+## Props
+
+<ArgTypes of={TermStories} />

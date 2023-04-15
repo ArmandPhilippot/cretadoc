@@ -1,10 +1,14 @@
 import { assignInlineVars } from '@vanilla-extract/dynamic';
-import type { FC, HTMLAttributes } from 'react';
-import type { ColorContextTokens } from '../../../../themes/types/tokens';
-import { getColorFromTokenKey } from '../../../utils/helpers';
-import * as styles from './description-list.css';
+import type { FC, HTMLAttributes, ReactNode } from 'react';
+import type { ColorContextTokens } from '../../../../../themes/types/tokens';
+import { getColorFromTokenKey } from '../../../../utils/helpers';
+import * as styles from '../description-list.css';
 
 export type TermProps = HTMLAttributes<HTMLElement> & {
+  /**
+   * A term.
+   */
+  children: ReactNode;
   /**
    * Set the term color.
    *

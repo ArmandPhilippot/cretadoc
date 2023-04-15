@@ -1,0 +1,73 @@
+import type { Meta, StoryObj } from '@storybook/react';
+import { Description } from './description';
+
+const meta = {
+  title: 'Components/Atoms/Lists/Description List/Description',
+  component: Description,
+} satisfies Meta<typeof Description>;
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  args: {
+    children: 'A description of a term.',
+  },
+};
+
+export const ColorCritical: Story = {
+  name: 'Color: Critical',
+  args: {
+    ...Default.args,
+    color: 'critical',
+  },
+};
+
+export const ColorInfo: Story = {
+  name: 'Color: Info',
+  args: {
+    ...Default.args,
+    color: 'info',
+  },
+};
+
+export const ColorInverted: Story = {
+  name: 'Color: Inverted',
+  args: {
+    ...Default.args,
+    color: 'inverted',
+  },
+};
+
+export const ColorMuted: Story = {
+  name: 'Color: Muted',
+  args: {
+    ...Default.args,
+    color: 'muted',
+  },
+};
+
+export const ColorRegular: Story = {
+  name: 'Color: Regular',
+  args: {
+    ...Default.args,
+    color: 'regular',
+  },
+};
+
+export const ColorSuccess: Story = {
+  name: 'Color: Success',
+  args: {
+    ...Default.args,
+    color: 'success',
+  },
+};
+
+export const ColorWarning: Story = {
+  name: 'Color: Warning',
+  args: {
+    ...Default.args,
+    color: 'warning',
+  },
+};

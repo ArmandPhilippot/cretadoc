@@ -11,13 +11,17 @@ A description list is commonly used to implement a glossary or to display metada
 
 ## Contents
 
-A description list is composed of `<Term />`, `<Description />` and eventually `<Group />` components.
+A description list is composed of:
+
+- [`<Term />`](/docs/components-atoms-lists-description-list-term--docs),
+- [`<Description />`](/docs/components-atoms-lists-description-list-description--docs),
+- and eventually [`<Group />`](/docs/components-atoms-lists-description-list-group--docs).
 
 ### Single term and description
 
 You can use a single term with a single description:
 
-<Canvas of={DescriptionListStories.Default} />
+<Canvas of={DescriptionListStories.SingleTermSingleDescription} />
 
 ### Multiple terms, single description
 
@@ -51,57 +55,78 @@ You can adjust the spacing between each term/description association.
 
 ### Without groups
 
+#### Double extra-small (xxs)
+
 <Canvas of={DescriptionListStories.SpacingXXSWithoutGroup} />
+
+#### Extra-small (xs)
+
 <Canvas of={DescriptionListStories.SpacingXSWithoutGroup} />
+
+#### Small (sm)
+
 <Canvas of={DescriptionListStories.SpacingSMWithoutGroup} />
+
+#### Medium (md)
+
 <Canvas of={DescriptionListStories.SpacingMDWithoutGroup} />
+
+#### Large (lg)
+
 <Canvas of={DescriptionListStories.SpacingLGWithoutGroup} />
+
+#### Extra-large (xl)
+
 <Canvas of={DescriptionListStories.SpacingXLWithoutGroup} />
+
+#### Double extra-large (xxl)
+
 <Canvas of={DescriptionListStories.SpacingXXLWithoutGroup} />
 
 ### With groups
 
+#### Double extra-small (xxs)
+
 <Canvas of={DescriptionListStories.SpacingXXSWithGroup} />
+
+#### Extra-small (xs)
+
 <Canvas of={DescriptionListStories.SpacingXSWithGroup} />
+
+#### Small (sm)
+
 <Canvas of={DescriptionListStories.SpacingSMWithGroup} />
+
+#### Medium (md)
+
 <Canvas of={DescriptionListStories.SpacingMDWithGroup} />
+
+#### Large (lg)
+
 <Canvas of={DescriptionListStories.SpacingLGWithGroup} />
+
+#### Extra-large (xl)
+
 <Canvas of={DescriptionListStories.SpacingXLWithGroup} />
+
+#### Double extra-large (xxl)
+
 <Canvas of={DescriptionListStories.SpacingXXLWithGroup} />
-
-You can also define the spacing between the items in group:
-
-<Canvas of={DescriptionListStories.GroupSpacingXXS} />
-<Canvas of={DescriptionListStories.GroupSpacingXS} />
-<Canvas of={DescriptionListStories.GroupSpacingSM} />
-<Canvas of={DescriptionListStories.GroupSpacingMD} />
-<Canvas of={DescriptionListStories.GroupSpacingLG} />
-<Canvas of={DescriptionListStories.GroupSpacingXL} />
-<Canvas of={DescriptionListStories.GroupSpacingXXL} />
-
-## Colors
-
-If needed, you can apply color on descriptions, terms or both.
-
-<Canvas of={DescriptionListStories.ColorCritical} />
-<Canvas of={DescriptionListStories.ColorInfo} />
-<Canvas of={DescriptionListStories.ColorInverted} />
-<Canvas of={DescriptionListStories.ColorMuted} />
-<Canvas of={DescriptionListStories.ColorRegular} />
-<Canvas of={DescriptionListStories.ColorSuccess} />
-<Canvas of={DescriptionListStories.ColorWarning} />
 
 ## Alignment
 
-You can change the items alignment inside a group:
+You can change the items alignment inside a list and mix it with inlined groups if needed.
 
-<Canvas of={DescriptionListStories.StackedGroup} />
-<Canvas of={DescriptionListStories.InlineGroup} />
-
-You can also change the groups alignment inside a list and mix it with inlined groups if needed:
+### Inlined without groups
 
 <Canvas of={DescriptionListStories.InlinedWithoutGroups} />
+
+### Inlined with groups
+
 <Canvas of={DescriptionListStories.InlinedWithGroups} />
+
+### Inlined without inlined groups
+
 <Canvas of={DescriptionListStories.InlinedWithInlinedGroups} />
 
 ## Props

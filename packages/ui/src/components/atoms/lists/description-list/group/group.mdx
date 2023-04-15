@@ -1,0 +1,51 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as GroupStories from './group.stories';
+
+<Meta of={GroupStories} />
+
+# Group
+
+<Primary />
+
+## Alignment
+
+You can change the items alignment inside a group:
+
+<Canvas of={GroupStories.Stacked} />
+<Canvas of={GroupStories.Inlined} />
+
+## Spacing
+
+You can also define the spacing between the items in group.
+
+### Double extra-small (xxs)
+
+<Canvas of={GroupStories.SpacingXXS} />
+
+### Extra-small (xs)
+
+<Canvas of={GroupStories.SpacingXS} />
+
+### Small (sm)
+
+<Canvas of={GroupStories.SpacingSM} />
+
+### Medium (md)
+
+<Canvas of={GroupStories.SpacingMD} />
+
+### Large (lg)
+
+<Canvas of={GroupStories.SpacingLG} />
+
+### Extra-large (xl)
+
+<Canvas of={GroupStories.SpacingXL} />
+
+### Double extra-large (xxl)
+
+<Canvas of={GroupStories.SpacingXXL} />
+
+## Props
+
+<ArgTypes of={GroupStories} />

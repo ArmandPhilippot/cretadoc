@@ -1,0 +1,26 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as DescriptionStories from './description.stories';
+
+<Meta of={DescriptionStories} />
+
+# Description
+
+A `<Description />` is used in a `<DescriptionList />`. It provides a description of the preceding `<Term />`.
+
+<Primary />
+
+## Colors
+
+If needed, you can apply color on descriptions.
+
+<Canvas of={DescriptionStories.ColorCritical} />
+<Canvas of={DescriptionStories.ColorInfo} />
+<Canvas of={DescriptionStories.ColorInverted} />
+<Canvas of={DescriptionStories.ColorMuted} />
+<Canvas of={DescriptionStories.ColorRegular} />
+<Canvas of={DescriptionStories.ColorSuccess} />
+<Canvas of={DescriptionStories.ColorWarning} />
+
+## Props
+
+<ArgTypes of={DescriptionStories} />
