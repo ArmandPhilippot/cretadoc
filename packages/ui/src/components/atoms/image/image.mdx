@@ -1,0 +1,22 @@
+import { ArgTypes, Meta, Primary } from '@storybook/blocks';
+import * as ImageStories from './image.stories';
+
+<Meta of={ImageStories} />
+
+# Image
+
+The `Img` component is used to display any kind of images.
+
+<Primary />
+
+## Accessibility
+
+The attribute `alt` is required for accessibility purposes. Its role is to describe the image’s purpose when people cannot perceive it visually.
+
+Sometimes an image can be purely decorative. In that case, the `alt` attribute is still needed but can should empty.
+
+Without the attribute, screen readers may announce the presence of the image and warn the user that the description is missing. So, an empty string tells to screen readers that the image does not need alt text and they can safely ignore the image. It is intentional.
+
+## Props
+
+<ArgTypes of={ImageStories} />

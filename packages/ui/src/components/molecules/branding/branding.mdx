@@ -1,0 +1,20 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as BrandingStories from './branding.stories';
+
+<Meta of={BrandingStories} />
+
+# Branding
+
+A branding component is commonly use in the website heading. It provides information about the visited website.
+
+<Primary />
+
+## Contents
+
+A branding always has a brand. In addition, you can provide a logo.
+
+<Canvas of={BrandingStories.WithLogo} />
+
+## Props
+
+<ArgTypes of={BrandingStories} />

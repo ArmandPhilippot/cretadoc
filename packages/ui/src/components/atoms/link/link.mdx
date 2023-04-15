@@ -1,0 +1,20 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as LinkStories from './link.stories';
+
+<Meta of={LinkStories} />
+
+# Link
+
+A link is used to create a hyperlink to another location. It can be a web page, a file, an email address or even another location in the same page.
+
+<Primary />
+
+## Language
+
+You can use the `hreflang` attribute to inform the user about the lang used in the link target.
+
+<Canvas of={LinkStories.Lang} />
+
+## Props
+
+<ArgTypes of={LinkStories} />

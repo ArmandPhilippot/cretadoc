@@ -1,0 +1,34 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as CheckboxStories from './checkbox.stories';
+
+<Meta of={CheckboxStories} />
+
+# Checkbox
+
+A `Checkbox` component allows you to turn single values on and off in a form.
+
+<Primary />
+
+## States
+
+A checkbox can have different states.
+
+### Unchecked
+
+<Canvas of={CheckboxStories.IsUnchecked} />
+
+### Checked
+
+<Canvas of={CheckboxStories.IsChecked} />
+
+### Disabled
+
+<Canvas of={CheckboxStories.IsDisabled} />
+
+### Required
+
+<Canvas of={CheckboxStories.IsRequired} />
+
+## Props
+
+<ArgTypes of={CheckboxStories} />

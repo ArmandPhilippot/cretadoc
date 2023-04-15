@@ -1,0 +1,47 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as ListStories from './list.stories';
+
+<Meta of={ListStories} />
+
+# List
+
+A list can be used to display a list of data.
+
+<Primary />
+
+## Kind
+
+Two kinds of list are possible but depending on the usage, one should be prefer over the other:
+
+- if the data **order** in the list is **meaningless**, you should use an **unordered list**,
+- if the data should be ordered, please consider using an ordered list instead.
+
+<Canvas of={ListStories.UnorderedList} />
+<Canvas of={ListStories.OrderedList} />
+
+## Nested
+
+You can use one or more lists inside a list.
+
+<Canvas of={ListStories.Nested} />
+
+## Markers
+
+The list can control the items marker visibility:
+
+<Canvas of={ListStories.WithMarker} />
+<Canvas of={ListStories.WithoutMarker} />
+
+## Orientation
+
+For design purposes, a list can also be used horizontally. It can be useful to design a breadcrumbs for example.
+
+<Canvas of={ListStories.InlineList} />
+
+You can also use a nested list inside an inline list:
+
+<Canvas of={ListStories.ListInInlineList} />
+
+## Props
+
+<ArgTypes of={ListStories} />

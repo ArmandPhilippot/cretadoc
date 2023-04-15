@@ -1,0 +1,62 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as ButtonStories from './button.stories';
+
+<Meta of={ButtonStories} />
+
+# Button
+
+A button is used to trigger an event on click.
+
+<Primary />
+
+## Types
+
+A button can have three different types:
+
+- `submit`: it indicates the button is used to submit a form
+- `reset`: it indicates the button is used to reset a form
+- `button`: all other cases
+
+## Kind
+
+The button appearance can change depending on its kind. It can be either `primary`, `secondary` (default) or `neutral`.
+
+### Primary
+
+<Canvas of={ButtonStories.Primary} />
+
+### Secondary
+
+<Canvas of={ButtonStories.Secondary} />
+
+### Neutral
+
+<Canvas of={ButtonStories.Neutral} />
+
+## States
+
+It can either be enabled (default), be disabled or indicate a loading state.
+
+### Enabled
+
+<Canvas of={ButtonStories.Enabled} />
+
+### Disabled
+
+<Canvas of={ButtonStories.Disabled} />
+
+### Loading
+
+<Canvas of={ButtonStories.Loading} />
+
+## Accessibility
+
+If the button is a toggle button, it should use the `aria-pressed` attribute to indicate the current state.
+
+If the button controls the visibility of a some other elements, it should use the `aria-expanded` attribute to indicate the current state.
+
+Sometimes, the button body is not enough explicit for screen reader users. In that case, you should use the `aria-label` attribute to give a better indication about the button purpose.
+
+## Props
+
+<ArgTypes of={ButtonStories} />

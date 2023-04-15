@@ -1,0 +1,45 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as LabelStories from './label.stories';
+
+<Meta of={LabelStories} />
+
+# Label
+
+A label represents a caption for an item in a user interface. It should be associated with an input.
+
+<Primary />
+
+## State
+
+A field can be either required or not. The label reflect this state.
+
+<Canvas of={LabelStories.IsRequired} />
+
+You can also change the default symbol used with `isRequired`:
+
+<Canvas of={LabelStories.CustomRequiredSymbol} />
+
+## Color
+
+The label can have a different color than the foreground. It could be used, for example, to indicate a valid or non-valid field.
+
+<Canvas of={LabelStories.ColorCritical} />
+<Canvas of={LabelStories.ColorInfo} />
+<Canvas of={LabelStories.ColorInverted} />
+<Canvas of={LabelStories.ColorMuted} />
+<Canvas of={LabelStories.ColorRegular} />
+<Canvas of={LabelStories.ColorSuccess} />
+<Canvas of={LabelStories.ColorWarning} />
+
+## Size
+
+You can also control the font-size used for the label:
+
+<Canvas of={LabelStories.SizeXS} />
+<Canvas of={LabelStories.SizeSM} />
+<Canvas of={LabelStories.SizeMD} />
+<Canvas of={LabelStories.SizeLG} />
+
+## Props
+
+<ArgTypes of={LabelStories} />

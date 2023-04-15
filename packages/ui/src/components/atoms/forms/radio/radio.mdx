@@ -1,0 +1,38 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as RadioStories from './radio.stories';
+
+<Meta of={RadioStories} />
+
+# Radio
+
+A `Radio` component is commonly used alongside other `Radio` component to create a set of related options.
+
+<Primary />
+
+## Usage
+
+A radio group is defined by giving each of `Radio` component in the group the same name. Then, only one radio button in the group can be selected at the same time.
+
+## States
+
+A radio can have different states.
+
+### Unchecked
+
+<Canvas of={RadioStories.IsUnchecked} />
+
+### Checked
+
+<Canvas of={RadioStories.IsChecked} />
+
+### Disabled
+
+<Canvas of={RadioStories.IsDisabled} />
+
+### Required
+
+<Canvas of={RadioStories.IsRequired} />
+
+## Props
+
+<ArgTypes of={RadioStories} />

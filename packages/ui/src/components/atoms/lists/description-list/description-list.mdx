@@ -1,0 +1,109 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as DescriptionListStories from './description-list.stories';
+
+<Meta of={DescriptionListStories} />
+
+# Description List
+
+A description list is commonly used to implement a glossary or to display metadata. It represents a list of key-value pairs.
+
+<Primary />
+
+## Contents
+
+A description list is composed of `<Term />`, `<Description />` and eventually `<Group />` components.
+
+### Single term and description
+
+You can use a single term with a single description:
+
+<Canvas of={DescriptionListStories.Default} />
+
+### Multiple terms, single description
+
+You can also use a multiple terms with a single description:
+
+<Canvas of={DescriptionListStories.MultipleTermsSingleDescription} />
+
+### Single term, multiple descriptions
+
+You can also use a single term with multiple descriptions:
+
+<Canvas of={DescriptionListStories.SingleTermMultipleDescriptions} />
+
+### Multiple terms and descriptions
+
+You can also combine the examples above to define multiple terms with multiple corresponding descriptions.
+
+<Canvas of={DescriptionListStories.MultipleTermsMultipleDescriptions} />
+
+### Group of terms and descriptions
+
+You can also use groups to wrap each term(s)/description(s) association. They can be used for styling purposes or to improve code readability when mixing a lot of terms and descriptions.
+
+Here an example with the above example:
+
+<Canvas of={DescriptionListStories.GroupOfMultipleTermsMultipleDescriptions} />
+
+## Spacing
+
+You can adjust the spacing between each term/description association.
+
+### Without groups
+
+<Canvas of={DescriptionListStories.SpacingXXSWithoutGroup} />
+<Canvas of={DescriptionListStories.SpacingXSWithoutGroup} />
+<Canvas of={DescriptionListStories.SpacingSMWithoutGroup} />
+<Canvas of={DescriptionListStories.SpacingMDWithoutGroup} />
+<Canvas of={DescriptionListStories.SpacingLGWithoutGroup} />
+<Canvas of={DescriptionListStories.SpacingXLWithoutGroup} />
+<Canvas of={DescriptionListStories.SpacingXXLWithoutGroup} />
+
+### With groups
+
+<Canvas of={DescriptionListStories.SpacingXXSWithGroup} />
+<Canvas of={DescriptionListStories.SpacingXSWithGroup} />
+<Canvas of={DescriptionListStories.SpacingSMWithGroup} />
+<Canvas of={DescriptionListStories.SpacingMDWithGroup} />
+<Canvas of={DescriptionListStories.SpacingLGWithGroup} />
+<Canvas of={DescriptionListStories.SpacingXLWithGroup} />
+<Canvas of={DescriptionListStories.SpacingXXLWithGroup} />
+
+You can also define the spacing between the items in group:
+
+<Canvas of={DescriptionListStories.GroupSpacingXXS} />
+<Canvas of={DescriptionListStories.GroupSpacingXS} />
+<Canvas of={DescriptionListStories.GroupSpacingSM} />
+<Canvas of={DescriptionListStories.GroupSpacingMD} />
+<Canvas of={DescriptionListStories.GroupSpacingLG} />
+<Canvas of={DescriptionListStories.GroupSpacingXL} />
+<Canvas of={DescriptionListStories.GroupSpacingXXL} />
+
+## Colors
+
+If needed, you can apply color on descriptions, terms or both.
+
+<Canvas of={DescriptionListStories.ColorCritical} />
+<Canvas of={DescriptionListStories.ColorInfo} />
+<Canvas of={DescriptionListStories.ColorInverted} />
+<Canvas of={DescriptionListStories.ColorMuted} />
+<Canvas of={DescriptionListStories.ColorRegular} />
+<Canvas of={DescriptionListStories.ColorSuccess} />
+<Canvas of={DescriptionListStories.ColorWarning} />
+
+## Alignment
+
+You can change the items alignment inside a group:
+
+<Canvas of={DescriptionListStories.StackedGroup} />
+<Canvas of={DescriptionListStories.InlineGroup} />
+
+You can also change the groups alignment inside a list and mix it with inlined groups if needed:
+
+<Canvas of={DescriptionListStories.InlinedWithoutGroups} />
+<Canvas of={DescriptionListStories.InlinedWithGroups} />
+<Canvas of={DescriptionListStories.InlinedWithInlinedGroups} />
+
+## Props
+
+<ArgTypes of={DescriptionListStories} />

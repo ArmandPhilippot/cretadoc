@@ -1,0 +1,64 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as ListItemStories from './list-item.stories';
+
+<Meta of={ListItemStories} />
+
+# List Item
+
+A list item can be used inside an ordered list or unordered list to display some data.
+
+<Primary />
+
+## Borders
+
+A list item can be bordered or not:
+
+<Canvas of={ListItemStories.Default} />
+<Canvas of={ListItemStories.Border} />
+
+### Borders position
+
+You can also define the desired borders:
+
+<Canvas of={ListItemStories.BorderLeft} />
+<Canvas of={ListItemStories.BorderRight} />
+<Canvas of={ListItemStories.BorderBottom} />
+<Canvas of={ListItemStories.BorderTop} />
+<Canvas of={ListItemStories.BorderBlock} />
+<Canvas of={ListItemStories.BorderInline} />
+
+### Borders color
+
+The component also allows you to define the color of the border:
+
+<Canvas of={ListItemStories.BorderCritical} />
+<Canvas of={ListItemStories.BorderInfo} />
+<Canvas of={ListItemStories.BorderInverted} />
+<Canvas of={ListItemStories.BorderMuted} />
+<Canvas of={ListItemStories.BorderRegular} />
+<Canvas of={ListItemStories.BorderSuccess} />
+<Canvas of={ListItemStories.BorderWarning} />
+
+### Borders size
+
+You can also define the size of the borders:
+
+<Canvas of={ListItemStories.BorderSM} />
+<Canvas of={ListItemStories.BorderMD} />
+<Canvas of={ListItemStories.BorderLG} />
+
+## Marker
+
+A list item can have a marker or not:
+
+<Canvas of={ListItemStories.WithMarker} />
+<Canvas of={ListItemStories.WithoutMarker} />
+
+You can also use a custom marker like a [CSS keyword](https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-type) or an unicode emoji.
+
+<Canvas of={ListItemStories.CSSKeywordMarker} />
+<Canvas of={ListItemStories.UnicodeMarker} />
+
+## Props
+
+<ArgTypes of={ListItemStories} />

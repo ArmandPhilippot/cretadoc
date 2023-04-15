@@ -1,0 +1,35 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as LegendStories from './legend.stories';
+
+<Meta of={LegendStories} />
+
+# Legend
+
+A legend represents a caption for the controls inside a `<Fieldset />` component.
+
+<Primary />
+
+## Color
+
+The legend can have a different color than the foreground:
+
+<Canvas of={LegendStories.ColorCritical} />
+<Canvas of={LegendStories.ColorInfo} />
+<Canvas of={LegendStories.ColorInverted} />
+<Canvas of={LegendStories.ColorMuted} />
+<Canvas of={LegendStories.ColorRegular} />
+<Canvas of={LegendStories.ColorSuccess} />
+<Canvas of={LegendStories.ColorWarning} />
+
+## Size
+
+You can also control the font-size used for the legend:
+
+<Canvas of={LegendStories.SizeXS} />
+<Canvas of={LegendStories.SizeSM} />
+<Canvas of={LegendStories.SizeMD} />
+<Canvas of={LegendStories.SizeLG} />
+
+## Props
+
+<ArgTypes of={LegendStories} />

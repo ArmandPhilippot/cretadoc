@@ -1,0 +1,44 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as SelectStories from './select.stories';
+
+<Meta of={SelectStories} />
+
+# Select
+
+A select is used for collecting user provided information from a list of options.
+
+<Primary />
+
+## Single choice
+
+By default, an user can select only one option in the select menu.
+
+<Canvas of={SelectStories.SingleChoice} />
+
+## Multiple choices
+
+When using `multiple`, an user can select multiple options in the select menu.
+
+<Canvas of={SelectStories.MultipleChoices} />
+
+## States
+
+Different states are possible:
+
+- selectable (default): the user can select an option,
+- disabled: the user cannot interact with the select field,
+- disabled options: the user can interact with the select field but some options are not selectable.
+
+<Canvas of={SelectStories.IsRequired} />
+<Canvas of={SelectStories.IsDisabled} />
+<Canvas of={SelectStories.WithDisabledOptions} />
+
+## Placeholder
+
+You can provide a "_placeholder_" used as default value and not selectable by the user.
+
+<Canvas of={SelectStories.Placeholder} />
+
+## Props
+
+<ArgTypes of={SelectStories} />

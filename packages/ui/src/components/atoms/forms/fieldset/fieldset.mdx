@@ -1,0 +1,26 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as FieldsetStories from './fieldset.stories';
+
+<Meta of={FieldsetStories} />
+
+# Fieldset
+
+A fieldset is used to group several controls within a form.
+
+<Primary />
+
+## State
+
+A fieldset can be either enabled or disabled. Its state affects the fields inside.
+
+### Enabled (default)
+
+<Canvas of={FieldsetStories.Enabled} />
+
+### Disabled
+
+<Canvas of={FieldsetStories.Disabled} />
+
+## Props
+
+<ArgTypes of={FieldsetStories} />

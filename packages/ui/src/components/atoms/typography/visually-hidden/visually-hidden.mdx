@@ -1,0 +1,22 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as VisuallyHiddenStories from './visually-hidden.stories';
+
+<Meta of={VisuallyHiddenStories} />
+
+# Visually Hidden
+
+A `VisuallyHidden` component is commonly used for accessibility. It allows you to include some contents in your page without making them visible.
+
+<Primary />
+
+## Focusable
+
+Depending on what you want to hide, sometimes the content should be focusable. It is for example useful with "skip" links.
+
+<Canvas of={VisuallyHiddenStories.NotFocusable} />
+<Canvas of={VisuallyHiddenStories.Focusable} />
+<Canvas of={VisuallyHiddenStories.DeepFocusable} />
+
+## Props
+
+<ArgTypes of={VisuallyHiddenStories} />

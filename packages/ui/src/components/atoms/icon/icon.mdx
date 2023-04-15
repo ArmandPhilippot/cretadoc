@@ -1,0 +1,105 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as IconStories from './icon.stories';
+
+<Meta of={IconStories} />
+
+# Icon
+
+An `Icon` component is commonly used for accessibility. It allows you to include some contents in your page without making them visible.
+
+<Primary />
+
+## Shape
+
+An icon can have multiple shapes:
+
+### Cross
+
+<Canvas of={IconStories.Cross} />
+
+### Hamburger
+
+<Canvas of={IconStories.Hamburger} />
+
+## Size
+
+An icon can have multiple sizes:
+
+### Extra-small (xs)
+
+<Canvas of={IconStories.SizeXS} />
+
+### Small (sm)
+
+<Canvas of={IconStories.SizeSM} />
+
+### Medium (md)
+
+<Canvas of={IconStories.SizeMD} />
+
+### Large (lg)
+
+<Canvas of={IconStories.SizeLG} />
+
+### Extra-large (xl)
+
+<Canvas of={IconStories.SizeXL} />
+
+## Color
+
+An icon can have multiple colors:
+
+### Critical
+
+<Canvas of={IconStories.ColorCritical} />
+
+### Info
+
+<Canvas of={IconStories.ColorInfo} />
+
+### Inverted
+
+<Canvas of={IconStories.ColorInverted} />
+
+### Muted
+
+<Canvas of={IconStories.ColorMuted} />
+
+### Primary
+
+<Canvas of={IconStories.ColorPrimary} />
+
+### Regular (default)
+
+<Canvas of={IconStories.ColorRegular} />
+
+### Success
+
+<Canvas of={IconStories.ColorSuccess} />
+
+### Warning
+
+<Canvas of={IconStories.ColorWarning} />
+
+## Accessibility
+
+The Icon component provides some attributes to adjust the accessibility. It is up to you to define if the icon should be hidden for assistive technology or if an accessible name should be given.
+
+The accessible name can be provided with one of:
+
+- `aria-label`,
+- `aria-labelledby`,
+- `title`.
+
+You can also add a longer description with one of:
+
+- `aria-describedby`,
+- `description`.
+
+If you provide an accessible name, you should also set the role to `img`.
+
+If you think that the icon should be hidden then, you should use the `aria-hidden` attribute.
+
+## Props
+
+<ArgTypes of={IconStories} />

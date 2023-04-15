@@ -1,0 +1,54 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as HeadingStories from './heading.stories';
+
+<Meta of={HeadingStories} />
+
+# Heading
+
+A heading is used to hierarchize your contents.
+
+<Primary />
+
+## Levels
+
+The 6 levels of heading (`h1`, `h2`, ...) are supported. Note that `1` is the hightest section level and `6` is the lower section level.
+
+### H1
+
+<Canvas of={HeadingStories.H1} />
+
+### H2
+
+<Canvas of={HeadingStories.H2} />
+
+### H3
+
+<Canvas of={HeadingStories.H3} />
+
+### H4
+
+<Canvas of={HeadingStories.H4} />
+
+### H5
+
+<Canvas of={HeadingStories.H5} />
+
+### H6
+
+<Canvas of={HeadingStories.H6} />
+
+## Use a fake heading
+
+In some cases you might want to use heading styles but semantically it is not right. Then, you can use the `isFake` attribute to simulate a heading.
+
+### Regular H2
+
+<Canvas of={HeadingStories.H2} />
+
+### Fake H2
+
+<Canvas of={HeadingStories.FakeH2} />
+
+## Props
+
+<ArgTypes of={HeadingStories} />
