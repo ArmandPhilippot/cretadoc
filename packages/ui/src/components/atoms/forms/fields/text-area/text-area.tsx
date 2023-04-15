@@ -3,6 +3,7 @@ import {
   forwardRef,
   type TextareaHTMLAttributes,
 } from 'react';
+import * as styles from '../fields.css';
 
 type AllowedTextAreaProps = Omit<
   TextareaHTMLAttributes<HTMLTextAreaElement>,
@@ -33,21 +34,27 @@ export type TextAreaProps = AllowedTextAreaProps & {
 
 const TextAreaWithRef = (
   {
+    className = '',
     isDisabled = false,
     isReadOnly = false,
     isRequired = false,
     ...props
   }: TextAreaProps,
   ref: ForwardedRef<HTMLTextAreaElement>
-) => (
-  <textarea
-    {...props}
-    disabled={isDisabled}
-    readOnly={isReadOnly}
-    ref={ref}
-    required={isRequired}
-  />
-);
+) => {
+  const fieldClassName = styles.field({ isSelect: false, isTextArea: true });
+
+  return (
+    <textarea
+      {...props}
+      className={`${fieldClassName} ${className}`}
+      disabled={isDisabled}
+      readOnly={isReadOnly}
+      ref={ref}
+      required={isRequired}
+    />
+  );
+};
 
 /**
  * TextArea component.

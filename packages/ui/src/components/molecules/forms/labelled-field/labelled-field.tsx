@@ -1,12 +1,12 @@
 import type { FC, ReactElement } from 'react';
 import {
   type CheckboxProps,
-  type FieldProps,
-  type FieldType,
   Label,
   type LabelProps,
   type RadioProps,
   type SelectProps,
+  type InputProps,
+  type TextAreaProps,
 } from '../../../atoms';
 import * as styles from './labelled-field.css';
 
@@ -15,7 +15,11 @@ export type LabelledFieldProps = Omit<LabelProps, 'children' | 'htmlFor'> & {
    * The field.
    */
   field: ReactElement<
-    CheckboxProps | FieldProps<FieldType> | RadioProps | SelectProps<boolean>
+    | CheckboxProps
+    | InputProps
+    | RadioProps
+    | SelectProps<boolean>
+    | TextAreaProps
   >;
   /**
    * If true, the label is displayed after the field.

@@ -1,0 +1,86 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as InputStories from './input.stories';
+
+<Meta of={InputStories} />
+
+# Input
+
+An `Input` component allows you to receive data from the user.
+
+<Primary />
+
+## States
+
+A field can have different states.
+
+### Editable (default)
+
+<Canvas of={InputStories.IsEditable} />
+
+### Disabled
+
+<Canvas of={InputStories.IsDisabled} />
+
+### Read-only
+
+<Canvas of={InputStories.IsReadOnly} />
+
+### Required
+
+<Canvas of={InputStories.IsRequired} />
+
+## Types
+
+Many types of field are supported.
+
+### Date
+
+<Canvas of={InputStories.DateInput} />
+
+### Datetime
+
+<Canvas of={InputStories.DatetimeInput} />
+
+### Email
+
+<Canvas of={InputStories.EmailInput} />
+
+### Month
+
+<Canvas of={InputStories.MonthInput} />
+
+### Number
+
+<Canvas of={InputStories.NumberInput} />
+
+### Password
+
+<Canvas of={InputStories.PasswordInput} />
+
+### Search
+
+<Canvas of={InputStories.SearchInput} />
+
+### Tel
+
+<Canvas of={InputStories.TelInput} />
+
+### Text
+
+<Canvas of={InputStories.TextInput} />
+
+### Time
+
+<Canvas of={InputStories.TimeInput} />
+
+### Url
+
+<Canvas of={InputStories.UrlInput} />
+
+### Week
+
+<Canvas of={InputStories.WeekInput} />
+
+## Props
+
+<ArgTypes of={InputStories} />

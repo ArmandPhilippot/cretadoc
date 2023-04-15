@@ -1,5 +1,5 @@
 import type { FC, OptionHTMLAttributes, SelectHTMLAttributes } from 'react';
-import * as styles from './select.css';
+import * as styles from '../fields.css';
 
 type SelectItemProps = OptionHTMLAttributes<HTMLOptionElement> & {
   /**
@@ -81,7 +81,7 @@ export const Select = <M extends boolean = false>({
   value,
   ...props
 }: SelectProps<M>) => {
-  const selectClassName = styles.select;
+  const selectClassName = styles.field({ isTextArea: false });
   const firstOption: SelectOption = {
     label: placeholder ?? '',
     value: '',

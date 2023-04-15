@@ -4,7 +4,7 @@ import { Select, type SelectProps } from './select';
 
 const meta = {
   component: Select,
-  title: 'Components/Atoms/Forms/Select',
+  title: 'Components/Atoms/Forms/Fields/Select',
   excludeStories: /Controlled.*$/,
 } satisfies Meta<typeof Select>;
 

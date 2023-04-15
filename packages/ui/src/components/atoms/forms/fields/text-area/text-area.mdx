@@ -1,0 +1,34 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as TextAreaStories from './text-area.stories';
+
+<Meta of={TextAreaStories} />
+
+# TextArea
+
+A `TextArea` component allows you to receive data from the user.
+
+<Primary />
+
+## States
+
+A field can have different states.
+
+### Editable (default)
+
+<Canvas of={TextAreaStories.IsEditable} />
+
+### Disabled
+
+<Canvas of={TextAreaStories.IsDisabled} />
+
+### Read-only
+
+<Canvas of={TextAreaStories.IsReadOnly} />
+
+### Required
+
+<Canvas of={TextAreaStories.IsRequired} />
+
+## Props
+
+<ArgTypes of={TextAreaStories} />

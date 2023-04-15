@@ -1,13 +1,13 @@
 import { render, screen as screenTL } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { Field } from '../field/field';
+import { Input } from '../fields';
 import { Fieldset } from './fieldset';
 
 describe('fieldset', () => {
   it('renders a group of form elements', () => {
     render(
       <Fieldset>
-        <Field type="text" />
+        <Input type="text" />
       </Fieldset>
     );
     expect(screenTL.getByRole('group')).toBeInTheDocument();
@@ -17,7 +17,7 @@ describe('fieldset', () => {
   it('renders a disabled group of form elements', () => {
     render(
       <Fieldset isDisabled>
-        <Field type="text" />
+        <Input type="text" />
       </Fieldset>
     );
     expect(screenTL.getByRole('group')).toBeDisabled();

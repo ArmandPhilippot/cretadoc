@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Field } from '../field/field';
+import { Input } from '../fields';
 import { Fieldset, type FieldsetProps } from './fieldset';
 
 const meta = {
@@ -17,7 +17,7 @@ export const Default: Story = {
 
 const FieldsetWithFields = (args: FieldsetProps) => (
   <Fieldset {...args}>
-    <Field id="field" name="field" type="text" />
+    <Input id="field" name="field" type="text" />
   </Fieldset>
 );
 

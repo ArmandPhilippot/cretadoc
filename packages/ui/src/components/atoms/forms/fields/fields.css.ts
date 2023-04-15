@@ -20,19 +20,24 @@ export const field = recipe({
       background: contract.color.background.muted,
       color: contract.color.foreground.onMuted,
     },
-    ':read-only': {
-      background: contract.color.background.muted,
-      color: contract.color.foreground.onMuted,
-    },
-    ':focus-visible': {
-      outline: 'none',
-      borderColor: contract.color.primary.base,
-    },
     '::placeholder': {
       color: contract.color.foreground.muted,
     },
   },
   variants: {
+    isSelect: {
+      false: {
+        ':focus-visible': {
+          outline: 'none',
+          borderColor: contract.color.primary.base,
+        },
+        ':read-only': {
+          background: contract.color.background.muted,
+          color: contract.color.foreground.onMuted,
+        },
+      },
+      true: {},
+    },
     isTextArea: {
       false: {},
       true: {

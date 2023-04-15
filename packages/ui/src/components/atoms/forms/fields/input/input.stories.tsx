@@ -1,35 +1,32 @@
 import { useArgs } from '@storybook/client-api';
 import type { Meta, StoryObj } from '@storybook/react';
 import { type ChangeEvent, useCallback } from 'react';
-import { Field, type FieldType, type FieldProps } from './field';
+import { Input, type InputProps } from './input';
 
 const meta = {
-  component: Field,
-  title: 'Components/Atoms/Forms/Field',
+  component: Input,
+  title: 'Components/Atoms/Forms/Fields/Input',
   excludeStories: /Controlled.*$/,
-} satisfies Meta<typeof Field>;
+} satisfies Meta<typeof Input>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const ControlledField = <T extends FieldType>({
-  value,
-  ...args
-}: FieldProps<T>) => {
-  const [_, updateArgs] = useArgs<FieldProps<T>>();
+export const ControlledInput = ({ value, ...args }: InputProps) => {
+  const [_, updateArgs] = useArgs<InputProps>();
 
   const handleChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    (e: ChangeEvent<HTMLInputElement>) => {
       updateArgs({ ...args, value: e.target.value });
     },
     [args, updateArgs]
   );
 
-  return <Field {...args} onChange={handleChange} value={value} />;
+  return <Input {...args} onChange={handleChange} value={value} />;
 };
 
-const FieldTemplate: Story = {
+const InputTemplate: Story = {
   args: {
     id: 'default',
     isDisabled: false,
@@ -39,24 +36,24 @@ const FieldTemplate: Story = {
     type: 'text',
     value: '',
   },
-  render: ControlledField,
+  render: ControlledInput,
 };
 
 export const IsEditable: Story = {
-  ...FieldTemplate,
+  ...InputTemplate,
   name: 'State: Editable',
   args: {
-    ...FieldTemplate.args,
+    ...InputTemplate.args,
     id: 'disabled',
     name: 'disabled',
   },
 };
 
 export const IsDisabled: Story = {
-  ...FieldTemplate,
+  ...InputTemplate,
   name: 'State: Disabled',
   args: {
-    ...FieldTemplate.args,
+    ...InputTemplate.args,
     id: 'disabled',
     isDisabled: true,
     name: 'disabled',
@@ -64,10 +61,10 @@ export const IsDisabled: Story = {
 };
 
 export const IsReadOnly: Story = {
-  ...FieldTemplate,
+  ...InputTemplate,
   name: 'State: Readonly',
   args: {
-    ...FieldTemplate.args,
+    ...InputTemplate.args,
     id: 'readonly',
     isReadOnly: true,
     name: 'readonly',
@@ -75,153 +72,142 @@ export const IsReadOnly: Story = {
 };
 
 export const IsRequired: Story = {
-  ...FieldTemplate,
+  ...InputTemplate,
   name: 'State: Required',
   args: {
-    ...FieldTemplate.args,
+    ...InputTemplate.args,
     id: 'required',
     isRequired: true,
     name: 'required',
   },
 };
 
-export const DateField: Story = {
-  ...FieldTemplate,
+export const DateInput: Story = {
+  ...InputTemplate,
   name: 'Type: Date',
   args: {
-    ...FieldTemplate.args,
+    ...InputTemplate.args,
     id: 'date',
     name: 'date',
     type: 'date',
   },
 };
 
-export const DatetimeField: Story = {
-  ...FieldTemplate,
+export const DatetimeInput: Story = {
+  ...InputTemplate,
   name: 'Type: Datetime',
   args: {
-    ...FieldTemplate.args,
+    ...InputTemplate.args,
     id: 'datetime',
     name: 'datetime',
     type: 'datetime-local',
   },
 };
 
-export const EmailField: Story = {
-  ...FieldTemplate,
+export const EmailInput: Story = {
+  ...InputTemplate,
   name: 'Type: Email',
   args: {
-    ...FieldTemplate.args,
+    ...InputTemplate.args,
     id: 'email',
     name: 'email',
     type: 'email',
   },
 };
 
-export const MonthField: Story = {
-  ...FieldTemplate,
+export const MonthInput: Story = {
+  ...InputTemplate,
   name: 'Type: Month',
   args: {
-    ...FieldTemplate.args,
+    ...InputTemplate.args,
     id: 'month',
     name: 'month',
     type: 'month',
   },
 };
 
-export const NumberField: Story = {
-  ...FieldTemplate,
+export const NumberInput: Story = {
+  ...InputTemplate,
   name: 'Type: Number',
   args: {
-    ...FieldTemplate.args,
+    ...InputTemplate.args,
     id: 'number',
     name: 'number',
     type: 'number',
   },
 };
 
-export const PasswordField: Story = {
-  ...FieldTemplate,
+export const PasswordInput: Story = {
+  ...InputTemplate,
   name: 'Type: Password',
   args: {
-    ...FieldTemplate.args,
+    ...InputTemplate.args,
     id: 'password',
     name: 'password',
     type: 'password',
   },
 };
 
-export const SearchField: Story = {
-  ...FieldTemplate,
+export const SearchInput: Story = {
+  ...InputTemplate,
   name: 'Type: Search',
   args: {
-    ...FieldTemplate.args,
+    ...InputTemplate.args,
     id: 'search',
     name: 'search',
     type: 'search',
   },
 };
 
-export const TelField: Story = {
-  ...FieldTemplate,
+export const TelInput: Story = {
+  ...InputTemplate,
   name: 'Type: Tel',
   args: {
-    ...FieldTemplate.args,
+    ...InputTemplate.args,
     id: 'tel',
     name: 'tel',
     type: 'tel',
   },
 };
 
-export const TextField: Story = {
-  ...FieldTemplate,
+export const TextInput: Story = {
+  ...InputTemplate,
   name: 'Type: Text',
   args: {
-    ...FieldTemplate.args,
+    ...InputTemplate.args,
     id: 'text',
     name: 'text',
     type: 'text',
   },
 };
 
-export const TextareaField: Story = {
-  ...FieldTemplate,
-  name: 'Type: Textarea',
-  args: {
-    ...FieldTemplate.args,
-    id: 'textarea',
-    name: 'textarea',
-    type: 'textarea',
-  },
-};
-
-export const TimeField: Story = {
-  ...FieldTemplate,
+export const TimeInput: Story = {
+  ...InputTemplate,
   name: 'Type: Time',
   args: {
-    ...FieldTemplate.args,
+    ...InputTemplate.args,
     id: 'time',
     name: 'time',
     type: 'time',
   },
 };
 
-export const UrlField: Story = {
-  ...FieldTemplate,
+export const UrlInput: Story = {
+  ...InputTemplate,
   name: 'Type: Url',
   args: {
-    ...FieldTemplate.args,
+    ...InputTemplate.args,
     id: 'url',
     name: 'url',
     type: 'url',
   },
 };
 
-export const WeekField: Story = {
-  ...FieldTemplate,
+export const WeekInput: Story = {
+  ...InputTemplate,
   name: 'Type: Week',
   args: {
-    ...FieldTemplate.args,
+    ...InputTemplate.args,
     id: 'week',
     name: 'week',
     type: 'week',

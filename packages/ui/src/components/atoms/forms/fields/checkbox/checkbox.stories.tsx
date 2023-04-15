@@ -1,20 +1,20 @@
 import { useArgs } from '@storybook/client-api';
 import type { Meta, StoryObj } from '@storybook/react';
 import { type ChangeEvent, useCallback } from 'react';
-import { Radio, type RadioProps } from './radio';
+import { Checkbox, type CheckboxProps } from './checkbox';
 
 const meta = {
-  component: Radio,
-  title: 'Components/Atoms/Forms/Radio',
+  component: Checkbox,
+  title: 'Components/Atoms/Forms/Fields/Checkbox',
   excludeStories: /Controlled.*$/,
-} satisfies Meta<typeof Radio>;
+} satisfies Meta<typeof Checkbox>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const ControlledRadio = ({ isChecked, ...args }: RadioProps) => {
-  const [_, updateArgs] = useArgs<RadioProps>();
+export const ControlledCheckbox = ({ isChecked, ...args }: CheckboxProps) => {
+  const [_, updateArgs] = useArgs<CheckboxProps>();
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -23,10 +23,10 @@ export const ControlledRadio = ({ isChecked, ...args }: RadioProps) => {
     [args, updateArgs]
   );
 
-  return <Radio {...args} isChecked={isChecked} onChange={handleChange} />;
+  return <Checkbox {...args} isChecked={isChecked} onChange={handleChange} />;
 };
 
-const RadioTemplate: Story = {
+const CheckboxTemplate: Story = {
   args: {
     id: 'default',
     isChecked: false,
@@ -34,24 +34,24 @@ const RadioTemplate: Story = {
     isRequired: false,
     name: 'default',
   },
-  render: ControlledRadio,
+  render: ControlledCheckbox,
 };
 
 export const IsUnchecked: Story = {
-  ...RadioTemplate,
+  ...CheckboxTemplate,
   name: 'State: Unchecked',
   args: {
-    ...RadioTemplate.args,
+    ...CheckboxTemplate.args,
     id: 'unchecked',
     name: 'unchecked',
   },
 };
 
 export const IsChecked: Story = {
-  ...RadioTemplate,
+  ...CheckboxTemplate,
   name: 'State: Checked',
   args: {
-    ...RadioTemplate.args,
+    ...CheckboxTemplate.args,
     id: 'checked',
     isChecked: true,
     name: 'checked',
@@ -59,10 +59,10 @@ export const IsChecked: Story = {
 };
 
 export const IsDisabled: Story = {
-  ...RadioTemplate,
+  ...CheckboxTemplate,
   name: 'State: Disabled',
   args: {
-    ...RadioTemplate.args,
+    ...CheckboxTemplate.args,
     id: 'disabled',
     isDisabled: true,
     name: 'disabled',
@@ -70,10 +70,10 @@ export const IsDisabled: Story = {
 };
 
 export const IsRequired: Story = {
-  ...RadioTemplate,
+  ...CheckboxTemplate,
   name: 'State: Required',
   args: {
-    ...RadioTemplate.args,
+    ...CheckboxTemplate.args,
     id: 'required',
     isRequired: true,
     name: 'required',
