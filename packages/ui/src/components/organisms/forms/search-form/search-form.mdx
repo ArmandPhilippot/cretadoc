@@ -1,0 +1,48 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as SearchFormStories from './search-form.stories';
+
+<Meta of={SearchFormStories} />
+
+# Search Form
+
+A search form is used to perform a research across the website contents.
+
+<Primary />
+
+## Layout
+
+A search form can have different layout depending on its position in your design.
+
+### Column
+
+<Canvas of={SearchFormStories.LayoutColumn} />
+
+### Row
+
+<Canvas of={SearchFormStories.LayoutRow} />
+
+### Spacing
+
+If needed, you can opt out from the spacing between the labelled field and the button. It can be useful if you choose to use a custom button.
+
+<Canvas of={SearchFormStories.WithoutSpacing} />
+
+## Contents
+
+You are free to decide the kind of button or label you want in your search form.
+
+### Button
+
+For example, you could use an icon instead of a text:
+
+<Canvas of={SearchFormStories.IconAsButton} />
+
+### Label
+
+You could use a visually hidden label if it fits better in your design:
+
+<Canvas of={SearchFormStories.VisuallyHiddenLabel} />
+
+## Props
+
+<ArgTypes of={SearchFormStories} />
