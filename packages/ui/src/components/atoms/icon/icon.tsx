@@ -7,13 +7,13 @@ import type {
 } from '../../../themes/types/tokens';
 import { getColorFromTokenKey } from '../../utils/helpers';
 import * as styles from './icon.css';
-import { CrossSVGPaths, HamburgerSVGPaths } from './svg-paths';
+import { CrossSVGPaths, HamburgerSVGPaths, SearchSVGPaths } from './svg-paths';
 
 export type IconColor = keyof ColorContextTokens | 'primary';
 
 export type IconSize = keyof IconSizeTokens;
 
-export type IconShape = 'cross' | 'hamburger';
+export type IconShape = 'cross' | 'hamburger' | 'search';
 
 type IconPathsProps = {
   shape: IconShape;
@@ -24,8 +24,10 @@ const IconPaths: FC<IconPathsProps> = ({ shape }) => {
     case 'cross':
       return <CrossSVGPaths />;
     case 'hamburger':
-    default:
       return <HamburgerSVGPaths />;
+    case 'search':
+    default:
+      return <SearchSVGPaths />;
   }
 };
 

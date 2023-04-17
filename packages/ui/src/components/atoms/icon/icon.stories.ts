@@ -4,6 +4,21 @@ import { Icon } from './icon';
 const meta = {
   component: Icon,
   title: 'Components/Atoms/Icons',
+  argTypes: {
+    color: {
+      control: 'select',
+      options: [
+        'critical',
+        'info',
+        'inverted',
+        'muted',
+        'primary',
+        'regular',
+        'success',
+        'warning',
+      ],
+    },
+  },
 } satisfies Meta<typeof Icon>;
 
 export default meta;
@@ -21,6 +36,13 @@ export const Hamburger: Story = {
   name: 'Shape: Hamburger',
   args: {
     shape: 'hamburger',
+  },
+};
+
+export const Search: Story = {
+  name: 'Shape: Search',
+  args: {
+    shape: 'search',
   },
 };
 

@@ -13,6 +13,11 @@ describe('icon', () => {
     expect(container.querySelector('svg')).toBeInTheDocument();
   });
 
+  it('renders a search icon', () => {
+    const { container } = render(<Icon shape="search" />);
+    expect(container.querySelector('svg')).toBeInTheDocument();
+  });
+
   it('can have an img role', () => {
     // eslint-disable-next-line jsx-a11y/prefer-tag-over-role -- Valid usage.
     render(<Icon shape="hamburger" role="img" />);

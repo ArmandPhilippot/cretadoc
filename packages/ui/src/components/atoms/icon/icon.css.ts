@@ -19,6 +19,9 @@ export const icon = recipe({
         stroke: iconColor,
         strokeWidth: 2,
       },
+      search: {
+        fill: iconColor,
+      },
     },
   },
 });
