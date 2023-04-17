@@ -9,6 +9,7 @@ import {
   font,
   icon,
   shadow,
+  size,
   spacing,
 } from './tokens';
 
@@ -19,6 +20,7 @@ const themeContract: ReplaceTypesIn<ThemeTokens, string> = {
   font,
   icon,
   shadow,
+  size,
   spacing,
 };
 

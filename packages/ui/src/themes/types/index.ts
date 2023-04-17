@@ -5,6 +5,7 @@ import type {
   FontTokens,
   IconTokens,
   ShadowTokens,
+  SizeTokens,
   SpacingTokens,
 } from './tokens';
 
@@ -35,6 +36,10 @@ export type ThemeTokens = {
    * The design tokens to define the shadows.
    */
   shadow: ShadowTokens;
+  /**
+   * The design tokens to define the sizes.
+   */
+  size: SizeTokens;
   /**
    * The design tokens to define the spacings.
    */

@@ -5,6 +5,7 @@ import { darkColor, lightColor } from './color';
 import { font } from './font';
 import { icon } from './icon';
 import { shadow } from './shadow';
+import { size } from './size';
 import { spacing } from './spacing';
 
 const cretadocAuthor: ThemeAuthor = {
@@ -19,6 +20,7 @@ const cretadocLightTokens: ThemeTokens = {
   font,
   icon,
   shadow,
+  size,
   spacing,
 };
 
@@ -37,6 +39,7 @@ const cretadocDarkTokens: ThemeTokens = {
   font,
   icon,
   shadow,
+  size,
   spacing,
 };
 

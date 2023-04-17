@@ -4,4 +4,5 @@ export * from './color';
 export * from './font';
 export * from './icon';
 export * from './shadow';
+export * from './size';
 export * from './spacing';
