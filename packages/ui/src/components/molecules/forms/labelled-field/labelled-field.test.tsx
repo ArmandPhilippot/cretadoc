@@ -77,4 +77,19 @@ describe('labelled-field', () => {
     );
     expect(screenTL.getByLabelText(label)).toBeInTheDocument();
   });
+
+  it('renders a visually hidden label', () => {
+    const label = 'aliquid';
+    const type = 'search';
+    render(
+      <LabelledField
+        field={
+          <Input id="input" name="input" onChange={handleChange} type={type} />
+        }
+        isLabelHidden
+        label={label}
+      />
+    );
+    expect(screenTL.getByRole('searchbox')).toHaveAccessibleName(label);
+  });
 });

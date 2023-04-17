@@ -255,3 +255,11 @@ export const LayoutReversedRow: Story = {
     isReversedOrder: true,
   },
 };
+
+export const IsVisuallyHidden: Story = {
+  name: 'Visually hidden label',
+  args: {
+    ...Default.args,
+    isLabelHidden: true,
+  },
+};

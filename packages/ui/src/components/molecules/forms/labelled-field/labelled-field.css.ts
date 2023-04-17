@@ -4,19 +4,24 @@ import { contract } from '../../../../themes';
 export const wrapper = recipe({
   base: {
     display: 'flex',
-    gap: contract.spacing.xxs,
     width: 'fit-content',
   },
   variants: {
+    isLabelHidden: {
+      false: {
+        gap: contract.spacing.xxs,
+      },
+      true: {},
+    },
+    isReversedOrder: {
+      false: {},
+      true: {},
+    },
     layout: {
       column: {},
       row: {
         alignItems: 'center',
       },
-    },
-    isReversedOrder: {
-      false: {},
-      true: {},
     },
   },
   compoundVariants: [
