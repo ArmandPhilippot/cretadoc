@@ -2,14 +2,19 @@ import {
   type AnchorHTMLAttributes,
   type ForwardRefRenderFunction,
   forwardRef,
+  type ReactNode,
 } from 'react';
 import { UIContext, useComponentsFrom } from '../../context';
 import * as styles from './link.css';
 
 export type LinkProps = Omit<
   AnchorHTMLAttributes<HTMLAnchorElement>,
-  'href'
+  'children' | 'href'
 > & {
+  /**
+   * The link anchor.
+   */
+  children: ReactNode;
   /**
    * The link target.
    */
