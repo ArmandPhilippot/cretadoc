@@ -54,11 +54,9 @@ export const list = recipe({
   ],
 });
 
-globalStyle(
-  `${list({ isInline: true }).split(' ')[1] ?? ''} ${
-    list({ isInline: false }).split(' ')[1] ?? ''
-  }`,
-  {
-    paddingInlineStart: 0,
-  }
-);
+const inlinedList = list({ isInline: true }).split(' ')[1] ?? 'should-exist';
+const stackedList = list({ isInline: false }).split(' ')[1] ?? 'should-exit';
+
+globalStyle(`${inlinedList} ${stackedList}`, {
+  paddingInlineStart: 0,
+});

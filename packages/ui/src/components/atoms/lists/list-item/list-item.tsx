@@ -107,8 +107,9 @@ export const ListItem: FC<ListItemProps> = ({
   isBordered = false,
   isInline = false,
   marker,
-  paddingBlock = 'xxs',
-  paddingInline = 'xs',
+  paddingBlock,
+  paddingInline,
+  style,
   ...props
 }) => {
   const itemClassName = styles.item({
@@ -121,15 +122,17 @@ export const ListItem: FC<ListItemProps> = ({
     [styles.borderColor]: getColorFromTokenKey(borderColor),
     [styles.borderSize]: contract.border.size[borderSize],
     [styles.marker]: marker ?? '',
-    [styles.paddingBlock]: contract.spacing[paddingBlock],
-    [styles.paddingInline]: contract.spacing[paddingInline],
+    [styles.paddingBlock]: paddingBlock ? contract.spacing[paddingBlock] : '',
+    [styles.paddingInline]: paddingInline
+      ? contract.spacing[paddingInline]
+      : '',
   });
 
   return (
     <li
       {...props}
       className={`${itemClassName} ${className}`}
-      style={itemStyles}
+      style={{ ...itemStyles, ...style }}
     >
       {children}
     </li>

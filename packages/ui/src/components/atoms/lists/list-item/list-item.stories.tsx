@@ -38,6 +38,8 @@ export const Border: Story = {
   args: {
     ...ListItemTemplate.args,
     isBordered: true,
+    paddingBlock: 'xxs',
+    paddingInline: 'xs',
   },
 };
 

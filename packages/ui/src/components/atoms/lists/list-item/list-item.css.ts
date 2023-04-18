@@ -68,9 +68,7 @@ export const item = recipe({
       },
     },
     isBordered: {
-      false: {
-        marginBlockEnd: contract.spacing.xxs,
-      },
+      false: {},
       true: {
         paddingBlock,
         paddingInline,
@@ -86,6 +84,19 @@ export const item = recipe({
       variants: { hasMarker: true, isBordered: true },
       style: {
         listStylePosition: 'inside',
+      },
+    },
+    {
+      variants: {
+        isBordered: false,
+        isInline: false,
+      },
+      style: {
+        selectors: {
+          '&:not(:last-child)': {
+            marginBlockEnd: contract.spacing.xxs,
+          },
+        },
       },
     },
     {
