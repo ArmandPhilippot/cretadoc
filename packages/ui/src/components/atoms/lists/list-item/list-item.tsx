@@ -15,7 +15,7 @@ export type ListItemBorderPosition =
   | 'block'
   | 'inline';
 
-export type ListItemBorderColor = keyof ColorContextTokens;
+export type ListItemBorderColor = keyof ColorContextTokens | 'primary';
 
 export type ListItemBorderSize = keyof BorderSizeTokens;
 

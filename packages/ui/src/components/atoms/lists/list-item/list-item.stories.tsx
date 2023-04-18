@@ -133,6 +133,15 @@ export const BorderMuted: Story = {
   },
 };
 
+export const BorderPrimary: Story = {
+  ...ListItemTemplate,
+  name: 'BorderColor: Primary',
+  args: {
+    ...Border.args,
+    borderColor: 'primary',
+  },
+};
+
 export const BorderRegular: Story = {
   ...ListItemTemplate,
   name: 'BorderColor: Regular',
