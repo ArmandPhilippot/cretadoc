@@ -5,22 +5,33 @@ import type {
   ColorContextTokens,
   IconSizeTokens,
 } from '../../../themes/types/tokens';
+import type { Position } from '../../types';
 import { getColorFromTokenKey } from '../../utils/helpers';
 import * as styles from './icon.css';
-import { CrossSVGPaths, HamburgerSVGPaths, SearchSVGPaths } from './svg-paths';
+import {
+  AngleSVGPaths,
+  CrossSVGPaths,
+  HamburgerSVGPaths,
+  SearchSVGPaths,
+} from './svg-paths';
 
 export type IconColor = keyof ColorContextTokens | 'primary';
 
+export type IconOrientation = Exclude<Position, 'center'>;
+
 export type IconSize = keyof IconSizeTokens;
 
-export type IconShape = 'cross' | 'hamburger' | 'search';
+export type IconShape = 'angle' | 'cross' | 'hamburger' | 'search';
 
 type IconPathsProps = {
+  orientation?: IconOrientation;
   shape: IconShape;
 };
 
-const IconPaths: FC<IconPathsProps> = ({ shape }) => {
+const IconPaths: FC<IconPathsProps> = ({ orientation, shape }) => {
   switch (shape) {
+    case 'angle':
+      return <AngleSVGPaths orientation={orientation ?? 'bottom'} />;
     case 'cross':
       return <CrossSVGPaths />;
     case 'hamburger':
@@ -48,6 +59,10 @@ export type IconProps = Omit<
    */
   description?: string;
   /**
+   * The icon orientation. Only used with some shapes (like `angle`).
+   */
+  orientation?: IconOrientation;
+  /**
    * The icon shape.
    */
   shape: IconShape;
@@ -70,7 +85,7 @@ export const Icon: FC<IconProps> = ({
   className = '',
   color = 'regular',
   description,
-  direction,
+  orientation,
   size = 'md',
   shape,
   style,
@@ -82,7 +97,9 @@ export const Icon: FC<IconProps> = ({
     [styles.iconSize]: contract.icon.size[size],
   });
 
-  const iconClassName = styles.icon({ shape });
+  const iconClassName = styles.icon({
+    shape: shape.startsWith('angle') ? 'angle' : shape,
+  });
 
   return (
     <svg
@@ -94,7 +111,7 @@ export const Icon: FC<IconProps> = ({
     >
       {title !== undefined && <title>{title}</title>}
       {description !== undefined && <desc>{description}</desc>}
-      <IconPaths shape={shape} />
+      <IconPaths orientation={orientation} shape={shape} />
     </svg>
   );
 };

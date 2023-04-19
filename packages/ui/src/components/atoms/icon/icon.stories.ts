@@ -25,6 +25,38 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
+export const AngleBottom: Story = {
+  name: 'Shape: Angle bottom',
+  args: {
+    orientation: 'bottom',
+    shape: 'angle',
+  },
+};
+
+export const AngleLeft: Story = {
+  name: 'Shape: Angle left',
+  args: {
+    orientation: 'left',
+    shape: 'angle',
+  },
+};
+
+export const AngleRight: Story = {
+  name: 'Shape: Angle right',
+  args: {
+    orientation: 'right',
+    shape: 'angle',
+  },
+};
+
+export const AngleTop: Story = {
+  name: 'Shape: Angle top',
+  args: {
+    orientation: 'top',
+    shape: 'angle',
+  },
+};
+
 export const Cross: Story = {
   name: 'Shape: Cross',
   args: {

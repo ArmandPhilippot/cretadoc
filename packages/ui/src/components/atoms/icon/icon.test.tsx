@@ -3,6 +3,26 @@ import { describe, expect, it } from 'vitest';
 import { Icon } from './icon';
 
 describe('icon', () => {
+  it('renders an angle icon', () => {
+    const { container } = render(<Icon shape="angle" />);
+    expect(container.querySelector('svg')).toBeInTheDocument();
+  });
+
+  it('renders a left oriented angle icon', () => {
+    const { container } = render(<Icon orientation="left" shape="angle" />);
+    expect(container.querySelector('svg')).toBeInTheDocument();
+  });
+
+  it('renders a right oriented angle icon', () => {
+    const { container } = render(<Icon orientation="right" shape="angle" />);
+    expect(container.querySelector('svg')).toBeInTheDocument();
+  });
+
+  it('renders a top oriented angle icon', () => {
+    const { container } = render(<Icon orientation="top" shape="angle" />);
+    expect(container.querySelector('svg')).toBeInTheDocument();
+  });
+
   it('renders a cross svg icon', () => {
     const { container } = render(<Icon shape="cross" />);
     expect(container.querySelector('svg')).toBeInTheDocument();

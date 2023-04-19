@@ -11,6 +11,9 @@ export const icon = recipe({
   },
   variants: {
     shape: {
+      angle: {
+        fill: iconColor,
+      },
       cross: {
         stroke: iconColor,
         strokeWidth: 2,
