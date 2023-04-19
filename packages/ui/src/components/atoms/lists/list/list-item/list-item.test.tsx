@@ -66,4 +66,18 @@ describe('list-item', () => {
     expect(item).toHaveTextContent(body);
     expect(item).toHaveClass(styles.item({ isBordered: true }));
   });
+
+  it('renders a list item with padding', () => {
+    const body = 'blanditiis';
+
+    render(
+      <ListItem paddingBlock="lg" paddingInline="xs">
+        {body}
+      </ListItem>
+    );
+
+    const item = screenTL.getByRole('listitem');
+
+    expect(item).toHaveTextContent(body);
+  });
 });

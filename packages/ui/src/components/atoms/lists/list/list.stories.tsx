@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ListItem } from '../list-item';
 import { List } from './list';
+import { ListItem } from './list-item';
 
 const meta = {
   component: List,
@@ -100,5 +100,30 @@ export const ListInInlineList: Story = {
       </ListItem>,
       <ListItem key="item-3">Item 3</ListItem>,
     ],
+  },
+};
+
+export const WithBorderedItems: Story = {
+  args: {
+    ...Default.args,
+    children: [
+      <ListItem isBordered key="item-1" paddingBlock="xs" paddingInline="xxs">
+        Item 1
+      </ListItem>,
+      <ListItem isBordered key="item-2" paddingBlock="xs" paddingInline="xxs">
+        Item 2
+      </ListItem>,
+      <ListItem isBordered key="item-3" paddingBlock="xs" paddingInline="xxs">
+        Item 3
+      </ListItem>,
+    ],
+    hasMarker: false,
+  },
+};
+
+export const InlineWithBorderedItems: Story = {
+  args: {
+    ...WithBorderedItems.args,
+    isInline: true,
   },
 };

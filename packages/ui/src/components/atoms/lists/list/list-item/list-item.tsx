@@ -1,13 +1,13 @@
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import type { FC, LiHTMLAttributes } from 'react';
-import { contract } from '../../../../themes';
+import { contract } from '../../../../../themes';
 import type {
   BorderSizeTokens,
   ColorContextTokens,
   SpacingTokens,
-} from '../../../../themes/types/tokens';
-import type { Position } from '../../../types';
-import { getColorFromTokenKey } from '../../../utils/helpers';
+} from '../../../../../themes/types/tokens';
+import type { Position } from '../../../../types';
+import { getColorFromTokenKey } from '../../../../utils/helpers';
 import * as styles from './list-item.css';
 
 export type ListItemBorderPosition =
@@ -51,12 +51,6 @@ export type ListItemProps = LiHTMLAttributes<HTMLLIElement> & {
    * @default false
    */
   isBordered?: boolean;
-  /**
-   * Is the list item in an inlined list?
-   *
-   * @default false
-   */
-  isInline?: boolean;
   /**
    * Define the marker to use when `hasMarker` is set. You can also use a
    * keyword predefined by `list-style-type`.
@@ -105,7 +99,6 @@ export const ListItem: FC<ListItemProps> = ({
   className = '',
   hasMarker = true,
   isBordered = false,
-  isInline = false,
   marker,
   paddingBlock,
   paddingInline,
@@ -116,7 +109,6 @@ export const ListItem: FC<ListItemProps> = ({
     border: getBordersStyles({ border, isBordered }),
     hasMarker,
     isBordered,
-    isInline,
   });
   const itemStyles = assignInlineVars({
     [styles.borderColor]: getColorFromTokenKey(borderColor),

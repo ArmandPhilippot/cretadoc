@@ -1,7 +1,7 @@
 import { render, screen as screenTL } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { ListItem } from '../list-item';
 import { List } from './list';
+import { ListItem } from './list-item';
 
 describe('list', () => {
   it('renders an unordered list', () => {

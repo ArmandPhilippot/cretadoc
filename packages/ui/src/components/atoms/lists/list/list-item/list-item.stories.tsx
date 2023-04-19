@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { List } from '../list';
 import { ListItem, type ListItemProps } from './list-item';
 
 const meta = {
   component: ListItem,
-  title: 'Components/Atoms/Lists/ListItem',
+  title: 'Components/Atoms/Lists/List/Item',
 } satisfies Meta<typeof ListItem>;
 
 export default meta;
@@ -11,9 +12,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const ListItemInList = ({ isBordered, ...args }: ListItemProps) => (
-  <ul style={isBordered ? { padding: 0 } : {}}>
+  <List>
     <ListItem {...args} isBordered={isBordered} />
-  </ul>
+  </List>
 );
 
 const ListItemTemplate: Story = {
