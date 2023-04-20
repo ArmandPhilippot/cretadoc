@@ -48,6 +48,14 @@ export const Nested: Story = {
         <List isOrdered>
           <ListItem>Nested item 1</ListItem>
           <ListItem>Nested item 2</ListItem>
+          <ListItem>
+            Nested item 3
+            <List>
+              <ListItem>Deeper item 1</ListItem>
+              <ListItem>Deeper item 2</ListItem>
+              <ListItem>Deeper item 3</ListItem>
+            </List>
+          </ListItem>
         </List>
       </ListItem>,
       <ListItem key="item-3">Item 3</ListItem>,
@@ -118,6 +126,7 @@ export const WithBorderedItems: Story = {
       </ListItem>,
     ],
     hasMarker: false,
+    spacing: null,
   },
 };
 
@@ -125,5 +134,6 @@ export const InlineWithBorderedItems: Story = {
   args: {
     ...WithBorderedItems.args,
     isInline: true,
+    spacing: null,
   },
 };

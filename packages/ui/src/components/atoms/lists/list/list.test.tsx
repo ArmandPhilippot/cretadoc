@@ -16,7 +16,7 @@ describe('list', () => {
     expect(screenTL.getByRole('list')).toBeInTheDocument();
   });
 
-  it('renders a list with a custom spacing', () => {
+  it('renders a list with a custom item spacing', () => {
     const items = [<ListItem key="aut">aut</ListItem>];
     render(<List spacing="xl">{items}</List>);
     expect(screenTL.getByRole('list')).toBeInTheDocument();

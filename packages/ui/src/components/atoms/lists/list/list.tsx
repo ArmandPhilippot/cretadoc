@@ -1,3 +1,4 @@
+import type { Nullable } from '@cretadoc/utils';
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import type { HTMLAttributes, OlHTMLAttributes, FC } from 'react';
 import { contract } from '../../../../themes';
@@ -33,9 +34,9 @@ export type ListProps<T extends boolean> = ResolveListProps<T> & {
   /**
    * Define the size of the spacing between the list items.
    *
-   * @default undefined
+   * @default 'xxs'
    */
-  spacing?: keyof SpacingTokens;
+  spacing?: Nullable<keyof SpacingTokens>;
 };
 
 const OrderedList: FC<OrderedListProps> = (props) => <ol {...props} />;
@@ -50,32 +51,23 @@ export const List = <T extends boolean>({
   hasMarker = true,
   isInline = false,
   isOrdered,
-  spacing,
+  spacing = 'xxs',
   style,
   ...props
 }: ListProps<T>) => {
+  const ListComponent = isOrdered ? OrderedList : UnorderedList;
   const listClassName = styles.list({ hasMarker, isInline });
-  const listStyles = spacing
-    ? assignInlineVars({
-        [styles.itemSpacing]: contract.spacing[spacing],
-      })
-    : {};
+  const listStyles = assignInlineVars({
+    [styles.itemSpacing]: spacing ? contract.spacing[spacing] : '0',
+  });
 
-  return isOrdered ? (
-    <OrderedList
+  return (
+    <ListComponent
       {...props}
       className={`${listClassName} ${className}`}
       style={{ ...listStyles, ...style }}
     >
       {children}
-    </OrderedList>
-  ) : (
-    <UnorderedList
-      {...props}
-      className={`${listClassName} ${className}`}
-      style={{ ...listStyles, ...style }}
-    >
-      {children}
-    </UnorderedList>
+    </ListComponent>
   );
 };

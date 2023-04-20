@@ -1,7 +1,7 @@
 import { createVar, style } from '@vanilla-extract/css';
 import { recipe, type RecipeVariants } from '@vanilla-extract/recipes';
 import { contract } from '../../../../../themes';
-import { list } from '../list.css';
+import { itemSpacing, list } from '../list.css';
 
 const inlinedList = list({ isInline: true }).split(' ')[1] ?? 'should-exit';
 const stackedList = list({ isInline: false }).split(' ')[1] ?? 'should-exit';
@@ -33,7 +33,13 @@ const borderBlock = style({
 });
 
 export const item = recipe({
-  base: {},
+  base: {
+    selectors: {
+      [`${stackedList} &:not(:last-child)`]: {
+        marginBlockEnd: itemSpacing,
+      },
+    },
+  },
   variants: {
     border: {
       all: [borderInline, borderBlock],
@@ -53,13 +59,7 @@ export const item = recipe({
       },
     },
     isBordered: {
-      false: {
-        selectors: {
-          [`${stackedList} &:not(:last-child)`]: {
-            marginBlockEnd: contract.spacing.xxs,
-          },
-        },
-      },
+      false: {},
       true: {
         paddingBlock,
         paddingInline,

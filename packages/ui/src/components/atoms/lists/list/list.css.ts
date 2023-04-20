@@ -1,8 +1,9 @@
-import { createVar, globalStyle } from '@vanilla-extract/css';
+import { createVar } from '@vanilla-extract/css';
 import { recipe } from '@vanilla-extract/recipes';
 import { contract } from '../../../../themes';
 
 export const itemSpacing = createVar();
+export const inlinePadding = createVar();
 
 export const list = recipe({
   base: {
@@ -12,6 +13,9 @@ export const list = recipe({
       '& &': {
         paddingBlockStart: itemSpacing,
       },
+    },
+    vars: {
+      [inlinePadding]: contract.spacing.sm,
     },
   },
   variants: {
@@ -25,8 +29,7 @@ export const list = recipe({
       false: {
         selectors: {
           '& &': {
-            paddingBlockStart: contract.spacing.xxs,
-            paddingInlineStart: contract.spacing.md,
+            paddingInlineStart: `calc(${inlinePadding} * 1.25)`,
           },
         },
       },
@@ -35,12 +38,6 @@ export const list = recipe({
         flexFlow: 'row wrap',
         gap: itemSpacing,
         placeItems: 'baseline',
-        listStylePosition: 'inside',
-        selectors: {
-          '& &': {
-            paddingInlineStart: 0,
-          },
-        },
       },
     },
   },
@@ -48,15 +45,8 @@ export const list = recipe({
     {
       variants: { hasMarker: true, isInline: false },
       style: {
-        paddingInlineStart: contract.spacing.sm,
+        paddingInlineStart: inlinePadding,
       },
     },
   ],
-});
-
-const inlinedList = list({ isInline: true }).split(' ')[1] ?? 'should-exist';
-const stackedList = list({ isInline: false }).split(' ')[1] ?? 'should-exit';
-
-globalStyle(`${inlinedList} ${stackedList}`, {
-  paddingInlineStart: 0,
 });
