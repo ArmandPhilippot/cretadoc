@@ -1,0 +1,70 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as NavLinkStories from './nav-link.stories';
+
+<Meta of={NavLinkStories} />
+
+# Nav Link
+
+<Primary />
+
+## Variants
+
+A `NavLink` have some variants depending on its context.
+
+### Regular (default)
+
+#### Initial state
+
+<Canvas of={NavLinkStories.RegularVariant} />
+
+##### Selected
+
+<Canvas of={NavLinkStories.RegularIsSelected} />
+
+##### Disabled
+
+<Canvas of={NavLinkStories.RegularIsDisabled} />
+
+##### Disabled and Selected
+
+<Canvas of={NavLinkStories.RegularIsDisabledAndSelected} />
+
+### Block
+
+The block variant is commonly used for main navigation.
+
+#### Initial state
+
+<Canvas of={NavLinkStories.BlockVariant} />
+
+##### Selected
+
+<Canvas of={NavLinkStories.BlockIsSelected} />
+
+##### Disabled
+
+<Canvas of={NavLinkStories.BlockIsDisabled} />
+
+##### Disabled and Selected
+
+<Canvas of={NavLinkStories.BlockIsDisabledAndSelected} />
+
+##### Radius
+
+You can add some smoother borders if needed.
+
+On all borders:
+
+<Canvas of={NavLinkStories.BlockRadiusBoth} />
+
+On left side:
+
+<Canvas of={NavLinkStories.BlockRadiusLeft} />
+
+On right side:
+
+<Canvas of={NavLinkStories.BlockRadiusRight} />
+
+## Props
+
+<ArgTypes of={NavLinkStories} />
