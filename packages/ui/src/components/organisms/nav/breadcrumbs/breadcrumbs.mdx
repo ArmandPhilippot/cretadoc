@@ -1,0 +1,30 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as BreadcrumbsStories from './breadcrumbs.stories';
+
+<Meta of={BreadcrumbsStories} />
+
+# Breadcrumbs
+
+Breadcrumbs are used to indicate the current location in a website and help users to understand the content hierarchy.
+
+<Primary />
+
+## Items separator
+
+By default, the component uses a slash (`/`) as separator but you can choose a different character if needed.
+
+<Canvas of={BreadcrumbsStories.TextSeparator} />
+
+## Hide the last item
+
+For design purposes and to avoid repeating the current page twice, you could hide the last item visually. You should use this variant only if the page title is directly under the breadcrumbs since the last separator will remain.
+
+<Canvas of={BreadcrumbsStories.LastItemHidden} />
+
+## Accessibility
+
+Since breadcrumbs provide a navigation, you should add a meaningful label (such as "_Breadcrumbs_") using the `aria-label` attribute to describe the type of navigation provided in the nav element.
+
+## Props
+
+<ArgTypes of={BreadcrumbsStories} />
