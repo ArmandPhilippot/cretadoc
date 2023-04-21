@@ -1,0 +1,42 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as NavItemStories from './nav-item.stories';
+
+<Meta of={NavItemStories} />
+
+# Nav Item
+
+A nav item is used to navigate through the website contents.
+
+<Primary />
+
+## State
+
+A nav item can have different states and different variants. You can learn more about those options on [`<NavLink />` documentation](/docs/components-molecules-nav-nav-link--docs).
+
+### Disabled
+
+It can be disabled. It is commonly used to deactivate a link if it is the current page.
+
+<Canvas of={NavItemStories.IsDisabled} />
+
+### Selected
+
+It can be selected. It is commonly used to indicate that the user is currently browsing a section.
+
+<Canvas of={NavItemStories.IsSelected} />
+
+### Disabled and Selected
+
+It can also be both disabled and selected.
+
+<Canvas of={NavItemStories.IsDisabledAndSelected} />
+
+## Separator
+
+For design purposes, sometimes you need to separate the items in nav list with a separator.
+
+<Canvas of={NavItemStories.WithSeparator} />
+
+## Props
+
+<ArgTypes of={NavItemStories} />
