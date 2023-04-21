@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 import { render, screen as screenTL } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { Icon } from './icon';
@@ -54,5 +55,12 @@ describe('icon', () => {
     const description = 'animi ipsum velit';
     render(<Icon shape="hamburger" description={description} />);
     expect(screenTL.getByText(description)).toBeInTheDocument();
+  });
+
+  it('accepts an animation speed', () => {
+    const { container } = render(
+      <Icon animationSpeed="medium" shape="angle" />
+    );
+    expect(container.querySelector('svg')).toBeInTheDocument();
   });
 });

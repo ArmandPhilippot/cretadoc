@@ -1,6 +1,7 @@
 import { createVar } from '@vanilla-extract/css';
 import { recipe } from '@vanilla-extract/recipes';
 
+export const animationSpeed = createVar();
 export const iconColor = createVar();
 export const iconSize = createVar();
 

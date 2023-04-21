@@ -18,6 +18,10 @@ const meta = {
         'warning',
       ],
     },
+    orientation: {
+      control: 'select',
+      options: ['bottom', 'left', 'right', 'top'],
+    },
   },
 } satisfies Meta<typeof Icon>;
 

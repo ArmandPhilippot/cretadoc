@@ -2,6 +2,7 @@ import { assignInlineVars } from '@vanilla-extract/dynamic';
 import type { FC, SVGAttributes } from 'react';
 import { contract } from '../../../themes';
 import type {
+  AnimationDurationTokens,
   ColorContextTokens,
   IconSizeTokens,
 } from '../../../themes/types/tokens';
@@ -47,6 +48,10 @@ export type IconProps = Omit<
   'children' | 'viewBox' | 'xmlns'
 > & {
   /**
+   * Control the animation or transition speed when the icon can be animated.
+   */
+  animationSpeed?: keyof AnimationDurationTokens;
+  /**
    * Set the icon color.
    *
    * Use either the same color as the text or the theme primary color.
@@ -82,6 +87,7 @@ export type IconProps = Omit<
  * Icon component.
  */
 export const Icon: FC<IconProps> = ({
+  animationSpeed,
   className = '',
   color = 'regular',
   description,
@@ -93,6 +99,9 @@ export const Icon: FC<IconProps> = ({
   ...props
 }) => {
   const iconStyles = assignInlineVars({
+    [styles.animationSpeed]: animationSpeed
+      ? contract.animation.duration[animationSpeed]
+      : '',
     [styles.iconColor]: getColorFromTokenKey(color),
     [styles.iconSize]: contract.icon.size[size],
   });
