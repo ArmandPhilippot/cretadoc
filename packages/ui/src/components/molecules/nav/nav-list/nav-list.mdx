@@ -1,0 +1,88 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as NavListStories from './nav-list.stories';
+
+<Meta of={NavListStories} />
+
+# Nav List
+
+<Primary />
+
+## Variant: regular (default)
+
+### Column
+
+#### Default
+
+<Canvas of={NavListStories.Column} />
+
+#### Selected item
+
+<Canvas of={NavListStories.ColumnWithSelectedItem} />
+
+#### Disabled item
+
+<Canvas of={NavListStories.ColumnWithDisabledItem} />
+
+#### Selected and disabled item
+
+<Canvas of={NavListStories.ColumnWithSelectedAndDisabledItem} />
+
+### Row
+
+#### Default
+
+<Canvas of={NavListStories.Row} />
+
+#### Selected item
+
+<Canvas of={NavListStories.RowWithSelectedItem} />
+
+#### Disabled item
+
+<Canvas of={NavListStories.RowWithDisabledItem} />
+
+#### Selected and disabled item
+
+<Canvas of={NavListStories.RowWithSelectedAndDisabledItem} />
+
+## Variant: block
+
+### Column
+
+#### Default
+
+<Canvas of={NavListStories.ColumnBlock} />
+
+#### Selected item
+
+<Canvas of={NavListStories.ColumnWithSelectedItemBlock} />
+
+#### Disabled item
+
+<Canvas of={NavListStories.ColumnWithDisabledItemBlock} />
+
+#### Selected and disabled item
+
+<Canvas of={NavListStories.ColumnWithSelectedAndDisabledItemBlock} />
+
+### Row
+
+#### Default
+
+<Canvas of={NavListStories.RowBlock} />
+
+#### Selected item
+
+<Canvas of={NavListStories.RowWithSelectedItemBlock} />
+
+#### Disabled item
+
+<Canvas of={NavListStories.RowWithDisabledItemBlock} />
+
+#### Selected and disabled item
+
+<Canvas of={NavListStories.RowWithSelectedAndDisabledItemBlock} />
+
+## Props
+
+<ArgTypes of={NavListStories} />
