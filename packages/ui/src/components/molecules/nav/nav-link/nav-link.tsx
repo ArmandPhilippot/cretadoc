@@ -33,6 +33,9 @@ export type NavLinkProps = LinkProps & {
   variant?: NavLinkVariant;
 };
 
+/**
+ * NavLink component.
+ */
 export const NavLink: FC<NavLinkProps> = ({
   children,
   className = '',
@@ -53,7 +56,12 @@ export const NavLink: FC<NavLinkProps> = ({
   return isDisabled ? (
     <span className={`${linkClassName} ${className}`}>{children}</span>
   ) : (
-    <Link {...props} className={`${linkClassName} ${className}`} to={to}>
+    <Link
+      {...props}
+      aria-current={isSelected}
+      className={`${linkClassName} ${className}`}
+      to={to}
+    >
       {children}
     </Link>
   );
