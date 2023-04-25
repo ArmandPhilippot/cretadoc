@@ -9,7 +9,7 @@ module.exports = {
     'warn',
     {
       propTypeNames: ['bool'],
-      rule: '^(is|has)[A-Z]([A-Za-z0-9]?)+',
+      rule: '^(is|has|hide|show)[A-Z]([A-Za-z0-9]?)+',
       message:
         'It is better if your prop ({{ propName }}) matches this pattern: ({{ pattern }})',
       validateNested: true,
