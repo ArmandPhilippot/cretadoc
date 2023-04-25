@@ -13,6 +13,10 @@ export type NavItemProps = Omit<ListItemProps, 'children' | 'isBordered'> &
      */
     label: ReactNode;
     /**
+     * Provide an accessible name to the link.
+     */
+    linkAriaLabel?: string;
+    /**
      * Add a separator after the nav link.
      */
     sep?: string;
@@ -22,30 +26,38 @@ export type NavItemProps = Omit<ListItemProps, 'children' | 'isBordered'> &
  * NavItem component.
  */
 export const NavItem: FC<NavItemProps> = ({
+  'aria-label': ariaLabel,
   className = '',
   isDisabled = false,
   isSelected = false,
   label,
+  linkAriaLabel,
   radiusOn,
   sep,
   to,
   variant,
   ...props
-}) => (
-  <ListItem
-    {...props}
-    className={`${styles.item} ${className}`}
-    hasMarker={false}
-  >
-    <NavLink
-      isDisabled={isDisabled}
-      isSelected={isSelected}
-      radiusOn={radiusOn}
-      to={to}
-      variant={variant}
+}) => {
+  const itemAriaLabel = isDisabled ? ariaLabel ?? linkAriaLabel : ariaLabel;
+
+  return (
+    <ListItem
+      {...props}
+      aria-label={itemAriaLabel}
+      className={`${styles.item} ${className}`}
+      hasMarker={false}
     >
-      {label}
-    </NavLink>
-    {sep ? <span aria-hidden={true}>{sep}</span> : null}
-  </ListItem>
-);
+      <NavLink
+        aria-label={linkAriaLabel}
+        isDisabled={isDisabled}
+        isSelected={isSelected}
+        radiusOn={radiusOn}
+        to={to}
+        variant={variant}
+      >
+        {label}
+      </NavLink>
+      {sep ? <span aria-hidden={true}>{sep}</span> : null}
+    </ListItem>
+  );
+};
