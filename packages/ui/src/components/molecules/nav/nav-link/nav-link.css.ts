@@ -2,7 +2,11 @@ import { recipe } from '@vanilla-extract/recipes';
 import { contract } from '../../../../themes';
 
 export const link = recipe({
-  base: {},
+  base: {
+    display: 'flex',
+    flexFlow: 'row wrap',
+    alignItems: 'center',
+  },
   variants: {
     isDisabled: {
       false: {},
@@ -27,14 +31,14 @@ export const link = recipe({
     },
     variant: {
       block: {
-        display: 'flex',
-        flexFlow: 'row wrap',
-        alignItems: 'center',
         paddingBlock: contract.spacing.xxs,
         paddingInline: contract.spacing.sm,
         fontWeight: contract.font.weight.strong,
+        width: '100%',
       },
-      regular: {},
+      regular: {
+        width: 'fit-content',
+      },
     },
   },
   compoundVariants: [

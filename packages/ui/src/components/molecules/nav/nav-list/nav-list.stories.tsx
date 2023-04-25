@@ -95,6 +95,18 @@ export const ColumnWithSelectedAndDisabledItem: Story = {
   },
 };
 
+export const ColumnWithBorders: Story = {
+  args: {
+    ...ColumnWithSelectedAndDisabledItem.args,
+    children: [
+      <NavItem key="link-1" isBordered label="Link 1" to="#" />,
+      <NavItem key="link-2" isBordered label="Link 2" to="#" />,
+      <NavItem key="link-3" isBordered label="Link 3" to="#" />,
+    ],
+    spacing: null,
+  },
+};
+
 export const Row: Story = {
   name: 'Row: Default',
   args: {
@@ -125,6 +137,14 @@ export const RowWithSelectedAndDisabledItem: Story = {
     ...Row.args,
     disabled: 2,
     selected: 2,
+  },
+};
+
+export const RowWithBorders: Story = {
+  args: {
+    ...RowWithSelectedAndDisabledItem.args,
+    children: ColumnWithBorders.args.children,
+    spacing: null,
   },
 };
 
@@ -161,6 +181,18 @@ export const ColumnWithSelectedAndDisabledItemBlock: Story = {
   },
 };
 
+export const ColumnWithBordersBlock: Story = {
+  args: {
+    ...ColumnWithSelectedAndDisabledItemBlock.args,
+    children: [
+      <NavItem key="link-1" isBordered label="Link 1" to="#" variant="block" />,
+      <NavItem key="link-2" isBordered label="Link 2" to="#" variant="block" />,
+      <NavItem key="link-3" isBordered label="Link 3" to="#" variant="block" />,
+    ],
+    spacing: null,
+  },
+};
+
 export const RowBlock: Story = {
   name: 'Row: Default (block variant)',
   args: {
@@ -191,5 +223,13 @@ export const RowWithSelectedAndDisabledItemBlock: Story = {
     ...RowBlock.args,
     disabled: 2,
     selected: 2,
+  },
+};
+
+export const RowWithBordersBlock: Story = {
+  args: {
+    ...RowWithSelectedAndDisabledItemBlock.args,
+    children: ColumnWithBordersBlock.args.children,
+    spacing: null,
   },
 };

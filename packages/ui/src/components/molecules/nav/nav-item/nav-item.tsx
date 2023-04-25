@@ -3,7 +3,7 @@ import { ListItem, type ListItemProps } from '../../../atoms';
 import { NavLink, type NavLinkProps } from '../nav-link';
 import * as styles from './nav-item.css';
 
-export type NavItemProps = Omit<ListItemProps, 'children' | 'isBordered'> &
+export type NavItemProps = Omit<ListItemProps, 'children'> &
   Pick<
     NavLinkProps,
     'isDisabled' | 'isSelected' | 'radiusOn' | 'to' | 'variant'

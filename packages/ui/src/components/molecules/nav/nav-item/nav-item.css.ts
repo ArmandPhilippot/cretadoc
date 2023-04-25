@@ -5,5 +5,4 @@ export const item = style({
   display: 'flex',
   flexFlow: 'row wrap',
   gap: itemSpacing,
-  alignItems: 'center',
 });

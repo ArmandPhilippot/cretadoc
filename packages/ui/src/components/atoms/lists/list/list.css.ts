@@ -37,7 +37,6 @@ export const list = recipe({
         display: 'flex',
         flexFlow: 'row wrap',
         gap: itemSpacing,
-        placeItems: 'baseline',
       },
     },
   },
