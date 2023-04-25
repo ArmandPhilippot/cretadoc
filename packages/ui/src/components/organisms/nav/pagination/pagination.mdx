@@ -1,0 +1,64 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as PaginationStories from './pagination.stories';
+
+<Meta of={PaginationStories} />
+
+# Pagination
+
+<Primary />
+
+## Page selection
+
+Depending on the selected page, the pagination uses ellipsis to limit the number of items rendered.
+
+### First page selected
+
+<Canvas of={PaginationStories.FirstPageSelected} />
+
+### Inner page selected
+
+<Canvas of={PaginationStories.InnerPageSelected} />
+
+### Last page selected
+
+<Canvas of={PaginationStories.LastPageSelected} />
+
+## Siblings
+
+You can control the visible range by using the `siblings` attribute. It define the number of items to show on each side of the selected page before the ellipsis.
+
+<Canvas of={PaginationStories.Siblings} />
+
+## Backward and Forward links
+
+You can add a text label in addition to the icons.
+
+<Canvas of={PaginationStories.BackwardForwardLabel} />
+
+Or, if you prefer, you can disable the backward and forward links.
+
+<Canvas of={PaginationStories.BackwardForwardHidden} />
+
+## Accessibility
+
+By default, all items have an `aria-label` to improve accessibility. However, you can provide your owns. It can be useful if you need to translate the labels for example.
+
+<Canvas of={PaginationStories.AriaLabels} />
+
+## Variants
+
+### Bordered next and previous links
+
+<Canvas of={PaginationStories.VariantBorderedBackwardForward} />
+
+### Bordered pages links
+
+<Canvas of={PaginationStories.VariantBorderedPageNumbers} />
+
+### All bordered
+
+<Canvas of={PaginationStories.VariantBordered} />
+
+## Props
+
+<ArgTypes of={PaginationStories} />
