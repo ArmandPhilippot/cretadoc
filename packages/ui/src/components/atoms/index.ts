@@ -4,5 +4,6 @@ export * from './icon';
 export * from './image';
 export * from './link';
 export * from './lists';
+export * from './overlay';
 export * from './spinner';
 export * from './typography';
