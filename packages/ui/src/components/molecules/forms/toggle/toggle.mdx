@@ -1,0 +1,23 @@
+import { Canvas, Meta } from '@storybook/blocks';
+import * as ToggleStories from './toggle.stories';
+
+<Meta of={ToggleStories} />
+
+# Toggle
+
+Toggles are used when there are just a couple options to switch between. To create a toggle, you need:
+
+- 1 `<ToggleGroup />` component
+- 2 or more `<ToggleItem />` components
+
+## Single value
+
+A toggle can be used to collect a single value from the user. A current use case is an on/off setting.
+
+<Canvas of={ToggleStories.SingleValue} />
+
+## Multiple values
+
+It can also be used to collect several values from the user. A use case could be a set of options that can be combine (think of the _bold_, _italic_ and _underline_ options of a text editor).
+
+<Canvas of={ToggleStories.MultipleValues} />
