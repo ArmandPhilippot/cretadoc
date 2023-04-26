@@ -1,0 +1,28 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as ToggleItemStories from './toggle-item.stories';
+
+<Meta of={ToggleItemStories} />
+
+# Toggle Item
+
+A toggle item is like a checkbox, only its styling differs. It has two states, either checked or unchecked.
+
+<Primary />
+
+## States
+
+### Unchecked
+
+<Canvas of={ToggleItemStories.Unchecked} />
+
+### Checked
+
+<Canvas of={ToggleItemStories.Checked} />
+
+### Disabled
+
+<Canvas of={ToggleItemStories.Disabled} />
+
+## Props
+
+<ArgTypes of={ToggleItemStories} />
