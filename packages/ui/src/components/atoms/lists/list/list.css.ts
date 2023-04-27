@@ -47,5 +47,11 @@ export const list = recipe({
         paddingInlineStart: inlinePadding,
       },
     },
+    {
+      variants: { hasMarker: true, isInline: true },
+      style: {
+        listStylePosition: 'inside',
+      },
+    },
   ],
 });
