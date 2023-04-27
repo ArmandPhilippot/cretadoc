@@ -102,7 +102,7 @@ export const Icon: FC<IconProps> = ({
     [styles.animationSpeed]: animationSpeed
       ? contract.animation.duration[animationSpeed]
       : '',
-    [styles.iconColor]: getColorFromTokenKey(color),
+    [styles.iconColor]: getColorFromTokenKey(color, 'foreground'),
     [styles.iconSize]: contract.icon.size[size],
   });
 

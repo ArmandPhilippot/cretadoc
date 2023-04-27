@@ -111,7 +111,7 @@ export const ListItem: FC<ListItemProps> = ({
     isBordered,
   });
   const itemStyles = assignInlineVars({
-    [styles.borderColor]: getColorFromTokenKey(borderColor),
+    [styles.borderColor]: getColorFromTokenKey(borderColor, 'borders'),
     [styles.borderSize]: contract.border.size[borderSize],
     [styles.marker]: marker ?? '',
     [styles.paddingBlock]: paddingBlock ? contract.spacing[paddingBlock] : '',

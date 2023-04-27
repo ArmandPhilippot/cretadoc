@@ -55,7 +55,7 @@ export const Label: FC<LabelProps> = ({
   ...props
 }) => {
   const labelStyles = assignInlineVars({
-    [styles.labelColor]: getColorFromTokenKey(color),
+    [styles.labelColor]: getColorFromTokenKey(color, 'foreground'),
     [styles.labelSize]: contract.font.size[size],
   });
 

@@ -31,7 +31,7 @@ export const Term: FC<TermProps> = ({
 }) => {
   const termClassName = styles.term;
   const termStyles = assignInlineVars({
-    [styles.termColor]: getColorFromTokenKey(color),
+    [styles.termColor]: getColorFromTokenKey(color, 'borders'),
   });
 
   return (

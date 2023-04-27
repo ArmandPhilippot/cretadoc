@@ -31,7 +31,7 @@ export const Description: FC<DescriptionProps> = ({
 }) => {
   const descriptionClassName = styles.description;
   const descriptionStyles = assignInlineVars({
-    [styles.descriptionColor]: getColorFromTokenKey(color),
+    [styles.descriptionColor]: getColorFromTokenKey(color, 'foreground'),
   });
 
   return (

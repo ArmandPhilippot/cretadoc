@@ -40,7 +40,7 @@ export const Legend: FC<LegendProps> = ({
 }) => {
   const legendClassName = styles.legend;
   const legendStyles = assignInlineVars({
-    [styles.legendColor]: getColorFromTokenKey(color),
+    [styles.legendColor]: getColorFromTokenKey(color, 'foreground'),
     [styles.legendSize]: contract.font.size[size],
   });
 
