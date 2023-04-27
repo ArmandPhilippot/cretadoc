@@ -18,6 +18,7 @@ export const button = recipe({
     fontFamily: contract.font.family.regular,
     fontSize: contract.font.size.md,
     lineHeight: contract.font.lineHeight.md,
+    textDecoration: 'none',
   },
   variants: {
     kind: {

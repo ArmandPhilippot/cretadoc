@@ -3,33 +3,14 @@ import {
   type ForwardRefRenderFunction,
   forwardRef,
 } from 'react';
-import * as styles from './button.css';
-
-export type ButtonKind = 'neutral' | 'primary' | 'secondary';
+import type { ButtonOptions } from '../buttons';
+import * as styles from '../buttons.css';
 
 export type ButtonProps = Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
   'disabled'
-> & {
-  /**
-   * Should the button be disabled?
-   *
-   * @default false
-   */
-  isDisabled?: boolean;
-  /**
-   * Should the button indicate a loading state?
-   *
-   * @default false
-   */
-  isLoading?: boolean;
-  /**
-   * The button variant.
-   *
-   * @default 'secondary'
-   */
-  kind?: ButtonKind;
-};
+> &
+  ButtonOptions;
 
 const ButtonWithRef: ForwardRefRenderFunction<
   HTMLButtonElement,

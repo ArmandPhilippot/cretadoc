@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Button } from './button';
+import { ButtonLink } from './button-link';
 
 const meta = {
-  component: Button,
-  title: 'Components/Atoms/Button',
-} satisfies Meta<typeof Button>;
+  component: ButtonLink,
+  title: 'Components/Atoms/Buttons/ButtonLink',
+} satisfies Meta<typeof ButtonLink>;
 
 export default meta;
 
@@ -12,9 +12,10 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    children: 'Button',
+    children: 'Button Link',
     isDisabled: false,
     isLoading: false,
+    to: '#',
   },
 };
 

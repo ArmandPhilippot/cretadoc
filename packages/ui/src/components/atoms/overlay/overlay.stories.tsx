@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useCallback, useState } from 'react';
 import { contract } from '../../../themes';
-import { Button } from '../button';
+import { Button } from '../buttons';
 import { Overlay, type OverlayProps } from './overlay';
 
 type OverlayTemplateProps = OverlayProps & {

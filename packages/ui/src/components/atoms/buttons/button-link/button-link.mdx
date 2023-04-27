@@ -1,0 +1,52 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as ButtonLinkStories from './button-link.stories';
+
+<Meta of={ButtonLinkStories} />
+
+# Button Link
+
+A button link is a regular link design as a button. It is commonly use to encourage action.
+
+<Primary />
+
+## Kind
+
+The button appearance can change depending on its kind. It can be either `primary`, `secondary` (default) or `neutral`.
+
+### Primary
+
+<Canvas of={ButtonLinkStories.Primary} />
+
+### Secondary
+
+<Canvas of={ButtonLinkStories.Secondary} />
+
+### Neutral
+
+Although you can use the `neutral` kind, if you need a neutral link, you should use the [`<Link />` component](/docs/components-atoms-link--docs) instead.
+
+<Canvas of={ButtonLinkStories.Neutral} />
+
+## States
+
+It can either be enabled (default), be disabled or indicate a loading state.
+
+### Enabled
+
+<Canvas of={ButtonLinkStories.Enabled} />
+
+### Disabled
+
+<Canvas of={ButtonLinkStories.Disabled} />
+
+### Loading
+
+<Canvas of={ButtonLinkStories.Loading} />
+
+## Accessibility
+
+Sometimes, the body is not enough explicit for screen reader users. In that case, you should use the `aria-label` attribute to give a better indication about the button purpose.
+
+## Props
+
+<ArgTypes of={ButtonLinkStories} />

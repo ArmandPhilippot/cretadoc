@@ -1,4 +1,4 @@
-export * from './button';
+export * from './buttons';
 export * from './forms';
 export * from './icon';
 export * from './image';
