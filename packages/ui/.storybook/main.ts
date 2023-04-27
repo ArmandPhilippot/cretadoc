@@ -14,9 +14,6 @@ const config: StorybookConfig = {
     '@storybook/addon-interactions',
     '@storybook/addon-a11y',
   ],
-  core: {
-    builder: '@storybook/builder-vite',
-  },
   framework: {
     name: '@storybook/react-vite',
     options: {},
