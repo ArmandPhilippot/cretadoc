@@ -2,7 +2,7 @@ import type { FC, ReactElement } from 'react';
 import { Link, type ImageProps, type LinkProps } from '../../atoms';
 import * as styles from './branding.css';
 
-export type BrandingProps = LinkProps & {
+export type BrandingProps = Omit<LinkProps, 'children'> & {
   /**
    * The brand name.
    */
