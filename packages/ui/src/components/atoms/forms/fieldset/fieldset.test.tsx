@@ -7,7 +7,7 @@ describe('fieldset', () => {
   it('renders a group of form elements', () => {
     render(
       <Fieldset>
-        <Input type="text" />
+        <Input id="text" name="text" type="text" />
       </Fieldset>
     );
     expect(screenTL.getByRole('group')).toBeInTheDocument();
@@ -17,7 +17,7 @@ describe('fieldset', () => {
   it('renders a disabled group of form elements', () => {
     render(
       <Fieldset isDisabled>
-        <Input type="text" />
+        <Input id="text" name="text" type="text" />
       </Fieldset>
     );
     expect(screenTL.getByRole('group')).toBeDisabled();
