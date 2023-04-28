@@ -1,0 +1,30 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as BackToTopStories from './back-to-top.stories';
+
+<Meta of={BackToTopStories} />
+
+# Back to top
+
+The `<BackToTop />` component allows users to quickly navigate to the given target at the top of the page.
+
+<Primary />
+
+## Label
+
+By default the label is visually hidden, but if needed you can choose to display it.
+
+<Canvas of={BackToTopStories.LabelVisible} />
+
+You can also overwrite the default label:
+
+<Canvas of={BackToTopStories.CustomLabel} />
+
+## Visibility
+
+The component accepts an `isVisible` attribute that let you control the visibility of the button. It can be useful if you only want to display it when the user as scrolled a certain length.
+
+<Canvas of={BackToTopStories.Hidden} />
+
+## Props
+
+<ArgTypes of={BackToTopStories} />

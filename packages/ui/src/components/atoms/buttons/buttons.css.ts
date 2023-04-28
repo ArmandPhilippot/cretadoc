@@ -15,6 +15,11 @@ const mutedSecondaryButton = style({
 
 export const button = recipe({
   base: {
+    display: 'flex',
+    flexFlow: 'row wrap',
+    placeItems: 'center',
+    gap: contract.spacing.xxs,
+    width: 'fit-content',
     fontFamily: contract.font.family.regular,
     fontSize: contract.font.size.md,
     lineHeight: contract.font.lineHeight.md,
