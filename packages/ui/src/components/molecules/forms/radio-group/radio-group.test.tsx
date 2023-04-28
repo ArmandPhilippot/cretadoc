@@ -2,6 +2,10 @@ import { render, screen as screenTL } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { RadioGroup, type RadioGroupItem } from './radio-group';
 
+const handleChange = () => {
+  /* Do nothing. */
+};
+
 describe('radio-group', () => {
   it('renders a group of labelled radio buttons', () => {
     const items: RadioGroupItem[] = [
@@ -12,7 +16,14 @@ describe('radio-group', () => {
     const legend = 'sint ratione voluptate';
     const name = 'voluptas';
 
-    render(<RadioGroup items={items} legend={legend} name={name} />);
+    render(
+      <RadioGroup
+        items={items}
+        legend={legend}
+        name={name}
+        onChange={handleChange}
+      />
+    );
 
     const radios = screenTL.getAllByRole('radio');
     expect(
