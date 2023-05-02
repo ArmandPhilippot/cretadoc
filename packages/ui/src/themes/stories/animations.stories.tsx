@@ -6,7 +6,7 @@ const meta: Meta = {
   title: 'Themes/Tokens/Animations',
   component: InfiniteAnimation,
   parameters: {
-    layout: 'full',
+    layout: 'fullscreen',
   },
 };
 

@@ -3,19 +3,17 @@ import { contract } from '../src';
 
 export const container = recipe({
   base: {
+    width: '100%',
     background: contract.color.background.regular.base,
     color: contract.color.foreground.regular.base,
     fontFamily: contract.font.family.regular,
   },
   variants: {
     fullscreen: {
-      off: {
-        padding: '1rem',
-        width: 'calc(100% - 1rem * 2)',
-      },
+      off: {},
       on: {
         padding: 0,
-        width: '100%',
+        minHeight: '100%',
       },
     },
   },

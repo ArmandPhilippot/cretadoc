@@ -6,7 +6,7 @@ const meta: Meta = {
   title: 'Themes/Tokens/Spacings',
   component: Spacing,
   parameters: {
-    layout: 'full',
+    layout: 'fullscreen',
   },
 };
 

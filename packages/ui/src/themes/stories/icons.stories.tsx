@@ -6,7 +6,7 @@ const meta: Meta = {
   title: 'Themes/Tokens/Icons',
   component: Icon,
   parameters: {
-    layout: 'full',
+    layout: 'fullscreen',
   },
 };
 

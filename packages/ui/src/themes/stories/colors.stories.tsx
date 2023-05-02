@@ -6,7 +6,7 @@ const meta: Meta = {
   title: 'Themes/Tokens/Colors',
   component: Color,
   parameters: {
-    layout: 'full',
+    layout: 'fullscreen',
   },
 };
 

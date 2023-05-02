@@ -18,7 +18,7 @@ const defaultTheme =
 
 const withGlobalDecorator: Decorator = (Story, context) => {
   const containerClassName = styles.container({
-    fullscreen: context.parameters['layout'] === 'full' ? 'on' : 'off',
+    fullscreen: context.parameters['layout'] === 'fullscreen' ? 'on' : 'off',
   });
 
   return (
@@ -54,7 +54,6 @@ const preview: Preview = {
     docs: {
       theme: cretadoc,
     },
-    layout: 'fullscreen',
     viewMode: 'docs',
   },
 };

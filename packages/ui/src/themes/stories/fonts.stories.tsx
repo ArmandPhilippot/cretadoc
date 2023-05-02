@@ -6,7 +6,7 @@ const meta: Meta = {
   title: 'Themes/Tokens/Fonts',
   component: Font,
   parameters: {
-    layout: 'full',
+    layout: 'fullscreen',
   },
 };
 

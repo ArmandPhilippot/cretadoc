@@ -6,7 +6,7 @@ const meta: Meta = {
   title: 'Themes/Tokens/Borders',
   component: Border,
   parameters: {
-    layout: 'full',
+    layout: 'fullscreen',
   },
 };
 

@@ -6,7 +6,7 @@ const meta: Meta = {
   title: 'Themes/Tokens/Shadows',
   component: Shadow,
   parameters: {
-    layout: 'full',
+    layout: 'fullscreen',
   },
 };
 
