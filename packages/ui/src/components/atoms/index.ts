@@ -2,6 +2,7 @@ export * from './buttons';
 export * from './forms';
 export * from './icon';
 export * from './image';
+export * from './layout';
 export * from './link';
 export * from './lists';
 export * from './overlay';
