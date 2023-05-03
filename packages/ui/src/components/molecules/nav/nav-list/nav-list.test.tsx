@@ -4,7 +4,7 @@ import { NavItem } from '../nav-item';
 import { NavList } from './nav-list';
 
 describe('nav-list', () => {
-  it('renders a list in a nav element', () => {
+  it('renders a list of nav items', () => {
     const anchor = 'temporibus';
     const target = '#';
 
@@ -13,7 +13,6 @@ describe('nav-list', () => {
         <NavItem label={anchor} to={target} />
       </NavList>
     );
-    expect(screenTL.getByRole('navigation')).toBeInTheDocument();
     expect(screenTL.getByRole('list')).toBeInTheDocument();
   });
 });

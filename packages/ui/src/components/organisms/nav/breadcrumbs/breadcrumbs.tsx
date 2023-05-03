@@ -1,7 +1,7 @@
 import type { FC, ReactNode } from 'react';
-import { VisuallyHidden } from '../../../atoms';
+import { Nav, type NavProps, VisuallyHidden } from '../../../atoms';
 import { NavItem } from '../../../molecules/nav';
-import { NavList, type NavListProps } from '../../../molecules/nav/nav-list';
+import { NavList } from '../../../molecules/nav/nav-list';
 
 export type BreadcrumbsItem = {
   /**
@@ -18,10 +18,7 @@ export type BreadcrumbsItem = {
   url: string;
 };
 
-export type BreadcrumbsProps = Omit<
-  NavListProps<true>,
-  'children' | 'isInline' | 'isOrdered' | 'spacing'
-> & {
+export type BreadcrumbsProps = Omit<NavProps, 'children'> & {
   /**
    * The breadcrumbs items.
    */
@@ -45,26 +42,28 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({
   sep = '/',
   ...props
 }) => (
-  <NavList {...props} isInline isOrdered spacing="xxs">
-    {items.map((item, index) => {
-      const isLastItem = index === items.length - 1;
+  <Nav {...props}>
+    <NavList isInline isOrdered spacing="xxs">
+      {items.map((item, index) => {
+        const isLastItem = index === items.length - 1;
 
-      return (
-        <NavItem
-          aria-current={isLastItem ? 'page' : undefined}
-          isDisabled={isLastItem}
-          key={item.id}
-          label={
-            isLastItem && isLastItemHidden ? (
-              <VisuallyHidden>{item.label}</VisuallyHidden>
-            ) : (
-              item.label
-            )
-          }
-          sep={isLastItem ? undefined : sep}
-          to={item.url}
-        />
-      );
-    })}
-  </NavList>
+        return (
+          <NavItem
+            aria-current={isLastItem ? 'page' : undefined}
+            isDisabled={isLastItem}
+            key={item.id}
+            label={
+              isLastItem && isLastItemHidden ? (
+                <VisuallyHidden>{item.label}</VisuallyHidden>
+              ) : (
+                item.label
+              )
+            }
+            sep={isLastItem ? undefined : sep}
+            to={item.url}
+          />
+        );
+      })}
+    </NavList>
+  </Nav>
 );
