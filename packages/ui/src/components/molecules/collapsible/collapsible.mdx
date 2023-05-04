@@ -1,0 +1,20 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as CollapsibleStories from './collapsible.stories';
+
+<Meta of={CollapsibleStories} />
+
+# Collapsible
+
+The `<Collapsible />` component allows users to show and hide sections of related content on a page.
+
+<Primary />
+
+## Using a link as label
+
+If you use a link as label, you should use the `hasDissociatedBtn` attribute.
+
+<Canvas of={CollapsibleStories.LinkLabel} />
+
+## Props
+
+<ArgTypes of={CollapsibleStories} />

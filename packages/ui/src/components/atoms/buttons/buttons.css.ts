@@ -18,6 +18,7 @@ export const button = recipe({
     display: 'flex',
     flexFlow: 'row wrap',
     placeItems: 'center',
+    placeContent: 'center',
     gap: contract.spacing.xxs,
     width: 'fit-content',
     fontFamily: contract.font.family.regular,
