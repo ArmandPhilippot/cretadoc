@@ -1,0 +1,26 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as DrawerStories from './drawer.stories';
+
+<Meta of={DrawerStories} />
+
+# Drawer
+
+The `<Drawer />` component is a collapsible container that anchors to the left of the screen. It should be associated to a button that controls its state.
+
+<Primary />
+
+## Closing
+
+You can add a close button to the bottom of the drawer. It can be useful if the opening button is hidden by the drawer or an overlay and cannot serve as a toggle button.
+
+<Canvas of={DrawerStories.CloseButton} />
+
+## Width
+
+You can control the drawer width on large device with the `maxWidth` attribute:
+
+<Canvas of={DrawerStories.MaxWidth} />
+
+## Props
+
+<ArgTypes of={DrawerStories} />
