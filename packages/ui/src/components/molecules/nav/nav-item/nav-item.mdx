@@ -37,6 +37,20 @@ For design purposes, sometimes you need to separate the items in nav list with a
 
 <Canvas of={NavItemStories.WithSeparator} />
 
+## Submenu
+
+A nav item could offer a submenu.
+
+Note: if you choose to use a submenu, you should not use a separator since it would be placed under the submenu.
+
+### With regular variant
+
+<Canvas of={NavItemStories.WithChildren} />
+
+### With block variant
+
+<Canvas of={NavItemStories.BlockWithChildren} />
+
 ## Props
 
 <ArgTypes of={NavItemStories} />

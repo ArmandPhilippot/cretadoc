@@ -26,13 +26,7 @@ export const list = recipe({
       true: {},
     },
     isInline: {
-      false: {
-        selectors: {
-          '& &': {
-            paddingInlineStart: `calc(${inlinePadding} * 1.25)`,
-          },
-        },
-      },
+      false: {},
       true: {
         display: 'flex',
         flexFlow: 'row wrap',
@@ -45,6 +39,11 @@ export const list = recipe({
       variants: { hasMarker: true, isInline: false },
       style: {
         paddingInlineStart: inlinePadding,
+        selectors: {
+          '& &': {
+            paddingInlineStart: `calc(${inlinePadding} * 1.25)`,
+          },
+        },
       },
     },
     {

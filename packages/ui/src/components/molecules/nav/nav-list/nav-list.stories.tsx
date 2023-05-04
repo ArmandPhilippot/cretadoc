@@ -233,3 +233,28 @@ export const RowWithBordersBlock: Story = {
     spacing: null,
   },
 };
+
+export const ColumnWithExpandableNavItem: Story = {
+  args: {
+    ...NavListTemplateBlock.args,
+    children: [
+      <NavItem key="link-1" label="Link 1" to="#" variant="block" />,
+      <NavItem isExpanded key="link-2" label="Link 2" to="#" variant="block">
+        <NavList spacing={null}>
+          <NavItem label="Subitem 1" to="#" variant="block" />
+          <NavItem label="Subitem 2" to="#" variant="block" />
+        </NavList>
+      </NavItem>,
+      <NavItem key="link-3" label="Link 3" to="#" variant="block" />,
+    ],
+    spacing: null,
+  },
+};
+
+export const RowWithExpandableNavItem: Story = {
+  args: {
+    ...ColumnWithExpandableNavItem.args,
+    isInline: true,
+    style: { alignItems: 'flex-start' },
+  },
+};

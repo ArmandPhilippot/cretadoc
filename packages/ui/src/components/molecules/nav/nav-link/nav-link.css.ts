@@ -34,7 +34,7 @@ export const link = recipe({
         paddingBlock: contract.spacing.xxs,
         paddingInline: contract.spacing.sm,
         fontWeight: contract.font.weight.strong,
-        width: '100%',
+        flex: 1,
       },
       regular: {
         width: 'fit-content',
@@ -47,6 +47,20 @@ export const link = recipe({
       style: {
         background: contract.color.primary.base,
         color: contract.color.foreground.onPrimary.base,
+      },
+    },
+    {
+      variants: { variant: 'block', isDisabled: false, isSelected: false },
+      style: {
+        ':hover': {
+          background: contract.color.background.regular.light,
+        },
+        ':focus': {
+          background: contract.color.background.regular.light,
+        },
+        ':active': {
+          background: contract.color.background.regular.dark,
+        },
       },
     },
     {

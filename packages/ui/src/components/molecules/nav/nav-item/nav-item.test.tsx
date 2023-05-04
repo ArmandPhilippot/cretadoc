@@ -23,4 +23,22 @@ describe('nav-item', () => {
     render(<NavItem label={anchor} sep={sep} to={target} />);
     expect(screenTL.getByRole('listitem')).toHaveTextContent(sep);
   });
+
+  it('renders a collapsed item', () => {
+    const label = 'voluptatum';
+    const target = '#';
+    const expandBtnLabel = 'rem';
+    const children = 'dolor nobis reiciendis';
+    render(
+      <NavItem expandBtnAriaLabel={expandBtnLabel} label={label} to={target}>
+        {children}
+      </NavItem>
+    );
+    expect(
+      screenTL.getByRole('button', { name: expandBtnLabel })
+    ).toBeInTheDocument();
+    const renderedChildren = screenTL.getByText(children);
+    expect(renderedChildren).toBeInTheDocument();
+    expect(renderedChildren).not.toBeVisible();
+  });
 });

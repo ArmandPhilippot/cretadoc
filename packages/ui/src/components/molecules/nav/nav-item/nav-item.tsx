@@ -1,5 +1,6 @@
 import type { ReactNode, FC } from 'react';
 import { ListItem, type ListItemProps } from '../../../atoms';
+import { Collapsible } from '../../collapsible';
 import { NavLink, type NavLinkProps } from '../nav-link';
 import * as styles from './nav-item.css';
 
@@ -8,6 +9,17 @@ export type NavItemProps = Omit<ListItemProps, 'children'> &
     NavLinkProps,
     'isDisabled' | 'isSelected' | 'radiusOn' | 'to' | 'variant'
   > & {
+    children?: ReactNode;
+    /**
+     * Add an accessible name to the expand button when using children.
+     */
+    expandBtnAriaLabel?: string;
+    /**
+     * When using children, is the item is expanded?
+     *
+     * @default false
+     */
+    isExpanded?: boolean;
     /**
      * The nav item label.
      */
@@ -16,6 +28,10 @@ export type NavItemProps = Omit<ListItemProps, 'children'> &
      * Provide an accessible name to the link.
      */
     linkAriaLabel?: string;
+    /**
+     * A function to trigger on click on expand button when using children.
+     */
+    onExpand?: () => void;
     /**
      * Add a separator after the nav link.
      */
@@ -27,37 +43,65 @@ export type NavItemProps = Omit<ListItemProps, 'children'> &
  */
 export const NavItem: FC<NavItemProps> = ({
   'aria-label': ariaLabel,
+  children,
   className = '',
+  expandBtnAriaLabel,
   isDisabled = false,
+  isExpanded = false,
   isSelected = false,
   label,
   linkAriaLabel,
+  onExpand,
   radiusOn,
   sep,
   to,
-  variant,
+  variant = 'regular',
   ...props
 }) => {
   const itemAriaLabel = isDisabled ? ariaLabel ?? linkAriaLabel : ariaLabel;
+  const hasChildren = !!children;
+  const itemClassName = styles.item({
+    hasExpandedChildren: hasChildren && isExpanded,
+  });
+
+  const navLink = (
+    <NavLink
+      aria-label={linkAriaLabel}
+      isDisabled={isDisabled}
+      isSelected={isSelected}
+      radiusOn={radiusOn}
+      to={to}
+      variant={variant}
+    >
+      {label}
+    </NavLink>
+  );
 
   return (
     <ListItem
       {...props}
       aria-label={itemAriaLabel}
-      className={`${styles.item} ${className}`}
+      className={`${itemClassName} ${className}`}
       hasMarker={false}
     >
-      <NavLink
-        aria-label={linkAriaLabel}
-        isDisabled={isDisabled}
-        isSelected={isSelected}
-        radiusOn={radiusOn}
-        to={to}
-        variant={variant}
-      >
-        {label}
-      </NavLink>
-      {sep ? <span aria-hidden={true}>{sep}</span> : null}
+      {hasChildren ? (
+        <Collapsible
+          expandBtnLabel={expandBtnAriaLabel}
+          hasDissociatedBtn
+          isExpanded={isExpanded}
+          onExpand={onExpand}
+          summary={navLink}
+        >
+          {children}
+        </Collapsible>
+      ) : (
+        navLink
+      )}
+      {sep ? (
+        <span aria-hidden={true} className={styles.sep}>
+          {sep}
+        </span>
+      ) : null}
     </ListItem>
   );
 };

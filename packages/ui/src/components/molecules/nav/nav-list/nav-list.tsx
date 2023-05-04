@@ -1,6 +1,7 @@
 import type { ReactElement } from 'react';
 import { List, type ListProps } from '../../../atoms';
 import type { NavItemProps } from '../nav-item';
+import * as styles from './nav-list.css';
 
 export type NavListProps<T extends boolean> = Omit<
   ListProps<T>,
@@ -14,9 +15,10 @@ export type NavListProps<T extends boolean> = Omit<
  */
 export const NavList = <T extends boolean>({
   children,
+  className = '',
   ...props
 }: NavListProps<T>) => (
-  <List hasMarker={false} {...props}>
+  <List {...props} className={`${styles.list} ${className}`} hasMarker={false}>
     {children}
   </List>
 );
