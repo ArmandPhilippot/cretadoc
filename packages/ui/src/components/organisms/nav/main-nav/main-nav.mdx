@@ -1,0 +1,20 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as MainNavStories from './main-nav.stories';
+
+<Meta of={MainNavStories} />
+
+# Main nav
+
+A `<MainNav />` component is used to wrap a `<NavList />` which require a toggle button to be opened.
+
+<Primary />
+
+## Close button
+
+If needed you can add a close button to close the main nav:
+
+<Canvas of={MainNavStories.WithCloseBtn} />
+
+## Props
+
+<ArgTypes of={MainNavStories} />
