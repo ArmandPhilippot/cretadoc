@@ -6,7 +6,7 @@ import { recipe } from '@vanilla-extract/recipes';
  * @see https://github.com/vanilla-extract-css/vanilla-extract/issues/541
  * @see https://github.com/frenic/csstype/issues/114
  */
-const visuallyHidden = {
+const hidden = {
   width: '1px !important',
   height: '1px !important',
   padding: '0 !important',
@@ -19,13 +19,13 @@ const visuallyHidden = {
   whiteSpace: 'nowrap !important' as 'nowrap',
 };
 
-export const wrapper = recipe({
+export const visuallyHidden = recipe({
   variants: {
     isFocusable: {
-      false: visuallyHidden,
+      false: hidden,
       true: {
         selectors: {
-          '&:not(:focus):not(:focus-within)': visuallyHidden,
+          '&:not(:focus):not(:focus-within)': hidden,
         },
       },
     },

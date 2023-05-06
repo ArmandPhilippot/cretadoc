@@ -1,4 +1,5 @@
 import type { FC, InputHTMLAttributes } from 'react';
+import * as styles from './boolean-field.css';
 
 export type BooleanFieldType = 'checkbox' | 'radio';
 
@@ -69,6 +70,7 @@ export type BooleanFieldProps = DefaultProps & {
  * BooleanField component.
  */
 export const BooleanField: FC<BooleanFieldProps> = ({
+  className = '',
   isChecked = false,
   isDisabled = false,
   isRequired = false,
@@ -77,6 +79,7 @@ export const BooleanField: FC<BooleanFieldProps> = ({
   <input
     {...props}
     checked={isChecked}
+    className={`${styles.field} ${className}`}
     disabled={isDisabled}
     required={isRequired}
   />

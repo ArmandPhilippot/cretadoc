@@ -4,7 +4,6 @@ import {
   type CheckboxProps,
   Label,
   type LabelProps,
-  VisuallyHidden,
 } from '../../../../atoms';
 import * as styles from './toggle-item.css';
 
@@ -27,7 +26,6 @@ export type ToggleItemProps = Omit<
  * ToggleItem component.
  */
 export const ToggleItem: FC<ToggleItemProps> = ({
-  className = '',
   id,
   isChecked = false,
   isDisabled = false,
@@ -39,17 +37,16 @@ export const ToggleItem: FC<ToggleItemProps> = ({
   const itemClassName = styles.item({ isChecked, isDisabled });
 
   return (
-    <Label {...props} className={`${itemClassName} ${className}`} htmlFor={id}>
-      <VisuallyHidden>
-        <Checkbox
-          id={id}
-          isChecked={isChecked}
-          isDisabled={isDisabled}
-          name={name}
-          onChange={onToggle}
-        />
-      </VisuallyHidden>
-      {label}
+    <Label {...props} htmlFor={id}>
+      <Checkbox
+        className={styles.checkbox}
+        id={id}
+        isChecked={isChecked}
+        isDisabled={isDisabled}
+        name={name}
+        onChange={onToggle}
+      />
+      <span className={itemClassName}>{label}</span>
     </Label>
   );
 };

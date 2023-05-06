@@ -19,7 +19,7 @@ export const VisuallyHidden: FC<VisuallyHiddenProps> = ({
   isFocusable = false,
   ...props
 }) => {
-  const wrapperClassName = styles.wrapper({ isFocusable });
+  const wrapperClassName = styles.visuallyHidden({ isFocusable });
 
   return (
     <span {...props} className={`${wrapperClassName} ${className}`}>

@@ -1,8 +1,16 @@
+import { style } from '@vanilla-extract/css';
 import { recipe } from '@vanilla-extract/recipes';
 import { contract } from '../../../../../themes';
+import { visuallyHidden } from '../../../../atoms/typography/visually-hidden/visually-hidden.css';
+
+export const checkbox = style([visuallyHidden({ isFocusable: false }), {}]);
 
 export const item = recipe({
   base: {
+    display: 'flex',
+    flexFlow: 'row wrap',
+    placeItems: 'center',
+    placeContent: 'center',
     padding: contract.spacing.xxs,
     borderStyle: contract.border.style.regular,
     borderWidth: contract.border.size.sm,
@@ -44,6 +52,13 @@ export const item = recipe({
           borderColor: contract.color.primary.dark,
           color: contract.color.foreground.onPrimary.base,
         },
+        selectors: {
+          [`${checkbox}:focus + &`]: {
+            background: contract.color.primary.base,
+            borderColor: contract.color.primary.dark,
+            color: contract.color.foreground.onPrimary.base,
+          },
+        },
       },
     },
     {
@@ -52,6 +67,12 @@ export const item = recipe({
         ':hover': {
           background: contract.color.background.regular.light,
           borderColor: contract.color.borders.regular.base,
+        },
+        selectors: {
+          [`${checkbox}:focus + &`]: {
+            background: contract.color.background.regular.light,
+            borderColor: contract.color.borders.regular.base,
+          },
         },
       },
     },
