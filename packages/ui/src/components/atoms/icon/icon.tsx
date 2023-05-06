@@ -13,7 +13,9 @@ import {
   AngleSVGPaths,
   CrossSVGPaths,
   HamburgerSVGPaths,
+  MoonSVGPaths,
   SearchSVGPaths,
+  SunSVGPaths,
 } from './svg-paths';
 
 export type IconColor = keyof ColorContextTokens | 'primary';
@@ -22,7 +24,13 @@ export type IconOrientation = Exclude<Position, 'center'>;
 
 export type IconSize = keyof IconSizeTokens;
 
-export type IconShape = 'angle' | 'cross' | 'hamburger' | 'search';
+export type IconShape =
+  | 'angle'
+  | 'cross'
+  | 'hamburger'
+  | 'moon'
+  | 'search'
+  | 'sun';
 
 type IconPathsProps = {
   orientation?: IconOrientation;
@@ -37,9 +45,13 @@ const IconPaths: FC<IconPathsProps> = ({ orientation, shape }) => {
       return <CrossSVGPaths />;
     case 'hamburger':
       return <HamburgerSVGPaths />;
+    case 'moon':
+      return <MoonSVGPaths />;
     case 'search':
-    default:
       return <SearchSVGPaths />;
+    case 'sun':
+    default:
+      return <SunSVGPaths />;
   }
 };
 

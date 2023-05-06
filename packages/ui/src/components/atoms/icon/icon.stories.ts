@@ -75,10 +75,24 @@ export const Hamburger: Story = {
   },
 };
 
+export const Moon: Story = {
+  name: 'Shape: Moon',
+  args: {
+    shape: 'moon',
+  },
+};
+
 export const Search: Story = {
   name: 'Shape: Search',
   args: {
     shape: 'search',
+  },
+};
+
+export const Sun: Story = {
+  name: 'Shape: Sun',
+  args: {
+    shape: 'sun',
   },
 };
 

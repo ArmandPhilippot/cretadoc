@@ -34,8 +34,18 @@ describe('icon', () => {
     expect(container.querySelector('svg')).toBeInTheDocument();
   });
 
+  it('renders a moon icon', () => {
+    const { container } = render(<Icon shape="moon" />);
+    expect(container.querySelector('svg')).toBeInTheDocument();
+  });
+
   it('renders a search icon', () => {
     const { container } = render(<Icon shape="search" />);
+    expect(container.querySelector('svg')).toBeInTheDocument();
+  });
+
+  it('renders a sun icon', () => {
+    const { container } = render(<Icon shape="sun" />);
     expect(container.querySelector('svg')).toBeInTheDocument();
   });
 

@@ -23,7 +23,13 @@ export const icon = recipe({
         stroke: iconColor,
         strokeWidth: 2,
       },
+      moon: {
+        fill: iconColor,
+      },
       search: {
+        fill: iconColor,
+      },
+      sun: {
         fill: iconColor,
       },
     },
