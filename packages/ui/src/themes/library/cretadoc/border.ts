@@ -5,7 +5,8 @@ export const border: BorderTokens = {
     sharp: '0',
     soft: '5px',
     softer: '10px',
-    round: '50%',
+    pill: '3rem',
+    circle: '50%',
   },
   size: {
     sm: '1px',

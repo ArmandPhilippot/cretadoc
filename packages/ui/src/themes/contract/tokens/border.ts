@@ -6,7 +6,8 @@ export const border: ReplaceTypesIn<BorderTokens, string> = {
     sharp: 'border-radius-sharp',
     soft: 'border-radius-soft',
     softer: 'border-radius-softer',
-    round: 'border-radius-round',
+    pill: 'border-radius-pill',
+    circle: 'border-radius-circle',
   },
   size: {
     sm: 'border-size-sm',

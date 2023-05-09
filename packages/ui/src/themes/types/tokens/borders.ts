@@ -10,13 +10,17 @@ export type BorderRadiusTokens = {
    */
   soft: LengthPercentage;
   /**
-   * The size of softer borders: a radius between soft and round.
+   * The size of softer borders: a radius between soft and pill.
    */
   softer: LengthPercentage;
   /**
-   * The size of rounded borders: the highest radius (usually `50%`).
+   * The size of rounded borders: a radius between softer and circle.
    */
-  round: LengthPercentage;
+  pill: LengthPercentage;
+  /**
+   * The size of full rounded borders: the highest radius (usually `50%`).
+   */
+  circle: LengthPercentage;
 };
 
 export type BorderSizeTokens = {
