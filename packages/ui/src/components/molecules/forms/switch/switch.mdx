@@ -1,0 +1,30 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as SwitchStories from './switch.stories';
+
+<Meta of={SwitchStories} />
+
+# Switch
+
+A `<Switch />` is a special toggle that accepts only two possible choices. A default choice must be provided and, on click, the selection switches to the other choice.
+
+<Primary />
+
+## Disabled
+
+<Canvas of={SwitchStories.Disabled} />
+
+## Accessibility
+
+If you choose to use an icon as label, you should provide as well an `aria-label`.
+
+<Canvas of={SwitchStories.Icons} />
+
+## Legend
+
+You can add a legend before the switch to help users understand its purpose.
+
+<Canvas of={SwitchStories.Legend} />
+
+## Props
+
+<ArgTypes of={SwitchStories} />
