@@ -54,6 +54,7 @@ export const CardsList = <T extends boolean>({
       {...props}
       className={`${listClassName} ${className}`}
       hasMarker={false}
+      isInline
       style={{ ...listStyles, ...style }}
     >
       {items.map((item) => (
