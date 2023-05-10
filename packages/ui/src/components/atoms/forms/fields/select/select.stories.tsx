@@ -71,6 +71,7 @@ export const SingleChoice: Story = {
   ...SelectTemplate,
   args: {
     ...SelectTemplate.args,
+    'aria-label': 'Example of a default select field',
     options,
   },
 };
@@ -79,6 +80,7 @@ export const MultipleChoices: Story = {
   ...SelectTemplate,
   args: {
     ...SelectTemplate.args,
+    'aria-label': 'Example of a select field with multiple choices',
     multiple: true,
     options,
   },
@@ -89,6 +91,7 @@ export const IsDisabled: Story = {
   name: 'State: Disabled',
   args: {
     ...SelectTemplate.args,
+    'aria-label': 'Example of a disabled select field',
     isDisabled: true,
     options,
   },
@@ -99,6 +102,7 @@ export const IsRequired: Story = {
   name: 'State: Required',
   args: {
     ...SelectTemplate.args,
+    'aria-label': 'Example of a required select field',
     isRequired: true,
     options,
   },
@@ -109,6 +113,7 @@ export const WithDisabledOptions: Story = {
   name: 'State: Disabled options',
   args: {
     ...SelectTemplate.args,
+    'aria-label': 'Example of a select field with disabled options',
     options: optionsWithDisabled,
   },
 };
@@ -117,6 +122,7 @@ export const Placeholder: Story = {
   ...SelectTemplate,
   args: {
     ...SelectTemplate.args,
+    'aria-label': 'Example of a select field with placeholder',
     options,
     placeholder: 'Select something...',
   },

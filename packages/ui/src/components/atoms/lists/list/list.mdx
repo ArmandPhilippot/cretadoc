@@ -16,7 +16,12 @@ Two kinds of list are possible but depending on the usage, one should be prefer 
 - if the data **order** in the list is **meaningless**, you should use an **unordered list**,
 - if the data should be ordered, please consider using an ordered list instead.
 
+### Unordered
+
 <Canvas of={ListStories.UnorderedList} />
+
+### Ordered
+
 <Canvas of={ListStories.OrderedList} />
 
 ## Nested
@@ -27,9 +32,14 @@ You can use one or more lists inside a list.
 
 ## Markers
 
-The list can control the items marker visibility:
+The list can control the items marker visibility.
+
+### Visible markers
 
 <Canvas of={ListStories.WithMarker} />
+
+### Hidden markers
+
 <Canvas of={ListStories.WithoutMarker} />
 
 ## Orientation
@@ -44,11 +54,13 @@ You can also use a nested list inside an inline list:
 
 ## Borders
 
-You can use a list with bordered items with a regular list:
+For design purposes, you can use a list with bordered items.
+
+### With a regular list
 
 <Canvas of={ListStories.WithBorderedItems} />
 
-Or an inlined list:
+### With an inlined list
 
 <Canvas of={ListStories.InlineWithBorderedItems} />
 

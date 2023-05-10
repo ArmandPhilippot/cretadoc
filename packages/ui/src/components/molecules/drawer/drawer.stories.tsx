@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { useCallback, useState } from 'react';
+import { useCallback, useId, useState } from 'react';
 import { Button } from '../../atoms';
 import { Drawer, type DrawerProps } from './drawer';
 
@@ -9,6 +9,7 @@ const ControlledDrawer = ({
   ...props
 }: DrawerProps) => {
   const [isOpen, setIsOpen] = useState(isOpenByDefault);
+  const drawerId = useId();
 
   const toggleDrawer = useCallback(() => {
     setIsOpen((prev) => !prev);
@@ -20,11 +21,18 @@ const ControlledDrawer = ({
 
   return (
     <div style={{ height: 300 }}>
-      <Button onClick={toggleDrawer}>Open the drawer</Button>
+      <Button
+        aria-controls={drawerId}
+        aria-expanded={isOpen}
+        onClick={toggleDrawer}
+      >
+        Open the drawer
+      </Button>
       <Drawer
         {...props}
         closeBtnLabel={hasCloseBtn ? 'Close' : undefined}
         hasCloseBtn={hasCloseBtn}
+        id={drawerId}
         isOpen={isOpen}
         onClose={hasCloseBtn ? handleClosing : undefined}
       />

@@ -42,6 +42,7 @@ export const IsUnchecked: Story = {
   name: 'State: Unchecked',
   args: {
     ...RadioTemplate.args,
+    'aria-label': 'Example of an unchecked radio button',
     id: 'unchecked',
     name: 'unchecked',
   },
@@ -52,6 +53,7 @@ export const IsChecked: Story = {
   name: 'State: Checked',
   args: {
     ...RadioTemplate.args,
+    'aria-label': 'Example of a checked radio button',
     id: 'checked',
     isChecked: true,
     name: 'checked',
@@ -63,6 +65,7 @@ export const IsDisabled: Story = {
   name: 'State: Disabled',
   args: {
     ...RadioTemplate.args,
+    'aria-label': 'Example of a disabled radio button',
     id: 'disabled',
     isDisabled: true,
     name: 'disabled',
@@ -74,6 +77,7 @@ export const IsRequired: Story = {
   name: 'State: Required',
   args: {
     ...RadioTemplate.args,
+    'aria-label': 'Example of an required radio button',
     id: 'required',
     isRequired: true,
     name: 'required',

@@ -29,15 +29,3 @@ export const Focusable: Story = {
     isFocusable: true,
   },
 };
-
-export const DeepFocusable: Story = {
-  args: {
-    ...VisuallyHiddenTemplate.args,
-    children: (
-      <div>
-        A hidden container with <a href="#anchor">a link</a> inside it.
-      </div>
-    ),
-    isFocusable: true,
-  },
-};

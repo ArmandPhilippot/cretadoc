@@ -28,6 +28,7 @@ export const ControlledCheckbox = ({ isChecked, ...args }: CheckboxProps) => {
 
 const CheckboxTemplate: Story = {
   args: {
+    'aria-label': 'Example of a default checkbox',
     id: 'default',
     isChecked: false,
     isDisabled: false,
@@ -42,6 +43,7 @@ export const IsUnchecked: Story = {
   name: 'State: Unchecked',
   args: {
     ...CheckboxTemplate.args,
+    'aria-label': 'Example of an unchecked checkbox',
     id: 'unchecked',
     name: 'unchecked',
   },
@@ -52,6 +54,7 @@ export const IsChecked: Story = {
   name: 'State: Checked',
   args: {
     ...CheckboxTemplate.args,
+    'aria-label': 'Example of a checked checkbox',
     id: 'checked',
     isChecked: true,
     name: 'checked',
@@ -63,6 +66,7 @@ export const IsDisabled: Story = {
   name: 'State: Disabled',
   args: {
     ...CheckboxTemplate.args,
+    'aria-label': 'Example of a disabled checkbox',
     id: 'disabled',
     isDisabled: true,
     name: 'disabled',
@@ -74,6 +78,7 @@ export const IsRequired: Story = {
   name: 'State: Required',
   args: {
     ...CheckboxTemplate.args,
+    'aria-label': 'Example of a required checkbox',
     id: 'required',
     isRequired: true,
     name: 'required',

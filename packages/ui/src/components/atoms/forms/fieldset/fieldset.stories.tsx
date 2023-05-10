@@ -15,25 +15,32 @@ export const Default: Story = {
   args: {},
 };
 
-const FieldsetWithFields = (args: FieldsetProps) => (
-  <Fieldset {...args}>
-    <Input id="field" name="field" type="text" />
+const FieldsetWithFields = ({
+  inputLabel,
+  ...props
+}: FieldsetProps & { inputLabel: string }) => (
+  <Fieldset {...props}>
+    <Input aria-label={inputLabel} id="field" name="field" type="text" />
   </Fieldset>
 );
 
-export const Enabled: Story = {
+type WithFieldStory = StoryObj<FieldsetProps & { inputLabel: string }>;
+
+export const Enabled: WithFieldStory = {
   name: 'State: Enabled',
   args: {
     ...Default.args,
+    inputLabel: 'Example of a field inside an enabled fieldset',
     isDisabled: false,
   },
   render: FieldsetWithFields,
 };
 
-export const Disabled: Story = {
+export const Disabled: WithFieldStory = {
   name: 'State: Disabled',
   args: {
     ...Default.args,
+    inputLabel: 'Example of a field inside a disabled fieldset',
     isDisabled: true,
   },
   render: FieldsetWithFields,

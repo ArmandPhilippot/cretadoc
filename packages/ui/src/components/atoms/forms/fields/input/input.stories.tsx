@@ -44,8 +44,9 @@ export const IsEditable: Story = {
   name: 'State: Editable',
   args: {
     ...InputTemplate.args,
-    id: 'disabled',
-    name: 'disabled',
+    'aria-label': 'Example of an editable input field',
+    id: 'editable-input',
+    name: 'editable',
   },
 };
 
@@ -54,7 +55,8 @@ export const IsDisabled: Story = {
   name: 'State: Disabled',
   args: {
     ...InputTemplate.args,
-    id: 'disabled',
+    'aria-label': 'Example of a disabled input field',
+    id: 'disabled-input',
     isDisabled: true,
     name: 'disabled',
   },
@@ -65,7 +67,8 @@ export const IsReadOnly: Story = {
   name: 'State: Readonly',
   args: {
     ...InputTemplate.args,
-    id: 'readonly',
+    'aria-label': 'Example of a read-only input field',
+    id: 'readonly-input',
     isReadOnly: true,
     name: 'readonly',
   },
@@ -76,7 +79,8 @@ export const IsRequired: Story = {
   name: 'State: Required',
   args: {
     ...InputTemplate.args,
-    id: 'required',
+    'aria-label': 'Example of a required input field',
+    id: 'required-input',
     isRequired: true,
     name: 'required',
   },
@@ -87,6 +91,7 @@ export const DateInput: Story = {
   name: 'Type: Date',
   args: {
     ...InputTemplate.args,
+    'aria-label': 'Example of a date field',
     id: 'date',
     name: 'date',
     type: 'date',
@@ -98,6 +103,7 @@ export const DatetimeInput: Story = {
   name: 'Type: Datetime',
   args: {
     ...InputTemplate.args,
+    'aria-label': 'Example of a datetime field',
     id: 'datetime',
     name: 'datetime',
     type: 'datetime-local',
@@ -109,6 +115,7 @@ export const EmailInput: Story = {
   name: 'Type: Email',
   args: {
     ...InputTemplate.args,
+    'aria-label': 'Example of an email field',
     id: 'email',
     name: 'email',
     type: 'email',
@@ -120,6 +127,7 @@ export const MonthInput: Story = {
   name: 'Type: Month',
   args: {
     ...InputTemplate.args,
+    'aria-label': 'Example of a month field',
     id: 'month',
     name: 'month',
     type: 'month',
@@ -131,6 +139,7 @@ export const NumberInput: Story = {
   name: 'Type: Number',
   args: {
     ...InputTemplate.args,
+    'aria-label': 'Example of a number field',
     id: 'number',
     name: 'number',
     type: 'number',
@@ -142,6 +151,7 @@ export const PasswordInput: Story = {
   name: 'Type: Password',
   args: {
     ...InputTemplate.args,
+    'aria-label': 'Example of a password field',
     id: 'password',
     name: 'password',
     type: 'password',
@@ -153,6 +163,7 @@ export const SearchInput: Story = {
   name: 'Type: Search',
   args: {
     ...InputTemplate.args,
+    'aria-label': 'Example of a search field',
     id: 'search',
     name: 'search',
     type: 'search',
@@ -164,6 +175,7 @@ export const TelInput: Story = {
   name: 'Type: Tel',
   args: {
     ...InputTemplate.args,
+    'aria-label': 'Example of a tel field',
     id: 'tel',
     name: 'tel',
     type: 'tel',
@@ -175,6 +187,7 @@ export const TextInput: Story = {
   name: 'Type: Text',
   args: {
     ...InputTemplate.args,
+    'aria-label': 'Example of a text field',
     id: 'text',
     name: 'text',
     type: 'text',
@@ -186,6 +199,7 @@ export const TimeInput: Story = {
   name: 'Type: Time',
   args: {
     ...InputTemplate.args,
+    'aria-label': 'Example of a time field',
     id: 'time',
     name: 'time',
     type: 'time',
@@ -197,6 +211,7 @@ export const UrlInput: Story = {
   name: 'Type: Url',
   args: {
     ...InputTemplate.args,
+    'aria-label': 'Example of an url field',
     id: 'url',
     name: 'url',
     type: 'url',
@@ -208,6 +223,7 @@ export const WeekInput: Story = {
   name: 'Type: Week',
   args: {
     ...InputTemplate.args,
+    'aria-label': 'Example of a week field',
     id: 'week',
     name: 'week',
     type: 'week',

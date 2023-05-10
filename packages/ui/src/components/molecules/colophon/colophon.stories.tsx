@@ -62,7 +62,7 @@ export const CopyrightAndLegalNotice: Story = {
 
 export const GeneratorAndLegalNotice: Story = {
   args: {
-    ...CopyrightOnly.args,
+    ...GeneratorOnly.args,
     ...LegalNoticeOnly.args,
   },
 };

@@ -15,17 +15,17 @@ A button can have three different types:
 
 - `submit`: it indicates the button is used to submit a form
 - `reset`: it indicates the button is used to reset a form
-- `button`: all other cases
+- `button`: all other cases, it is the default type
 
 ## Kind
 
-The button appearance can change depending on its kind. It can be either `primary`, `secondary` (default) or `neutral`.
+The button appearance can change depending on its kind.
 
 ### Primary
 
 <Canvas of={ButtonStories.Primary} />
 
-### Secondary
+### Secondary (default)
 
 <Canvas of={ButtonStories.Secondary} />
 
@@ -35,9 +35,9 @@ The button appearance can change depending on its kind. It can be either `primar
 
 ## States
 
-It can either be enabled (default), be disabled or indicate a loading state.
+It can either be enabled, be disabled or indicate a loading state.
 
-### Enabled
+### Enabled (default)
 
 <Canvas of={ButtonStories.Enabled} />
 
@@ -53,7 +53,7 @@ It can either be enabled (default), be disabled or indicate a loading state.
 
 If the button is a toggle button, it should use the `aria-pressed` attribute to indicate the current state.
 
-If the button controls the visibility of a some other elements, it should use the `aria-expanded` attribute to indicate the current state.
+If the button controls the visibility of some other elements, it should use the `aria-expanded` attribute to indicate the current state.
 
 Sometimes, the button body is not enough explicit for screen reader users. In that case, you should use the `aria-label` attribute to give a better indication about the button purpose.
 

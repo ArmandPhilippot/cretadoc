@@ -82,6 +82,7 @@ export const Template: FC<TemplateProps> = ({ children }) => {
         <Branding brand={brand} to="#" />
         <div className={styles.navbar}>
           <MainNav
+            aria-label="Main navigation"
             closeBtnLabel="Close the main nav"
             hasCloseBtn
             isOpen={isMainNavOpen}

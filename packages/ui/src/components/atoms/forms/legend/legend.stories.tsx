@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { contract } from '../../../../themes';
 import { Fieldset } from '../fieldset';
 import { Legend, type LegendProps } from './legend';
 
@@ -34,14 +35,17 @@ const FieldsetWithLegend = (args: LegendProps) => (
 const LegendTemplate: Story = {
   args: {
     children: 'A legend',
-    color: 'regular',
-    size: 'md',
   },
   render: FieldsetWithLegend,
 };
 
 export const Default: Story = {
   ...LegendTemplate,
+  args: {
+    ...LegendTemplate.args,
+    color: 'regular',
+    size: 'md',
+  },
 };
 
 export const ColorCritical: Story = {
@@ -68,6 +72,7 @@ export const ColorInverted: Story = {
   args: {
     ...LegendTemplate.args,
     color: 'inverted',
+    style: { background: contract.color.background.inverted.base },
   },
 };
 

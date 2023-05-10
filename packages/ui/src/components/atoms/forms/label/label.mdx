@@ -5,13 +5,13 @@ import * as LabelStories from './label.stories';
 
 # Label
 
-A label represents a caption for an item in a user interface. It should be associated with an input.
+A label represents a caption for an item in a user interface. It should be associated with a field.
 
 <Primary />
 
 ## State
 
-A field can be either required or not. The label reflect this state.
+A field can be either required or not. The label can reflect this state.
 
 <Canvas of={LabelStories.IsRequired} />
 
@@ -23,21 +23,52 @@ You can also change the default symbol used with `isRequired`:
 
 The label can have a different color than the foreground. It could be used, for example, to indicate a valid or non-valid field.
 
+### Critical
+
 <Canvas of={LabelStories.ColorCritical} />
+
+### Info
+
 <Canvas of={LabelStories.ColorInfo} />
+
+### Inverted
+
 <Canvas of={LabelStories.ColorInverted} />
+
+### Muted
+
 <Canvas of={LabelStories.ColorMuted} />
+
+### Regular (default)
+
 <Canvas of={LabelStories.ColorRegular} />
+
+### Success
+
 <Canvas of={LabelStories.ColorSuccess} />
+
+### Warning
+
 <Canvas of={LabelStories.ColorWarning} />
 
 ## Size
 
-You can also control the font-size used for the label:
+You can also control the font-size used for the label.
+
+### Extra-small (xs)
 
 <Canvas of={LabelStories.SizeXS} />
+
+### Small (sm)
+
 <Canvas of={LabelStories.SizeSM} />
+
+### Medium (md) (default)
+
 <Canvas of={LabelStories.SizeMD} />
+
+### Large (lg)
+
 <Canvas of={LabelStories.SizeLG} />
 
 ## Props

@@ -43,6 +43,7 @@ export const IsEditable: Story = {
   name: 'State: Editable',
   args: {
     ...TextAreaTemplate.args,
+    'aria-label': 'Example of a default text area',
     id: 'disabled',
     name: 'disabled',
   },
@@ -53,6 +54,7 @@ export const IsDisabled: Story = {
   name: 'State: Disabled',
   args: {
     ...TextAreaTemplate.args,
+    'aria-label': 'Example of a disabled text area',
     id: 'disabled',
     isDisabled: true,
     name: 'disabled',
@@ -64,6 +66,7 @@ export const IsReadOnly: Story = {
   name: 'State: Readonly',
   args: {
     ...TextAreaTemplate.args,
+    'aria-label': 'Example of a read-only text area',
     id: 'readonly',
     isReadOnly: true,
     name: 'readonly',
@@ -75,6 +78,7 @@ export const IsRequired: Story = {
   name: 'State: Required',
   args: {
     ...TextAreaTemplate.args,
+    'aria-label': 'Example of a required text area',
     id: 'required',
     isRequired: true,
     name: 'required',

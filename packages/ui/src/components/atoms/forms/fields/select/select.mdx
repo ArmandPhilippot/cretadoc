@@ -21,16 +21,24 @@ When using `multiple`, an user can select multiple options in the select menu.
 
 <Canvas of={SelectStories.MultipleChoices} />
 
+You should consider using a group of [`<Checkbox />` component](/docs/components-atoms-forms-fields-checkbox--docs) or a [`<Toggle />` component](/docs/components-molecules-forms-toggle--docs) instead.
+
 ## States
 
-Different states are possible:
+Different states are possible.
 
-- selectable (default): the user can select an option,
-- disabled: the user cannot interact with the select field,
-- disabled options: the user can interact with the select field but some options are not selectable.
+### Required
 
 <Canvas of={SelectStories.IsRequired} />
+
+### Disabled
+
 <Canvas of={SelectStories.IsDisabled} />
+
+### Disabled options
+
+The user can interact with the select field but some options are not selectable.
+
 <Canvas of={SelectStories.WithDisabledOptions} />
 
 ## Placeholder

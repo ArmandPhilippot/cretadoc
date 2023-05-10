@@ -52,6 +52,7 @@ export const Example: Story = {
         <NavItem label="Home" to="#" />
       </NavList>
     ),
+    drawerId: 'example-main-nav',
     maxWidth: '30ch',
     toggleBtnLabel: 'Toggle main nav',
   },
@@ -61,6 +62,7 @@ export const WithCloseBtn: Story = {
   args: {
     ...Example.args,
     closeBtnLabel: 'Close the panel',
+    drawerId: 'with-close-main-nav',
     hasCloseBtn: true,
   },
 };

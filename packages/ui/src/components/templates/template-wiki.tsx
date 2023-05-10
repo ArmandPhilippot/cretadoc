@@ -126,6 +126,7 @@ export const WikiTemplate: FC = () => {
       <Heading level={1}>Wiki</Heading>
       <CardsList items={cards} />
       <Pagination
+        aria-label="Wiki pagination"
         alignment="center"
         current={1}
         total={6}

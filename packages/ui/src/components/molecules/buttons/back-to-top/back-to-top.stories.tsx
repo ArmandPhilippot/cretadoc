@@ -24,6 +24,9 @@ const RenderBackToTop = ({
       id={targetId}
       onScroll={handleScroll}
       style={{ maxHeight: 300, overflow: 'auto' }}
+      // cspell:disable-next-line
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+      tabIndex={0}
     >
       <div style={{ height: 600 }} />
       <BackToTop {...props} isVisible={isVisible} />

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { contract } from '../../../../themes';
 import { Label } from './label';
 
 const meta = {
@@ -28,10 +29,6 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     children: 'A label',
-    color: 'regular',
-    isRequired: false,
-    size: 'md',
-    requiredSymbol: ' *',
   },
 };
 
@@ -73,6 +70,7 @@ export const ColorInverted: Story = {
   args: {
     ...Default.args,
     color: 'inverted',
+    style: { background: contract.color.background.inverted.base },
   },
 };
 

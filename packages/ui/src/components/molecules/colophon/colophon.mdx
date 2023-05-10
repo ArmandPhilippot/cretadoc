@@ -1,4 +1,4 @@
-import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import { ArgTypes, Canvas, Meta } from '@storybook/blocks';
 import * as ColophonStories from './colophon.stories';
 
 <Meta of={ColophonStories} />
@@ -7,27 +7,23 @@ import * as ColophonStories from './colophon.stories';
 
 A colophon is commonly used in the website footer to print some copyright information and/or legal notice link.
 
-<Primary />
-
 ## Contents
 
 A colophon can be decomposed in three parts.
 
-### Parts
-
-#### A copyright notice
+### A copyright notice
 
 <Canvas of={ColophonStories.CopyrightOnly} />
 
-#### A generator information
+### A generator information
 
 <Canvas of={ColophonStories.GeneratorOnly} />
 
-#### A legal notice link
+### A legal notice link
 
 <Canvas of={ColophonStories.LegalNoticeOnly} />
 
-### Combined
+### With combination
 
 #### Copyright and generator
 
