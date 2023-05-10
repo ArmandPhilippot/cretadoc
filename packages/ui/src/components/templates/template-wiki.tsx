@@ -125,7 +125,12 @@ export const WikiTemplate: FC = () => {
     <Template>
       <Heading level={1}>Wiki</Heading>
       <CardsList items={cards} />
-      <Pagination current={1} total={6} renderLink={renderLink} />
+      <Pagination
+        alignment="center"
+        current={1}
+        total={6}
+        renderLink={renderLink}
+      />
     </Template>
   );
 };

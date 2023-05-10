@@ -148,6 +148,30 @@ export const RowWithBorders: Story = {
   },
 };
 
+export const RowAlignmentLeft: Story = {
+  name: 'Row: Alignment Left',
+  args: {
+    ...Row.args,
+    alignment: 'left',
+  },
+};
+
+export const RowAlignmentCenter: Story = {
+  name: 'Row: Alignment Center',
+  args: {
+    ...Row.args,
+    alignment: 'center',
+  },
+};
+
+export const RowAlignmentRight: Story = {
+  name: 'Row: Alignment Right',
+  args: {
+    ...Row.args,
+    alignment: 'right',
+  },
+};
+
 export const ColumnBlock: Story = {
   name: 'Column: Default (block variant)',
   args: {

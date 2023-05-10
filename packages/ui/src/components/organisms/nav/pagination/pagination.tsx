@@ -24,7 +24,7 @@ export type RenderPaginationItemAriaLabel = <T extends PaginationItemKind>(
 export type RenderPaginationLink = (page: number) => string;
 
 export type PaginationProps = Omit<NavProps, 'children'> &
-  Pick<NavListProps<false>, 'spacing'> & {
+  Pick<NavListProps<false>, 'alignment' | 'spacing'> & {
     /**
      * The currently active page number.
      */
@@ -91,6 +91,7 @@ export type PaginationProps = Omit<NavProps, 'children'> &
  * Pagination component.
  */
 export const Pagination: FC<PaginationProps> = ({
+  alignment,
   current,
   hideNextLink = false,
   hidePrevLink = false,
@@ -135,7 +136,7 @@ export const Pagination: FC<PaginationProps> = ({
 
   return (
     <Nav {...props}>
-      <NavList isInline spacing={spacing}>
+      <NavList alignment={alignment} isInline spacing={spacing}>
         <>
           {!hidePrevLink && hasPreviousPage ? (
             <BackwardForward
