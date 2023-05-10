@@ -18,7 +18,9 @@ export const getColorFromTokenKey = (
   if (color === 'primary') return contract.color.primary.base;
   if (color === 'regular') return contract.color[kind].regular.base;
   if (color === 'inverted')
-    return kind === 'foreground' ? '' : contract.color[kind].inverted.base;
+    return kind === 'foreground'
+      ? contract.color.foreground.onInverted.base
+      : contract.color[kind].inverted.base;
 
   return contract.color[kind][color];
 };
