@@ -43,6 +43,7 @@ export const Drawer: FC<DrawerProps> = ({
   className = '',
   closeBtnLabel,
   hasCloseBtn = false,
+  id,
   isOpen = true,
   maxWidth,
   onClose,
@@ -60,11 +61,14 @@ export const Drawer: FC<DrawerProps> = ({
     <div
       {...props}
       className={`${drawerClassName} ${className}`}
+      id={id}
       style={{ ...drawerStyles, ...style }}
     >
       <div className={styles.content}>{children}</div>
       {hasCloseBtn ? (
         <Button
+          aria-controls={id}
+          aria-expanded={isOpen}
           aria-label={closeBtnLabel}
           className={styles.btn}
           kind="neutral"

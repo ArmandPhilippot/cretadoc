@@ -14,6 +14,10 @@ export type MainNavProps = NavProps &
     'closeBtnLabel' | 'hasCloseBtn' | 'maxWidth' | 'onClose'
   > & {
     /**
+     * Define an id for the drawer. It will be used to improve accessibility.
+     */
+    drawerId?: string;
+    /**
      * Is the main nav opened?
      *
      * @default false
@@ -40,6 +44,7 @@ export const MainNav: FC<MainNavProps> = ({
   children,
   className = '',
   closeBtnLabel,
+  drawerId,
   hasCloseBtn = false,
   isOpen = false,
   maxWidth,
@@ -57,7 +62,13 @@ export const MainNav: FC<MainNavProps> = ({
 
   return (
     <Nav {...props}>
-      <Button aria-label={toggleBtnLabel} kind="neutral" onClick={onToggle}>
+      <Button
+        aria-controls={drawerId}
+        aria-expanded={isOpen}
+        aria-label={toggleBtnLabel}
+        kind="neutral"
+        onClick={onToggle}
+      >
         <Icon color="primary" shape="hamburger" />
       </Button>
       <Overlay isVisible={isOpen} onClick={onClickOutside}>
@@ -65,6 +76,7 @@ export const MainNav: FC<MainNavProps> = ({
           className={`${styles.panel} ${className}`}
           closeBtnLabel={closeBtnLabel}
           hasCloseBtn={hasCloseBtn}
+          id={drawerId}
           isOpen={isOpen}
           maxWidth={maxWidth}
           onClick={stopPropagation}
