@@ -4,30 +4,41 @@ import { Button, Heading, Img, Link } from '../../atoms';
 import { Card } from './card';
 
 describe('card', () => {
+  it('renders a heading in an article', () => {
+    const level = 2;
+    const title = 'praesentium deleniti in';
+
+    render(<Card heading={<Heading level={level}>{title}</Heading>} />);
+    expect(screenTL.getByRole('article')).toHaveTextContent(title);
+    expect(screenTL.getByRole('heading', { level })).toHaveTextContent(title);
+  });
+
   it('accepts a cover', () => {
     const alt = 'voluptatem';
     const src = 'https://picsum.photos/640/480';
 
-    render(<Card cover={<Img alt={alt} src={src} />} />);
+    render(
+      <Card
+        cover={<Img alt={alt} src={src} />}
+        heading={<Heading level={2}>placeat nihil debitis</Heading>}
+      />
+    );
     expect(screenTL.getByRole('img', { name: alt })).toHaveAttribute(
       'src',
       src
     );
   });
 
-  it('accepts a heading', () => {
-    const level = 2;
-    const title = 'praesentium deleniti in';
-
-    render(<Card heading={<Heading level={level}>{title}</Heading>} />);
-    expect(screenTL.getByRole('heading', { level })).toHaveTextContent(title);
-  });
-
   it('accepts an excerpt', () => {
     const excerpt =
       'Qui dignissimos culpa et repellat quod et aut exercitationem voluptatem.';
 
-    render(<Card excerpt={excerpt} />);
+    render(
+      <Card
+        excerpt={excerpt}
+        heading={<Heading level={2}>placeat nihil debitis</Heading>}
+      />
+    );
     expect(screenTL.getByText(excerpt)).toBeInTheDocument();
   });
 
@@ -35,7 +46,12 @@ describe('card', () => {
     const cta = 'eaque';
     const target = '#';
 
-    render(<Card actions={<Link to={target}>{cta}</Link>} />);
+    render(
+      <Card
+        actions={<Link to={target}>{cta}</Link>}
+        heading={<Heading level={2}>placeat nihil debitis</Heading>}
+      />
+    );
     expect(screenTL.getByRole('link', { name: cta })).toHaveAttribute(
       'href',
       target
@@ -65,6 +81,7 @@ describe('card', () => {
             {action2.cta}
           </Button>,
         ]}
+        heading={<Heading level={2}>placeat nihil debitis</Heading>}
       />
     );
     expect(screenTL.getByRole('link', { name: action1.cta })).toHaveAttribute(

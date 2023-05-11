@@ -23,20 +23,21 @@ globalStyle(`${cover} > img`, {
   objectPosition: 'center',
 });
 
-export const heading = style({
-  margin: contract.spacing.md,
-  fontSize: contract.font.size.xl,
-});
+export const header = style({});
 
-globalStyle(`${heading} > *`, {
-  fontSize: 'inherit',
-});
+globalStyle(
+  `${header} > h1, ${header} > h2, ${header} > h3, ${header} > h4, ${header} > h5, ${header} > h6`,
+  {
+    margin: contract.spacing.md,
+    fontSize: contract.font.size.xl,
+  }
+);
 
 export const excerpt = style({
   margin: contract.spacing.md,
 });
 
-export const actions = style({
+export const footer = style({
   display: 'flex',
   flexFlow: 'row wrap',
   alignItems: 'center',

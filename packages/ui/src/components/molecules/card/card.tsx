@@ -1,20 +1,25 @@
 import type { FC, HTMLAttributes, ReactElement } from 'react';
-import type {
-  ButtonProps,
-  HeadingProps,
-  ImageProps,
-  LinkProps,
+import {
+  Article,
+  type ButtonProps,
+  Footer,
+  Header,
+  type HeadingProps,
+  type ImageProps,
+  type LinkProps,
+  type ButtonLinkProps,
 } from '../../atoms';
 import * as styles from './card.css';
 
 export type CardProps = HTMLAttributes<HTMLDivElement> & {
   actions?:
     | ReactElement<ButtonProps>
+    | ReactElement<ButtonLinkProps>
     | ReactElement<LinkProps>
-    | Array<ReactElement<ButtonProps | LinkProps>>;
+    | Array<ReactElement<ButtonProps | ButtonLinkProps | LinkProps>>;
   cover?: ReactElement<ImageProps>;
   excerpt?: string;
-  heading?: ReactElement<HeadingProps>;
+  heading: ReactElement<HeadingProps>;
 };
 
 /**
@@ -32,11 +37,13 @@ export const Card: FC<CardProps> = ({
   const cardClassName = styles.card({});
 
   return (
-    <div {...props} className={`${cardClassName} ${className}`}>
-      {cover ? <div className={styles.cover}>{cover}</div> : null}
-      {heading ? <div className={styles.heading}>{heading}</div> : null}
+    <Article {...props} className={`${cardClassName} ${className}`}>
+      <Header className={styles.header}>
+        {cover ? <div className={styles.cover}>{cover}</div> : null}
+        {heading}
+      </Header>
       {excerpt ? <div className={styles.excerpt}>{excerpt}</div> : null}
-      {actions ? <div className={styles.actions}>{actions}</div> : null}
-    </div>
+      {actions ? <Footer className={styles.footer}>{actions}</Footer> : null}
+    </Article>
   );
 };

@@ -1,5 +1,6 @@
 import { render, screen as screenTL } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
+import { Heading } from '../../atoms';
 import { Card } from '../../molecules';
 import { CardsList } from './cards-list';
 
@@ -12,7 +13,11 @@ describe('cards-list', () => {
         items={cards.map((id) => {
           return {
             id: `card-${id}`,
-            card: <Card excerpt="voluptatum iste fugit" />,
+            card: (
+              <Card
+                heading={<Heading level={2}>dignissimos cum nisi</Heading>}
+              />
+            ),
           };
         })}
       />

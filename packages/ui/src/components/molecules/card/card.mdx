@@ -1,4 +1,4 @@
-import { ArgTypes, Canvas, Meta } from '@storybook/blocks';
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
 import * as CardStories from './card.stories';
 
 <Meta of={CardStories} />
@@ -7,80 +7,47 @@ import * as CardStories from './card.stories';
 
 A card is commonly used to present short content about a single subject.
 
+<Primary />
+
 ## Contents
 
-A card can be composed with the following elements:
+A card always has a [`<Heading />`](/docs/components-atoms-typography-heading--docs). In addition, it can be composed with the following elements:
 
 - a cover (by using an [`<Img />`](/docs/components-atoms-image--docs) component),
-- a heading (by using a [`<Heading />`](/docs/components-atoms-typography-heading--docs) component),
 - an excerpt,
-- one or more actions (by using either a [`<Link />`](/docs/components-atoms-link--docs) component or a [`<Button />`](/docs/components-atoms-button--docs) component).
+- one or more actions (by using either a [`<Link />`](/docs/components-atoms-link--docs) component or one of the [buttons components](http://localhost:6006/?path=/docs/components-atoms-buttons--docs)).
 
-### Single element
-
-#### Cover only
-
-<Canvas of={CardStories.CoverOnly} />
-
-#### Heading only
-
-<Canvas of={CardStories.HeadingOnly} />
-
-#### Excerpt only
-
-<Canvas of={CardStories.ExcerptOnly} />
-
-#### Actions only
-
-<Canvas of={CardStories.SingleActionOnly} />
-
-You can also define several actions:
-
-<Canvas of={CardStories.MultipleActionsOnly} />
-
-### Multiple elements
-
-#### Cover and heading
+### Cover and heading
 
 <Canvas of={CardStories.CoverAndHeading} />
 
-#### Cover and excerpt
-
-<Canvas of={CardStories.CoverAndExcerpt} />
-
-#### Cover and actions
-
-<Canvas of={CardStories.CoverAndActions} />
-
-#### Heading and excerpt
+### Heading and excerpt
 
 <Canvas of={CardStories.ExcerptAndHeading} />
 
-#### Heading and actions
+### Heading and actions
 
-<Canvas of={CardStories.HeadingAndActions} />
+#### Single action
 
-#### Excerpt and actions
+<Canvas of={CardStories.SingleActionAndHeading} />
 
-<Canvas of={CardStories.ExcerptAndActions} />
+#### Multiple actions
 
-#### Cover, heading and excerpt
+<Canvas of={CardStories.MultipleActionsAndHeading} />
+
+### Cover, excerpt and heading
 
 <Canvas of={CardStories.CoverExcerptAndHeading} />
 
-#### Cover, excerpt and actions
-
-<Canvas of={CardStories.CoverExcerptAndActions} />
-
-#### Cover, heading and actions
+### Cover, heading and actions
 
 <Canvas of={CardStories.CoverHeadingAndActions} />
 
-#### Heading, excerpt and actions
+### Excerpt, heading and actions
 
 <Canvas of={CardStories.ExcerptHeadingAndActions} />
 
-#### All
+### All
 
 <Canvas of={CardStories.All} />
 

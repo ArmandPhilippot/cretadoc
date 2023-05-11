@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Button, Heading, Img, Link } from '../../atoms';
+import { Button, ButtonLink, Heading, Img, Link } from '../../atoms';
 import { Card } from './card';
 
 const meta = {
@@ -12,36 +12,36 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: {},
-};
-
-export const CoverOnly: Story = {
-  args: {
-    cover: <Img alt="The card cover" src="https://picsum.photos/640/480" />,
-  },
-};
-
-export const HeadingOnly: Story = {
   args: {
     heading: <Heading level={2}>Card title</Heading>,
   },
 };
 
-export const ExcerptOnly: Story = {
+export const CoverAndHeading: Story = {
   args: {
+    ...Default.args,
+    cover: <Img alt="The card cover" src="https://picsum.photos/640/480" />,
+  },
+};
+
+export const ExcerptAndHeading: Story = {
+  args: {
+    ...Default.args,
     excerpt:
       'Enim rem nisi et. Sequi ut veniam dolores est eius sed quo dolores. Quia porro adipisci. Id doloremque sint non magnam corporis eum voluptates quam. Ipsum iste cum magni.',
   },
 };
 
-export const SingleActionOnly: Story = {
+export const SingleActionAndHeading: Story = {
   args: {
+    ...Default.args,
     actions: <Link to="#card">Read more</Link>,
   },
 };
 
-export const MultipleActionsOnly: Story = {
+export const MultipleActionsAndHeading: Story = {
   args: {
+    ...Default.args,
     actions: [
       <Button key="like-btn">Like</Button>,
       <Link key="read-more-link" to="#card">
@@ -51,97 +51,36 @@ export const MultipleActionsOnly: Story = {
   },
 };
 
-export const CoverAndHeading: Story = {
-  args: {
-    ...CoverOnly.args,
-    heading: (
-      <Heading level={2}>
-        <Link to="#another-page">Card title</Link>
-      </Heading>
-    ),
-  },
-};
-
-export const CoverAndExcerpt: Story = {
-  args: {
-    ...CoverOnly.args,
-    ...ExcerptOnly.args,
-  },
-};
-
-export const CoverAndActions: Story = {
-  args: {
-    ...CoverOnly.args,
-    actions: <Button>Expand</Button>,
-  },
-};
-
-export const ExcerptAndHeading: Story = {
-  args: {
-    ...ExcerptOnly.args,
-    heading: (
-      <Heading level={2}>
-        <Link to="#another-page">Card title</Link>
-      </Heading>
-    ),
-  },
-};
-
-export const ExcerptAndActions: Story = {
-  args: {
-    ...ExcerptOnly.args,
-    ...SingleActionOnly.args,
-  },
-};
-
-export const HeadingAndActions: Story = {
-  args: {
-    ...HeadingOnly.args,
-    ...SingleActionOnly.args,
-  },
-};
-
 export const CoverExcerptAndHeading: Story = {
   args: {
-    ...CoverOnly.args,
-    ...ExcerptOnly.args,
-    heading: (
-      <Heading level={2}>
-        <Link to="#another-page">Card title</Link>
-      </Heading>
-    ),
-  },
-};
-
-export const CoverExcerptAndActions: Story = {
-  args: {
-    ...CoverOnly.args,
-    ...ExcerptOnly.args,
-    ...SingleActionOnly.args,
+    ...CoverAndHeading.args,
+    ...ExcerptAndHeading.args,
   },
 };
 
 export const CoverHeadingAndActions: Story = {
   args: {
-    ...CoverOnly.args,
-    ...HeadingOnly.args,
-    ...SingleActionOnly.args,
+    ...CoverAndHeading.args,
+    ...SingleActionAndHeading.args,
   },
 };
 
 export const ExcerptHeadingAndActions: Story = {
   args: {
-    ...ExcerptOnly.args,
-    ...HeadingOnly.args,
-    ...SingleActionOnly.args,
+    ...ExcerptAndHeading.args,
+    ...SingleActionAndHeading.args,
   },
 };
 
 export const All: Story = {
   args: {
-    ...CoverOnly.args,
-    ...ExcerptOnly.args,
-    ...HeadingOnly.args,
-    ...MultipleActionsOnly.args,
+    ...CoverAndHeading.args,
+    ...ExcerptAndHeading.args,
+    actions: [
+      <Button key="like-btn">Like</Button>,
+      <ButtonLink key="read-more-link" to="#card">
+        Read more
+      </ButtonLink>,
+    ],
   },
 };
