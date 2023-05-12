@@ -78,7 +78,7 @@ const RenderNestedItems = ({ variant, ...props }: NavItemProps) => {
         onExpand={handleExpand}
         variant={variant}
       >
-        <NavList>
+        <NavList spacing={variant === 'block' ? null : undefined}>
           <NavItem label="Item 1" to="#" variant={variant} />
           <NavItem label="Item 2" to="#" variant={variant} />
         </NavList>

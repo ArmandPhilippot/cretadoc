@@ -1,5 +1,5 @@
 import type { ReactNode, FC } from 'react';
-import { ListItem, type ListItemProps } from '../../../atoms';
+import { Icon, ListItem, type ListItemProps } from '../../../atoms';
 import { Collapsible } from '../../collapsible';
 import { NavLink, type NavLinkProps } from '../nav-link';
 import * as styles from './nav-item.css';
@@ -86,8 +86,20 @@ export const NavItem: FC<NavItemProps> = ({
     >
       {hasChildren ? (
         <Collapsible
+          bodyClassName={styles.collapsibleBody}
+          className={styles.collapsible}
+          expandBtnClassName={styles.expandBtn}
           expandBtnLabel={expandBtnAriaLabel}
           hasDissociatedBtn
+          icon={
+            <Icon
+              animationSpeed="fast"
+              color="primary"
+              orientation={isExpanded ? 'bottom' : 'right'}
+              shape="angle"
+              size="sm"
+            />
+          }
           isExpanded={isExpanded}
           onExpand={onExpand}
           summary={navLink}

@@ -1,12 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useCallback, useState } from 'react';
-import { Link } from '../../atoms';
+import { Icon, Link } from '../../atoms';
 import { Collapsible, type CollapsibleProps } from './collapsible';
 
 const ControlledCollapsible = ({
+  hasDissociatedBtn,
   isExpanded: expanded,
   ...props
-}: CollapsibleProps) => {
+}: Omit<CollapsibleProps, 'icon' | 'onExpand'>) => {
   const [isExpanded, setIsExpanded] = useState(expanded);
 
   const handleExpand = useCallback(() => {
@@ -14,7 +15,21 @@ const ControlledCollapsible = ({
   }, []);
 
   return (
-    <Collapsible {...props} isExpanded={isExpanded} onExpand={handleExpand} />
+    <Collapsible
+      {...props}
+      hasDissociatedBtn={hasDissociatedBtn}
+      icon={
+        <Icon
+          animationSpeed="fast"
+          color={hasDissociatedBtn ? 'primary' : 'regular'}
+          orientation={isExpanded ? 'bottom' : 'right'}
+          shape="angle"
+          size="sm"
+        />
+      }
+      isExpanded={isExpanded}
+      onExpand={handleExpand}
+    />
   );
 };
 
@@ -26,7 +41,7 @@ const meta = {
 
 export default meta;
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof ControlledCollapsible>;
 
 export const Example: Story = {
   args: {

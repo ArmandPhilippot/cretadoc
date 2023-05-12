@@ -1,12 +1,21 @@
 import { fireEvent, render, screen as screenTL } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
+import { Icon } from '../../atoms';
 import { Collapsible } from './collapsible';
+
+const icon = (
+  <Icon animationSpeed="fast" color="primary" shape="angle" size="sm" />
+);
 
 describe('collapsible', () => {
   it('renders a collapsed content', () => {
     const summary = 'facilis et hic';
     const body = 'possimus iste est';
-    render(<Collapsible summary={summary}>{body}</Collapsible>);
+    render(
+      <Collapsible icon={icon} summary={summary}>
+        {body}
+      </Collapsible>
+    );
     expect(screenTL.getByRole('button', { name: summary })).toBeVisible();
     expect(screenTL.getByText(body)).toBeInTheDocument();
     expect(screenTL.getByText(body)).not.toBeVisible();
@@ -17,7 +26,7 @@ describe('collapsible', () => {
     const summary = 'facilis et hic';
     const body = 'possimus iste est';
     render(
-      <Collapsible onExpand={onExpand} summary={summary}>
+      <Collapsible icon={icon} onExpand={onExpand} summary={summary}>
         {body}
       </Collapsible>
     );
@@ -34,6 +43,7 @@ describe('collapsible', () => {
       <Collapsible
         expandBtnLabel={expandLabel}
         hasDissociatedBtn
+        icon={icon}
         summary={summary}
       >
         {body}

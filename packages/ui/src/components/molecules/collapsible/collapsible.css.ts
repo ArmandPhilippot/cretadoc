@@ -2,29 +2,37 @@ import { style } from '@vanilla-extract/css';
 import { recipe } from '@vanilla-extract/recipes';
 import { contract } from '../../../themes';
 
-export const wrapper = style({
-  display: 'flex',
-  flexFlow: 'column wrap',
-  width: '100%',
+export const wrapper = recipe({
+  base: {
+    display: 'flex',
+    flexFlow: 'column wrap',
+  },
+  variants: {
+    isExpanded: {
+      false: {},
+      true: {},
+    },
+  },
 });
 
+const collapsedWrapper =
+  wrapper({ isExpanded: false }).split(' ')[1] ?? 'should-exist';
+
+const expandedWrapper =
+  wrapper({ isExpanded: true }).split(' ')[1] ?? 'should-exist';
+
 export const summary = style({
+  flex: 1,
   display: 'flex',
   flexFlow: 'row wrap',
   justifyContent: 'space-between',
   alignItems: 'center',
-  width: '100%',
-  padding: 0,
-  color: contract.color.primary.base,
 });
 
 export const btn = recipe({
   base: {
     height: '100%',
-    paddingInline: contract.spacing.xs,
-    borderLeftColor: contract.color.primary.base,
-    borderLeftStyle: contract.border.style.regular,
-    borderLeftWidth: contract.border.size.sm,
+    padding: 0,
     transitionProperty: 'all',
     transitionDuration: contract.animation.duration.fast,
     transitionTimingFunction: contract.animation.timing.linear,
@@ -39,44 +47,34 @@ export const btn = recipe({
     },
   },
   variants: {
-    isExpanded: {
-      false: { borderTopWidth: 0 },
+    isFullWidth: {
+      false: {
+        paddingInline: contract.spacing.xs,
+      },
       true: {
-        borderTopColor: contract.color.primary.base,
-        borderTopStyle: contract.border.style.regular,
-        borderTopWidth: contract.border.size.sm,
-        borderRightColor: contract.color.primary.base,
-        borderRightStyle: contract.border.style.regular,
-        borderRightWidth: contract.border.size.sm,
+        flex: 1,
+        placeContent: 'flex-start',
+        justifyContent: 'space-between',
       },
     },
   },
 });
 
-export const body = recipe({
-  base: {
-    transitionDuration: `${contract.animation.duration.medium}, ${contract.animation.duration.fast}`,
-    transitionProperty: 'all, padding',
-    transitionTimingFunction: `${contract.animation.timing.easeInOut}, ${contract.animation.timing.linear}`,
-  },
-  variants: {
-    isExpanded: {
-      false: {
-        maxHeight: 0,
-        padding: 0,
-        visibility: 'hidden',
-        opacity: 0,
-        overflow: 'hidden',
-        borderWidth: 0,
-      },
-      true: {
-        maxHeight: '95vh',
-        borderBlockColor: contract.color.primary.base,
-        borderBlockStyle: contract.border.style.regular,
-        borderBlockWidth: contract.border.size.sm,
-        visibility: 'visible',
-        opacity: 1,
-      },
+export const body = style({
+  transitionDuration: `${contract.animation.duration.medium}, ${contract.animation.duration.fast}`,
+  transitionProperty: 'all, padding',
+  transitionTimingFunction: `${contract.animation.timing.easeInOut}, ${contract.animation.timing.linear}`,
+  selectors: {
+    [`${collapsedWrapper} &`]: {
+      maxHeight: 0,
+      visibility: 'hidden',
+      opacity: 0,
+      overflow: 'hidden',
+    },
+    [`${expandedWrapper} &`]: {
+      maxHeight: '95vh',
+      visibility: 'visible',
+      opacity: 1,
     },
   },
 });

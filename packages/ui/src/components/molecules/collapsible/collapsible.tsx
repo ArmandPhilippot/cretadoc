@@ -1,5 +1,11 @@
-import { type FC, type HTMLAttributes, type ReactNode, useId } from 'react';
-import { Button, Icon } from '../../atoms';
+import {
+  type FC,
+  type HTMLAttributes,
+  type ReactNode,
+  useId,
+  type ReactElement,
+} from 'react';
+import { Button, type IconProps } from '../../atoms';
 import * as styles from './collapsible.css';
 
 export type CollapsibleProps = Omit<
@@ -7,6 +13,14 @@ export type CollapsibleProps = Omit<
   'children'
 > &
   Required<Pick<HTMLAttributes<HTMLDivElement>, 'children'>> & {
+    /**
+     * Provide additional styles to the body wrapper.
+     */
+    bodyClassName?: string;
+    /**
+     * Provide additional styles to the expand button.
+     */
+    expandBtnClassName?: string;
     /**
      * Add an accessible name to the expand button.
      */
@@ -18,7 +32,11 @@ export type CollapsibleProps = Omit<
      */
     hasDissociatedBtn?: boolean;
     /**
-     * Is the body expanded?
+     * An icon to represent the current state.
+     */
+    icon: ReactElement<IconProps>;
+    /**
+     * Are the details visible?
      *
      * @default false
      */
@@ -31,64 +49,65 @@ export type CollapsibleProps = Omit<
      * The collapsible summary.
      */
     summary: ReactNode;
+    /**
+     * Provide additional styles to the summary wrapper.
+     */
+    summaryClassName?: string;
   };
 
 /**
  * Collapsible component.
  */
 export const Collapsible: FC<CollapsibleProps> = ({
+  bodyClassName = '',
   children,
   className = '',
+  expandBtnClassName = '',
   expandBtnLabel,
   hasDissociatedBtn = false,
+  icon,
   isExpanded = false,
   onExpand,
   summary,
+  summaryClassName = '',
   ...props
 }) => {
-  const bodyClassName = styles.body({ isExpanded });
+  const wrapperClassName = styles.wrapper({ isExpanded });
+  const btnClassName = styles.btn({ isFullWidth: !hasDissociatedBtn });
   const bodyId = useId();
 
-  const expandIcon = (
-    <Icon
-      animationSpeed="fast"
-      color="primary"
-      orientation={isExpanded ? 'bottom' : 'right'}
-      shape="angle"
-      size="sm"
-    />
-  );
-
   return (
-    <div {...props} className={`${styles.wrapper} ${className}`}>
-      {hasDissociatedBtn ? (
-        <div className={styles.summary}>
-          {summary}
+    <div {...props} className={`${wrapperClassName} ${className}`}>
+      <div className={`${styles.summary} ${summaryClassName}`}>
+        {hasDissociatedBtn ? (
+          <>
+            {summary}
+            <Button
+              aria-controls={bodyId}
+              aria-expanded={isExpanded}
+              aria-label={expandBtnLabel}
+              className={`${btnClassName} ${expandBtnClassName}`}
+              kind="neutral"
+              onClick={onExpand}
+            >
+              {icon}
+            </Button>
+          </>
+        ) : (
           <Button
             aria-controls={bodyId}
             aria-expanded={isExpanded}
             aria-label={expandBtnLabel}
-            className={styles.btn({ isExpanded })}
+            className={`${btnClassName} ${expandBtnClassName}`}
             kind="neutral"
             onClick={onExpand}
           >
-            {expandIcon}
+            {summary}
+            {icon}
           </Button>
-        </div>
-      ) : (
-        <Button
-          aria-controls={bodyId}
-          aria-expanded={isExpanded}
-          aria-label={expandBtnLabel}
-          className={styles.summary}
-          kind="neutral"
-          onClick={onExpand}
-        >
-          {summary}
-          {expandIcon}
-        </Button>
-      )}
-      <div className={bodyClassName} id={bodyId}>
+        )}
+      </div>
+      <div className={`${styles.body} ${bodyClassName}`} id={bodyId}>
         {children}
       </div>
     </div>
