@@ -1,0 +1,24 @@
+import { Controls, Meta, Primary } from '@storybook/blocks';
+import * as UseHeadingsTreeStories from './use-headings-tree.stories';
+
+<Meta of={UseHeadingsTreeStories} />
+
+# useHeadingsTree
+
+`useHeadingsTree` is a React hook that lets you retrieve all headings in a page or in the given wrapper.
+
+## Options
+
+The hook accepts three options:
+
+- `fromLevel`: look for headings starting from the given level,
+- `toLevel`: look for headings until the given level (included),
+- `wrapper`: the element where to look for heading elements.
+
+Without options, the hook will return all the headings in the page.
+
+## Demo
+
+<Primary />
+
+<Controls />
