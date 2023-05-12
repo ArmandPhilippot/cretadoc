@@ -1,0 +1,20 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as ToCStories from './table-of-contents.stories';
+
+<Meta of={ToCStories} />
+
+# Table of contents
+
+A table of contents allows users to quickly navigate between the different headings in a document.
+
+<Primary />
+
+## Collapsible
+
+To gain space, you could use a collapsible table of contents.
+
+<Canvas of={ToCStories.Collapsible} />
+
+## Props
+
+<ArgTypes of={ToCStories} />
