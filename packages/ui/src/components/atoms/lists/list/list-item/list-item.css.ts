@@ -3,8 +3,10 @@ import { recipe, type RecipeVariants } from '@vanilla-extract/recipes';
 import { contract } from '../../../../../themes';
 import { itemSpacing, list } from '../list.css';
 
-const inlinedList = list({ isInline: true }).split(' ')[1] ?? 'should-exit';
-const stackedList = list({ isInline: false }).split(' ')[1] ?? 'should-exit';
+const hierarchicalList =
+  list({ isHierarchical: true }).split(' ')[1] ?? 'should-exist';
+const inlinedList = list({ isInline: true }).split(' ')[1] ?? 'should-exist';
+const stackedList = list({ isInline: false }).split(' ')[1] ?? 'should-exist';
 
 export const borderColor = createVar();
 export const borderSize = createVar();
@@ -35,6 +37,15 @@ const borderBlock = style({
 export const item = recipe({
   base: {
     selectors: {
+      [`${hierarchicalList} &`]: {
+        display: 'table',
+      },
+      [`${hierarchicalList} &::before`]: {
+        content: 'counters(item, ".") ". "',
+        counterIncrement: 'item',
+        display: 'table-cell',
+        paddingInlineEnd: contract.spacing.xxs,
+      },
       [`${stackedList} &:not(:last-child)`]: {
         marginBlockEnd: itemSpacing,
       },

@@ -20,6 +20,12 @@ export type ListProps<T extends boolean> = ResolveListProps<T> & {
    */
   hasMarker?: boolean;
   /**
+   * Should the numbering keep track of hierarchy when using ordered list?
+   *
+   * @default false
+   */
+  isHierarchical?: T extends true ? boolean : undefined;
+  /**
    * Should the list items be displayed inline?
    *
    * @default false
@@ -49,6 +55,7 @@ export const List = <T extends boolean>({
   children,
   className = '',
   hasMarker = true,
+  isHierarchical = false,
   isInline = false,
   isOrdered,
   spacing = 'xxs',
@@ -56,7 +63,7 @@ export const List = <T extends boolean>({
   ...props
 }: ListProps<T>) => {
   const ListComponent = isOrdered ? OrderedList : UnorderedList;
-  const listClassName = styles.list({ hasMarker, isInline });
+  const listClassName = styles.list({ hasMarker, isHierarchical, isInline });
   const listStyles = assignInlineVars({
     [styles.itemSpacing]: spacing ? contract.spacing[spacing] : '0',
   });

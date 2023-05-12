@@ -18,9 +18,6 @@ export const Default: Story = {
       <ListItem key="item-2">Item 2</ListItem>,
       <ListItem key="item-3">Item 3</ListItem>,
     ],
-    hasMarker: true,
-    isInline: false,
-    isOrdered: false,
   },
 };
 
@@ -61,6 +58,37 @@ export const Nested: Story = {
       <ListItem key="item-3">Item 3</ListItem>,
     ],
     isOrdered: false,
+  },
+};
+
+export const HierarchicalList: Story = {
+  args: {
+    ...OrderedList.args,
+    children: [
+      <ListItem key="item-1">
+        Item 1
+        <List isHierarchical isOrdered>
+          <ListItem>Subitem 1</ListItem>
+          <ListItem>Subitem 2</ListItem>
+        </List>
+      </ListItem>,
+      <ListItem key="item-2">
+        Item 2
+        <List isHierarchical isOrdered>
+          <ListItem>Subitem 1</ListItem>
+          <ListItem>
+            Subitem 2
+            <List isHierarchical isOrdered>
+              <ListItem>Nested item 1</ListItem>
+              <ListItem>Nested item 2</ListItem>
+            </List>
+          </ListItem>
+          <ListItem>Subitem 3</ListItem>
+        </List>
+      </ListItem>,
+      <ListItem key="item-3">Item 3</ListItem>,
+    ],
+    isHierarchical: true,
   },
 };
 

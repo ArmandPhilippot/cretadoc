@@ -25,6 +25,12 @@ export const list = recipe({
       },
       true: {},
     },
+    isHierarchical: {
+      false: {},
+      true: {
+        counterReset: 'item',
+      },
+    },
     isInline: {
       false: {},
       true: {
@@ -36,7 +42,7 @@ export const list = recipe({
   },
   compoundVariants: [
     {
-      variants: { hasMarker: true, isInline: false },
+      variants: { hasMarker: true, isHierarchical: false, isInline: false },
       style: {
         paddingInlineStart: inlinePadding,
         selectors: {
