@@ -16,6 +16,7 @@ export const BoxWithRef: ForwardRefRenderFunction<HTMLDivElement, BoxProps> = (
     className = '',
     hasOverflow = false,
     isAlwaysScrollable = false,
+    style,
     ...props
   },
   ref
@@ -25,6 +26,7 @@ export const BoxWithRef: ForwardRefRenderFunction<HTMLDivElement, BoxProps> = (
     className={`${styles.box} ${className}`}
     ref={ref}
     style={{
+      ...style,
       overflow: isAlwaysScrollable ? 'scroll' : 'auto',
     }}
   >

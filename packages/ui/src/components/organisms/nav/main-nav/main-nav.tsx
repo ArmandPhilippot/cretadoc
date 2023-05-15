@@ -3,7 +3,7 @@ import {
   type MouseEvent as ReactMouseEvent,
   useCallback,
 } from 'react';
-import { useBodyScrollLock } from '../../../../hooks/use-body-scroll-lock';
+import { useScrollLock } from '../../../../hooks';
 import { Button, Icon, Nav, type NavProps, Overlay } from '../../../atoms';
 import { Drawer, type DrawerProps } from '../../../molecules/drawer';
 import * as styles from './main-nav.css';
@@ -58,7 +58,7 @@ export const MainNav: FC<MainNavProps> = ({
     e.stopPropagation();
   }, []);
 
-  useBodyScrollLock(isOpen);
+  useScrollLock(isOpen);
 
   return (
     <Nav {...props}>
