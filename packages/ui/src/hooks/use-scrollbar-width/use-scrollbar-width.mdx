@@ -1,0 +1,18 @@
+import { Meta, Primary } from '@storybook/blocks';
+import * as UseScrollbarWidthStories from './use-scrollbar-width.stories';
+
+<Meta of={UseScrollbarWidthStories} />
+
+# useScrollbarWidth
+
+`useScrollbarWidth` is a React hook that lets you retrieve the browser scrollbar width.
+
+## Caveats
+
+The hook observes window resizing and orientation change to update the scrollbar width. However there is no built-in way to detect an overflow change in a given container. If we create an observer for each child of the container, it could cause performance issues. So we don't watch for overflow change. If the container looses its scrollbar, the width will not be updated.
+
+## Demo
+
+**Note:** On Firefox, the scrollbar is not set inside its container. You should use a different browser, like Chromium, to see another value than 0.
+
+<Primary />

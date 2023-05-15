@@ -2,25 +2,26 @@ import type { Nullable } from '@cretadoc/utils';
 import { isBrowser } from './is';
 
 /**
- * Retrieve the scrollbar width.
+ * Retrieve the scrollbar width of either a given element or the window.
  *
- * @param {string} [rootSelector] - A selector to query the root element.
+ * @param {Nullable<HTMLElement>} [el] - The targeted element.
  * @returns {number} The scrollbar width.
  */
-export const getScrollbarWidth = (rootSelector?: string): number => {
+export const getScrollbarWidth = (el?: Nullable<HTMLElement>): number => {
   const defaultWidth = 15;
 
   if (!isBrowser()) return defaultWidth;
 
-  if (rootSelector) {
-    const root = document.querySelector(
-      rootSelector
-    ) satisfies Nullable<HTMLElement>;
+  if (el) {
+    const elStyles = window.getComputedStyle(el);
+    const borders =
+      parseFloat(elStyles.borderLeftWidth) +
+      parseFloat(elStyles.borderRightWidth);
 
-    return root ? root.offsetWidth - root.scrollWidth : 0;
+    return el.offsetWidth - (el.clientWidth + borders);
   }
 
-  return window.document.body.scrollWidth
-    ? window.innerWidth - window.document.body.scrollWidth
+  return window.document.body.clientWidth
+    ? window.innerWidth - window.document.body.clientWidth
     : 0;
 };

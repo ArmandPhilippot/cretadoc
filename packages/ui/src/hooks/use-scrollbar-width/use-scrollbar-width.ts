@@ -1,25 +1,21 @@
-import { useCallback, useEffect, useState } from 'react';
-import { getScrollbarWidth } from '../helpers';
+import { type RefObject, useCallback, useEffect, useState } from 'react';
+import { getScrollbarWidth } from '../../helpers';
 
 /**
  * React hook to retrieve the current scrollbar width.
  *
- * @param {string} [rootSelector] - A selector to query the root element.
+ * @param {RefObject<HTMLElement>} [ref] - The targeted element.
  * @returns {number} The scrollbar width.
  */
-export const useScrollBarWidth = (rootSelector?: string): number => {
+export const useScrollBarWidth = (ref?: RefObject<HTMLElement>): number => {
   const [scrollbarWidth, setScrollbarWidth] = useState(0);
 
-  useEffect(() => {
-    setScrollbarWidth(getScrollbarWidth(rootSelector));
-  }, [rootSelector]);
-
   const updateScrollbarWidth = useCallback(() => {
-    const newSize = getScrollbarWidth(rootSelector);
-    setScrollbarWidth(newSize);
-  }, [rootSelector]);
+    setScrollbarWidth(getScrollbarWidth(ref?.current));
+  }, [ref]);
 
   useEffect(() => {
+    updateScrollbarWidth();
     window.addEventListener('resize', updateScrollbarWidth);
     window.addEventListener('orientationchange', updateScrollbarWidth);
 
