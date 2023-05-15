@@ -25,7 +25,7 @@ export const UseScrollbarWidthDemo: FC = () => {
         </Box>
       </DemoPanel>
       <DemoPanel heading='Div with "overflow: auto" and children overflow'>
-        <Box hasOverflow ref={divOverflowRef}>
+        <Box hasOverflowY ref={divOverflowRef}>
           The scrollbar width of this box is: {divOverflowScrollbarWidth}
         </Box>
       </DemoPanel>

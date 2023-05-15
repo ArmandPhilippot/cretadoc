@@ -51,7 +51,7 @@ export const UseScrollLockDemo: FC = () => {
           label="Lock div scroll"
           layout="row"
         />
-        <Box id="locked-div" hasOverflow ref={divRef} />
+        <Box id="locked-div" hasOverflowY ref={divRef} />
       </DemoPanel>
     </Demo>
   );

@@ -6,7 +6,8 @@ import {
 import * as styles from './box.css';
 
 type BoxProps = HTMLAttributes<HTMLDivElement> & {
-  hasOverflow?: boolean;
+  hasOverflowX?: boolean;
+  hasOverflowY?: boolean;
   isAlwaysScrollable?: boolean;
 };
 
@@ -14,7 +15,8 @@ export const BoxWithRef: ForwardRefRenderFunction<HTMLDivElement, BoxProps> = (
   {
     children,
     className = '',
-    hasOverflow = false,
+    hasOverflowX = false,
+    hasOverflowY = false,
     isAlwaysScrollable = false,
     style,
     ...props
@@ -31,7 +33,17 @@ export const BoxWithRef: ForwardRefRenderFunction<HTMLDivElement, BoxProps> = (
     }}
   >
     {children}
-    <div style={hasOverflow ? { minHeight: '100vh' } : {}} />
+    <div
+      style={{
+        ...(hasOverflowY ? { minHeight: '100vh' } : {}),
+        ...(hasOverflowX ? { minWidth: '100vw' } : {}),
+      }}
+      // cspell:ignore-word noninteractive
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+      tabIndex={
+        hasOverflowX || hasOverflowY || isAlwaysScrollable ? 0 : undefined
+      }
+    />
   </div>
 );
 
