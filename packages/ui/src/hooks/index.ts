@@ -3,3 +3,4 @@ export * from './use-headings-tree';
 export * from './use-scroll-lock';
 export * from './use-scroll-position';
 export * from './use-scrollbar-width';
+export * from './use-toggle';
