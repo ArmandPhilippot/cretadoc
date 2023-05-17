@@ -14,4 +14,8 @@ export type SizeTokens = {
    * The size of the container used for prose.
    */
   prose: LengthPercentage;
+  /**
+   * The maximum width of the sidebar container.
+   */
+  sidebar: LengthPercentage;
 };
