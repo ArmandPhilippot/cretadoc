@@ -1,14 +1,12 @@
-import { createVar, style } from '@vanilla-extract/css';
+import { style } from '@vanilla-extract/css';
 import { recipe } from '@vanilla-extract/recipes';
 import { contract } from '../../../themes';
-
-export const drawerWidth = createVar();
 
 export const drawer = recipe({
   base: {
     display: 'flex',
     flexFlow: 'column nowrap',
-    width: `min(80vw, ${drawerWidth})`,
+    width: `min(80vw, ${contract.size.sidebar})`,
     height: '100%',
     position: 'fixed',
     insetBlock: 0,

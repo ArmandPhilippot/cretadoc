@@ -53,7 +53,6 @@ export const Example: Story = {
       </NavList>
     ),
     drawerId: 'example-main-nav',
-    maxWidth: '30ch',
     toggleBtnLabel: 'Toggle main nav',
   },
 };

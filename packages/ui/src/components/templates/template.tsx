@@ -86,7 +86,6 @@ export const Template: FC<TemplateProps> = ({ children }) => {
             closeBtnLabel="Close the main nav"
             hasCloseBtn
             isOpen={isMainNavOpen}
-            maxWidth="40ch"
             onClickOutside={closeMainNav}
             onClose={closeMainNav}
             onToggle={toggleMainNav}

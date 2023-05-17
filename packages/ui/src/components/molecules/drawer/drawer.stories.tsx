@@ -73,10 +73,3 @@ export const CloseButton: Story = {
     hasCloseBtn: true,
   },
 };
-
-export const MaxWidth: Story = {
-  args: {
-    ...CloseButton.args,
-    maxWidth: '40ch',
-  },
-};

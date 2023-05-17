@@ -9,10 +9,7 @@ import { Drawer, type DrawerProps } from '../../../molecules/drawer';
 import * as styles from './main-nav.css';
 
 export type MainNavProps = NavProps &
-  Pick<
-    DrawerProps,
-    'closeBtnLabel' | 'hasCloseBtn' | 'maxWidth' | 'onClose'
-  > & {
+  Pick<DrawerProps, 'closeBtnLabel' | 'hasCloseBtn' | 'onClose'> & {
     /**
      * Define an id for the drawer. It will be used to improve accessibility.
      */
@@ -47,7 +44,6 @@ export const MainNav: FC<MainNavProps> = ({
   drawerId,
   hasCloseBtn = false,
   isOpen = false,
-  maxWidth,
   onClickOutside,
   onClose,
   onToggle,
@@ -78,7 +74,6 @@ export const MainNav: FC<MainNavProps> = ({
           hasCloseBtn={hasCloseBtn}
           id={drawerId}
           isOpen={isOpen}
-          maxWidth={maxWidth}
           onClick={stopPropagation}
           onClose={onClose}
         >

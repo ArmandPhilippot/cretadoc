@@ -1,6 +1,4 @@
-import { assignInlineVars } from '@vanilla-extract/dynamic';
 import type { FC, HTMLAttributes, ReactNode } from 'react';
-import type { LengthPercentage } from '../../../themes/types/css';
 import { Button, Icon } from '../../atoms';
 import * as styles from './drawer.css';
 
@@ -26,10 +24,6 @@ export type DrawerProps = HTMLAttributes<HTMLDivElement> & {
    */
   isOpen?: boolean;
   /**
-   * The drawer max width.
-   */
-  maxWidth?: LengthPercentage;
-  /**
    * A function to trigger when user clicks on close button.
    */
   onClose?: () => void;
@@ -45,25 +39,15 @@ export const Drawer: FC<DrawerProps> = ({
   hasCloseBtn = false,
   id,
   isOpen = true,
-  maxWidth,
   onClose,
-  style,
   ...props
 }) => {
   const drawerClassName = styles.drawer({
     isOpen,
   });
-  const drawerStyles = assignInlineVars({
-    [styles.drawerWidth]: maxWidth ?? '',
-  });
 
   return (
-    <div
-      {...props}
-      className={`${drawerClassName} ${className}`}
-      id={id}
-      style={{ ...drawerStyles, ...style }}
-    >
+    <div {...props} className={`${drawerClassName} ${className}`} id={id}>
       <div className={styles.content}>{children}</div>
       {hasCloseBtn ? (
         <Button
