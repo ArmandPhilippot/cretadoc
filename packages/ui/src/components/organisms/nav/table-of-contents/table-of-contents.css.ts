@@ -6,9 +6,7 @@ export const nav = recipe({
   base: {},
   variants: {
     isCollapsible: {
-      false: {
-        padding: contract.spacing.xs,
-      },
+      false: {},
       true: {
         borderColor: contract.color.borders.regular.light,
         borderStyle: contract.border.style.regular,

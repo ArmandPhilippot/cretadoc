@@ -10,4 +10,7 @@ export const layout = style({
   fontFamily: contract.font.family.regular,
   fontSize: contract.font.size.md,
   lineHeight: contract.font.lineHeight.md,
+  transitionDuration: contract.animation.duration.fast,
+  transitionProperty: 'all',
+  transitionTimingFunction: contract.animation.timing.easeInOut,
 });

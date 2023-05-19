@@ -1,8 +1,14 @@
 import { type FC, useCallback } from 'react';
-import { Heading, Link, VisuallyHidden } from '../atoms';
+import { Article, Header, Heading, Link, VisuallyHidden } from '../atoms';
 import { Card } from '../molecules';
-import { type CardItem, CardsList, Pagination } from '../organisms';
+import {
+  type CardItem,
+  CardsList,
+  Pagination,
+  type BreadcrumbsItem,
+} from '../organisms';
 import { Template } from './template';
+import * as styles from './template.css';
 
 export const WikiTemplate: FC = () => {
   const cards: CardItem[] = [
@@ -120,18 +126,33 @@ export const WikiTemplate: FC = () => {
     },
   ];
   const renderLink = useCallback((page: number) => `#${page}`, []);
+  const pageTitle = 'Wiki';
+  const breadcrumbs: BreadcrumbsItem[] = [
+    { id: 'home', label: 'Home', url: '/' },
+    {
+      id: 'wiki',
+      label: pageTitle,
+      url: '/?path=/story/components-templates--homepage',
+    },
+  ];
 
   return (
-    <Template>
-      <Heading level={1}>Wiki</Heading>
-      <CardsList items={cards} />
-      <Pagination
-        aria-label="Wiki pagination"
-        alignment="center"
-        current={1}
-        total={6}
-        renderLink={renderLink}
-      />
+    <Template breadcrumbs={breadcrumbs} isWiki>
+      <Article className={styles.page({ hasTwoColumns: false })}>
+        <Header>
+          <Heading level={1}>{pageTitle}</Heading>
+        </Header>
+        <div>
+          <CardsList items={cards} />
+          <Pagination
+            aria-label="Wiki pagination"
+            alignment="center"
+            current={1}
+            total={6}
+            renderLink={renderLink}
+          />
+        </div>
+      </Article>
     </Template>
   );
 };

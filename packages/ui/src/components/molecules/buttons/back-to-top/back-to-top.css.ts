@@ -25,6 +25,7 @@ export const button = recipe({
       true: {
         opacity: 1,
         visibility: 'visible',
+        boxShadow: contract.shadow.regular.bottom.right.floating,
       },
     },
   },

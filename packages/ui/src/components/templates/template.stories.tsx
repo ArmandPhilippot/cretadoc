@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Template } from './template';
 import { HomePageTemplate } from './template-homepage';
 import { WikiTemplate } from './template-wiki';
+import { WikiPageTemplate } from './template-wiki-page';
 
 const meta = {
   title: 'Components/Templates',
@@ -21,4 +22,8 @@ export const Homepage: Story = {
 
 export const Wiki: Story = {
   render: () => <WikiTemplate />,
+};
+
+export const WikiPage: Story = {
+  render: () => <WikiPageTemplate />,
 };
