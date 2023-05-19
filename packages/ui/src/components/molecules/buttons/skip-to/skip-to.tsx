@@ -1,9 +1,6 @@
 import type { FC, ReactNode } from 'react';
-import {
-  ButtonLink,
-  VisuallyHidden,
-  type ButtonLinkProps,
-} from '../../../atoms';
+import { useVisuallyHidden } from '../../../../hooks';
+import { ButtonLink, type ButtonLinkProps } from '../../../atoms';
 import * as styles from './skip-to.css';
 
 export type SkipToProps = Omit<ButtonLinkProps, 'children' | 'to'> & {
@@ -26,17 +23,15 @@ export const SkipTo: FC<SkipToProps> = ({
   targetId,
   ...props
 }) => {
-  const buttonClassName = styles.btn;
+  const visuallyHidden = useVisuallyHidden(true);
 
   return (
-    <VisuallyHidden isFocusable>
-      <ButtonLink
-        {...props}
-        className={`${buttonClassName} ${className}`}
-        to={`#${targetId}`}
-      >
-        {label}
-      </ButtonLink>
-    </VisuallyHidden>
+    <ButtonLink
+      {...props}
+      className={`${visuallyHidden} ${styles.btn} ${className}`}
+      to={`#${targetId}`}
+    >
+      {label}
+    </ButtonLink>
   );
 };

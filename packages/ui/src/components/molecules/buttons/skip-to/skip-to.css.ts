@@ -6,5 +6,6 @@ export const btn = style({
     position: 'absolute',
     top: contract.spacing.sm,
     left: contract.spacing.sm,
+    zIndex: 5,
   },
 });
