@@ -33,7 +33,7 @@ export const item = recipe({
       false: {
         cursor: 'pointer',
         '::before': {
-          background: contract.color.primary.base,
+          background: contract.color.primary.light,
         },
         selectors: {
           [`${group({})}:focus-within &::before`]: {
@@ -64,6 +64,10 @@ export const item = recipe({
       },
       true: {
         selectors: {
+          '&:focus-within::before': {
+            outlineColor: 'Highlight',
+            outlineStyle: 'auto',
+          },
           '&:first-child::before': {
             left: 0,
           },
