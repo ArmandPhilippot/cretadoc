@@ -1,10 +1,20 @@
-import type { FC, HTMLAttributes, ReactNode } from 'react';
+import {
+  type ForwardRefRenderFunction,
+  type HTMLAttributes,
+  type ReactNode,
+  forwardRef,
+} from 'react';
 
 export type ArticleProps = HTMLAttributes<HTMLElement> & {
   children: ReactNode;
 };
 
+const ArticleWithRef: ForwardRefRenderFunction<HTMLElement, ArticleProps> = (
+  props,
+  ref
+) => <article {...props} ref={ref} />;
+
 /**
  * Article component.
  */
-export const Article: FC<ArticleProps> = (props) => <article {...props} />;
+export const Article = forwardRef(ArticleWithRef);
