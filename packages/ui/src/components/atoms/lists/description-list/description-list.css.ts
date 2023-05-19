@@ -22,6 +22,9 @@ export const list = recipe({
   },
 });
 
+const inlinedList = list({ isInline: true }).split(' ')[1] ?? '';
+const stackedList = list({ isInline: false }).split(' ')[1] ?? '';
+
 export const groupSpacing = createVar();
 
 export const group = recipe({
@@ -59,15 +62,24 @@ export const description = style({
 
 export const termColor = createVar();
 
-export const term = style({
-  color: termColor,
-  fontWeight: contract.font.weight.strong,
-  selectors: {
-    [`${list({ isInline: false }).split(' ')[1] ?? ''} ${description} + &`]: {
-      marginBlockStart: listSpacing,
+export const term = recipe({
+  base: {
+    color: termColor,
+    selectors: {
+      [`${inlinedList} ${description} + &`]: {
+        marginInlineStart: listSpacing,
+      },
+      [`${stackedList} ${description} + &`]: {
+        marginBlockStart: listSpacing,
+      },
     },
-    [`${list({ isInline: true }).split(' ')[1] ?? ''} ${description} + &`]: {
-      marginInlineStart: listSpacing,
+  },
+  variants: {
+    isBold: {
+      false: {},
+      true: {
+        fontWeight: contract.font.weight.strong,
+      },
     },
   },
 });

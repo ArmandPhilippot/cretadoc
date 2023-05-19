@@ -15,6 +15,12 @@ export type TermProps = HTMLAttributes<HTMLElement> & {
    * @default 'regular'
    */
   color?: keyof ColorContextTokens;
+  /**
+   * Should the term use a bold font-weight?
+   *
+   * @default true
+   */
+  isBold?: boolean;
 };
 
 /**
@@ -26,10 +32,11 @@ export const Term: FC<TermProps> = ({
   children,
   className = '',
   color = 'regular',
+  isBold = true,
   style,
   ...props
 }) => {
-  const termClassName = styles.term;
+  const termClassName = styles.term({ isBold });
   const termStyles = assignInlineVars({
     [styles.termColor]: getColorFromTokenKey(color, 'borders'),
   });

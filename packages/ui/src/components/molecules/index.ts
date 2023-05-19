@@ -5,4 +5,5 @@ export * from './collapsible';
 export * from './colophon';
 export * from './drawer';
 export * from './forms';
+export * from './meta';
 export * from './nav';

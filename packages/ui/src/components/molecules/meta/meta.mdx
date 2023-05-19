@@ -1,0 +1,34 @@
+import { ArgTypes, Canvas, Meta, Primary } from '@storybook/blocks';
+import * as MetaStories from './meta.stories.ts';
+
+<Meta of={MetaStories} />
+
+# Meta
+
+A `<Meta />` component can be used to display the page metadata such as a publication date.
+
+<Primary />
+
+## Size
+
+You can control the size of the meta.
+
+### Small (sm)
+
+<Canvas of={MetaStories.SizeSM} />
+
+### Medium (md) (default)
+
+<Canvas of={MetaStories.SizeMD} />
+
+### Large (lg)
+
+<Canvas of={MetaStories.SizeLG} />
+
+## Variant
+
+<Canvas of={MetaStories.InlinedMeta} />
+
+## Props
+
+<ArgTypes of={MetaStories} />
