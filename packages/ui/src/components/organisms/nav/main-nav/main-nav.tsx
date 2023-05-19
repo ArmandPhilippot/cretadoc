@@ -2,6 +2,7 @@ import {
   type FC,
   type MouseEvent as ReactMouseEvent,
   useCallback,
+  type FocusEventHandler,
 } from 'react';
 import { useScrollLock } from '../../../../hooks';
 import { Button, Icon, Nav, type NavProps, Overlay } from '../../../atoms';
@@ -56,6 +57,14 @@ export const MainNav: FC<MainNavProps> = ({
 
   useScrollLock(isOpen);
 
+  const handleBlur: FocusEventHandler = useCallback(
+    (e) => {
+      if (!e.currentTarget.contains(e.relatedTarget) && onClickOutside)
+        onClickOutside();
+    },
+    [onClickOutside]
+  );
+
   return (
     <Nav {...props}>
       <Button
@@ -74,6 +83,7 @@ export const MainNav: FC<MainNavProps> = ({
           hasCloseBtn={hasCloseBtn}
           id={drawerId}
           isOpen={isOpen}
+          onBlur={handleBlur}
           onClick={stopPropagation}
           onClose={onClose}
         >
