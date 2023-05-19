@@ -6,3 +6,4 @@ export * from './use-scroll-position';
 export * from './use-scrollbar-width';
 export * from './use-toggle';
 export * from './use-viewport-size';
+export * from './use-visually-hidden';

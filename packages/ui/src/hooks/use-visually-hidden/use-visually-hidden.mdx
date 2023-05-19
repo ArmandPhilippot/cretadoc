@@ -1,0 +1,18 @@
+import { Canvas, Meta } from '@storybook/blocks';
+import * as UseVisuallyHiddenStories from './use-visually-hidden.stories';
+
+<Meta of={UseVisuallyHiddenStories} />
+
+# useVisuallyHidden
+
+The hook `useVisuallyHidden` should only be used if you need to hide visually some contents without adding a wrapper around these contents. It can be useful for skip links for example. Otherwise, you should use the [`<VisuallyHidden />` component](/docs/components-atoms-typography-visually-hidden--docs) instead.
+
+## Demo
+
+The container below is visually hidden and it remains hidden even if a link was present.
+
+<Canvas of={UseVisuallyHiddenStories.VisuallyHidden} />
+
+When a container contains a link, you should use its `isFocusable` argument to make the focused link visible.
+
+<Canvas of={UseVisuallyHiddenStories.Focusable} />
