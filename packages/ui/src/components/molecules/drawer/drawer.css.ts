@@ -1,4 +1,4 @@
-import { style } from '@vanilla-extract/css';
+import { globalStyle, style } from '@vanilla-extract/css';
 import { recipe } from '@vanilla-extract/recipes';
 import { contract } from '../../../themes';
 
@@ -36,6 +36,12 @@ export const drawer = recipe({
   },
 });
 
+const closedDrawer = drawer({ isOpen: false }).split(' ')[1] ?? '';
+
+globalStyle(`${closedDrawer} *`, {
+  visibility: 'hidden',
+});
+
 export const content = style({
   paddingBlock: contract.spacing.md,
 });
@@ -46,9 +52,9 @@ export const btn = style({
   placeContent: 'center',
   width: '100%',
   padding: contract.spacing.xs,
+  marginTop: 'auto',
   position: 'sticky',
   bottom: 0,
-  marginTop: 'auto',
   background: contract.color.background.regular.base,
   borderTopColor: contract.color.primary.base,
   borderTopStyle: contract.border.style.regular,
