@@ -4,6 +4,7 @@ creativecommons
 cretadoc
 dotenv
 eslintcache
+formatjs
 graphiql
 nodenext
 pnpm

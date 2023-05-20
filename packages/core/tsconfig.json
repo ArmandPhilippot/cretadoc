@@ -1,0 +1,20 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    /* Language and Environment */
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+
+    /* Projects */
+    "tsBuildInfoFile": "./.tsbuildinfo",
+
+    /* Modules */
+    "baseUrl": "./",
+
+    /* Emit */
+    "declaration": false,
+    "declarationMap": false,
+    "outDir": "dist"
+  },
+  "include": ["./src/**/*"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
