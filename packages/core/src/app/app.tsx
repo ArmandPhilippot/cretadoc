@@ -1,9 +1,9 @@
 import { useCallback, useState } from 'react';
-import viteLogo from '../public/vite.svg';
-import reactLogo from './assets/react.svg';
-import './App.css';
+import { IntlProvider } from 'react-intl';
+import reactLogo from '../assets/react.svg';
+import './app.css';
 
-function App() {
+export const App = () => {
   const [count, setCount] = useState(0);
 
   const handleClick = useCallback(
@@ -12,10 +12,10 @@ function App() {
   );
 
   return (
-    <>
+    <IntlProvider locale="en">
       <div>
         <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
+          <img src="vite.svg" className="logo" alt="Vite logo" />
         </a>
         <a href="https://react.dev" target="_blank" rel="noreferrer">
           <img src={reactLogo} className="logo react" alt="React logo" />
@@ -33,8 +33,6 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
-    </>
+    </IntlProvider>
   );
-}
-
-export default App;
+};
