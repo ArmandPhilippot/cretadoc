@@ -1,4 +1,5 @@
 import request from 'supertest';
+import type { ExpectStatic } from 'vitest';
 import type { ServerReturn } from '../../../src/types';
 import type { MatcherResult } from '../../types';
 
@@ -22,7 +23,7 @@ const isExpectedText = (received: string, expected: ExpectedResponse) => {
 };
 
 export async function toRespondWith(
-  this: ReturnType<Vi.ExpectStatic['getState']>,
+  this: ReturnType<ExpectStatic['getState']>,
   { server, endpoint }: { server: ServerReturn; endpoint?: string },
   expected: ExpectedResponse
 ): Promise<MatcherResult> {
