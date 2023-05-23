@@ -33,7 +33,9 @@ export const isNumber = (value: unknown): value is number =>
 export const isObject = (
   value: unknown
 ): value is Record<string | number | symbol, unknown> =>
-  value !== null && value instanceof Object && !Array.isArray(value);
+  value !== null &&
+  (value instanceof Object || typeof value === 'object') &&
+  !Array.isArray(value);
 
 /**
  * Check if a value is a string.
