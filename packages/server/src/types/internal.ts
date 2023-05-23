@@ -1,3 +1,5 @@
+import type { ServerRender } from '.';
+
 export type LinkAsValue =
   | 'audio'
   | 'document'
@@ -45,3 +47,7 @@ export type LinkOtherAttributes = {
 export type LinkAttributes = LinkAsAttribute &
   LinkRelAttribute &
   LinkOtherAttributes;
+
+export type RenderImport = {
+  render: ServerRender;
+};

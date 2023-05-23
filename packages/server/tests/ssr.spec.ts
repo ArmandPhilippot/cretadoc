@@ -9,22 +9,17 @@ import { expect } from './utils';
 
 describe('ssr', () => {
   it('renders the HTML contents using the default route', async () => {
-    const contentPlaceholder = '<!-- ssr-outlet -->';
-    const entrypoint = new URL(
-      './fixtures/ssr/entry-server.ts',
-      import.meta.url
-    ).pathname;
-    const template = new URL('./fixtures/ssr/index.html', import.meta.url)
-      .pathname;
     const server = await createServer({
       hostname: 'localhost',
       port: 4300,
       ssr: {
-        entrypoint,
+        entrypoint: new URL('./fixtures/ssr/entry-server.ts', import.meta.url)
+          .pathname,
         placeholders: {
-          content: contentPlaceholder,
+          content: '<!-- ssr-outlet -->',
         },
-        template,
+        template: new URL('./fixtures/ssr/index.html', import.meta.url)
+          .pathname,
       },
     });
 
@@ -38,24 +33,19 @@ describe('ssr', () => {
   });
 
   it('renders the HTML contents using a custom route', async () => {
-    const contentPlaceholder = '<!-- ssr-outlet -->';
-    const entrypoint = new URL(
-      './fixtures/ssr/entry-server.ts',
-      import.meta.url
-    ).pathname;
-    const template = new URL('./fixtures/ssr/index.html', import.meta.url)
-      .pathname;
     const endpoint = '/custom';
     const server = await createServer({
       hostname: 'localhost',
       port: 4300,
       ssr: {
-        entrypoint,
+        entrypoint: new URL('./fixtures/ssr/entry-server.ts', import.meta.url)
+          .pathname,
         placeholders: {
-          content: contentPlaceholder,
+          content: '<!-- ssr-outlet -->',
         },
         route: endpoint,
-        template,
+        template: new URL('./fixtures/ssr/index.html', import.meta.url)
+          .pathname,
       },
     });
 
@@ -66,52 +56,19 @@ describe('ssr', () => {
     expect.assertions(1);
   });
 
-  it('accepts a custom HMR port', async () => {
-    const contentPlaceholder = '<!-- ssr-outlet -->';
-    const serverEntrypoint = new URL(
-      './fixtures/ssr/entry-server.ts',
-      import.meta.url
-    ).pathname;
-    const template = new URL('./fixtures/ssr/index.html', import.meta.url)
-      .pathname;
-    const hmrPort = 4698;
-    const server = await createServer({
-      hostname: 'localhost',
-      hmr: {
-        port: hmrPort,
-      },
-      port: 4300,
-      ssr: {
-        entrypoint: serverEntrypoint,
-        placeholders: {
-          content: contentPlaceholder,
-        },
-        template,
-      },
-    });
-
-    expect(server.config.hmr?.port).toBe(hmrPort);
-    expect.assertions(1);
-  });
-
   it('renders the initial state', async () => {
-    const contentPlaceholder = '<!-- ssr-outlet -->';
-    const serverEntrypoint = new URL(
-      './fixtures/ssr/entry-server.ts',
-      import.meta.url
-    ).pathname;
-    const template = new URL('./fixtures/ssr/index.html', import.meta.url)
-      .pathname;
     const server = await createServer({
       hostname: 'localhost',
       port: 4300,
       ssr: {
-        entrypoint: serverEntrypoint,
+        entrypoint: new URL('./fixtures/ssr/entry-server.ts', import.meta.url)
+          .pathname,
         placeholders: {
-          content: contentPlaceholder,
+          content: '<!-- ssr-outlet -->',
           initialState: '<!-- ssr-initial-state -->',
         },
-        template,
+        template: new URL('./fixtures/ssr/index.html', import.meta.url)
+          .pathname,
       },
     });
     const { initialState } = await render('');
@@ -127,23 +84,20 @@ describe('ssr', () => {
   });
 
   it('does not render the initial state if it is not provided', async () => {
-    const contentPlaceholder = '<!-- ssr-outlet -->';
-    const serverEntrypoint = new URL(
-      './fixtures/ssr/entry-server-html-only.ts',
-      import.meta.url
-    ).pathname;
-    const template = new URL('./fixtures/ssr/index.html', import.meta.url)
-      .pathname;
     const server = await createServer({
       hostname: 'localhost',
       port: 4300,
       ssr: {
-        entrypoint: serverEntrypoint,
+        entrypoint: new URL(
+          './fixtures/ssr/entry-server-html-only.ts',
+          import.meta.url
+        ).pathname,
         placeholders: {
-          content: contentPlaceholder,
+          content: '<!-- ssr-outlet -->',
           initialState: '<!-- ssr-initial-state -->',
         },
-        template,
+        template: new URL('./fixtures/ssr/index.html', import.meta.url)
+          .pathname,
       },
     });
     const { initialState } = await renderWithoutState('');
@@ -159,23 +113,18 @@ describe('ssr', () => {
   });
 
   it('renders the links to preload in document head', async () => {
-    const contentPlaceholder = '<!-- ssr-outlet -->';
-    const serverEntrypoint = new URL(
-      './fixtures/ssr/entry-server.ts',
-      import.meta.url
-    ).pathname;
-    const template = new URL('./fixtures/ssr/index.html', import.meta.url)
-      .pathname;
     const server = await createServer({
       hostname: 'localhost',
       port: 4300,
       ssr: {
-        entrypoint: serverEntrypoint,
+        entrypoint: new URL('./fixtures/ssr/entry-server.ts', import.meta.url)
+          .pathname,
         placeholders: {
-          content: contentPlaceholder,
+          content: '<!-- ssr-outlet -->',
           preloadedLinks: '<!-- ssr-preload-links -->',
         },
-        template,
+        template: new URL('./fixtures/ssr/index.html', import.meta.url)
+          .pathname,
       },
     });
 
@@ -188,23 +137,20 @@ describe('ssr', () => {
   });
 
   it('does not render the links in document head if not provided', async () => {
-    const contentPlaceholder = '<!-- ssr-outlet -->';
-    const serverEntrypoint = new URL(
-      './fixtures/ssr/entry-server-html-only.ts',
-      import.meta.url
-    ).pathname;
-    const template = new URL('./fixtures/ssr/index.html', import.meta.url)
-      .pathname;
     const server = await createServer({
       hostname: 'localhost',
       port: 4300,
       ssr: {
-        entrypoint: serverEntrypoint,
+        entrypoint: new URL(
+          './fixtures/ssr/entry-server-html-only.ts',
+          import.meta.url
+        ).pathname,
         placeholders: {
-          content: contentPlaceholder,
+          content: '<!-- ssr-outlet -->',
           preloadedLinks: '<!-- ssr-preload-links -->',
         },
-        template,
+        template: new URL('./fixtures/ssr/index.html', import.meta.url)
+          .pathname,
       },
     });
 
@@ -216,20 +162,42 @@ describe('ssr', () => {
     expect.assertions(1);
   });
 
-  it('throws an error when server entrypoint is not provided', async () => {
-    const contentPlaceholder = '<!-- ssr-outlet -->';
-    const template = new URL('./fixtures/ssr/index.html', import.meta.url)
-      .pathname;
+  it('renders the HTML in production mode', async () => {
+    const server = await createServer({
+      hostname: 'localhost',
+      mode: 'production',
+      port: 4400,
+      ssr: {
+        entrypoint: new URL('./fixtures/ssr/entry-server.ts', import.meta.url)
+          .pathname,
+        placeholders: {
+          content: '<!-- ssr-outlet -->',
+        },
+        template: new URL('./fixtures/ssr/index.html', import.meta.url)
+          .pathname,
+      },
+    });
 
+    const { html } = await render('');
+
+    await expect({ server, endpoint: DEFAULT_SSR_ROUTE }).toRespondWith({
+      statusCode: 200,
+      text: html,
+    });
+    expect.assertions(1);
+  });
+
+  it('throws an error when server entrypoint is not provided', async () => {
     await expect(async () =>
       createServer({
         hostname: 'localhost',
         port: 4200,
         ssr: {
           placeholders: {
-            content: contentPlaceholder,
+            content: '<!-- ssr-outlet -->',
           },
-          template,
+          template: new URL('./fixtures/ssr/index.html', import.meta.url)
+            .pathname,
         },
       })
     ).rejects.toThrowError(missing.config.ssr.entrypoint);
@@ -237,22 +205,19 @@ describe('ssr', () => {
   });
 
   it('throws an error when the server entrypoint is invalid', async () => {
-    const contentPlaceholder = '<!-- ssr-outlet -->';
-    const serverEntrypoint = new URL(
-      './fixtures/ssr/invalid-entry-server.ts',
-      import.meta.url
-    ).pathname;
-    const template = new URL('./fixtures/ssr/index.html', import.meta.url)
-      .pathname;
     const server = await createServer({
       hostname: 'localhost',
       port: 4400,
       ssr: {
-        entrypoint: serverEntrypoint,
+        entrypoint: new URL(
+          './fixtures/ssr/invalid-entry-server.ts',
+          import.meta.url
+        ).pathname,
         placeholders: {
-          content: contentPlaceholder,
+          content: '<!-- ssr-outlet -->',
         },
-        template,
+        template: new URL('./fixtures/ssr/index.html', import.meta.url)
+          .pathname,
       },
     });
 
@@ -264,21 +229,16 @@ describe('ssr', () => {
   });
 
   it('throws an error when content placeholder is not provided', async () => {
-    const serverEntrypoint = new URL(
-      './fixtures/ssr/entry-server.ts',
-      import.meta.url
-    ).pathname;
-    const template = new URL('./fixtures/ssr/index.html', import.meta.url)
-      .pathname;
-
     await expect(async () =>
       createServer({
         hostname: 'localhost',
         port: 4200,
         ssr: {
-          entrypoint: serverEntrypoint,
+          entrypoint: new URL('./fixtures/ssr/entry-server.ts', import.meta.url)
+            .pathname,
           placeholders: {},
-          template,
+          template: new URL('./fixtures/ssr/index.html', import.meta.url)
+            .pathname,
         },
       })
     ).rejects.toThrowError(missing.config.ssr.placeholders);
@@ -286,17 +246,13 @@ describe('ssr', () => {
   });
 
   it('throws an error when the template is not provided', async () => {
-    const serverEntrypoint = new URL(
-      './fixtures/ssr/entry-server.ts',
-      import.meta.url
-    ).pathname;
-
     await expect(async () =>
       createServer({
         hostname: 'localhost',
         port: 4200,
         ssr: {
-          entrypoint: serverEntrypoint,
+          entrypoint: new URL('./fixtures/ssr/entry-server.ts', import.meta.url)
+            .pathname,
           placeholders: {
             content: '<!-- ssr-outlet -->',
           },

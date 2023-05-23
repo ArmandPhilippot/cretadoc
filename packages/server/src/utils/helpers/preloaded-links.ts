@@ -1,5 +1,5 @@
 import type { Maybe } from '@cretadoc/utils';
-import type { LinkAsValue, LinkAttributes } from '../types/internal';
+import type { LinkAsValue, LinkAttributes } from '../../types/internal';
 
 /**
  * Check if the given file is a script.

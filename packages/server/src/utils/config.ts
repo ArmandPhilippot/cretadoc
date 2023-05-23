@@ -9,6 +9,7 @@ import type {
   APIConfig,
   HMRConfig,
   ServerConfig,
+  ServerMode,
   SSRConfig,
   StaticDirConfig,
 } from '../types';
@@ -86,16 +87,17 @@ const mergeStaticDirConfig = (
  * Merge the user HMR config with some default values if needed.
  *
  * @param {PartialDeep<HMRConfig>} [userConfig] - The user config.
+ * @param {Maybe<ServerMode>} [mode] - The server mode.
  * @returns {Maybe<HMRConfig>} The merged config.
  */
 const mergeHMRConfig = (
-  userConfig?: PartialDeep<HMRConfig>
+  userConfig?: PartialDeep<HMRConfig>,
+  mode?: Maybe<ServerMode>
 ): Maybe<HMRConfig> => {
-  if (!userConfig) return undefined;
+  if (userConfig === false) return userConfig;
+  if (userConfig) return { port: userConfig.port };
 
-  return {
-    port: userConfig.port,
-  };
+  return mode === 'production' ? false : undefined;
 };
 
 /**
@@ -138,14 +140,15 @@ export const mergeDefaultConfigWith = (
   userConfig: Maybe<PartialDeep<ServerConfig>>
 ): ReadonlyDeep<ServerConfig> => {
   const defaultConfig = getDefaultConfig();
+  const mode = userConfig?.mode ?? defaultConfig.mode;
 
   if (!userConfig) return deepFreeze(defaultConfig);
 
   const newConfig: ServerConfig = {
     api: mergeAPIConfig(userConfig.api),
-    hmr: mergeHMRConfig(userConfig.hmr),
+    hmr: mergeHMRConfig(userConfig.hmr, mode),
     hostname: userConfig.hostname ?? defaultConfig.hostname,
-    mode: userConfig.mode ?? defaultConfig.mode,
+    mode,
     port: userConfig.port ?? defaultConfig.port,
     ssr: mergeSSRConfig(userConfig.ssr),
     staticDir: mergeStaticDirConfig(userConfig.staticDir),

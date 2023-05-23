@@ -16,12 +16,14 @@ export type APIConfig = {
   route: string;
 };
 
-export type HMRConfig = {
-  /**
-   * The port used by Vite HMR (dev mode).
-   */
-  port: Maybe<number>;
-};
+export type HMRConfig =
+  | false
+  | {
+      /**
+       * The port used by Vite HMR (dev mode).
+       */
+      port: Maybe<number>;
+    };
 
 export type SSRPlaceholders = {
   /**

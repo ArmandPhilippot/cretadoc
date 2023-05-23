@@ -14,4 +14,7 @@ export const DEFAULT_ENTRYPOINT_FILE = 'index.html';
 export const DEFAULT_SSR_ROUTE = '/';
 export const DEFAULT_STATIC_ROUTE = '/static';
 
-export const SUCCESS_CODE = 200;
+export const HTTP_CODE = {
+  ERROR: 500,
+  SUCCESS: 200,
+} as const;

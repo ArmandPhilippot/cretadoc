@@ -41,13 +41,16 @@ const createExpressApp = async ({
   const app = express();
   app.disable('x-powered-by');
 
-  const viteServer = await createDevServer(hmr);
+  let viteServer: Maybe<ViteDevServer> = undefined;
 
   if (mode === ENVIRONMENT.PRODUCTION) loadProdMiddleware(app);
-  else loadDevMiddleware(app, viteServer);
+  else {
+    viteServer = await createDevServer(hmr);
+    loadDevMiddleware(app, viteServer);
+  }
 
   if (api) serveAPI(app, api);
-  if (ssr) renderWithSSR(app, viteServer, ssr);
+  if (ssr) renderWithSSR(app, { mode, ssr, viteServer });
   if (staticDir) serveStaticDir(app, staticDir);
 
   return app;
