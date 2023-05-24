@@ -39,7 +39,7 @@ module.exports = {
   'default-case': 'error',
   'default-case-last': 'error',
   'default-param-last': 'error',
-  'dot-notation': ['error', { allowKeywords: false }],
+  'dot-notation': ['error', { allowKeywords: true }],
   eqeqeq: ['error', 'always', { null: 'always' }],
   'func-name-matching': ['error', 'always'],
   'func-names': ['error', 'always'],

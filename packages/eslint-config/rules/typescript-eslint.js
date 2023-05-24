@@ -139,7 +139,7 @@ module.exports = {
   'default-param-last': 'off',
   '@typescript-eslint/default-param-last': 'error',
   'dot-notation': 'off',
-  '@typescript-eslint/dot-notation': ['error', { allowKeywords: false }],
+  '@typescript-eslint/dot-notation': ['error', { allowKeywords: true }],
   'init-declarations': 'off',
   '@typescript-eslint/init-declarations': ['error', 'always'],
   'no-array-constructor': 'off',
