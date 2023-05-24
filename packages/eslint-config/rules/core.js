@@ -59,7 +59,15 @@ module.exports = {
   'max-params': ['error', { max: 3 }],
   'max-statements': ['error', { max: 10 }],
   'multiline-comment-style': ['error', 'starred-block'],
-  'new-cap': ['error', { capIsNew: true, newIsCap: true, properties: true }],
+  'new-cap': [
+    'error',
+    {
+      capIsNew: true,
+      capIsNewExceptionPattern: '^[A-Z]+[A-Z._]*[A-Z]+$',
+      newIsCap: true,
+      properties: true,
+    },
+  ],
   'no-alert': 'error',
   'no-array-constructor': 'error',
   'no-await-in-loop': 'error',
