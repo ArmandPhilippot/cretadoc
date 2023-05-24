@@ -57,9 +57,9 @@ const generateHTMLContents = (
 
   if (placeholders.initialState) {
     const stateScript = rendered.initialState
-      ? `\n<script>window.__INITIAL_STATE__=${JSON.stringify(
+      ? `\n<script>window.__INITIAL_STATE__='${JSON.stringify(
           rendered.initialState
-        )}</script>`
+        )}'</script>`
       : '';
     html = html.replace(placeholders.initialState, stateScript);
   }
