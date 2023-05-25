@@ -18,9 +18,6 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [react(), vanillaExtractPlugin()],
     test: {
-      deps: {
-        inline: true,
-      },
       environment: 'jsdom',
       globals: false,
       setupFiles: './vite.setup.ts',

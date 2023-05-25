@@ -5,6 +5,7 @@
     "./rollup.config.ts",
     "./server.ts",
     "./src/**/*",
+    "./tests/**/*",
     "./vite.config.ts",
     "./vite.setup.ts"
   ]
