@@ -113,11 +113,13 @@ export const ListItem: FC<ListItemProps> = ({
   const itemStyles = assignInlineVars({
     [styles.borderColor]: getColorFromTokenKey(borderColor, 'borders'),
     [styles.borderSize]: contract.border.size[borderSize],
-    [styles.marker]: marker ?? '',
-    [styles.paddingBlock]: paddingBlock ? contract.spacing[paddingBlock] : '',
-    [styles.paddingInline]: paddingInline
-      ? contract.spacing[paddingInline]
-      : '',
+    ...(marker ? { [styles.marker]: marker } : {}),
+    ...(paddingBlock
+      ? { [styles.paddingBlock]: contract.spacing[paddingBlock] }
+      : {}),
+    ...(paddingInline
+      ? { [styles.paddingInline]: contract.spacing[paddingInline] }
+      : {}),
   });
 
   return (

@@ -111,9 +111,9 @@ export const Icon: FC<IconProps> = ({
   ...props
 }) => {
   const iconStyles = assignInlineVars({
-    [styles.animationSpeed]: animationSpeed
-      ? contract.animation.duration[animationSpeed]
-      : '',
+    ...(animationSpeed
+      ? { [styles.animationSpeed]: contract.animation.duration[animationSpeed] }
+      : {}),
     [styles.iconColor]: getColorFromTokenKey(color, 'foreground'),
     [styles.iconSize]: contract.icon.size[size],
   });
