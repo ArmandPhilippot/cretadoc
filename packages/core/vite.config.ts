@@ -18,6 +18,14 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [react(), vanillaExtractPlugin()],
     test: {
+      deps: {
+        /*
+         * Using `['@cretadoc/ui']` with or without @vanilla-extract packages
+         * is not enough to avoid the `Unknown file extension ".css"` error. So
+         * far only this workaround is working: https://github.com/vitest-dev/vitest/issues/2806#issuecomment-1474468560
+         */
+        inline: [/^(?!.*vitest).*$/],
+      },
       environment: 'jsdom',
       globals: false,
       setupFiles: './vite.setup.ts',
