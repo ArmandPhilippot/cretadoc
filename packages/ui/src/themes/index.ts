@@ -1,6 +1,17 @@
 import { contract } from './contract';
-import { themes } from './library';
-import { buildThemes } from './utils/helpers';
+import {
+  buildThemes,
+  isValidDarkThemeId,
+  isValidLightThemeId,
+  isValidThemeId,
+} from './utils/helpers';
 
-export { buildThemes, contract, themes };
+export * from './library';
+export {
+  buildThemes,
+  contract,
+  isValidDarkThemeId,
+  isValidLightThemeId,
+  isValidThemeId,
+};
 export * from './types';

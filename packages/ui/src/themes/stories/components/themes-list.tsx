@@ -29,7 +29,7 @@ export const ThemesList: FC = () => {
         </tr>
       </thead>
       <tbody>
-        {Object.values(themes).map((theme) => (
+        {themes.map((theme) => (
           <tr key={theme.id}>
             <td className={styles.cell}>{theme.name}</td>
             <td className={styles.cell}>{theme.scheme}</td>

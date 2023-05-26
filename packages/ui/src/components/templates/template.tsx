@@ -1,6 +1,11 @@
 import { type FC, useId, useState, useCallback } from 'react';
 import { useBoolean, useScrollPosition, useToggle } from '../../hooks';
-import { themes as allThemes } from '../../themes';
+import type {
+  CretadocDarkTheme,
+  CretadocLightTheme,
+  CretadocTheme,
+} from '../../themes';
+import { isValidThemeId } from '../../themes/utils/helpers';
 import {
   Footer,
   Header,
@@ -27,18 +32,27 @@ import * as styles from './template.css';
 
 const brand = 'Cretadoc';
 const minScrollLength = 50;
-const themes: [SwitchItem, SwitchItem] = [
+
+type LightTheme = Omit<SwitchItem, 'value'> & {
+  value: CretadocLightTheme;
+};
+
+type DarkTheme = Omit<SwitchItem, 'value'> & {
+  value: CretadocDarkTheme;
+};
+
+const themes: [LightTheme, DarkTheme] = [
   {
-    'aria-label': allThemes.cretadocLight.name,
+    'aria-label': 'Light theme',
     id: 'light-theme',
     label: <Icon shape="sun" size="xs" />,
-    value: allThemes.cretadocLight.id,
+    value: 'cretadoc-light',
   },
   {
-    'aria-label': allThemes.cretadocDark.name,
+    'aria-label': 'Dark theme',
     id: 'dark-theme',
     label: <Icon shape="moon" size="xs" />,
-    value: allThemes.cretadocDark.id,
+    value: 'cretadoc-dark',
   },
 ];
 
@@ -56,7 +70,9 @@ export const Template: FC<TemplateProps> = ({
 }) => {
   const topId = useId();
   const mainId = useId();
-  const [currentTheme, setCurrentTheme] = useState(themes[0].value);
+  const [currentTheme, setCurrentTheme] = useState<CretadocTheme>(
+    themes[0].value
+  );
   const {
     deactivate: closeMainNav,
     state: isMainNavOpen,
@@ -66,7 +82,7 @@ export const Template: FC<TemplateProps> = ({
   const { y: windowPosition } = useScrollPosition();
 
   const updateTheme: SwitchProps['onSwitch'] = useCallback((e) => {
-    setCurrentTheme(e.target.value);
+    if (isValidThemeId(e.target.value)) setCurrentTheme(e.target.value);
   }, []);
 
   return (

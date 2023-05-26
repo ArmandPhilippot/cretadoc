@@ -1,17 +1,17 @@
 import { Decorator, Preview } from '@storybook/react';
-import { themes } from '../src';
+import { CretadocTheme, themes } from '../src';
 import * as styles from './styles.css';
 import './themes.css';
 import cretadoc from './themes/cretadoc';
 
-const customThemes = Object.values(themes).map((theme) => {
+const customThemes = themes.map((theme) => {
   return {
     title: theme.name,
     value: theme.id,
   };
 });
 
-const defaultThemeId = 'cretadoc-light';
+const defaultThemeId: CretadocTheme = 'cretadoc-light';
 const defaultTheme =
   customThemes.find((theme) => theme.value === defaultThemeId) ??
   customThemes[0];

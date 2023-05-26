@@ -51,7 +51,7 @@ export type ThemeAuthor = {
   website?: string;
 };
 
-export type Theme = {
+type ThemeBase = {
   author?: ThemeAuthor;
   id: string;
   name: string;
@@ -59,6 +59,12 @@ export type Theme = {
   tokens: ThemeTokens;
 };
 
-export type Themes = {
-  [key: string]: Theme;
+export type LightTheme = ThemeBase & {
+  scheme: 'light';
 };
+
+export type DarkTheme = ThemeBase & {
+  scheme: 'dark';
+};
+
+export type Theme = LightTheme | DarkTheme;
