@@ -1,3 +1,4 @@
+import { vanillaExtractPlugin } from '@vanilla-extract/rollup-plugin';
 import type { RollupOptions } from 'rollup';
 import dts from 'rollup-plugin-dts';
 import esbuild from 'rollup-plugin-esbuild';
@@ -6,13 +7,27 @@ const bundle = (config: RollupOptions): RollupOptions => {
   return {
     ...config,
     input: 'src/index.ts',
-    external: (id: string) => !/^[./]/.test(id),
+    external: [
+      '@cretadoc/utils',
+      'react',
+      'react/jsx-runtime',
+      '@vanilla-extract/css',
+      '@vanilla-extract/dynamic',
+      '@vanilla-extract/recipes/createRuntimeFn',
+    ],
   };
 };
 
 const outputOptions: RollupOptions['output'] = {
-  exports: 'auto',
+  preserveModules: true,
+  preserveModulesRoot: 'src',
   sourcemap: true,
+  entryFileNames({ name }) {
+    return `${name.replace(/\.css$/, '.css.vanilla')}.js`;
+  },
+  assetFileNames({ name }) {
+    return name?.replace(/^src\//, '') ?? '';
+  },
 };
 
 export default [
@@ -20,26 +35,27 @@ export default [
     output: [
       {
         ...outputOptions,
-        file: `dist/ui.cjs`,
+        dir: 'dist/cjs',
         format: 'cjs',
       },
       {
         ...outputOptions,
-        file: `dist/ui.mjs`,
+        dir: 'dist/esm',
         format: 'es',
       },
     ],
     plugins: [
+      vanillaExtractPlugin(),
       esbuild({
+        jsx: 'automatic',
         minify: true,
         tsconfig: 'tsconfig.json',
-        target: 'esnext',
       }),
     ],
   }),
   bundle({
     output: {
-      file: `dist/ui.d.ts`,
+      dir: 'dist/types',
       format: 'es',
     },
     plugins: [dts()],
