@@ -16,7 +16,10 @@ export default defineConfig(({ mode }) => {
       outDir: './dist',
       sourcemap: !isProd,
     },
-    plugins: [react(), vanillaExtractPlugin()],
+    plugins: [
+      react(),
+      vanillaExtractPlugin({ esbuildOptions: { loader: { '.css': 'empty' } } }),
+    ],
     test: {
       deps: {
         /*

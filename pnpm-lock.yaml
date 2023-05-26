@@ -145,6 +145,9 @@ importers:
       '@cretadoc/utils':
         specifier: workspace:^
         version: link:../utils
+      '@vanilla-extract/dynamic':
+        specifier: ^2.0.3
+        version: 2.0.3
       find-up:
         specifier: ^6.3.0
         version: 6.3.0
@@ -206,6 +209,9 @@ importers:
       '@vanilla-extract/css':
         specifier: ^1.11.0
         version: 1.11.0
+      '@vanilla-extract/recipes':
+        specifier: ^0.4.0
+        version: 0.4.0(@vanilla-extract/css@1.11.0)
       '@vanilla-extract/vite-plugin':
         specifier: ^3.8.1
         version: 3.8.1(@types/node@20.2.3)(ts-node@10.9.1)(vite@4.3.8)
@@ -6463,7 +6469,6 @@ packages:
       '@vanilla-extract/css': ^1.0.0
     dependencies:
       '@vanilla-extract/css': 1.11.0
-    dev: false
 
   /@vanilla-extract/rollup-plugin@1.2.2(@types/node@18.15.5)(rollup@3.23.0):
     resolution:
@@ -6565,7 +6570,7 @@ packages:
       '@babel/plugin-transform-react-jsx-self': 7.21.0(@babel/core@7.21.8)
       '@babel/plugin-transform-react-jsx-source': 7.19.6(@babel/core@7.21.8)
       react-refresh: 0.14.0
-      vite: 4.3.8(@types/node@18.15.5)
+      vite: 4.3.8(@types/node@20.2.3)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -13632,7 +13637,7 @@ packages:
     dependencies:
       lilconfig: 2.1.0
       postcss: 8.4.23
-      ts-node: 10.9.1(@types/node@18.15.5)(typescript@4.9.5)
+      ts-node: 10.9.1(@types/node@20.2.3)(typescript@5.0.4)
       yaml: 1.10.2
     dev: true
 
