@@ -1,2 +1,6 @@
 {
+  "Jv9kWo": {
+    "defaultMessage": "Built with {link}",
+    "description": "LocalizedFooter: built with information"
+  }
 }

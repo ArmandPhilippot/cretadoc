@@ -14,11 +14,16 @@ describe('load-config', () => {
     const currentDir = dirname(fileURLToPath(import.meta.url));
     const configFilePath = join(currentDir, CONFIG_FILE_NAME);
     const brandName = 'dolorum';
-    await createConfigFile(configFilePath, 'custom', { name: brandName });
+    const locale = 'en';
+    await createConfigFile(configFilePath, 'custom', {
+      locale,
+      name: brandName,
+    });
     const config = await loadConfig();
     expect(config.name).toBe(brandName);
+    expect(config.locale).toBe(locale);
     await removeConfigFile(configFilePath);
-    expect.assertions(1);
+    expect.assertions(2);
   });
 
   it('throws an error if the config file does not exist', async () => {

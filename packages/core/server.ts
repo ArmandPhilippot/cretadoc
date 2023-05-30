@@ -2,7 +2,10 @@ import { createCretadocApp } from './src';
 import { ROOT_CONFIG_PATH } from './tests/utils/constants';
 import { createConfigFile, removeConfigFile } from './tests/utils/helpers';
 
-await createConfigFile(ROOT_CONFIG_PATH, 'custom', { name: 'Cretadoc' });
+await createConfigFile(ROOT_CONFIG_PATH, 'custom', {
+  name: 'Cretadoc',
+  locale: 'en',
+});
 await createCretadocApp().then((app) => {
   app.start();
 

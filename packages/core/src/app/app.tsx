@@ -1,40 +1,23 @@
-import { useCallback, useState } from 'react';
+import { UIProvider } from '@cretadoc/ui';
 import { IntlProvider } from 'react-intl';
-import reactLogo from '../assets/react.svg';
-import './app.css';
+import { Route, Routes } from 'react-router-dom';
+import { Layout, RouterLink } from '../components';
+import { HomePage } from '../pages/homepage';
+import { DEFAULT_LOCALE, ROUTES } from '../utils/constants';
 import { useConfig } from '../utils/hooks';
 
 export const App = () => {
-  const [count, setCount] = useState(0);
-  const { name } = useConfig();
-
-  const handleClick = useCallback(
-    () => setCount((prevCount) => prevCount + 1),
-    []
-  );
+  const { locale } = useConfig();
 
   return (
-    <IntlProvider locale="en">
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src="vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>{name}: Vite + React</h1>
-      <div className="card">
-        <button onClick={handleClick} type="button">
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <IntlProvider defaultLocale={DEFAULT_LOCALE} locale={locale}>
+      <UIProvider components={{ LinkComponent: RouterLink }}>
+        <Routes>
+          <Route path={ROUTES.HOMEPAGE} element={<Layout />}>
+            <Route index element={<HomePage />} />
+          </Route>
+        </Routes>
+      </UIProvider>
     </IntlProvider>
   );
 };

@@ -5,11 +5,14 @@ import type { CretadocConfig } from '../../../src/types/config';
 
 const emptyConfig = '';
 
-const getConfigExportFrom = (config: CretadocConfig) => `
+const getConfigExportFrom = (config: Partial<CretadocConfig>) => `
 export default ${inspect(config)}
 `;
 
-const getConfig = (kind: 'empty' | 'custom', customConfig?: CretadocConfig) => {
+const getConfig = (
+  kind: 'empty' | 'custom',
+  customConfig?: Partial<CretadocConfig>
+) => {
   if (kind === 'empty') return emptyConfig;
   if (customConfig) return getConfigExportFrom(customConfig);
   throw new Error('Missing config.');
@@ -18,7 +21,7 @@ const getConfig = (kind: 'empty' | 'custom', customConfig?: CretadocConfig) => {
 export const createConfigFile = async (
   path: string,
   kind: 'empty' | 'custom',
-  customConfig?: CretadocConfig
+  customConfig?: Partial<CretadocConfig>
 ) => {
   const config = getConfig(kind, customConfig);
 
