@@ -16,6 +16,27 @@ yarn add @cretadoc/ui
 pnpm add @cretadoc/ui
 ```
 
+## Components
+
+This package provides different React components to help you build your interfaces. All you need to do is to import them and use them in your application.
+
+**Example:**
+
+`app.tsx`
+
+```tsx
+import { Button } from '@cretadoc/ui';
+import { FC } from 'react';
+
+export const App: FC = () => {
+  return (
+    <div>
+      <Button>Click here</Button>
+    </div>
+  );
+};
+```
+
 ## Themes
 
 This package provides different themes to use in Cretadoc interfaces. Each theme is represented as an object containing an id, a name, a color scheme and a collection of tokens associated to CSS values.
