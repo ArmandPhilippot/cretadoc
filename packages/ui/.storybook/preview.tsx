@@ -1,7 +1,7 @@
 import { Decorator, Preview } from '@storybook/react';
 import { CretadocTheme, themes } from '../src';
+import '../src/themes.css';
 import * as styles from './styles.css';
-import './themes.css';
 import cretadoc from './themes/cretadoc';
 
 const customThemes = themes.map((theme) => {

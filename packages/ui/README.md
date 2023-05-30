@@ -20,38 +20,38 @@ pnpm add @cretadoc/ui
 
 This package provides different themes to use in Cretadoc interfaces. Each theme is represented as an object containing an id, a name, a color scheme and a collection of tokens associated to CSS values.
 
-The themes are not shipped as CSS files, you need to compile them in your application. To help you do that, we provide a helper function `buildThemes` but some dependencies are also required.
+### Usage with @cretadoc/ui components
 
-### Dependencies
-
-This package uses `@vanilla-extract/css` to generate a theme contract (the shape of a theme).
-
-[Vanilla-extract](https://vanilla-extract.style/) is a tool to write zero-runtime stylesheets in Typescript. So your application needs:
-
-- to handle [Typescript](https://www.typescriptlang.org/),
-- a bundler that handles CSS. See [Bundler Integration](https://vanilla-extract.style/documentation/getting-started#bundler-integration) to configure your project.
-
-### Usage
-
-#### Build all the themes
-
-Create a `themes.css.ts` file (you can use another name) and use the helper inside it:
-
-```typescript
-import { buildThemes, themes } from '@cretadoc/ui';
-
-buildThemes(themes);
-```
-
-Thanks to your bundler and Vanilla-extract, this file will be transformed into a CSS file containing all the global CSS variables.
-
-#### Use a theme
-
-To use a theme, you need to add an attribute `data-theme` to your application wrapper. Its value should be a theme id. Then you need to use Vanilla Extract tools (like the `style` function) to generate a scoped class for your component.
+To use a theme, you need to add an attribute `data-theme` to your application wrapper. Its value must be a theme id.
 
 **Example with React:**
 
-`button.css.ts`
+`app.tsx`
+
+```tsx
+import { Button } from '@cretadoc/ui';
+import { FC } from 'react';
+
+export const App: FC = () => {
+  return (
+    <div data-theme="a-theme-id">
+      <Button>Click here</Button>
+    </div>
+  );
+};
+```
+
+### Usage with your own components
+
+You can reuse the themes contract with your own components. However your application needs:
+
+- to handle [Typescript](https://www.typescriptlang.org/),
+- [Vanilla-extract](https://vanilla-extract.style/) tools (like the `style` function),
+- a bundler that handles CSS. See [Bundler Integration](https://vanilla-extract.style/documentation/getting-started#bundler-integration) to configure your project.
+
+**Example with React:**
+
+`custom-button.css.ts`
 
 ```typescript
 import { contract } from '@cretadoc/ui';
@@ -63,17 +63,17 @@ export const button = style({
 });
 ```
 
-`button.tsx`
+`custom-button.tsx`
 
 ```tsx
 import { FC, ReactNode } from 'react';
 import * as styles from './button.css';
 
-type ButtonProps = {
+type CustomButtonProps = {
   children: ReactNode;
 };
 
-export const Button: FC<ButtonProps> = ({ children }) => {
+export const CustomButton: FC<CustomButtonProps> = ({ children }) => {
   return <button className={styles.button}>{children}</button>;
 };
 ```
@@ -82,8 +82,7 @@ export const Button: FC<ButtonProps> = ({ children }) => {
 
 ```tsx
 import { FC } from 'react';
-import { Button } from './button';
-import './themes.css';
+import { Button } from './custom-button.tsx';
 
 export const App: FC = () => {
   return (
