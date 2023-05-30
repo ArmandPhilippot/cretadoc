@@ -19,7 +19,8 @@ export const Radius: StoryObj = {
       <Border token="border.radius.sharp" />
       <Border token="border.radius.soft" />
       <Border token="border.radius.softer" />
-      <Border token="border.radius.round" />
+      <Border token="border.radius.pill" />
+      <Border token="border.radius.circle" />
     </PreviewList>
   ),
 };
