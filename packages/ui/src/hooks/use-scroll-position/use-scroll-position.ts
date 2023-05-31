@@ -1,4 +1,5 @@
-import { type RefObject, useCallback, useEffect, useState } from 'react';
+import type { Maybe } from '@cretadoc/utils';
+import { type RefObject, useState, useEffect } from 'react';
 import { isBrowser } from '../../helpers';
 
 export type ScrollPosition = {
@@ -6,32 +7,42 @@ export type ScrollPosition = {
   y: number;
 };
 
+const defaultPosition: ScrollPosition = { x: 0, y: 0 };
+
 const getScrollPosition = (el: HTMLElement): ScrollPosition => {
   if (isBrowser()) return { x: el.scrollLeft, y: el.scrollTop };
 
-  return { x: 0, y: 0 };
+  return defaultPosition;
 };
 
-export const useScrollPosition = (ref?: RefObject<HTMLElement>) => {
-  const el = ref?.current ?? window.document.documentElement;
-  const [scrollPosition, setScrollPosition] = useState<ScrollPosition>(
-    getScrollPosition(el)
-  );
+const getEl = (ref: Maybe<RefObject<HTMLElement>>) => {
+  if (ref) return ref.current;
 
-  const handleScroll = useCallback(() => {
-    setScrollPosition(getScrollPosition(el));
-  }, [el]);
+  return isBrowser() ? window.document.documentElement : null;
+};
+
+export const useScrollPosition = (
+  ref?: RefObject<HTMLElement>
+): ScrollPosition => {
+  const el = getEl(ref);
+  const [scrollPosition, setScrollPosition] =
+    useState<ScrollPosition>(defaultPosition);
 
   useEffect(() => {
-    if (ref?.current) {
-      el.addEventListener('scroll', handleScroll);
+    const handleScroll = () => {
+      if (el) setScrollPosition(getScrollPosition(el));
+    };
 
-      return () => el.removeEventListener('scroll', handleScroll);
+    if (!ref) {
+      window.addEventListener('scroll', handleScroll);
+
+      return () => window.removeEventListener('scroll', handleScroll);
     }
-    window.addEventListener('scroll', handleScroll);
 
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [el, handleScroll, ref]);
+    el?.addEventListener('scroll', handleScroll);
+
+    return () => el?.removeEventListener('scroll', handleScroll);
+  }, [el, ref]);
 
   return scrollPosition;
 };
