@@ -10,6 +10,7 @@ import { type FC, useId } from 'react';
 import { Outlet } from 'react-router-dom';
 import { ROUTES } from '../../utils/constants';
 import { useConfig } from '../../utils/hooks';
+import { BackToTop } from '../back-to-top';
 import { Colophon } from '../colophon';
 import { SkipToContent } from '../skip-to-content';
 import * as styles from './layout.css';
@@ -17,9 +18,11 @@ import * as styles from './layout.css';
 export const Layout: FC = () => {
   const { name, theme } = useConfig();
   const mainId = useId();
+  const topId = useId();
+  const footerAlignment = 'center';
 
   return (
-    <BaseLayout data-theme={isString(theme) ? theme : theme.light}>
+    <BaseLayout data-theme={isString(theme) ? theme : theme.light} id={topId}>
       <SkipToContent targetId={mainId} />
       <Header>
         <Branding brand={name} to={ROUTES.HOMEPAGE} />
@@ -28,7 +31,8 @@ export const Layout: FC = () => {
         <Outlet />
       </Main>
       <Footer>
-        <Colophon />
+        <Colophon alignment={footerAlignment} />
+        <BackToTop targetId={topId} />
       </Footer>
     </BaseLayout>
   );
