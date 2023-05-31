@@ -1,6 +1,5 @@
 import {
   Branding,
-  Colophon,
   Footer,
   Header,
   Layout as BaseLayout,
@@ -11,6 +10,7 @@ import type { FC } from 'react';
 import { Outlet } from 'react-router-dom';
 import { ROUTES } from '../../utils/constants';
 import { useConfig } from '../../utils/hooks';
+import { Colophon } from '../colophon';
 import * as styles from './layout.css';
 
 export const Layout: FC = () => {

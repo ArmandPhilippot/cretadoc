@@ -49,4 +49,20 @@ describe('validate-config', () => {
     );
     expect.assertions(1);
   });
+
+  it('throws an error when the copyright key has an invalid type', () => {
+    const copyright = 42;
+    expect(() => validateConfig({ copyright })).toThrowError(
+      new RegExp(ERROR.INVALID.TYPE('string', typeof copyright))
+    );
+    expect.assertions(1);
+  });
+
+  it('throws an error when the hideGenerator key has an invalid type', () => {
+    const hideGenerator = 42;
+    expect(() => validateConfig({ hideGenerator })).toThrowError(
+      new RegExp(ERROR.INVALID.TYPE('boolean', typeof hideGenerator))
+    );
+    expect.assertions(1);
+  });
 });

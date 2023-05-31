@@ -1,8 +1,12 @@
 import type { ThemeScheme } from '@cretadoc/ui';
-import type { ReadonlyDeep } from '@cretadoc/utils';
 import type { CretadocConfig, CretadocLocale } from '../types/config';
 
 export const CONFIG_FILE_NAME = 'cretadoc.config.js';
+
+export const CRETADOC_REPOSITORY = {
+  label: 'Cretadoc',
+  link: 'https://github.com/ArmandPhilippot/cretadoc',
+};
 
 export const CORE_ERROR_CODE = {
   /**
@@ -47,10 +51,12 @@ export const ROUTES = {
 
 export const SUPPORTED_LOCALES = ['en'] as const;
 
-export const DEFAULT_LOCALE: CretadocLocale = 'en';
+export const DEFAULT_LOCALE = 'en' as const satisfies CretadocLocale;
 
-export const DEFAULT_CONFIG: ReadonlyDeep<CretadocConfig> = {
+export const DEFAULT_CONFIG = {
+  copyright: undefined,
+  hideGenerator: false,
   locale: 'en',
   name: 'Cretadoc',
   theme: 'cretadoc-light',
-} as const;
+} as const satisfies CretadocConfig;

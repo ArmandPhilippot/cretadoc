@@ -161,8 +161,18 @@ const isValidConfig = (
 ): config is Partial<CretadocConfig> => {
   const errors = [...validateKeyType('name', 'string', config['name'])];
 
+  if (config['copyright'])
+    errors.push(...validateKeyType('copyright', 'string', config['copyright']));
+
+  if (config['hideGenerator'])
+    errors.push(
+      ...validateKeyType('hideGenerator', 'boolean', config['hideGenerator'])
+    );
+
   if (config['locale']) errors.push(...validateLocale(config['locale']));
+
   if (config['theme']) errors.push(...validateTheme(config['theme']));
+
   if (errors.length) throw new ConfigError(formatErrors(errors));
 
   return true;
