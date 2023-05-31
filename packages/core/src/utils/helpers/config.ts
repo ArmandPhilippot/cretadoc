@@ -1,5 +1,3 @@
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
 import {
   isValidThemeId,
   isValidDarkThemeId,
@@ -13,14 +11,8 @@ import {
   isObjKeyExist,
   type Maybe,
 } from '@cretadoc/utils';
-import { findUp } from 'find-up';
 import type { CretadocConfig } from '../../types/config';
-import {
-  CONFIG_FILE_NAME,
-  DEFAULT_CONFIG,
-  ERROR,
-  SUPPORTED_LOCALES,
-} from '../constants';
+import { DEFAULT_CONFIG, ERROR, SUPPORTED_LOCALES } from '../constants';
 import { ConfigError } from '../exceptions';
 
 /**
@@ -204,22 +196,4 @@ export const validateConfig = (config: unknown): CretadocConfig => {
   if (isValidConfig(config)) return mergeConfigWithDefaults(config);
 
   throw new ConfigError(ERROR.UNEXPECTED);
-};
-
-/**
- * Load the Cretadoc configuration.
- *
- * @returns {Promise<CretadocConfig>} The configuration.
- */
-export const loadConfig = async (): Promise<CretadocConfig> => {
-  const currentDir = dirname(fileURLToPath(import.meta.url));
-  const configPath = await findUp(CONFIG_FILE_NAME, { cwd: currentDir });
-
-  if (!configPath) throw new ConfigError(ERROR.MISSING.CONFIG);
-
-  const config = (await import(/* @vite-ignore */ configPath)) as {
-    default: unknown;
-  };
-
-  return validateConfig(config.default);
 };
