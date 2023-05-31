@@ -2,5 +2,9 @@
   "OqHQ1o": {
     "defaultMessage": "Built with {link}",
     "description": "Colophon: generator information"
+  },
+  "fpBnkZ": {
+    "defaultMessage": "Skip to content",
+    "description": "SkipToContent: link label"
   }
 }
