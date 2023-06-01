@@ -26,6 +26,12 @@
   ],
   "gitignoreRoot": ".",
   "useGitignore": true,
-  "ignorePaths": [".husky", ".vscode", "node_modules", "pnpm-lock.yaml"],
-  "ignoreRegExpList": ["Email", "Urls", "#[\\w-]*"]
+  "ignorePaths": [
+    ".husky",
+    ".vscode",
+    "node_modules",
+    "packages/core/src/i18n/",
+    "pnpm-lock.yaml"
+  ],
+  "ignoreRegExpList": ["Email", "Urls", "#[\\w-]*", "/id: '.*'/g"]
 }

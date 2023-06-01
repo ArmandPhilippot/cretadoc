@@ -60,3 +60,7 @@ export const DEFAULT_CONFIG = {
   name: 'Cretadoc',
   theme: 'cretadoc-light',
 } as const satisfies CretadocConfig;
+
+export const LOCAL_STORAGE_KEY = {
+  THEME: 'cretadoc-theme',
+} as const;

@@ -7,13 +7,16 @@ import { DEFAULT_LOCALE, ROUTES } from '../utils/constants';
 import { useConfig } from '../utils/hooks';
 
 export const App = () => {
-  const { locale } = useConfig();
+  const { locale, name, theme } = useConfig();
 
   return (
     <IntlProvider defaultLocale={DEFAULT_LOCALE} locale={locale}>
       <UIProvider components={{ LinkComponent: RouterLink }}>
         <Routes>
-          <Route path={ROUTES.HOMEPAGE} element={<Layout />}>
+          <Route
+            path={ROUTES.HOMEPAGE}
+            element={<Layout name={name} theme={theme} />}
+          >
             <Route index element={<HomePage />} />
           </Route>
         </Routes>

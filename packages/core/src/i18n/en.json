@@ -3,8 +3,24 @@
     "defaultMessage": "Built with {link}",
     "description": "Colophon: generator information"
   },
+  "a10l60": {
+    "defaultMessage": "Back to top",
+    "description": "BackToTop: button accessible label"
+  },
   "fpBnkZ": {
     "defaultMessage": "Skip to content",
     "description": "SkipToContent: link label"
+  },
+  "fvPw3j": {
+    "defaultMessage": "Switch theme",
+    "description": "ThemeSwitcher: accessible label"
+  },
+  "u07OwY": {
+    "defaultMessage": "Dark theme",
+    "description": "ThemeSwitcher: dark theme label"
+  },
+  "zysx+O": {
+    "defaultMessage": "Light theme",
+    "description": "ThemeSwitcher: light theme label"
   }
 }
