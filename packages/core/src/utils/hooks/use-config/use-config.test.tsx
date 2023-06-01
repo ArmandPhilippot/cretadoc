@@ -1,8 +1,8 @@
 import { renderHook } from '@testing-library/react';
 import type { FC, ReactNode } from 'react';
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_CONFIG } from '../constants';
-import { ConfigProvider, type ConfigProviderProps } from '../contexts';
+import { DEFAULT_CONFIG } from '../../constants';
+import { ConfigProvider, type ConfigProviderProps } from '../../contexts';
 import { useConfig } from './use-config';
 
 const createWrapper = (
