@@ -1,5 +1,5 @@
 import type { CretadocTheme } from '@cretadoc/ui';
-import type { Maybe } from '@cretadoc/utils';
+import type { Nullable } from '@cretadoc/utils';
 import type { SUPPORTED_LOCALES } from '../utils/constants';
 
 export type CretadocLocale = (typeof SUPPORTED_LOCALES)[number];
@@ -19,9 +19,9 @@ export type CretadocConfig = {
   /**
    * Define a copyright to put in your website footer.
    *
-   * @default undefined
+   * @default null
    */
-  copyright: Maybe<string>;
+  copyright: Nullable<string>;
   /**
    * Should we hide the "Built with" message in website footer?
    *

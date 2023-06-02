@@ -1,37 +1,27 @@
 import { describe, expect, it } from 'vitest';
-import { ERROR } from '../constants';
+import { CONFIG_FILE_NAME, DEFAULT_CONFIG } from '../constants';
 import { ConfigError } from '../exceptions';
-import { validateConfig } from './config';
+import { getFullConfigFrom } from './config';
 
 describe('validate-config', () => {
+  it('returns the config when it is valid', () => {
+    expect(getFullConfigFrom(DEFAULT_CONFIG)).toStrictEqual(DEFAULT_CONFIG);
+  });
+
   it('throws an error when the config is not an exported object', () => {
-    expect(() => validateConfig('')).toThrow(
-      new ConfigError(ERROR.EMPTY.CONFIG)
+    expect(() => getFullConfigFrom('')).toThrow(
+      new ConfigError(
+        `Found a ${CONFIG_FILE_NAME} file but it does not export a configuration. Some keys are required for Cretadoc to work properly.`
+      )
     );
     expect.assertions(1);
   });
 
-  it('throws an error when the name key has an invalid type', () => {
-    const brandName = 42;
-    expect(() => validateConfig({ name: brandName })).toThrowError(
-      new RegExp(ERROR.INVALID.TYPE('string', typeof brandName))
-    );
-    expect.assertions(1);
-  });
-
-  it('throws an error when the copyright key has an invalid type', () => {
-    const copyright = 42;
-    expect(() => validateConfig({ copyright })).toThrowError(
-      new RegExp(ERROR.INVALID.TYPE('string', typeof copyright))
-    );
-    expect.assertions(1);
-  });
-
-  it('throws an error when the hideGenerator key has an invalid type', () => {
-    const hideGenerator = 42;
-    expect(() => validateConfig({ hideGenerator })).toThrowError(
-      new RegExp(ERROR.INVALID.TYPE('boolean', typeof hideGenerator))
-    );
-    expect.assertions(1);
+  it('throws an error when the config is invalid', () => {
+    const config = {
+      copyright: 42,
+      name: false,
+    };
+    expect(() => getFullConfigFrom(config)).toThrowError();
   });
 });

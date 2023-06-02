@@ -1,6 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import createFetchMock from 'vitest-fetch-mock';
-import { ERROR } from '../../utils/constants';
 import { ApiError } from '../../utils/exceptions';
 import { fetchAPI } from './api';
 
@@ -22,10 +21,10 @@ describe('api', () => {
   });
 
   it('throws an error when no data is found', async () => {
-    fetchMocker.mockReject(new ApiError(ERROR.API.DATA));
+    fetchMocker.mockReject(new ApiError('No data found'));
 
     await expect(async () => fetchAPI({ query: '' })).rejects.toThrow(
-      new ApiError(ERROR.API.DATA)
+      new ApiError('No data found')
     );
     expect.assertions(1);
   });

@@ -2,9 +2,9 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { findUp } from 'find-up';
 import type { CretadocConfig } from '../../types/config';
-import { CONFIG_FILE_NAME, ERROR } from '../constants';
+import { CONFIG_FILE_NAME } from '../constants';
 import { ConfigError } from '../exceptions';
-import { validateConfig } from './config';
+import { getFullConfigFrom } from './config';
 
 /**
  * Load the Cretadoc configuration.
@@ -15,11 +15,16 @@ export const loadConfig = async (): Promise<CretadocConfig> => {
   const currentDir = dirname(fileURLToPath(import.meta.url));
   const configPath = await findUp(CONFIG_FILE_NAME, { cwd: currentDir });
 
-  if (!configPath) throw new ConfigError(ERROR.MISSING.CONFIG);
+  if (!configPath)
+    throw new ConfigError(
+      `Cannot find ${CONFIG_FILE_NAME} file. A configuration file is required for Cretadoc to work properly.`
+    );
 
-  const config = (await import(/* @vite-ignore */ configPath)) as {
+  const { default: exportedConfig } = (await import(
+    /* @vite-ignore */ configPath
+  )) as {
     default: unknown;
   };
 
-  return validateConfig(config.default);
+  return getFullConfigFrom(exportedConfig);
 };

@@ -1,5 +1,5 @@
 import { isObjKeyExist, isObject } from '@cretadoc/utils';
-import { ERROR, ROUTES } from '../../utils/constants';
+import { ROUTES } from '../../utils/constants';
 import { ApiError } from '../../utils/exceptions';
 
 type APIResponse = {
@@ -33,15 +33,17 @@ export const fetchAPI = async ({ query, variables }: FetchAPIProps) => {
 
   const jsonResponse: unknown = await response.json();
 
-  if (!isValidAPIResponse(jsonResponse)) throw new ApiError(ERROR.UNEXPECTED);
+  if (!isValidAPIResponse(jsonResponse))
+    throw new ApiError('Received an invalid response from the API.');
 
   if (response.ok) {
-    if (!jsonResponse.data) return Promise.reject(new ApiError(ERROR.API.DATA));
+    if (!jsonResponse.data)
+      return Promise.reject(new ApiError('No data found'));
 
     return jsonResponse;
   }
 
-  console.error(ERROR.API.RESPONSE);
+  console.error('Failed to fetch API');
   const error = new ApiError(
     jsonResponse.errors?.map((e) => e.message).join('\n') ?? 'unknown'
   );

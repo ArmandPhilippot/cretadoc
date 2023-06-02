@@ -8,8 +8,7 @@ import {
   useCallback,
 } from 'react';
 import { LocalStorage } from '../../../services';
-
-type Validator = <T>(value: unknown) => value is T;
+import type { Validator } from '../../../types/internals';
 
 export type UseLocalStorageReturn<T> = readonly [
   T,
@@ -27,7 +26,7 @@ export type UseLocalStorageReturn<T> = readonly [
 const useLocalStorage = <T>(
   key: string,
   fallbackValue: T,
-  validator?: Validator
+  validator?: Validator<T>
 ): UseLocalStorageReturn<T> => {
   const getStoredValue = useCallback(() => {
     if (!isBrowser()) return fallbackValue;

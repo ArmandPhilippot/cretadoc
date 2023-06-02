@@ -5,7 +5,7 @@ import {
   createConfigFile,
   removeConfigFile,
 } from '../../../tests/utils/helpers';
-import { CONFIG_FILE_NAME, ERROR } from '../constants';
+import { CONFIG_FILE_NAME } from '../constants';
 import { ConfigError } from '../exceptions';
 import { loadConfig } from './server';
 
@@ -28,7 +28,9 @@ describe('load-config', () => {
 
   it('throws an error if the config file does not exist', async () => {
     await expect(async () => loadConfig()).rejects.toThrow(
-      new ConfigError(ERROR.MISSING.CONFIG)
+      new ConfigError(
+        `Cannot find ${CONFIG_FILE_NAME} file. A configuration file is required for Cretadoc to work properly.`
+      )
     );
     expect.assertions(1);
   });
