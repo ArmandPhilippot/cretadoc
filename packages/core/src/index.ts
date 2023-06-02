@@ -1,18 +1,18 @@
 import { createAPI } from '@cretadoc/api';
 import { createServer } from '@cretadoc/server';
+import { ROUTES } from './utils/constants';
 
 export const createCretadocApp = async () => {
   const isProd = process.env['NODE_ENV'] === 'production';
-  const apiRoute = '/api';
   const api = createAPI({
     data: {},
-    endpoint: apiRoute,
+    endpoint: ROUTES.API,
   });
 
   return createServer({
     api: {
       instance: api,
-      route: apiRoute,
+      route: ROUTES.API,
     },
     mode: isProd ? 'production' : 'development',
     ssr: {

@@ -10,6 +10,10 @@ export const CRETADOC_REPOSITORY = {
 
 export const CORE_ERROR_CODE = {
   /**
+   * A problem occurred with API.
+   */
+  BAD_API_RESPONSE: 'BAD_API_RESPONSE',
+  /**
    * The CORE is misconfigured.
    */
   BAD_CONFIGURATION: 'BAD_CONFIGURATION',
@@ -20,6 +24,10 @@ export const CORE_ERROR_CODE = {
 } as const;
 
 export const ERROR = {
+  API: {
+    DATA: 'No data found',
+    RESPONSE: 'Failed to fetch API',
+  },
   EMPTY: {
     CONFIG: `Found a ${CONFIG_FILE_NAME} file but it does not export a configuration. Some keys are required for Cretadoc to work properly.`,
   },
@@ -46,8 +54,9 @@ export const ERROR = {
 } as const;
 
 export const ROUTES = {
+  API: '/api',
   HOMEPAGE: '/',
-};
+} as const;
 
 export const SUPPORTED_LOCALES = ['en'] as const;
 
