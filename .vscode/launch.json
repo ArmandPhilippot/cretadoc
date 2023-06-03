@@ -23,6 +23,25 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Debug: Core",
+      "localRoot": "${workspaceFolder}/packages/core/",
+      "skipFiles": [
+        "<node_internals>/**",
+        "${workspaceFolder}/**/node_modules/**/*.js"
+      ],
+      "runtimeArgs": [
+        "--experimental-specifier-resolution=node",
+        "--loader",
+        "ts-node/esm",
+        "-r",
+        "ts-node/register"
+      ],
+      "args": ["server.ts"],
+      "postDebugTask": "Core: clean fixtures"
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Debug: Server",
       "localRoot": "${workspaceFolder}/packages/server/",
       "skipFiles": [

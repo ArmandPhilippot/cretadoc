@@ -8,6 +8,14 @@
       "options": {
         "cwd": "${workspaceFolder}/packages/api/"
       }
+    },
+    {
+      "label": "Core: clean fixtures",
+      "type": "shell",
+      "command": "node --experimental-specifier-resolution=node --loader ts-node/esm ./tests/bin/remove-config-file.ts",
+      "options": {
+        "cwd": "${workspaceFolder}/packages/core/"
+      }
     }
   ]
 }
