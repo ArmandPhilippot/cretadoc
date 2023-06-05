@@ -67,3 +67,57 @@ export const isObjKeyExist = <T extends object, K extends string>(
 
   return obj[key] !== undefined;
 };
+
+/**
+ * Filter an object to exclude the given keys.
+ *
+ * @param {T} obj - An object to filter.
+ * @param {K} keys - The keys to exclude.
+ * @returns The filtered object.
+ */
+export const excludeKeysFromObj = <
+  T extends Record<PropertyKey, unknown>,
+  K extends Array<keyof T>
+>(
+  obj: T,
+  keys: K
+): {
+  [Key in Exclude<keyof T, K[number]>]: T[Key];
+} => {
+  const keysValues: Array<[string, unknown]> = [];
+
+  Object.entries(obj).forEach(([key, value]) => {
+    if (!(keys as string[]).includes(key)) keysValues.push([key, value]);
+  });
+
+  return Object.fromEntries(keysValues) as {
+    [Key in Exclude<keyof T, K[number]>]: T[Key];
+  };
+};
+
+/**
+ * Filter an object to extract the given keys.
+ *
+ * @param {T} obj - An object to filter.
+ * @param {K} keys - The keys to keep.
+ * @returns The filtered object.
+ */
+export const extractKeysFromObj = <
+  T extends Record<PropertyKey, unknown>,
+  K extends Array<keyof T>
+>(
+  obj: T,
+  keys: K
+): {
+  [Key in Extract<keyof T, K[number]>]: T[Key];
+} => {
+  const keysValues: Array<[string, unknown]> = [];
+
+  Object.entries(obj).forEach(([key, value]) => {
+    if ((keys as string[]).includes(key)) keysValues.push([key, value]);
+  });
+
+  return Object.fromEntries(keysValues) as {
+    [Key in Extract<keyof T, K[number]>]: T[Key];
+  };
+};

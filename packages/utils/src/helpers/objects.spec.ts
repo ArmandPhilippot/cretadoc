@@ -1,7 +1,13 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 /* eslint-disable max-statements */
 import { describe, expect, expectTypeOf, it } from 'vitest';
-import { deepFreeze, getValueByKeyPath, isObjKeyExist } from './objects';
+import {
+  deepFreeze,
+  getValueByKeyPath,
+  isObjKeyExist,
+  extractKeysFromObj,
+  excludeKeysFromObj,
+} from './objects';
 
 describe('deep-freeze', () => {
   it('returns a frozen object', () => {
@@ -64,7 +70,7 @@ describe('deep-freeze', () => {
     }).toThrowError();
     expect(() => {
       // @ts-expect-error: we are assigning a new value to a readonly property.
-      immutableObj['boolean'] = false;
+      immutableObj.boolean = false;
     }).toThrowError();
     expect(() => {
       // @ts-expect-error: we are assigning a new value to a readonly property.
@@ -72,7 +78,7 @@ describe('deep-freeze', () => {
     }).toThrowError();
     expect(() => {
       // @ts-expect-error: we are assigning a new value to a readonly property.
-      immutableObj['function'] = () => 42;
+      immutableObj.function = () => 42;
     }).toThrowError();
     expectTypeOf(immutableObj.literal).toEqualTypeOf<UnionOfLiteral>();
     expect(() => {
@@ -85,7 +91,7 @@ describe('deep-freeze', () => {
     }).toThrowError();
     expect(() => {
       // @ts-expect-error: we are assigning a new value to a readonly property.
-      immutableObj['null'] = undefined;
+      immutableObj.null = undefined;
     }).toThrowError();
     expect(() => {
       // @ts-expect-error: we are assigning a new value to a readonly property.
@@ -113,8 +119,8 @@ describe('deep-freeze', () => {
     }).toThrowError();
 
     // @ts-expect-error: we are assigning a new value to a readonly property.
-    immutableObj.nested['boolean'] = !obj.nested['boolean'];
-    expect(immutableObj.nested['boolean']).toBe(obj.nested['boolean']);
+    immutableObj.nested.boolean = !obj.nested.boolean;
+    expect(immutableObj.nested.boolean).toBe(obj.nested.boolean);
     // @ts-expect-error: we are assigning a new value to a readonly property.
     immutableObj.nested.object = undefined;
     expect(immutableObj.nested.object).toBe(obj.nested.object);
@@ -171,5 +177,27 @@ describe('is-object-key-exist', () => {
     expect(() => isObjKeyExist([], 'foo')).toThrowError(
       'First argument must be an object.'
     );
+  });
+});
+
+describe('exclude-keys-from-obj', () => {
+  it('returns a filtered copy of the object', () => {
+    const obj = { foo: '', bar: 42, baz: true };
+    const filtered = excludeKeysFromObj(obj, ['bar']);
+
+    expect(filtered.foo).toBe(obj.foo);
+    expect(filtered.baz).toBe(obj.baz);
+    expect('bar' in filtered).toBe(false);
+  });
+});
+
+describe('extract-keys-from-obj', () => {
+  it('returns a filtered copy of the object', () => {
+    const obj = { foo: '', bar: 42, baz: true };
+    const filtered = extractKeysFromObj(obj, ['bar']);
+
+    expect(filtered.bar).toBe(obj.bar);
+    expect('foo' in filtered).toBe(false);
+    expect('baz' in filtered).toBe(false);
   });
 });
