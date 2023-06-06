@@ -1,6 +1,5 @@
 import type { YogaServerInstance } from 'graphql-yoga';
-import type { API_ERROR_CODE } from '../utils/constants';
-import type { APIContext, ServerContext } from './contexts';
+import type { APIContext, ServerContext } from './internals';
 
 /**
  * Configure the data sources.
@@ -37,5 +36,3 @@ export type APIConfig = {
 };
 
 export type APIInstance = YogaServerInstance<ServerContext, APIContext>;
-
-export type APIErrorCode = (typeof API_ERROR_CODE)[keyof typeof API_ERROR_CODE];

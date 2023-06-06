@@ -2,6 +2,7 @@ import type { IncomingMessage, ServerResponse } from 'http';
 import type { Maybe } from '@cretadoc/utils';
 import type { DocRepository } from '../schema/doc/doc.repository';
 import type { PagesRepository } from '../schema/pages/pages.repository';
+import type { API_ERROR_CODE } from '../utils/constants';
 import type {
   DocLoaders,
   DocMutators,
@@ -27,3 +28,5 @@ export type ServerContext = {
   req: IncomingMessage;
   res: ServerResponse;
 };
+
+export type APIErrorCode = (typeof API_ERROR_CODE)[keyof typeof API_ERROR_CODE];

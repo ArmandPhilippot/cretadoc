@@ -1,5 +1,5 @@
 import type { GraphQLError } from 'graphql';
-import type { APIErrorCode } from 'src';
+import type { APIErrorCode } from '../../../src/types';
 import type { MatcherResult } from '../../types';
 
 type APIException = {
