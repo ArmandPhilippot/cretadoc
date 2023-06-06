@@ -1,6 +1,6 @@
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { createAPI } from '@cretadoc/api';
+import { type APIInstance, createAPI } from '@cretadoc/api';
 import { createServer } from '@cretadoc/server';
 import { CONFIG_FILE_NAME, ROUTES } from './utils/constants';
 import { loadServerConfig } from './utils/server/load-server-config';
@@ -9,7 +9,8 @@ export const createCretadocApp = async () => {
   const isProd = process.env['NODE_ENV'] === 'production';
   const currentDir = dirname(fileURLToPath(import.meta.url));
   const config = await loadServerConfig(CONFIG_FILE_NAME, currentDir);
-  const api = createAPI({
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const api: APIInstance = createAPI({
     data: {
       pages: config.paths.pages ?? undefined,
     },

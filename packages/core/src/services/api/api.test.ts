@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import createFetchMock from 'vitest-fetch-mock';
 import { ApiError } from '../../utils/exceptions';
 import { fetchAPI } from './api';
+import { pagesQuery } from './queries';
 
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
@@ -15,7 +16,7 @@ describe('api', () => {
     const data = [{ id: 1, name: 'page-1' }];
     fetchMocker.mockResponseOnce(JSON.stringify({ data }));
 
-    const response = await fetchAPI({ query: '' });
+    const response = await fetchAPI({ query: pagesQuery });
     expect(response.data).toStrictEqual(data);
     expect.assertions(1);
   });
@@ -23,7 +24,7 @@ describe('api', () => {
   it('throws an error when no data is found', async () => {
     fetchMocker.mockReject(new ApiError('No data found'));
 
-    await expect(async () => fetchAPI({ query: '' })).rejects.toThrow(
+    await expect(async () => fetchAPI({ query: pagesQuery })).rejects.toThrow(
       new ApiError('No data found')
     );
     expect.assertions(1);
@@ -33,7 +34,7 @@ describe('api', () => {
     const errors = 'tenetur iste rerum';
     fetchMocker.mockRejectOnce(new ApiError(errors));
 
-    await expect(async () => fetchAPI({ query: '' })).rejects.toThrow(
+    await expect(async () => fetchAPI({ query: pagesQuery })).rejects.toThrow(
       new ApiError(errors)
     );
     expect.assertions(1);
