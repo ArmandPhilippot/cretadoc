@@ -1,4 +1,9 @@
-import type { CretadocConfig } from './config';
+import type { ReplaceTypesIn } from '@cretadoc/utils';
+import type {
+  CretadocClientConfig,
+  CretadocConfig,
+  CretadocServerConfig,
+} from './config';
 
 export type Validator<T = unknown> = <V = T>(value: unknown) => value is V;
 
@@ -8,4 +13,8 @@ export type ValidationError = {
   received: string;
 };
 
-export type LooseAutocomplete<T extends string> = T | Omit<string, T>;
+export type ConfigShape = Partial<ReplaceTypesIn<CretadocConfig, unknown>>;
+
+export type ClientConfigShape = Pick<ConfigShape, keyof CretadocClientConfig>;
+
+export type ServerConfigShape = Pick<ConfigShape, keyof CretadocServerConfig>;

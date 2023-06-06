@@ -1,6 +1,5 @@
 export * from './is-supported-locale';
 export * from './is-supported-theme';
-export * from './validate-config-props';
 export * from './validate-copyright-prop';
 export * from './validate-hide-generator-prop';
 export * from './validate-locale-prop';

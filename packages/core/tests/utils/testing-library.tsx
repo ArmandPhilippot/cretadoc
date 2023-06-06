@@ -5,11 +5,11 @@ import {
 import type { FC, ReactElement, ReactNode } from 'react';
 import { IntlProvider } from 'react-intl';
 import { MemoryRouter } from 'react-router-dom';
-import type { CretadocConfig } from '../../src/types/config';
+import type { CretadocClientConfig } from '../../src/types/config';
 import { ConfigProvider } from '../../src/utils/contexts';
 
 type ProvidersConfig = {
-  config?: CretadocConfig;
+  config?: CretadocClientConfig;
   locale?: 'en';
 };
 

@@ -1,4 +1,9 @@
-import type { CretadocConfig, CretadocLocale } from '../types/config';
+import type {
+  CretadocClientConfig,
+  CretadocConfig,
+  CretadocLocale,
+  CretadocServerConfig,
+} from '../types/config';
 
 export const CONFIG_FILE_NAME = 'cretadoc.config.js';
 
@@ -31,12 +36,23 @@ export const SUPPORTED_LOCALES = ['en'] as const;
 
 export const DEFAULT_LOCALE = 'en' as const satisfies CretadocLocale;
 
-export const DEFAULT_CONFIG = {
+export const DEFAULT_CLIENT_CONFIG = {
   copyright: null,
   hideGenerator: false,
   locale: 'en',
   name: 'Cretadoc',
   theme: 'cretadoc-light',
+} as const satisfies CretadocClientConfig;
+
+export const DEFAULT_SERVER_CONFIG = {
+  paths: {
+    pages: null,
+  },
+} as const satisfies CretadocServerConfig;
+
+export const DEFAULT_CONFIG = {
+  ...DEFAULT_CLIENT_CONFIG,
+  ...DEFAULT_SERVER_CONFIG,
 } as const satisfies CretadocConfig;
 
 export const LOCAL_STORAGE_KEY = {

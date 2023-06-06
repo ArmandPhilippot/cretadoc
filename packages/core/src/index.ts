@@ -1,11 +1,18 @@
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 import { createAPI } from '@cretadoc/api';
 import { createServer } from '@cretadoc/server';
-import { ROUTES } from './utils/constants';
+import { CONFIG_FILE_NAME, ROUTES } from './utils/constants';
+import { loadServerConfig } from './utils/server/load-server-config';
 
 export const createCretadocApp = async () => {
   const isProd = process.env['NODE_ENV'] === 'production';
+  const currentDir = dirname(fileURLToPath(import.meta.url));
+  const config = await loadServerConfig(CONFIG_FILE_NAME, currentDir);
   const api = createAPI({
-    data: {},
+    data: {
+      pages: config.paths.pages ?? undefined,
+    },
     endpoint: ROUTES.API,
   });
 
@@ -27,11 +34,11 @@ export const createCretadocApp = async () => {
         ? new URL('../dist/client/index.html', import.meta.url).pathname
         : new URL('../index.html', import.meta.url).pathname,
     },
-    staticDir: {
-      entrypoint: 'index.html',
-      path: isProd
-        ? new URL('../dist/client', import.meta.url).pathname
-        : new URL('../', import.meta.url).pathname,
-    },
+    staticDir: isProd
+      ? {
+          entrypoint: 'index.html',
+          path: new URL('../dist/client', import.meta.url).pathname,
+        }
+      : undefined,
   });
 };

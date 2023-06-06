@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { App } from './app/app';
-import type { CretadocConfig } from './types/config';
+import type { CretadocClientConfig } from './types/config';
 import { DEFAULT_CONFIG } from './utils/constants';
 import { ConfigProvider } from './utils/contexts';
 
@@ -11,7 +11,7 @@ type WindowWithInitialState = typeof window & {
 };
 
 type InitialState = {
-  config: CretadocConfig;
+  config: CretadocClientConfig;
 };
 
 const serializedInitialState = (window as WindowWithInitialState)

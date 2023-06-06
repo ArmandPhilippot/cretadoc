@@ -1,8 +1,16 @@
 import type { CretadocTheme } from '@cretadoc/ui';
 import type { Nullable } from '@cretadoc/utils';
 import type { SUPPORTED_LOCALES } from '../utils/constants';
+import type { Expand } from './utils';
 
 export type CretadocLocale = (typeof SUPPORTED_LOCALES)[number];
+
+export type CretadocPaths = {
+  /**
+   * The path of the directory that contains the pages.
+   */
+  pages: Nullable<string>;
+};
 
 export type CretadocThemes = {
   /**
@@ -15,7 +23,7 @@ export type CretadocThemes = {
   light: CretadocTheme;
 };
 
-export type CretadocConfig = {
+export type CretadocClientConfig = {
   /**
    * Define a copyright to put in your website footer.
    *
@@ -45,3 +53,14 @@ export type CretadocConfig = {
    */
   theme: CretadocThemes | CretadocTheme;
 };
+
+export type CretadocServerConfig = {
+  /**
+   * The contents paths.
+   */
+  paths: CretadocPaths;
+};
+
+export type CretadocConfig = Expand<
+  CretadocClientConfig & CretadocServerConfig
+>;

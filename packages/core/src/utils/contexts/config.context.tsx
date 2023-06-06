@@ -1,19 +1,18 @@
 import { type FC, type ReactNode, createContext, useMemo } from 'react';
-import type { CretadocConfig } from '../../types/config';
-import { DEFAULT_CONFIG } from '../constants';
-import { mergeConfigWithDefaults } from '../helpers';
+import type { CretadocClientConfig } from '../../types/config';
+import { DEFAULT_CLIENT_CONFIG } from '../constants';
 
 export type ConfigContextProps = {
-  config: CretadocConfig;
+  config: CretadocClientConfig;
 };
 
 export const ConfigContext = createContext<ConfigContextProps>({
-  config: DEFAULT_CONFIG,
+  config: DEFAULT_CLIENT_CONFIG,
 });
 
 export type ConfigProviderProps = {
   children: ReactNode;
-  config?: Partial<CretadocConfig>;
+  config?: Partial<CretadocClientConfig>;
 };
 
 export const ConfigProvider: FC<ConfigProviderProps> = ({
@@ -22,7 +21,9 @@ export const ConfigProvider: FC<ConfigProviderProps> = ({
 }) => {
   const memoizedConfig = useMemo(() => {
     return {
-      config: config ? mergeConfigWithDefaults(config) : DEFAULT_CONFIG,
+      config: config
+        ? { ...DEFAULT_CLIENT_CONFIG, ...config }
+        : DEFAULT_CLIENT_CONFIG,
     };
   }, [config]);
 
