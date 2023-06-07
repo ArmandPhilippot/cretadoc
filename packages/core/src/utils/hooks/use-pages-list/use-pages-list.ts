@@ -1,40 +1,40 @@
-import type { Page } from '@cretadoc/api';
-import { type Maybe, slugify } from '@cretadoc/utils';
-import useSWR from 'swr';
-import { type FetchAPIProps, fetchAPI, pagesQuery } from '../../../services';
-import type { APIResponse } from '../../../types';
+import { usePages } from '../use-pages/use-pages';
 
-export type PageWithSlug = Page & { slug: string };
+export type UsePagesListOptions = {
+  /**
+   * Define the pages to exclude.
+   */
+  exclude?: {
+    /**
+     * Exclude pages by name.
+     */
+    names?: string[];
+    /**
+     * Exclude pages by slug.
+     */
+    slugs?: string[];
+  };
+};
 
 /**
- * Custom hook to retrieve the pages list from the API.
+ * Custom hook to retrieve the pages list.
  *
- * @param variables - The variables.
- * @returns An object with pages list.
+ * @param {UsePagesListOptions} [options] - Some options to exclude pages.
+ * @returns An object with the pages list.
  */
-export const usePagesList = (
-  variables?: FetchAPIProps<typeof pagesQuery>['variables']
-) => {
-  const { data, error, isLoading, isValidating } = useSWR<
-    APIResponse<typeof pagesQuery>,
-    Error
-  >({ query: pagesQuery, variables }, fetchAPI<typeof pagesQuery>);
-
-  const pages: Maybe<PageWithSlug[]> = data?.data?.pages?.edges?.map((page) => {
-    return {
-      ...page.node,
-      slug: `/${slugify(page.node.name)}`,
-    };
+export const usePagesList = (options?: UsePagesListOptions) => {
+  const { info } = usePages({ first: 1 });
+  const { isLoading, isValidating, isError, pages } = usePages({
+    first: info?.total ?? 1,
   });
 
-  if (error) console.error(error);
+  const pagesFilteredByName = options?.exclude?.names
+    ? pages?.filter((page) => !options.exclude?.names?.includes(page.name))
+    : pages;
 
-  return {
-    errors: data?.errors,
-    info: data?.data?.pages?.pageInfo,
-    isError: !!error,
-    isLoading,
-    isValidating,
-    pages,
-  };
+  const pagesFilteredByPath = options?.exclude?.slugs
+    ? pages?.filter((page) => !options.exclude?.slugs?.includes(page.slug))
+    : pagesFilteredByName;
+
+  return { isLoading, isValidating, isError, pages: pagesFilteredByPath };
 };

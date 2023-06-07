@@ -1,7 +1,15 @@
 {
+  "44f+HY": {
+    "defaultMessage": "Loading navigation items...",
+    "description": "MainNav: loading text"
+  },
   "OqHQ1o": {
     "defaultMessage": "Built with {link}",
     "description": "Colophon: generator information"
+  },
+  "XMShu1": {
+    "defaultMessage": "Close the main navigation",
+    "description": "MainNav: close button label"
   },
   "a10l60": {
     "defaultMessage": "Back to top",
@@ -14,6 +22,14 @@
   "fvPw3j": {
     "defaultMessage": "Switch theme",
     "description": "ThemeSwitcher: accessible label"
+  },
+  "fyZzW1": {
+    "defaultMessage": "Open the main navigation",
+    "description": "MainNav: open button label"
+  },
+  "hUSHbO": {
+    "defaultMessage": "No pages found.",
+    "description": "MainNav: no pages found"
   },
   "u07OwY": {
     "defaultMessage": "Dark theme",

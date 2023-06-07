@@ -3,14 +3,15 @@ import { IntlProvider } from 'react-intl';
 import { Route, Routes } from 'react-router-dom';
 import { Layout, RouterLink } from '../components';
 import { HomePage } from '../pages/homepage';
-import { DEFAULT_LOCALE, ROUTES } from '../utils/constants';
+import { ROUTES } from '../utils/constants';
 import { useConfig } from '../utils/hooks';
+import './app.css';
 
 export const App = () => {
   const { locale, name, theme } = useConfig();
 
   return (
-    <IntlProvider defaultLocale={DEFAULT_LOCALE} locale={locale}>
+    <IntlProvider locale={locale}>
       <UIProvider components={{ LinkComponent: RouterLink }}>
         <Routes>
           <Route

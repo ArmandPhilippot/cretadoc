@@ -21,7 +21,7 @@
   "bugs": {
     "url": "https://github.com/ArmandPhilippot/cretadoc/issues"
   },
-  "packageManager": "pnpm@8.3.1",
+  "packageManager": "pnpm@8.6.1",
   "engines": {
     "node": ">=14.6.0"
   },
@@ -64,6 +64,7 @@
     "@cretadoc/utils": "workspace:^",
     "@vanilla-extract/dynamic": "^2.0.3",
     "find-up": "^6.3.0",
+    "modern-normalize": "^2.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-intl": "^6.4.2",
