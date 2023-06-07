@@ -3,3 +3,7 @@ lang
 
 # config
 cretadoc.config.js
+
+# fixtures
+tests/fixtures
+!tests/fixtures/pages/.keep

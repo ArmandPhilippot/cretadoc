@@ -1,14 +1,31 @@
 import { createCretadocApp } from './src';
-import { ROOT_CONFIG_PATH } from './tests/utils/constants';
-import { createConfigFile, removeConfigFile } from './tests/utils/helpers';
+import {
+  PAGES_FIXTURES_DIR_PATH,
+  ROOT_CONFIG_PATH,
+} from './tests/utils/constants';
+import {
+  type Fixture,
+  createConfigFile,
+  createFixtures,
+  deleteFixtures,
+  removeConfigFile,
+} from './tests/utils/helpers';
+
+const fixtures: Fixture[] = [
+  { name: 'homepage', contents: '# Home\n\nWelcome to Cretadoc homepage!' },
+  { name: 'about', contents: '# About' },
+];
 
 await createConfigFile(ROOT_CONFIG_PATH, 'custom', {
   name: 'Cretadoc',
   locale: 'en',
   paths: {
-    pages: new URL('./tests/fixtures/pages/', import.meta.url).pathname,
+    pages: PAGES_FIXTURES_DIR_PATH,
   },
 });
+
+await createFixtures(fixtures);
+
 await createCretadocApp()
   .then((app) => {
     app.start();
@@ -33,11 +50,15 @@ await createCretadocApp()
       process.on(evt, () => {
         void (async () => {
           await removeConfigFile(ROOT_CONFIG_PATH);
+          await deleteFixtures(fixtures);
           process.exit();
         })();
       });
     });
   })
   .catch(async (err) => {
-    if (err instanceof Error) await removeConfigFile(ROOT_CONFIG_PATH);
+    if (err instanceof Error) {
+      await removeConfigFile(ROOT_CONFIG_PATH);
+      await deleteFixtures(fixtures);
+    }
   });
