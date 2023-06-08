@@ -30,6 +30,7 @@ export const CORE_ERROR_CODE = {
 export const ROUTES = {
   API: '/api',
   HOMEPAGE: '/',
+  NOT_FOUND: '/404',
 } as const;
 
 export const SUPPORTED_LOCALES = ['en'] as const;
