@@ -18,19 +18,32 @@ export const page: GraphQLFieldConfig<null, APIContext, QueryInput<Page>> = {
       type: GraphQLString,
       description: 'The name of the page (without extension).',
     },
+    slug: {
+      type: GraphQLString,
+      description: 'The slug of the page.',
+    },
   },
-  resolve: async (_source, { id, name }, context) => {
+  resolve: async (_source, { id, name, slug }, context) => {
     if (!context.loaders?.page)
       throw new LoadersError(error.missing.loader('Page'));
 
-    if (!id && !name)
-      throw new InputValidationError(error.missing.input, ['id', 'name']);
+    if (!id && !name && !slug)
+      throw new InputValidationError(error.missing.input, [
+        'id',
+        'name',
+        'slug',
+      ]);
 
-    if (id && name)
-      throw new InputValidationError(error.invalid.input, ['id', 'name']);
+    if ((id && name) || (id && slug) || (name && slug))
+      throw new InputValidationError(error.invalid.input, [
+        'id',
+        'name',
+        'slug',
+      ]);
 
     if (name) return context.loaders.page.byName.load(name);
     if (id) return context.loaders.page.byId.load(id);
+    if (slug) return context.loaders.page.bySlug.load(slug);
     return undefined;
   },
 };

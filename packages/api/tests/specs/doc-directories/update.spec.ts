@@ -1,6 +1,11 @@
 /* eslint-disable max-statements */
 import { basename, join } from 'path';
-import { isObject, isObjKeyExist, type Nullable } from '@cretadoc/utils';
+import {
+  isObject,
+  isObjKeyExist,
+  slugify,
+  type Nullable,
+} from '@cretadoc/utils';
 import { afterAll, beforeAll, describe, it } from 'vitest';
 import type {
   DocDirectoryPayload,
@@ -74,6 +79,7 @@ describe('updateDocDirectory', () => {
         name: existingDocDirectory.name,
         parent: existingDocDirectory.parent,
         path: existingDocDirectory.path,
+        slug: existingDocDirectory.slug,
         type: 'directory',
       });
 
@@ -107,6 +113,7 @@ describe('updateDocDirectory', () => {
         name: newDocDirectoryName,
         parent: existingDocDirectory.parent,
         path: newDocDirectoryPath,
+        slug: `/${slugify(newDocDirectoryName)}`,
         type: 'directory',
       });
 
@@ -139,8 +146,10 @@ describe('updateDocDirectory', () => {
           id: generateBase64String(parentPath),
           name: basename(parentPath),
           path: parentPath,
+          slug: `/${slugify(basename(parentPath))}`,
         },
         path: newPath,
+        slug: existingDocDirectory.slug,
         type: 'directory',
       });
 

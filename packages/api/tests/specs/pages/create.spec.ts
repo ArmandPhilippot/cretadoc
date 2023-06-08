@@ -1,4 +1,9 @@
-import { isObject, isObjKeyExist, type Nullable } from '@cretadoc/utils';
+import {
+  isObject,
+  isObjKeyExist,
+  slugify,
+  type Nullable,
+} from '@cretadoc/utils';
 import type {
   PageCreateErrors,
   PageCreatePayload,
@@ -67,6 +72,7 @@ describe('pageCreate', () => {
         id: generateBase64String(newPagePath),
         name: newPageName,
         path: newPagePath,
+        slug: `/${slugify(newPageName)}`,
       });
 
     expect.assertions(2);
@@ -89,6 +95,7 @@ describe('pageCreate', () => {
         id: generateBase64String(newPagePath),
         name: newPageName,
         path: newPagePath,
+        slug: `/${slugify(newPageName)}`,
       });
 
     expect.assertions(2);

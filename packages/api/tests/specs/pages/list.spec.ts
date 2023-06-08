@@ -29,7 +29,7 @@ const misconfiguredAPI = createAPIServer({ port: 3260 });
 const sendPagesQuery = async (variables?: Variables[typeof pagesQuery]) =>
   sendQuery({ api: api.instance, query: pagesQuery, variables });
 
-const rootPages = pages
+const rootPages = [...pages]
   .sort(byNameProp)
   .filter((page) => page.path.replace('./', '').split(sep).length === 1)
   .filter((page) => page.path.endsWith(MARKDOWN_EXTENSION));
@@ -124,10 +124,37 @@ describe('pages', () => {
     const receivedNames = response.body.data.pages?.edges?.map(
       (edge) => edge.node.name
     );
-    const rootPagesNames = rootPages.slice(0, perPage).map((page) => page.name);
+    const reversedRootPagesNames = rootPages
+      .slice(0, perPage)
+      .map((page) => page.name)
+      .reverse();
 
     expect(receivedNames).not.toBeUndefined();
-    expect(receivedNames).toStrictEqual(rootPagesNames.reverse());
+    expect(receivedNames).toStrictEqual(reversedRootPagesNames);
+
+    const assertionsCount = 3;
+    expect.assertions(assertionsCount);
+  });
+
+  it('returns the pages ordered by slug', async () => {
+    const perPage = 10;
+    const response = await sendPagesQuery({
+      first: perPage,
+      orderBy: { direction: 'DESC', field: 'slug' },
+    });
+
+    expect(response.body.data.pages).not.toBeNull();
+
+    const receivedSlugs = response.body.data.pages?.edges?.map(
+      (edge) => edge.node.slug
+    );
+    const reversedRootPagesSlugs = rootPages
+      .slice(0, perPage)
+      .map((page) => page.slug)
+      .reverse();
+
+    expect(receivedSlugs).not.toBeUndefined();
+    expect(receivedSlugs).toStrictEqual(reversedRootPagesSlugs);
 
     const assertionsCount = 3;
     expect.assertions(assertionsCount);

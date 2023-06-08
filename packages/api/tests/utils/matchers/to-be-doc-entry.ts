@@ -45,6 +45,7 @@ export function toBeDocEntry(
     name: entry.name,
     parent: entry.parent,
     path: entry.path,
+    slug: entry.slug,
     type: entry.type,
   };
 

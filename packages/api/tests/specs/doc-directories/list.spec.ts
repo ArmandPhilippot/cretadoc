@@ -29,7 +29,7 @@ const sendDocDirectoriesQuery = async (
   variables?: Variables[typeof docDirectoriesQuery]
 ) => sendQuery({ api: api.instance, query: docDirectoriesQuery, variables });
 
-const rootDocDirectories = docDirectories
+const rootDocDirectories = [...docDirectories]
   .sort(byNameProp)
   .filter((dir) => dir.path.replace('./', '').split(sep).length === 1);
 
@@ -163,12 +163,37 @@ describe('docDirectories', () => {
     const receivedNames = response.body.data.doc?.directories?.edges?.map(
       (edge) => edge.node.name
     );
-    const rootDocDirectoriesNames = rootDocDirectories
+    const reversedRootDocDirectoriesNames = rootDocDirectories
       .slice(0, perPage)
-      .map((page) => page.name);
+      .map((page) => page.name)
+      .reverse();
 
     expect(receivedNames).not.toBeUndefined();
-    expect(receivedNames).toStrictEqual(rootDocDirectoriesNames.reverse());
+    expect(receivedNames).toStrictEqual(reversedRootDocDirectoriesNames);
+
+    const assertionsCount = 3;
+    expect.assertions(assertionsCount);
+  });
+
+  it('returns the documentation directories ordered by slug', async () => {
+    const perPage = 10;
+    const response = await sendDocDirectoriesQuery({
+      first: perPage,
+      orderBy: { direction: 'DESC', field: 'slug' },
+    });
+
+    expect(response.body.data.doc?.directories).not.toBeNull();
+
+    const receivedSlugs = response.body.data.doc?.directories?.edges?.map(
+      (edge) => edge.node.slug
+    );
+    const reversedRootDocDirectoriesSlugs = rootDocDirectories
+      .slice(0, perPage)
+      .map((page) => page.slug)
+      .reverse();
+
+    expect(receivedSlugs).not.toBeUndefined();
+    expect(receivedSlugs).toStrictEqual(reversedRootDocDirectoriesSlugs);
 
     const assertionsCount = 3;
     expect.assertions(assertionsCount);

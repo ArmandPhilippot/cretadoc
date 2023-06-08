@@ -18,6 +18,9 @@ export const PageOrderFieldType = new GraphQLEnumType({
     name: {
       value: 'name',
     },
+    slug: {
+      value: 'slug',
+    },
     updatedAt: {
       value: 'updatedAt',
     },

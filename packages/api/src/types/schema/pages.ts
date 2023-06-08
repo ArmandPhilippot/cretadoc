@@ -11,7 +11,9 @@ import type {
 } from '../generics';
 import type { Connection, QueryResult } from '../gql';
 
-export type Page = Omit<RegularFile, 'extension' | 'type'>;
+export type Page = Omit<RegularFile, 'extension' | 'type'> & {
+  slug: `/${string}`;
+};
 
 /*
  * ===========================================================================
@@ -19,7 +21,7 @@ export type Page = Omit<RegularFile, 'extension' | 'type'>;
  * ===========================================================================
  */
 
-export type PageInput = Pick<Page, 'id' | 'name'>;
+export type PageInput = Pick<Page, 'id' | 'name' | 'slug'>;
 
 export type PagePayload = Payload<'page', NullableOptionalKeysOf<Page, true>>;
 
@@ -33,7 +35,10 @@ export type PageWhereFields = Partial<
   Pick<Page, 'createdAt' | 'name' | 'updatedAt'>
 >;
 
-export type PageOrderFields = Pick<Page, 'createdAt' | 'name' | 'updatedAt'>;
+export type PageOrderFields = Pick<
+  Page,
+  'createdAt' | 'name' | 'slug' | 'updatedAt'
+>;
 
 export type PageConnectionPayload = Payload<
   'pages',
@@ -106,10 +111,13 @@ export type PageByIdLoader = DataLoader<PageInput['id'], Maybe<Page>>;
 
 export type PageByNameLoader = DataLoader<PageInput['name'], Maybe<Page>>;
 
+export type PageBySlugLoader = DataLoader<PageInput['slug'], Maybe<Page>>;
+
 export type PageLoaders = {
   page?: {
     byId: PageByIdLoader;
     byName: PageByNameLoader;
+    bySlug: PageBySlugLoader;
     list: ListLoader<Page>;
   };
 };

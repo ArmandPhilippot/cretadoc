@@ -46,3 +46,16 @@ export const getPageByName = (
   new DataLoader<PageInput['name'], Maybe<Page>>(async (names) =>
     getPageBy(repository, 'name', names)
   );
+
+/**
+ * Retrieve many pages by slug.
+ *
+ * @param {PageRepository} repository - A Page repository.
+ * @returns {DataLoader<string, Maybe<Page>, string>} The Data Loader.
+ */
+export const getPageBySlug = (
+  repository: PagesRepository
+): DataLoader<string, Maybe<Page>, string> =>
+  new DataLoader<PageInput['slug'], Maybe<Page>>(async (slugs) =>
+    getPageBy(repository, 'slug', slugs)
+  );

@@ -1,4 +1,6 @@
 import { basename, parse } from 'path';
+import { type Nullable, slugify } from '@cretadoc/utils';
+import type { DocEntryParent } from '../../../src/types';
 import { generateBase64String } from '../../../src/utils/helpers';
 import { docFixtures } from '../../fixtures/doc';
 import type { DocDirectoryWithoutDatesAndContents } from '../../types';
@@ -9,13 +11,14 @@ const onlyDocDirectories = docFixtures
     const relativePath = fileOrDir.path.replace(DOC_FIXTURES_DIR, './');
     const dirPath = parse(relativePath).dir;
     const parentPath = parse(dirPath).dir;
-    const parent =
+    const parent: Nullable<DocEntryParent> =
       parentPath === '.'
         ? null
         : {
             id: generateBase64String(parentPath),
             name: basename(parentPath),
             path: parentPath,
+            slug: `/${slugify(basename(parentPath))}`,
           };
 
     return {
@@ -23,6 +26,7 @@ const onlyDocDirectories = docFixtures
       name: parse(dirPath).name,
       parent,
       path: dirPath,
+      slug: `/${slugify(parse(dirPath).name)}`,
       type: 'directory',
     };
   })

@@ -22,6 +22,9 @@ export const DocDirectoryOrderFieldType = new GraphQLEnumType({
     path: {
       value: 'path',
     },
+    slug: {
+      value: 'slug',
+    },
     updatedAt: {
       value: 'updatedAt',
     },

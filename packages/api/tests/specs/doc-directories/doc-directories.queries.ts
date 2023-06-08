@@ -10,8 +10,10 @@ export const docDirectoryQuery = `query DocDirectory($id: String, $path: String 
             id
             name
             path
+            slug
           }
           path
+          slug
           type
           updatedAt
         }
@@ -23,8 +25,10 @@ export const docDirectoryQuery = `query DocDirectory($id: String, $path: String 
             id
             name
             path
+            slug
           }
           path
+          slug
           type
           updatedAt
         }
@@ -36,8 +40,10 @@ export const docDirectoryQuery = `query DocDirectory($id: String, $path: String 
         id
         name
         path
+        slug
       }
       path
+      slug
       type
       updatedAt
     }
@@ -65,8 +71,10 @@ export const docDirectoriesQuery = `query DocDirectories($after: String, $first:
                 id
                 name
                 path
+                slug
               }
               path
+              slug
               type
               updatedAt
             }
@@ -78,8 +86,10 @@ export const docDirectoriesQuery = `query DocDirectories($after: String, $first:
                 id
                 name
                 path
+                slug
               }
               path
+              slug
               type
               updatedAt
             }
@@ -91,8 +101,10 @@ export const docDirectoriesQuery = `query DocDirectories($after: String, $first:
             id
             name
             path
+            slug
           }
           path
+          slug
           type
           updatedAt
         }

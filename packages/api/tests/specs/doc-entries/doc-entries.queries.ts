@@ -11,8 +11,10 @@ export const docEntryQuery = `query DocEntry($id: String, $path: String) {
           id
           name
           path
+          slug
         }
         path
+        slug
         type
         updatedAt
       }
@@ -28,8 +30,10 @@ export const docEntryQuery = `query DocEntry($id: String, $path: String) {
               id
               name
               path
+              slug
             }
             path
+            slug
             type
             updatedAt
           }
@@ -41,8 +45,10 @@ export const docEntryQuery = `query DocEntry($id: String, $path: String) {
               id
               name
               path
+              slug
             }
             path
+            slug
             type
             updatedAt
           }
@@ -52,8 +58,10 @@ export const docEntryQuery = `query DocEntry($id: String, $path: String) {
           id
           name
           path
+          slug
         }
         path
+        slug
         type
         updatedAt
       }
@@ -83,8 +91,10 @@ export const docEntriesQuery = `query DocEntries($after: String, $first: Int, $o
               id
               name
               path
+              slug
             }
             path
+            slug
             type
             updatedAt
           }
@@ -100,8 +110,10 @@ export const docEntriesQuery = `query DocEntries($after: String, $first: Int, $o
                   id
                   name
                   path
+                  slug
                 }
                 path
+                slug
                 type
                 updatedAt
               }
@@ -113,8 +125,10 @@ export const docEntriesQuery = `query DocEntries($after: String, $first: Int, $o
                   id
                   name
                   path
+                  slug
                 }
                 path
+                slug
                 type
                 updatedAt
               }
@@ -124,8 +138,10 @@ export const docEntriesQuery = `query DocEntries($after: String, $first: Int, $o
               id
               name
               path
+              slug
             }
             path
+            slug
             type
             updatedAt
           }

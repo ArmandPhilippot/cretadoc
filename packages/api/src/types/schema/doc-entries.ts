@@ -13,7 +13,7 @@ export type DocEntry = DocDirectory | DocFile;
  * ===========================================================================
  */
 
-export type DocEntryInput = Pick<DocEntry, 'id' | 'path'>;
+export type DocEntryInput = Pick<DocEntry, 'id' | 'path' | 'slug'>;
 
 export type DocEntryPayload = Payload<
   'entry',
@@ -32,7 +32,7 @@ export type DocEntryWhereFields = Partial<
 
 export type DocEntryOrderFields = Pick<
   DocEntry,
-  'createdAt' | 'name' | 'path' | 'updatedAt'
+  'createdAt' | 'name' | 'path' | 'slug' | 'updatedAt'
 >;
 
 export type DocEntryConnectionPayload = Payload<

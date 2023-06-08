@@ -1,5 +1,10 @@
 /* eslint-disable max-statements */
-import { isObject, isObjKeyExist, type Nullable } from '@cretadoc/utils';
+import {
+  isObject,
+  isObjKeyExist,
+  slugify,
+  type Nullable,
+} from '@cretadoc/utils';
 import { afterAll, beforeAll, describe, it } from 'vitest';
 import type {
   DocFilePayload,
@@ -72,6 +77,7 @@ describe('updateDocFile', () => {
         name: existingDocFile.name,
         parent: null,
         path: existingDocFile.path,
+        slug: existingDocFile.slug,
         type: 'file',
       });
 
@@ -103,6 +109,7 @@ describe('updateDocFile', () => {
         name: newDocFileName,
         parent: null,
         path: newDocFilePath,
+        slug: `/${slugify(newDocFileName)}`,
         type: 'file',
       });
 
@@ -134,6 +141,7 @@ describe('updateDocFile', () => {
         name: existingDocFile.name,
         parent: existingDocFile.parent,
         path: existingDocFile.path,
+        slug: existingDocFile.slug,
         type: 'file',
       });
 

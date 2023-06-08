@@ -5,7 +5,7 @@ import type {
   DirectoryContents,
   RegularFile,
 } from '@cretadoc/read-dir';
-import type { Maybe, Nullable } from '@cretadoc/utils';
+import { type Maybe, type Nullable, slugify } from '@cretadoc/utils';
 import { FileSystemRepository } from '../../repositories/filesystem.repository';
 import type {
   DocDirectory,
@@ -32,6 +32,7 @@ import {
   byCreatedAtProp,
   byNameProp,
   byPathProp,
+  bySlugProp,
   byUpdatedAtProp,
   decodeBase64String,
   generateBase64String,
@@ -65,14 +66,17 @@ export class DocRepository extends FileSystemRepository {
    * @returns {Nullable<DocEntryParent>} The parent if it is not root directory.
    */
   #getParentOf(path: string): Nullable<DocEntryParent> {
-    const parentPath = parse(path).dir;
+    const parent = parse(path);
 
-    if (parentPath === '.') return null;
+    if (parent.dir === '.') return null;
+
+    const name = basename(parent.dir);
 
     return {
-      id: generateBase64String(parentPath),
-      name: basename(parentPath),
-      path: parentPath,
+      id: generateBase64String(parent.dir),
+      name,
+      path: parent.dir,
+      slug: `/${slugify(name)}`,
     };
   }
 
@@ -115,6 +119,7 @@ export class DocRepository extends FileSystemRepository {
       name,
       parent: this.#getParentOf(relativePath),
       path: relativePath,
+      slug: `/${slugify(name)}`,
       type,
       updatedAt,
     } as R;
@@ -344,6 +349,9 @@ export class DocRepository extends FileSystemRepository {
         break;
       case 'path':
         orderedDocEntries = orderedDocEntries.sort(byPathProp);
+        break;
+      case 'slug':
+        orderedDocEntries = orderedDocEntries.sort(bySlugProp);
         break;
       case 'updatedAt':
         orderedDocEntries = orderedDocEntries.sort(byUpdatedAtProp);

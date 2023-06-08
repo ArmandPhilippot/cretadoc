@@ -26,6 +26,11 @@ export const DocFileParentType = new GraphQLObjectType<DocEntryParent>({
         description: 'The path of the parent.',
         resolve: ({ path }) => path,
       },
+      slug: {
+        type: new GraphQLNonNull(GraphQLString),
+        description: 'The slug of the parent.',
+        resolve: ({ slug }) => slug,
+      },
     };
   },
 });
@@ -64,6 +69,11 @@ export const DocFileType = new GraphQLObjectType<DocFile, APIContext>({
         type: new GraphQLNonNull(GraphQLString),
         description: 'The file path.',
         resolve: ({ path }) => path,
+      },
+      slug: {
+        type: new GraphQLNonNull(GraphQLString),
+        description: 'The file slug.',
+        resolve: ({ slug }) => slug,
       },
       type: {
         type: new GraphQLNonNull(GraphQLString),

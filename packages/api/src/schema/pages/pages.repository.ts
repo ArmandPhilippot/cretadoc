@@ -1,7 +1,7 @@
 import { writeFile } from 'fs/promises';
 import { join, parse } from 'path';
 import type { RegularFile } from '@cretadoc/read-dir';
-import type { Maybe } from '@cretadoc/utils';
+import { type Maybe, slugify } from '@cretadoc/utils';
 import { FileSystemRepository } from '../../repositories/filesystem.repository';
 import type {
   ListInput,
@@ -17,6 +17,7 @@ import type {
 import {
   byCreatedAtProp,
   byNameProp,
+  bySlugProp,
   byUpdatedAtProp,
   decodeBase64String,
   generateBase64String,
@@ -48,6 +49,7 @@ export class PagesRepository extends FileSystemRepository {
       id: generateBase64String(relativePath),
       name,
       path: relativePath,
+      slug: `/${slugify(name)}`,
       updatedAt,
     };
   }
@@ -145,6 +147,9 @@ export class PagesRepository extends FileSystemRepository {
         break;
       case 'name':
         orderedPages = orderedPages.sort(byNameProp);
+        break;
+      case 'slug':
+        orderedPages = orderedPages.sort(bySlugProp);
         break;
       case 'updatedAt':
         orderedPages = orderedPages.sort(byUpdatedAtProp);

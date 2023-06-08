@@ -11,8 +11,10 @@ export const docFileCreate = `mutation CreateDocFile($input: DocFileCreateInput!
           id
           name
           path
+          slug
         }
         path
+        slug
         type
         updatedAt
       }
@@ -41,8 +43,10 @@ export const docFileDelete = `mutation DeleteDocFile($input: DocFileDeleteInput!
           id
           name
           path
+          slug
         }
         path
+        slug
         type
         updatedAt
       }
@@ -70,8 +74,10 @@ export const docFileUpdate = `mutation UpdateDocFile($input: DocFileUpdateInput!
           id
           name
           path
+          slug
         }
         path
+        slug
         type
         updatedAt
       }

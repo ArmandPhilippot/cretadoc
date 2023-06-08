@@ -69,6 +69,7 @@ describe('docFileDelete', () => {
         name: existingDocFile.name,
         parent: existingDocFile.parent,
         path: existingDocFile.path,
+        slug: existingDocFile.slug,
         type: 'file',
       });
 
@@ -94,6 +95,7 @@ describe('docFileDelete', () => {
         name: existingDocFile.name,
         parent: existingDocFile.parent,
         path: existingDocFile.path,
+        slug: existingDocFile.slug,
         type: 'file',
       });
 

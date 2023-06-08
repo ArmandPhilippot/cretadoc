@@ -1,4 +1,6 @@
 import { basename, parse } from 'path';
+import { type Nullable, slugify } from '@cretadoc/utils';
+import type { DocEntryParent } from '../../../src/types';
 import { MARKDOWN_EXTENSION } from '../../../src/utils/constants';
 import { generateBase64String } from '../../../src/utils/helpers';
 import { docFixtures } from '../../fixtures/doc';
@@ -10,13 +12,14 @@ export const docFiles = docFixtures
   .map((fileOrDir): DocFileWithoutDates => {
     const relativePath = fileOrDir.path.replace(DOC_FIXTURES_DIR, './');
     const parentPath = parse(relativePath).dir;
-    const parent =
+    const parent: Nullable<DocEntryParent> =
       parentPath === '.'
         ? null
         : {
             id: generateBase64String(parentPath),
             name: basename(parentPath),
             path: parentPath,
+            slug: `/${slugify(basename(parentPath))}`,
           };
 
     return {
@@ -25,6 +28,7 @@ export const docFiles = docFixtures
       name: parse(relativePath).name,
       parent,
       path: relativePath,
+      slug: `/${slugify(parse(relativePath).name)}`,
       type: 'file',
     };
   });

@@ -31,6 +31,11 @@ export const PageType = new GraphQLObjectType<Page, APIContext>({
         description: 'The page path.',
         resolve: ({ path }) => path,
       },
+      slug: {
+        type: new GraphQLNonNull(GraphQLString),
+        description: 'The page slug.',
+        resolve: ({ slug }) => slug,
+      },
       updatedAt: {
         type: new GraphQLNonNull(GraphQLString),
         description: 'The update date of the page.',

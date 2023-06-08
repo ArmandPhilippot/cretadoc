@@ -8,6 +8,7 @@ export const pageCreate = `mutation CreatePage($input: PageCreateInput!) {
         id
         name
         path
+        slug
         updatedAt
       }
     }
@@ -31,6 +32,7 @@ export const pageDelete = `mutation DeletePage($input: PageDeleteInput!) {
         id
         name
         path
+        slug
         updatedAt
       }
     }
@@ -54,6 +56,7 @@ export const pageUpdate = `mutation UpdatePage($input: PageUpdateInput!) {
         id
         name
         path
+        slug
         updatedAt
       }
     }

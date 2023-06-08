@@ -12,8 +12,10 @@ export const docDirectoryCreate = `mutation CreateDocDirectory($input: DocDirect
               id
               name
               path
+              slug
             }
             path
+            slug
             type
             updatedAt
           }
@@ -25,8 +27,10 @@ export const docDirectoryCreate = `mutation CreateDocDirectory($input: DocDirect
               id
               name
               path
+              slug
             }
             path
+            slug
             type
             updatedAt
           }
@@ -38,8 +42,10 @@ export const docDirectoryCreate = `mutation CreateDocDirectory($input: DocDirect
           id
           name
           path
+          slug
         }
         path
+        slug
         type
         updatedAt
       }
@@ -68,8 +74,10 @@ export const docDirectoryDelete = `mutation DeleteDocDirectory($input: DocDirect
               id
               name
               path
+              slug
             }
             path
+            slug
             type
             updatedAt
           }
@@ -81,8 +89,10 @@ export const docDirectoryDelete = `mutation DeleteDocDirectory($input: DocDirect
               id
               name
               path
+              slug
             }
             path
+            slug
             type
             updatedAt
           }
@@ -94,8 +104,10 @@ export const docDirectoryDelete = `mutation DeleteDocDirectory($input: DocDirect
           id
           name
           path
+          slug
         }
         path
+        slug
         type
         updatedAt
       }
@@ -124,8 +136,10 @@ export const docDirectoryUpdate = `mutation UpdateDocDirectory($input: DocDirect
               id
               name
               path
+              slug
             }
             path
+            slug
             type
             updatedAt
           }
@@ -137,8 +151,10 @@ export const docDirectoryUpdate = `mutation UpdateDocDirectory($input: DocDirect
               id
               name
               path
+              slug
             }
             path
+            slug
             type
             updatedAt
           }
@@ -150,8 +166,10 @@ export const docDirectoryUpdate = `mutation UpdateDocDirectory($input: DocDirect
           id
           name
           path
+          slug
         }
         path
+        slug
         type
         updatedAt
       }

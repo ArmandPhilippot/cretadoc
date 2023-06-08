@@ -1,5 +1,10 @@
 /* eslint-disable max-statements */
-import { isObject, isObjKeyExist, type Nullable } from '@cretadoc/utils';
+import {
+  isObject,
+  isObjKeyExist,
+  slugify,
+  type Nullable,
+} from '@cretadoc/utils';
 import type {
   DocDirectoryDeleteErrors,
   DocDirectoryDeletePayload,
@@ -100,6 +105,7 @@ describe('docDirectoryDelete', () => {
         name: dirName,
         parent: null,
         path: dirPath,
+        slug: `/${slugify(dirName)}`,
         type: 'directory',
       });
 
@@ -124,6 +130,7 @@ describe('docDirectoryDelete', () => {
         name: existingDocDirectory.name,
         parent: existingDocDirectory.parent,
         path: existingDocDirectory.path,
+        slug: existingDocDirectory.slug,
         type: 'directory',
       });
 
@@ -148,6 +155,7 @@ describe('docDirectoryDelete', () => {
         name: existingDocDirectory.name,
         parent: existingDocDirectory.parent,
         path: existingDocDirectory.path,
+        slug: existingDocDirectory.slug,
         type: 'directory',
       });
 

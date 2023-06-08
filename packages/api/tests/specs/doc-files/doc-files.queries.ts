@@ -9,8 +9,10 @@ export const docFileQuery = `query DocFile($id: String, $path: String) {
         id
         name
         path
+        slug
       }
       path
+      slug
       type
       updatedAt
     }
@@ -37,8 +39,10 @@ export const docFilesQuery = `query DocFiles($after: String, $first: Int, $offse
             id
             name
             path
+            slug
           }
           path
+          slug
           type
           updatedAt
         }

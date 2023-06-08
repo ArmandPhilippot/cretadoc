@@ -1,7 +1,7 @@
 import type { ListInput, Page, PageInput, PageLoaders } from '../../types';
 import { listPages } from './list/list.loaders';
 import type { PagesRepository } from './pages.repository';
-import { getPageById, getPageByName } from './read/read.loaders';
+import { getPageById, getPageByName, getPageBySlug } from './read/read.loaders';
 
 /**
  * Initialize the page loaders.
@@ -14,6 +14,7 @@ export const initPageLoaders = (repository: PagesRepository): PageLoaders => {
     page: {
       byId: getPageById(repository),
       byName: getPageByName(repository),
+      bySlug: getPageBySlug(repository),
       list: async (params: ListInput<Page>) => listPages(repository, params),
     },
   };

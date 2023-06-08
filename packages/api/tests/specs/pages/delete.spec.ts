@@ -63,10 +63,11 @@ describe('pageDelete', () => {
 
     if (isPagePayload(response.body.data.pageDelete))
       expect(response.body.data.pageDelete.page).toBePage({
+        contents: existingPage.contents,
         id: existingPage.id,
         name: existingPage.name,
         path: existingPage.path,
-        contents: existingPage.contents,
+        slug: existingPage.slug,
       });
 
     expect.assertions(2);
@@ -83,10 +84,11 @@ describe('pageDelete', () => {
 
     if (isPagePayload(response.body.data.pageDelete))
       expect(response.body.data.pageDelete.page).toBePage({
+        contents: existingPage.contents,
         id: existingPage.id,
         name: existingPage.name,
         path: existingPage.path,
-        contents: existingPage.contents,
+        slug: existingPage.slug,
       });
 
     expect.assertions(2);

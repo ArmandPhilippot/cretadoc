@@ -1,5 +1,10 @@
 /* eslint-disable max-statements */
-import { isObject, isObjKeyExist, type Nullable } from '@cretadoc/utils';
+import {
+  isObject,
+  isObjKeyExist,
+  slugify,
+  type Nullable,
+} from '@cretadoc/utils';
 import { afterAll, beforeAll, describe, it } from 'vitest';
 import type {
   PagePayload,
@@ -70,6 +75,7 @@ describe('pageUpdate', () => {
         id: existingPage.id,
         name: existingPage.name,
         path: existingPage.path,
+        slug: existingPage.slug,
       });
 
     expect.assertions(2);
@@ -94,6 +100,7 @@ describe('pageUpdate', () => {
         id: generateBase64String(newPagePath),
         name: newPageName,
         path: newPagePath,
+        slug: `/${slugify(newPageName)}`,
       });
 
     expect.assertions(2);
@@ -118,6 +125,7 @@ describe('pageUpdate', () => {
         id: existingPage.id,
         name: existingPage.name,
         path: existingPage.path,
+        slug: existingPage.slug,
       });
 
     expect.assertions(2);

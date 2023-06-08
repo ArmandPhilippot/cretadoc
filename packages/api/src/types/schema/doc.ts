@@ -31,7 +31,9 @@ export type DocEntryKind = Directory['type'] | RegularFile['type'];
 export type DocEntryParent = Pick<
   Directory | RegularFile,
   'id' | 'name' | 'path'
->;
+> & {
+  slug: `/${string}`;
+};
 
 /*
  * ===========================================================================

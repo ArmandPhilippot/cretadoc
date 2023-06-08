@@ -14,6 +14,7 @@ import type { DocEntryParent } from './doc';
 
 export type DocDirectory = Omit<Directory, 'extension'> & {
   parent: Nullable<DocEntryParent>;
+  slug: `/${string}`;
 };
 
 /*
@@ -22,7 +23,7 @@ export type DocDirectory = Omit<Directory, 'extension'> & {
  * ===========================================================================
  */
 
-export type DocDirectoryInput = Pick<DocDirectory, 'id' | 'path'>;
+export type DocDirectoryInput = Pick<DocDirectory, 'id' | 'path' | 'slug'>;
 
 export type DocDirectoryPayload = Payload<
   'directory',
@@ -41,7 +42,7 @@ export type DocDirectoryWhereFields = Partial<
 
 export type DocDirectoryOrderFields = Pick<
   DocDirectory,
-  'createdAt' | 'name' | 'path' | 'updatedAt'
+  'createdAt' | 'name' | 'path' | 'slug' | 'updatedAt'
 >;
 
 export type DocDirectoryConnectionPayload = Payload<

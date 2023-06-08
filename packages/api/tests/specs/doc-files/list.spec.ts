@@ -28,7 +28,7 @@ const misconfiguredAPI = createAPIServer({ port: 3260 });
 const sendDocFilesQuery = async (variables?: Variables[typeof docFilesQuery]) =>
   sendQuery({ api: api.instance, query: docFilesQuery, variables });
 
-const rootDocFiles = docFiles
+const rootDocFiles = [...docFiles]
   .sort(byNameProp)
   .filter((file) => file.path.replace('./', '').split(sep).length === 1);
 
@@ -158,12 +158,37 @@ describe('docFiles', () => {
     const receivedNames = response.body.data.doc?.files?.edges?.map(
       (edge) => edge.node.name
     );
-    const rootDocFilesNames = rootDocFiles
+    const reversedRootDocFilesNames = rootDocFiles
       .slice(0, perPage)
-      .map((page) => page.name);
+      .map((page) => page.name)
+      .reverse();
 
     expect(receivedNames).not.toBeUndefined();
-    expect(receivedNames).toStrictEqual(rootDocFilesNames.reverse());
+    expect(receivedNames).toStrictEqual(reversedRootDocFilesNames);
+
+    const assertionsCount = 3;
+    expect.assertions(assertionsCount);
+  });
+
+  it('returns the documentation files ordered by slug', async () => {
+    const perPage = 10;
+    const response = await sendDocFilesQuery({
+      first: perPage,
+      orderBy: { direction: 'DESC', field: 'slug' },
+    });
+
+    expect(response.body.data.doc?.files).not.toBeNull();
+
+    const receivedSlugs = response.body.data.doc?.files?.edges?.map(
+      (edge) => edge.node.slug
+    );
+    const reversedRootDocFilesSlugs = rootDocFiles
+      .slice(0, perPage)
+      .map((page) => page.slug)
+      .reverse();
+
+    expect(receivedSlugs).not.toBeUndefined();
+    expect(receivedSlugs).toStrictEqual(reversedRootDocFilesSlugs);
 
     const assertionsCount = 3;
     expect.assertions(assertionsCount);

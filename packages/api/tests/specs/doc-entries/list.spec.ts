@@ -29,7 +29,7 @@ const sendDocEntriesQuery = async (
   variables?: Variables[typeof docEntriesQuery]
 ) => sendQuery({ api: api.instance, query: docEntriesQuery, variables });
 
-const rootDocEntries = docEntries
+const rootDocEntries = [...docEntries]
   .sort(byNameProp)
   .filter((entry) => entry.path.replace('./', '').split(sep).length === 1);
 
@@ -161,12 +161,13 @@ describe('docEntries', () => {
     const receivedNames = response.body.data.doc?.entries?.edges?.map(
       (edge) => edge.node.name
     );
-    const rootDocEntriesNames = rootDocEntries
+    const reversedRootDocEntriesNames = rootDocEntries
       .slice(0, perPage)
-      .map((page) => page.name);
+      .map((page) => page.name)
+      .reverse();
 
     expect(receivedNames).not.toBeUndefined();
-    expect(receivedNames).toStrictEqual(rootDocEntriesNames.reverse());
+    expect(receivedNames).toStrictEqual(reversedRootDocEntriesNames);
 
     const assertionsCount = 3;
     expect.assertions(assertionsCount);

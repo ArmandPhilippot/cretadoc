@@ -1,4 +1,9 @@
-import { isObject, isObjKeyExist, type Nullable } from '@cretadoc/utils';
+import {
+  isObject,
+  isObjKeyExist,
+  slugify,
+  type Nullable,
+} from '@cretadoc/utils';
 import type {
   DocFileCreateErrors,
   DocFileCreatePayload,
@@ -68,6 +73,7 @@ describe('docFileCreate', () => {
         name: newDocFileName,
         parent: null,
         path: newDocFilePath,
+        slug: `/${slugify(newDocFileName)}`,
         type: 'file',
       });
 
@@ -92,6 +98,7 @@ describe('docFileCreate', () => {
         name: newDocFileName,
         parent: null,
         path: newDocFilePath,
+        slug: `/${slugify(newDocFileName)}`,
         type: 'file',
       });
 

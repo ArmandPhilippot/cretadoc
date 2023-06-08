@@ -14,6 +14,7 @@ import type { DocEntryParent } from './doc';
 
 export type DocFile = Omit<RegularFile, 'extension'> & {
   parent: Nullable<DocEntryParent>;
+  slug: `/${string}`;
 };
 
 /*
@@ -22,7 +23,7 @@ export type DocFile = Omit<RegularFile, 'extension'> & {
  * ===========================================================================
  */
 
-export type DocFileInput = Pick<DocFile, 'id' | 'path'>;
+export type DocFileInput = Pick<DocFile, 'id' | 'path' | 'slug'>;
 
 export type DocFilePayload = Payload<
   'file',
@@ -41,7 +42,7 @@ export type DocFileWhereFields = Partial<
 
 export type DocFileOrderFields = Pick<
   DocFile,
-  'createdAt' | 'name' | 'path' | 'updatedAt'
+  'createdAt' | 'name' | 'path' | 'slug' | 'updatedAt'
 >;
 
 export type DocFileConnectionPayload = Payload<
