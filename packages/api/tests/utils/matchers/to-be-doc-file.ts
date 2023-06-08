@@ -1,4 +1,5 @@
 import type { Nullable } from '@cretadoc/utils';
+import type { ExpectStatic } from 'vitest';
 import type { DocFile } from '../../../src/types';
 import type { MatcherResult, DocFileWithoutDates } from '../../types';
 
@@ -7,7 +8,7 @@ export type ToBeDocFile = {
 };
 
 export function toBeDocFile(
-  this: ReturnType<Vi.ExpectStatic['getState']>,
+  this: ReturnType<ExpectStatic['getState']>,
   file: Nullable<DocFile>,
   expected: Nullable<DocFileWithoutDates>
 ): MatcherResult {

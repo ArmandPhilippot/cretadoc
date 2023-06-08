@@ -1,4 +1,5 @@
 import type supertest from 'supertest';
+import type { ExpectStatic } from 'vitest';
 import type { MatcherResult } from '../../types';
 
 type ExpectedResponse = {
@@ -11,7 +12,7 @@ export type ToRespondWithMatcher = {
 };
 
 export function toRespondWith(
-  this: ReturnType<Vi.ExpectStatic['getState']>,
+  this: ReturnType<ExpectStatic['getState']>,
   response: supertest.Response,
   expected: ExpectedResponse
 ): MatcherResult {

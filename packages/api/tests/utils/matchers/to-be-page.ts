@@ -1,4 +1,5 @@
 import type { Nullable } from '@cretadoc/utils';
+import type { ExpectStatic } from 'vitest';
 import type { Page } from '../../../src/types';
 import type { MatcherResult, PageWithoutDates } from '../../types';
 
@@ -7,7 +8,7 @@ export type ToBePage = {
 };
 
 export function toBePage(
-  this: ReturnType<Vi.ExpectStatic['getState']>,
+  this: ReturnType<ExpectStatic['getState']>,
   page: Nullable<Page>,
   expected: Nullable<PageWithoutDates>
 ): MatcherResult {

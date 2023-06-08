@@ -1,4 +1,5 @@
 import type { GraphQLError } from 'graphql';
+import type { ExpectStatic } from 'vitest';
 import type { APIErrorCode } from '../../../src/types';
 import type { MatcherResult } from '../../types';
 
@@ -12,7 +13,7 @@ export type ToContainException = {
 };
 
 export function toContainException(
-  this: ReturnType<Vi.ExpectStatic['getState']>,
+  this: ReturnType<ExpectStatic['getState']>,
   errors: GraphQLError[],
   expected: APIException
 ): MatcherResult {

@@ -1,4 +1,5 @@
 import type { Nullable } from '@cretadoc/utils';
+import type { ExpectStatic } from 'vitest';
 import type { DocDirectory } from '../../../src/types';
 import type {
   MatcherResult,
@@ -12,7 +13,7 @@ export type ToBeDocDirectory = {
 };
 
 export function toBeDocDirectory(
-  this: ReturnType<Vi.ExpectStatic['getState']>,
+  this: ReturnType<ExpectStatic['getState']>,
   directory: Nullable<DocDirectory>,
   expected: Nullable<DocDirectoryWithoutDatesAndContents>
 ): MatcherResult {

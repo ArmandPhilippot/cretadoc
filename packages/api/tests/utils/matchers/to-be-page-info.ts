@@ -1,3 +1,4 @@
+import type { ExpectStatic } from 'vitest';
 import type { PageInfo } from '../../../src/types/gql';
 import type { MatcherResult } from '../../types';
 
@@ -6,7 +7,7 @@ export type ToBePageInfo = {
 };
 
 export function toBePageInfo(
-  this: ReturnType<Vi.ExpectStatic['getState']>,
+  this: ReturnType<ExpectStatic['getState']>,
   pageInfo: PageInfo,
   expected: PageInfo
 ): MatcherResult {
