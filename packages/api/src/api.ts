@@ -70,13 +70,17 @@ const initContext = ({ doc, pages }: APIDataConfig): APIContext => {
   };
 };
 
+type CreateAPI = (config?: PartialDeep<APIConfig>) => APIInstance;
+
 /**
  * Create an instance of the API.
  *
  * @param {PartialDeep<APIConfig>} [config] - An API configuration object.
  * @returns {APIInstance} The API instance.
  */
-export const createAPI = (config?: PartialDeep<APIConfig>): APIInstance => {
+export const createAPI: CreateAPI = (
+  config?: PartialDeep<APIConfig>
+): APIInstance => {
   const mergedConfig = mergeConfigWithDefaults(config);
   const context = initContext({ ...config?.data });
 
