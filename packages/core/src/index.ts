@@ -31,6 +31,7 @@ export const createCretadocApp = async () => {
         content: '<!--ssr-outlet-->',
         initialState: '<!--ssr-initial-state-->',
       },
+      route: '/*',
       template: isProd
         ? new URL('../dist/client/index.html', import.meta.url).pathname
         : new URL('../index.html', import.meta.url).pathname,
