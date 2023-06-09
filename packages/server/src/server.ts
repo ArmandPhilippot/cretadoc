@@ -2,13 +2,16 @@ import type { Server } from 'http';
 import type { Maybe, PartialDeep } from '@cretadoc/utils';
 import express, { type Express } from 'express';
 import { createServer as createViteServer, type ViteDevServer } from 'vite';
-import { serveAPI } from './api';
-import { loadDevMiddleware, loadProdMiddleware } from './middleware';
-import { renderWithSSR } from './ssr';
-import { serveStaticDir } from './static-dir';
-import type { HMRConfig, ServerConfig, ServerReturn } from './types';
-import { mergeDefaultConfigWith } from './utils/config';
+import {
+  errorHandler,
+  loadAPI,
+  loadCommonMiddleware,
+  loadStaticDir,
+  renderContents,
+} from './middleware';
+import type { CretadocServer, HMRConfig, ServerConfig } from './types';
 import { ENVIRONMENT } from './utils/constants';
+import { mergeDefaultConfigWith } from './utils/helpers';
 
 /**
  * Create a Vite server in middleware mode.
@@ -41,17 +44,16 @@ const createExpressApp = async ({
   const app = express();
   app.disable('x-powered-by');
 
-  let viteServer: Maybe<ViteDevServer> = undefined;
+  const viteServer =
+    mode === ENVIRONMENT.DEVELOPMENT ? await createDevServer(hmr) : undefined;
 
-  if (mode === ENVIRONMENT.PRODUCTION) loadProdMiddleware(app);
-  else {
-    viteServer = await createDevServer(hmr);
-    loadDevMiddleware(app, viteServer);
-  }
-
-  if (api) serveAPI(app, api);
-  if (ssr) renderWithSSR(app, { mode, ssr, viteServer });
-  if (staticDir) serveStaticDir(app, staticDir);
+  app.use(loadCommonMiddleware(mode));
+  // cSpell:ignore-word middlewares
+  if (viteServer) app.use(viteServer.middlewares);
+  if (api) app.use(api.route, loadAPI(api.instance));
+  if (staticDir) app.use(staticDir.route, loadStaticDir(staticDir));
+  if (ssr) app.use(ssr.route, renderContents({ mode, ssr, viteServer }));
+  app.use(errorHandler);
 
   return app;
 };
@@ -60,11 +62,11 @@ const createExpressApp = async ({
  * Create a new server.
  *
  * @param {PartialDeep<ServerConfig>} [config] - The server configuration.
- * @returns {Promise<ServerReturn>} The methods to start/stop the server.
+ * @returns {Promise<CretadocServer>} The methods to start/stop the server.
  */
 export const createServer = async (
   config?: PartialDeep<ServerConfig>
-): Promise<ServerReturn> => {
+): Promise<CretadocServer> => {
   const mergedConfig = mergeDefaultConfigWith(config);
   const { api, hostname, hmr, mode, port, ssr, staticDir } = mergedConfig;
   const app = await createExpressApp({ api, hmr, mode, ssr, staticDir });

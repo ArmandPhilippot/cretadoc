@@ -1,6 +1,6 @@
 import type { APIInstance } from '@cretadoc/api';
 import type { Maybe, ReadonlyDeep } from '@cretadoc/utils';
-import type { ENVIRONMENT } from 'src/utils/constants';
+import type { ENVIRONMENT } from '../utils/constants';
 
 export type ServerMode = (typeof ENVIRONMENT)[keyof typeof ENVIRONMENT];
 
@@ -114,7 +114,7 @@ export type ServerConfig = {
   staticDir: Maybe<StaticDirConfig>;
 };
 
-export type ServerReturn = {
+export type CretadocServer = {
   /**
    * The server configuration.
    */

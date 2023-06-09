@@ -12,34 +12,15 @@ import type {
   ServerMode,
   SSRConfig,
   StaticDirConfig,
-} from '../types';
+} from '../../types';
 import {
   DEFAULT_API_ROUTE,
+  DEFAULT_CONFIG,
   DEFAULT_ENTRYPOINT_FILE,
-  DEFAULT_HOSTNAME,
-  DEFAULT_MODE,
-  DEFAULT_PORT,
   DEFAULT_SSR_ROUTE,
   DEFAULT_STATIC_ROUTE,
-} from './constants';
-import { invalid, missing } from './errors';
-
-/**
- * Retrieve the default config.
- *
- * @returns {ServerConfig} The default configuration.
- */
-export const getDefaultConfig = (): ServerConfig => {
-  return {
-    api: undefined,
-    hmr: undefined,
-    hostname: DEFAULT_HOSTNAME,
-    mode: DEFAULT_MODE,
-    port: DEFAULT_PORT,
-    ssr: undefined,
-    staticDir: undefined,
-  };
-};
+} from '../constants';
+import { ConfigError } from '../exceptions';
 
 /**
  * Merge the user API config with some default values if needed.
@@ -47,12 +28,13 @@ export const getDefaultConfig = (): ServerConfig => {
  * @param {PartialDeep<APIConfig>} [userConfig] - The user config.
  * @returns {Maybe<APIConfig>} The merged config.
  */
-const mergeAPIConfig = (
+export const mergeAPIConfig = (
   userConfig?: PartialDeep<APIConfig>
 ): Maybe<APIConfig> => {
   if (!userConfig) return undefined;
 
-  if (!userConfig.instance) throw new Error(missing.config.api.instance);
+  if (!userConfig.instance)
+    throw new ConfigError('An API instance is mandatory.');
 
   return {
     instance: userConfig.instance,
@@ -66,15 +48,18 @@ const mergeAPIConfig = (
  * @param {PartialDeep<StaticDirConfig>} [userConfig] - The user config.
  * @returns {Maybe<StaticDirConfig>} The merged config.
  */
-const mergeStaticDirConfig = (
+export const mergeStaticDirConfig = (
   userConfig?: PartialDeep<StaticDirConfig>
 ): Maybe<StaticDirConfig> => {
   if (!userConfig) return undefined;
 
-  if (!userConfig.path) throw new Error(missing.config.staticDir.path);
+  if (!userConfig.path)
+    throw new ConfigError('The static directory path is mandatory.');
 
   if (!existsSync(userConfig.path))
-    throw new Error(invalid.config.staticDir.path(userConfig.path));
+    throw new ConfigError(
+      `The static directory path does not exist. Received: ${userConfig.path}`
+    );
 
   return {
     entrypoint: userConfig.entrypoint ?? DEFAULT_ENTRYPOINT_FILE,
@@ -90,7 +75,7 @@ const mergeStaticDirConfig = (
  * @param {Maybe<ServerMode>} [mode] - The server mode.
  * @returns {Maybe<HMRConfig>} The merged config.
  */
-const mergeHMRConfig = (
+export const mergeHMRConfig = (
   userConfig?: PartialDeep<HMRConfig>,
   mode?: Maybe<ServerMode>
 ): Maybe<HMRConfig> => {
@@ -106,17 +91,19 @@ const mergeHMRConfig = (
  * @param {PartialDeep<SSRConfig>} [userConfig] - The user config.
  * @returns {Maybe<SSRConfig>} The merged config.
  */
-const mergeSSRConfig = (
+export const mergeSSRConfig = (
   userConfig?: PartialDeep<SSRConfig>
 ): Maybe<SSRConfig> => {
   if (!userConfig) return undefined;
 
-  if (!userConfig.entrypoint) throw new Error(missing.config.ssr.entrypoint);
+  if (!userConfig.entrypoint)
+    throw new ConfigError('In SSR mode, the server entrypoint is mandatory.');
 
   if (!userConfig.placeholders?.content)
-    throw new Error(missing.config.ssr.placeholders);
+    throw new ConfigError('In SSR mode, the content placeholder is mandatory.');
 
-  if (!userConfig.template) throw new Error(missing.config.ssr.template);
+  if (!userConfig.template)
+    throw new ConfigError('In SSR mode, the template is mandatory.');
 
   return {
     entrypoint: userConfig.entrypoint,
@@ -139,17 +126,16 @@ const mergeSSRConfig = (
 export const mergeDefaultConfigWith = (
   userConfig: Maybe<PartialDeep<ServerConfig>>
 ): ReadonlyDeep<ServerConfig> => {
-  const defaultConfig = getDefaultConfig();
-  const mode = userConfig?.mode ?? defaultConfig.mode;
+  const mode = userConfig?.mode ?? DEFAULT_CONFIG.mode;
 
-  if (!userConfig) return deepFreeze(defaultConfig);
+  if (!userConfig) return deepFreeze(DEFAULT_CONFIG);
 
   const newConfig: ServerConfig = {
     api: mergeAPIConfig(userConfig.api),
     hmr: mergeHMRConfig(userConfig.hmr, mode),
-    hostname: userConfig.hostname ?? defaultConfig.hostname,
+    hostname: userConfig.hostname ?? DEFAULT_CONFIG.hostname,
     mode,
-    port: userConfig.port ?? defaultConfig.port,
+    port: userConfig.port ?? DEFAULT_CONFIG.port,
     ssr: mergeSSRConfig(userConfig.ssr),
     staticDir: mergeStaticDirConfig(userConfig.staticDir),
   };
