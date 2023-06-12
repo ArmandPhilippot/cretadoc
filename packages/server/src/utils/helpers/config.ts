@@ -6,7 +6,6 @@ import {
   type ReadonlyDeep,
 } from '@cretadoc/utils';
 import type {
-  APIConfig,
   HMRConfig,
   ServerConfig,
   ServerMode,
@@ -14,33 +13,12 @@ import type {
   StaticDirConfig,
 } from '../../types';
 import {
-  DEFAULT_API_ROUTE,
   DEFAULT_CONFIG,
   DEFAULT_ENTRYPOINT_FILE,
   DEFAULT_SSR_ROUTE,
   DEFAULT_STATIC_ROUTE,
 } from '../constants';
 import { ConfigError } from '../exceptions';
-
-/**
- * Merge the user API config with some default values if needed.
- *
- * @param {PartialDeep<APIConfig>} [userConfig] - The user config.
- * @returns {Maybe<APIConfig>} The merged config.
- */
-export const mergeAPIConfig = (
-  userConfig?: PartialDeep<APIConfig>
-): Maybe<APIConfig> => {
-  if (!userConfig) return undefined;
-
-  if (!userConfig.instance)
-    throw new ConfigError('An API instance is mandatory.');
-
-  return {
-    instance: userConfig.instance,
-    route: userConfig.route ?? DEFAULT_API_ROUTE,
-  };
-};
 
 /**
  * Merge the user static directory config with some default values if needed.
@@ -131,7 +109,7 @@ export const mergeDefaultConfigWith = (
   if (!userConfig) return deepFreeze(DEFAULT_CONFIG);
 
   const newConfig: ServerConfig = {
-    api: mergeAPIConfig(userConfig.api),
+    api: userConfig.api,
     hmr: mergeHMRConfig(userConfig.hmr, mode),
     hostname: userConfig.hostname ?? DEFAULT_CONFIG.hostname,
     mode,

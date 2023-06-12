@@ -49,8 +49,8 @@ const createExpressApp = async ({
 
   app.use(loadCommonMiddleware(mode));
   // cSpell:ignore-word middlewares
+  if (api) app.use(api.graphqlEndpoint, loadAPI(api));
   if (viteServer) app.use(viteServer.middlewares);
-  if (api) app.use(api.route, loadAPI(api.instance));
   if (staticDir) app.use(staticDir.route, loadStaticDir(staticDir));
   if (ssr) app.use(ssr.route, renderContents({ mode, ssr, viteServer }));
   app.use(errorHandler);

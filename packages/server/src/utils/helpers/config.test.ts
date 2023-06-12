@@ -1,9 +1,7 @@
-import { createAPI } from '@cretadoc/api';
 import { deepFreeze } from '@cretadoc/utils';
 import { describe, expect, it } from 'vitest';
 import type { HMRConfig } from '../../types';
 import {
-  DEFAULT_API_ROUTE,
   DEFAULT_CONFIG,
   DEFAULT_ENTRYPOINT_FILE,
   DEFAULT_SSR_ROUTE,
@@ -11,41 +9,11 @@ import {
 } from '../constants';
 import { ConfigError } from '../exceptions';
 import {
-  mergeAPIConfig,
   mergeDefaultConfigWith,
   mergeHMRConfig,
   mergeSSRConfig,
   mergeStaticDirConfig,
 } from './config';
-
-describe('merge-api-config', () => {
-  it('returns an undefined config if an user config is not provided', () => {
-    expect(mergeAPIConfig()).toStrictEqual(undefined);
-  });
-
-  it('throws an error if an user config is provided without an instance', () => {
-    expect(() => mergeAPIConfig({ route: '/any-path' })).toThrow(
-      new ConfigError('An API instance is mandatory.')
-    );
-  });
-
-  it('can merge the given config with the default config', () => {
-    const instance = createAPI();
-    expect(mergeAPIConfig({ instance })).toEqual({
-      instance,
-      route: DEFAULT_API_ROUTE,
-    });
-  });
-
-  it('returns the given config when complete', () => {
-    const instance = createAPI();
-    const route = '/api-endpoint';
-    expect(mergeAPIConfig({ instance, route })).toEqual({
-      instance,
-      route,
-    });
-  });
-});
 
 describe('merge-static-dir-config', () => {
   it('returns an undefined config if an user config is not provided', () => {

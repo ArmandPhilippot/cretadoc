@@ -15,9 +15,7 @@ const createServer = async () => {
     .pathname;
 
   return createCretadocServer({
-    api: {
-      instance: api,
-    },
+    api,
     hostname: 'localhost',
     port: 4000,
     ssr: {

@@ -79,10 +79,10 @@ export type StaticDirConfig = {
 
 export type ServerConfig = {
   /**
-   * A configuration object to serve an API instance.
+   * An API instance.
    * @default undefined
    */
-  api: Maybe<APIConfig>;
+  api: Maybe<APIInstance>;
   /**
    * The HMR configuration when using dev mode.
    */
