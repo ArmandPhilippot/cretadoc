@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "exclude": ["**/node_modules/**", "**/dist/**"],
+  "include": [
+    "./.storybook/**/*",
+    "./src/**/*",
+    "./rollup.config.ts",
+    "./server.ts",
+    "./vitest.config.ts"
+  ]
+}
