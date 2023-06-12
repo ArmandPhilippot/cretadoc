@@ -3,8 +3,7 @@ import { UIProvider } from '@cretadoc/ui';
 import { IntlProvider } from 'react-intl';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { Layout, RouterLink } from '../components';
-import { HomePage } from '../pages/home.page';
-import { NotFoundPage } from '../pages/not-found.page';
+import { HomePage, NotFoundPage, RegularPage } from '../pages';
 import { ROUTES } from '../utils/constants';
 import { useConfig } from '../utils/hooks';
 import './app.css';
@@ -22,6 +21,7 @@ export const App = () => {
           >
             <Route index element={<HomePage />} />
             <Route path={ROUTES.NOT_FOUND} element={<NotFoundPage />} />
+            <Route path="/:slug" element={<RegularPage />} />
             <Route
               path="*"
               element={<Navigate to={ROUTES.NOT_FOUND} replace />}

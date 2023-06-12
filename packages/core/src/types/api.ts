@@ -2,16 +2,20 @@ import type {
   ConnectionInput,
   Page,
   PageConnectionPayload,
+  PagePayload,
+  QueryInput,
 } from '@cretadoc/api';
-import type { pagesQuery } from '../services';
+import type { pageQuery, pagesQuery } from '../services';
 
-export type Queries = typeof pagesQuery;
+export type Queries = typeof pageQuery | typeof pagesQuery;
 
 export type VariablesMap = {
+  [pageQuery]: QueryInput<Page>;
   [pagesQuery]: ConnectionInput<Page>;
 };
 
 export type DataMap = {
+  [pageQuery]: PagePayload;
   [pagesQuery]: PageConnectionPayload;
 };
 
