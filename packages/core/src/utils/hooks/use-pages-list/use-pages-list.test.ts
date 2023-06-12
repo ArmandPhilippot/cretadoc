@@ -2,7 +2,6 @@ import type { PageConnectionPayload } from '@cretadoc/api';
 import { renderHook } from '@testing-library/react';
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import createFetchMock from 'vitest-fetch-mock';
-import { getPagesWithSlug } from '../../helpers';
 import { usePagesList } from './use-pages-list';
 
 const fetchMocker = createFetchMock(vi);
@@ -18,6 +17,7 @@ const data: PageConnectionPayload = {
           id: 'page-1',
           name: 'Page 1',
           path: './page-1',
+          slug: '/page-1',
           updatedAt: 'page-1',
         },
       },
@@ -28,6 +28,7 @@ const data: PageConnectionPayload = {
           id: 'page-2',
           name: 'Page 2',
           path: './page-2',
+          slug: '/page-2',
           updatedAt: 'page-2',
         },
       },
@@ -59,16 +60,14 @@ describe('use-pages-list', () => {
   });
 
   it('returns all the pages', () => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const pagesWithSlug = getPagesWithSlug(data.pages!.edges!);
+    const pagesWithSlug = data.pages?.edges?.map((page) => page.node) ?? [];
     const { result } = renderHook(() => usePagesList());
 
     expect(result.current.pages).toStrictEqual(pagesWithSlug);
   });
 
   it('can exclude pages by names', () => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const pagesWithSlug = getPagesWithSlug(data.pages!.edges!);
+    const pagesWithSlug = data.pages?.edges?.map((page) => page.node) ?? [];
     const excludedName = 'Page 1';
     const expectedPages = pagesWithSlug.filter(
       (page) => page.name !== excludedName
@@ -81,8 +80,7 @@ describe('use-pages-list', () => {
   });
 
   it('can exclude pages by slug', () => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const pagesWithSlug = getPagesWithSlug(data.pages!.edges!);
+    const pagesWithSlug = data.pages?.edges?.map((page) => page.node) ?? [];
     const excludedSlug = '/page-2';
     const expectedPages = pagesWithSlug.filter(
       (page) => page.slug !== excludedSlug

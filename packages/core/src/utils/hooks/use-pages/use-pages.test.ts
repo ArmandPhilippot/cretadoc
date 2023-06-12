@@ -6,7 +6,7 @@ import { usePages } from './use-pages';
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
 
-describe('use-pages-list', () => {
+describe('use-pages', () => {
   beforeEach(() => {
     fetchMocker.resetMocks();
   });

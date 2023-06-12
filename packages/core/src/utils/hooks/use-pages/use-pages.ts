@@ -1,8 +1,6 @@
-import type { Maybe } from '@cretadoc/utils';
 import useSWR from 'swr';
 import { type FetchAPIProps, fetchAPI, pagesQuery } from '../../../services';
-import type { APIResponse, PageWithSlug } from '../../../types';
-import { getPagesWithSlug } from '../../helpers';
+import type { APIResponse } from '../../../types';
 
 /**
  * Custom hook to retrieve an array of pages from the API.
@@ -18,10 +16,6 @@ export const usePages = (
     Error
   >({ query: pagesQuery, variables }, fetchAPI<typeof pagesQuery>);
 
-  const pages: Maybe<PageWithSlug[]> = data?.data?.pages?.edges
-    ? getPagesWithSlug(data.data.pages.edges)
-    : undefined;
-
   if (error) console.error(error);
 
   return {
@@ -30,6 +24,6 @@ export const usePages = (
     isError: !!error,
     isLoading,
     isValidating,
-    pages,
+    pages: data?.data?.pages?.edges?.map((page) => page.node),
   };
 };

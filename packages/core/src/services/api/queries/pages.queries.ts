@@ -14,6 +14,7 @@ export const pagesQuery = `query Pages($after: String, $first: Int, $offset: Int
         id
         name
         path
+        slug
         updatedAt
       }
     }
