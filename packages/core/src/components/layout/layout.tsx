@@ -11,7 +11,7 @@ import { type FC, useId } from 'react';
 import { Outlet } from 'react-router-dom';
 import type { CretadocConfig } from '../../types/config';
 import { ROUTES } from '../../utils/constants';
-import { useTheme } from '../../utils/hooks';
+import { useOnRouteChange, useTheme } from '../../utils/hooks';
 import { BackToTop } from '../back-to-top';
 import { Colophon } from '../colophon';
 import { MainNav } from '../main-nav';
@@ -33,6 +33,8 @@ export const Layout: FC<LayoutProps> = ({ name, theme }) => {
     state: isMainNavOpen,
     toggle: toggleMainNav,
   } = useBoolean(false);
+
+  useOnRouteChange(closeMainNav);
 
   return (
     <BaseLayout className={styles.layout} data-theme={currentTheme} id={topId}>
