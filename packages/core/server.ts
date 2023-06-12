@@ -47,7 +47,10 @@ await createCretadocApp()
       'SIGUSR2',
       'SIGTERM',
     ].forEach((evt) => {
-      process.on(evt, () => {
+      process.on(evt, (exception) => {
+        if (evt === 'uncaughtException' || evt === 'unhandledRejection')
+          console.error(exception);
+
         void (async () => {
           await removeConfigFile(ROOT_CONFIG_PATH);
           await deleteFixtures(fixtures);
@@ -61,4 +64,6 @@ await createCretadocApp()
       await removeConfigFile(ROOT_CONFIG_PATH);
       await deleteFixtures(fixtures);
     }
+
+    console.error(err);
   });
