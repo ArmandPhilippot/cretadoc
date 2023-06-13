@@ -22,6 +22,10 @@ export const CORE_ERROR_CODE = {
    */
   BAD_CONFIGURATION: 'BAD_CONFIGURATION',
   /**
+   * An error occurred with react-router.
+   */
+  BAD_ROUTER_RESPONSE: 'BAD_ROUTER_RESPONSE',
+  /**
    * An unspecified error occurred.
    */
   INTERNAL_SERVER_ERROR: 'INTERNAL_SERVER_ERROR',
