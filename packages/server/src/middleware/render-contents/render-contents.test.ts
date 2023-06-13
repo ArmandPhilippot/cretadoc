@@ -1,4 +1,4 @@
-import express, { type Express } from 'express';
+import express, { type Request as ExpressRequest, type Express } from 'express';
 import request from 'supertest';
 import { type InlineConfig, createServer } from 'vite';
 import { beforeEach, describe, expect, it } from 'vitest';
@@ -6,7 +6,7 @@ import { render } from '../../../tests/fixtures/ssr/entry-server';
 import { render as renderWithoutState } from '../../../tests/fixtures/ssr/entry-server-html-only';
 import type { SSRConfig } from '../../types';
 import { HTTP_CODE } from '../../utils/constants';
-import { type RenderContentsConfig, renderContents } from './render-contents';
+import { renderContents } from './render-contents';
 
 type RenderContentsContext = {
   app: Express;
@@ -46,15 +46,12 @@ describe('render-contents', () => {
     ssrConfig,
   }) => {
     const { route, ...ssr } = ssrConfig;
-    const config: RenderContentsConfig<'production'> = {
-      mode: 'production',
-      ssr,
-    };
 
-    app.use(route, renderContents(config));
+    app.use(route, renderContents(ssr));
 
     const response = await request(app).get(route);
-    const { html } = await render('');
+    const req = {} as ExpressRequest;
+    const { html } = await render('', req);
 
     expect(response.statusCode).toBe(HTTP_CODE.SUCCESS);
     expect(response.text).toContain(html);
@@ -68,16 +65,12 @@ describe('render-contents', () => {
   }) => {
     const { route, ...ssr } = ssrConfig;
     const viteServer = await createServer(viteConfig);
-    const config: RenderContentsConfig<'development'> = {
-      mode: 'development',
-      ssr,
-      viteServer,
-    };
 
-    app.use(route, renderContents(config));
+    app.use(route, renderContents(ssr, viteServer));
 
     const response = await request(app).get(route);
-    const { html } = await render('');
+    const req = {} as ExpressRequest;
+    const { html } = await render('', req);
 
     expect(response.statusCode).toBe(HTTP_CODE.SUCCESS);
     expect(response.text).toContain(html);
@@ -91,22 +84,19 @@ describe('render-contents', () => {
   }) => {
     const { route, ...ssr } = ssrConfig;
     const viteServer = await createServer(viteConfig);
-    const config: RenderContentsConfig<'development'> = {
-      mode: 'development',
-      ssr: {
-        ...ssr,
-        placeholders: {
-          ...ssr.placeholders,
-          initialState: '<!-- ssr-initial-state -->',
-        },
+    const config: Omit<SSRConfig, 'route'> = {
+      ...ssr,
+      placeholders: {
+        ...ssr.placeholders,
+        initialState: '<!-- ssr-initial-state -->',
       },
-      viteServer,
     };
 
-    app.use('/', renderContents(config));
+    app.use('/', renderContents(config, viteServer));
 
     const response = await request(app).get('/');
-    const { initialState } = await render('');
+    const req = {} as ExpressRequest;
+    const { initialState } = await render('', req);
 
     expect(response.statusCode).toBe(HTTP_CODE.SUCCESS);
     expect(response.text).toContain(
@@ -124,26 +114,22 @@ describe('render-contents', () => {
   }) => {
     const { route, ...ssr } = ssrConfig;
     const viteServer = await createServer(viteConfig);
-    const config: RenderContentsConfig<'development'> = {
-      mode: 'development',
-      ssr: {
-        ...ssr,
-        entrypoint: new URL(
-          '../../../tests/fixtures/ssr/entry-server-html-only.ts',
-          import.meta.url
-        ).pathname,
-        placeholders: {
-          ...ssr.placeholders,
-          initialState: '<!-- ssr-initial-state -->',
-        },
+    const config: Omit<SSRConfig, 'route'> = {
+      ...ssr,
+      entrypoint: new URL(
+        '../../../tests/fixtures/ssr/entry-server-html-only.ts',
+        import.meta.url
+      ).pathname,
+      placeholders: {
+        ...ssr.placeholders,
+        initialState: '<!-- ssr-initial-state -->',
       },
-      viteServer,
     };
 
-    app.use(route, renderContents(config));
+    app.use(route, renderContents(config, viteServer));
 
     const response = await request(app).get(route);
-    const { initialState } = await renderWithoutState('');
+    const { initialState } = await renderWithoutState('', {} as ExpressRequest);
 
     expect(response.statusCode).toBe(HTTP_CODE.SUCCESS);
     expect(response.text).not.toContain(
@@ -151,7 +137,7 @@ describe('render-contents', () => {
         initialState
       )}'</script>`
     );
-    expect(response.text).not.toContain(config.ssr.placeholders.initialState);
+    expect(response.text).not.toContain(config.placeholders.initialState);
     // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     expect.assertions(3);
   });
@@ -163,19 +149,15 @@ describe('render-contents', () => {
   }) => {
     const { route, ...ssr } = ssrConfig;
     const viteServer = await createServer(viteConfig);
-    const config: RenderContentsConfig<'development'> = {
-      mode: 'development',
-      ssr: {
-        ...ssr,
-        placeholders: {
-          ...ssr.placeholders,
-          preloadedLinks: '<!-- ssr-preload-links -->',
-        },
+    const config: Omit<SSRConfig, 'route'> = {
+      ...ssr,
+      placeholders: {
+        ...ssr.placeholders,
+        preloadedLinks: '<!-- ssr-preload-links -->',
       },
-      viteServer,
     };
 
-    app.use(route, renderContents(config));
+    app.use(route, renderContents(config, viteServer));
 
     const response = await request(app).get(route);
 
@@ -191,30 +173,50 @@ describe('render-contents', () => {
   }) => {
     const { route, ...ssr } = ssrConfig;
     const viteServer = await createServer(viteConfig);
-    const config: RenderContentsConfig<'development'> = {
-      mode: 'development',
-      ssr: {
-        ...ssr,
-        entrypoint: new URL(
-          '../../../tests/fixtures/ssr/entry-server-html-only.ts',
-          import.meta.url
-        ).pathname,
-        placeholders: {
-          ...ssr.placeholders,
-          preloadedLinks: '<!-- ssr-preload-links -->',
-        },
+    const config: Omit<SSRConfig, 'route'> = {
+      ...ssr,
+      entrypoint: new URL(
+        '../../../tests/fixtures/ssr/entry-server-html-only.ts',
+        import.meta.url
+      ).pathname,
+      placeholders: {
+        ...ssr.placeholders,
+        preloadedLinks: '<!-- ssr-preload-links -->',
       },
-      viteServer,
+    };
+
+    app.use(route, renderContents(config, viteServer));
+
+    const response = await request(app).get(route);
+
+    expect(response.statusCode).toBe(HTTP_CODE.SUCCESS);
+    expect(response.text).not.toContain('rel="preload"');
+    expect(response.text).not.toContain(config.placeholders.preloadedLinks);
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    expect.assertions(3);
+  });
+
+  it<RenderContentsContext>('returns an error if a render function is not exported', async ({
+    app,
+    ssrConfig,
+  }) => {
+    const { route, ...ssr } = ssrConfig;
+    const config: Omit<SSRConfig, 'route'> = {
+      ...ssr,
+      entrypoint: new URL(
+        '../../../tests/fixtures/ssr/invalid-entry-server.ts',
+        import.meta.url
+      ).pathname,
     };
 
     app.use(route, renderContents(config));
 
     const response = await request(app).get(route);
 
-    expect(response.statusCode).toBe(HTTP_CODE.SUCCESS);
-    expect(response.text).not.toContain('rel="preload"');
-    expect(response.text).not.toContain(config.ssr.placeholders.preloadedLinks);
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-    expect.assertions(3);
+    expect(response.statusCode).toBe(HTTP_CODE.ERROR);
+    expect(response.text).toMatch(
+      'The server entrypoint must export a render function.'
+    );
+    expect.assertions(2);
   });
 });

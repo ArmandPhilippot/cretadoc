@@ -29,9 +29,9 @@ export const HTTP_CODE = {
   SUCCESS: 200,
 } as const;
 
-export const CORE_ERROR_CODE = {
+export const SERVER_ERROR_CODE = {
   /**
-   * The CORE is misconfigured.
+   * The server is misconfigured.
    */
   BAD_CONFIGURATION: 'BAD_CONFIGURATION',
   /**

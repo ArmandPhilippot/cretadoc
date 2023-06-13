@@ -1,6 +1,6 @@
-import type { ServerRender } from '../../../src/types';
+import type { RenderFunction } from '../../../src/types';
 
-export const render: ServerRender = async () =>
+export const render: RenderFunction = async () =>
   Promise.resolve({
     html: 'vero eos sed',
   });

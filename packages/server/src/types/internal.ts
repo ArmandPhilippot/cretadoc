@@ -1,4 +1,4 @@
-import type { ServerRender } from '.';
+import type { RenderFunction } from '.';
 
 export type LinkAsValue =
   | 'audio'
@@ -48,6 +48,9 @@ export type LinkAttributes = LinkAsAttribute &
   LinkRelAttribute &
   LinkOtherAttributes;
 
-export type RenderImport = {
-  render: ServerRender;
+export type ValidRenderExport = {
+  /**
+   * The render method.
+   */
+  render: RenderFunction;
 };

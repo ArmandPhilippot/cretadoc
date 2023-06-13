@@ -1,43 +1,38 @@
 import { readFileSync } from 'fs';
-import type { RequestHandler } from 'express';
+import type { Request as ExpressRequest, RequestHandler } from 'express';
 import type { ViteDevServer } from 'vite';
-import type {
-  Render,
-  SSRConfig,
-  SSRPlaceholders,
-  ServerMode,
-} from '../../types';
-import type { RenderImport } from '../../types/internal';
-import { ENVIRONMENT, HTTP_CODE } from '../../utils/constants';
-import { getPreloadLinkElements, isRenderImport } from '../../utils/helpers';
-
-export type RenderContentsConfig<M extends ServerMode> = {
-  mode: M;
-  ssr: Omit<SSRConfig, 'route'>;
-  viteServer?: M extends typeof ENVIRONMENT.PRODUCTION ? never : ViteDevServer;
-};
+import type { Render, SSRConfig, SSRPlaceholders } from '../../types';
+import type { ValidRenderExport } from '../../types/internal';
+import { SERVER_ERROR_CODE, HTTP_CODE } from '../../utils/constants';
+import { CretadocServerError } from '../../utils/exceptions';
+import {
+  getPreloadLinkElements,
+  getUrlFrom,
+  isValidRenderExport,
+} from '../../utils/helpers';
 
 /**
- * Load a render method from the server entrypoint.
+ * Retrieve the named exports from the server entrypoint.
  *
  * @param {string} entrypoint - The entrypoint path.
- * @param {Omit<RenderContentsConfig<M>, 'ssr'>} config - The configuration.
- * @returns {Promise<RenderImport>} The imported render method.
+ * @param {ViteDevServer} [viteServer] - The Vite server.
+ * @returns {Promise<ValidRenderExport>} The exported render method and routes.
  */
-const loadRenderMethod = async <M extends ServerMode>(
+const getEntrypointExports = async (
   entrypoint: string,
-  { mode, viteServer }: Omit<RenderContentsConfig<M>, 'ssr'>
-): Promise<RenderImport> => {
-  const isProd = mode === ENVIRONMENT.PRODUCTION;
-  const loadedEntrypoint =
-    !isProd && viteServer
-      ? await viteServer.ssrLoadModule(entrypoint)
-      : ((await import(entrypoint)) as unknown);
+  viteServer?: ViteDevServer
+): Promise<ValidRenderExport> => {
+  const loadedExports = viteServer
+    ? await viteServer.ssrLoadModule(entrypoint)
+    : ((await import(entrypoint)) as unknown);
 
-  if (!isRenderImport(loadedEntrypoint))
-    throw new Error('The server entrypoint must export a render function.');
+  if (!isValidRenderExport(loadedExports))
+    throw new CretadocServerError(
+      SERVER_ERROR_CODE.INTERNAL_SERVER_ERROR,
+      'The server entrypoint must export a render function.'
+    );
 
-  return loadedEntrypoint;
+  return loadedExports;
 };
 
 /**
@@ -77,42 +72,62 @@ const generateHTML = (
 };
 
 /**
- * Render the HTML template for the given url.
+ * Retrieve the HTML template.
  *
- * @param {string} url - The URL to render.
- * @param {RenderContentsConfig<M>} config - The configuration.
- * @returns {Promise<string>} The generated HTML.
+ * @param {string} path - The template path.
+ * @param {string} url - The requested url.
+ * @param {ViteDevServer} [viteServer] - The Vite server.
+ * @returns {Promise<string>} The HTML template.
  */
-const renderHTMLTemplate = async <M extends ServerMode>(
+const getHTMLTemplate = async (
+  path: string,
   url: string,
-  { mode, ssr, viteServer }: RenderContentsConfig<M>
+  viteServer?: ViteDevServer
 ): Promise<string> => {
-  const isProd = mode === ENVIRONMENT.PRODUCTION;
-  const { entrypoint, placeholders, template: templatePath } = ssr;
-  const htmlTemplate = readFileSync(templatePath, 'utf8');
-  const template =
-    !isProd && viteServer
-      ? await viteServer.transformIndexHtml(url, htmlTemplate)
-      : htmlTemplate;
-  const { render } = await loadRenderMethod(entrypoint, { mode, viteServer });
-  const rendered = await render(url);
+  const htmlTemplate = readFileSync(path, 'utf8');
 
-  return generateHTML(template, placeholders, rendered);
+  return viteServer
+    ? viteServer.transformIndexHtml(url, htmlTemplate)
+    : htmlTemplate;
 };
 
+/**
+ * Render the HTML template for the given url.
+ *
+ * @param {ExpressRequest} req - The server request.
+ * @param {Omit<SSRConfig, 'route'>} config - The SSR configuration.
+ * @param {ViteDevServer} [viteServer] - The Vite server.
+ * @returns {Promise<string>} The generated HTML.
+ */
+const renderHTMLTemplate = async (
+  req: ExpressRequest,
+  config: Omit<SSRConfig, 'route'>,
+  viteServer?: ViteDevServer
+): Promise<string> => {
+  const { entrypoint, placeholders, template } = config;
+  const url = getUrlFrom(req);
+  const htmlTemplate = await getHTMLTemplate(template, url, viteServer);
+  const { render } = await getEntrypointExports(entrypoint, viteServer);
+  const rendered = await render(url, req);
+
+  return generateHTML(htmlTemplate, placeholders, rendered);
+};
+
+/**
+ * Express middleware to render contents using SSR.
+ *
+ * @param {Omit<SSRConfig, 'route'>} config - The SSR configuration.
+ * @param {ViteDevServer} [viteServer] - The Vite server.
+ * @returns {RequestHandler}
+ */
 export const renderContents =
-  <M extends ServerMode>({
-    mode,
-    ssr,
-    viteServer,
-  }: RenderContentsConfig<M>): RequestHandler =>
+  (
+    config: Omit<SSRConfig, 'route'>,
+    viteServer?: ViteDevServer
+  ): RequestHandler =>
   async (req, res, next) => {
     try {
-      const html = await renderHTMLTemplate(req.originalUrl, {
-        mode,
-        ssr,
-        viteServer,
-      });
+      const html = await renderHTMLTemplate(req, config, viteServer);
       res
         .status(HTTP_CODE.SUCCESS)
         .set({ 'Content-Type': 'text/html' })

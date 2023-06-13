@@ -52,7 +52,7 @@ const createExpressApp = async ({
   if (api) app.use(api.graphqlEndpoint, loadAPI(api));
   if (viteServer) app.use(viteServer.middlewares);
   if (staticDir) app.use(staticDir.route, loadStaticDir(staticDir));
-  if (ssr) app.use(ssr.route, renderContents({ mode, ssr, viteServer }));
+  if (ssr) app.use(ssr.route, renderContents(ssr, viteServer));
   app.use(errorHandler);
 
   return app;

@@ -4,6 +4,7 @@
   "include": [
     "./.storybook/**/*",
     "./src/**/*",
+    "./tests/**/*",
     "./rollup.config.ts",
     "./server.ts",
     "./vitest.config.ts"

@@ -1,5 +1,6 @@
 import type { APIInstance } from '@cretadoc/api';
 import type { Maybe, ReadonlyDeep } from '@cretadoc/utils';
+import type { Request as ExpressRequest } from 'express';
 import type { ENVIRONMENT } from '../utils/constants';
 
 export type ServerMode = (typeof ENVIRONMENT)[keyof typeof ENVIRONMENT];
@@ -144,4 +145,7 @@ export type Render = {
   preloadedLinks?: string[];
 };
 
-export type ServerRender = (url: string) => Promise<Render>;
+export type RenderFunction = (
+  url: string,
+  req: ExpressRequest
+) => Promise<Render>;
