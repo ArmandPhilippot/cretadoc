@@ -1,6 +1,6 @@
-import { type RouteObject, redirect } from 'react-router-dom';
+import type { RouteObject } from 'react-router-dom';
 import { App } from '../app';
-import { HomePage, NotFoundPage, RegularPage } from '../pages';
+import { ErrorPage, HomePage, RegularPage } from '../pages';
 import type { CretadocClientConfig } from '../types';
 import { ROUTES } from '../utils/constants';
 import { pageLoader } from './loaders';
@@ -19,21 +19,18 @@ export const createRoutes = ({
     element: <App name={name} theme={theme} />,
     children: [
       {
-        path: ROUTES.HOMEPAGE,
-        element: <HomePage />,
-      },
-      {
-        path: ROUTES.NOT_FOUND,
-        element: <NotFoundPage />,
-      },
-      {
-        path: '/:slug',
-        element: <RegularPage />,
-        loader: pageLoader,
-      },
-      {
-        path: '*',
-        loader: () => redirect(ROUTES.NOT_FOUND),
+        errorElement: <ErrorPage />,
+        children: [
+          {
+            path: ROUTES.HOMEPAGE,
+            element: <HomePage />,
+          },
+          {
+            path: '/:slug',
+            element: <RegularPage />,
+            loader: pageLoader,
+          },
+        ],
       },
     ],
   },

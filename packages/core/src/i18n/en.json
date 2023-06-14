@@ -3,29 +3,41 @@
     "defaultMessage": "Loading navigation items...",
     "description": "MainNav: loading text"
   },
-  "57yRf+": {
-    "defaultMessage": "Go back to homepage",
-    "description": "NotFoundPage: back to homepage anchor"
+  "ApbCEQ": {
+    "defaultMessage": "Sorry, an unexpected error has occurred.",
+    "description": "ErrorPage: 500 page body"
   },
-  "IN3wH8": {
-    "defaultMessage": "Sorry, it seems that the page your are looking for does not exist.",
-    "description": "NotFoundPage: page body"
-  },
-  "IdI+8U": {
+  "Jh7oPf": {
     "defaultMessage": "Page not found",
-    "description": "NotFoundPage: page title"
+    "description": "ErrorPage: 404 page title"
   },
   "OqHQ1o": {
     "defaultMessage": "Built with {link}",
     "description": "Colophon: generator information"
   },
+  "R1rt/u": {
+    "defaultMessage": "The requested page is loading...",
+    "description": "Page: loading page message"
+  },
+  "RYaguF": {
+    "defaultMessage": "Sorry, an authorization is required to access this page.",
+    "description": "ErrorPage: 401 page body"
+  },
   "XMShu1": {
     "defaultMessage": "Close the main navigation",
     "description": "MainNav: close button label"
   },
+  "Ynp8Pu": {
+    "defaultMessage": "Sorry, it seems that the page your are looking for does not exist.",
+    "description": "ErrorPage: 404 page body"
+  },
   "a10l60": {
     "defaultMessage": "Back to top",
     "description": "BackToTop: button accessible label"
+  },
+  "eeCw8n": {
+    "defaultMessage": "Internal server error",
+    "description": "ErrorPage: 500 page title"
   },
   "fpBnkZ": {
     "defaultMessage": "Skip to content",
@@ -43,9 +55,17 @@
     "defaultMessage": "No pages found.",
     "description": "MainNav: no pages found"
   },
+  "sOBeiY": {
+    "defaultMessage": "Unauthenticated",
+    "description": "ErrorPage: 401 page title"
+  },
   "u07OwY": {
     "defaultMessage": "Dark theme",
     "description": "ThemeSwitcher: dark theme label"
+  },
+  "z+4ywp": {
+    "defaultMessage": "Go back to homepage",
+    "description": "ErrorPage: back to homepage anchor"
   },
   "zysx+O": {
     "defaultMessage": "Light theme",

@@ -1,4 +1,3 @@
-export * from './use-404-if';
 export * from './use-config';
 export * from './use-local-storage';
 export * from './use-on-route-change';
