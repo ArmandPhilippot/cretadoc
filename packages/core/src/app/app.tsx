@@ -7,22 +7,28 @@ import {
   useBoolean,
 } from '@cretadoc/ui';
 import { isString } from '@cretadoc/utils';
+import 'modern-normalize/modern-normalize.css';
 import { type FC, useId } from 'react';
-import { Outlet } from 'react-router-dom';
-import { BackToTop } from '../components/back-to-top';
-import { Colophon } from '../components/colophon';
-import { MainNav } from '../components/main-nav';
-import { SkipToContent } from '../components/skip-to-content';
-import { ThemeSwitcher } from '../components/theme-switcher';
+import { Outlet, useLocation } from 'react-router-dom';
+import {
+  BackToTop,
+  Breadcrumbs,
+  Colophon,
+  MainNav,
+  SkipToContent,
+  ThemeSwitcher,
+} from '../components';
 import type { CretadocConfig } from '../types/config';
 import { ROUTES } from '../utils/constants';
 import { useOnRouteChange, useTheme } from '../utils/hooks';
 import * as styles from './app.css';
-import 'modern-normalize/modern-normalize.css';
+
+const isHomepage = (slug: string) => slug === ROUTES.HOMEPAGE;
 
 export type AppProps = Pick<CretadocConfig, 'name' | 'theme'>;
 
 export const App: FC<AppProps> = ({ name, theme }) => {
+  const { pathname } = useLocation();
   const mainId = useId();
   const topId = useId();
   const footerAlignment = 'center';
@@ -59,6 +65,9 @@ export const App: FC<AppProps> = ({ name, theme }) => {
         </div>
       </Header>
       <Main className={styles.main} id={mainId}>
+        {isHomepage(pathname) ? null : (
+          <Breadcrumbs className={styles.breadcrumbs} />
+        )}
         <Outlet />
       </Main>
       <Footer className={styles.footer}>

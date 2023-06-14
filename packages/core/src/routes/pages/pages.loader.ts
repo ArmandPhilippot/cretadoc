@@ -3,7 +3,7 @@ import { type LoaderFunctionArgs, redirect } from 'react-router-dom';
 import { fetchAPI, pageQuery } from '../../services';
 import type { APIResponse } from '../../types';
 
-export const pageLoader = async ({
+export const pagesLoader = async ({
   params,
   request,
 }: LoaderFunctionArgs): Promise<APIResponse<typeof pageQuery>> => {

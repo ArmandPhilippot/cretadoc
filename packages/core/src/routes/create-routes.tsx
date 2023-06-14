@@ -1,9 +1,11 @@
+import type { BreadcrumbsItem } from '@cretadoc/ui';
 import type { RouteObject } from 'react-router-dom';
 import { App } from '../app';
 import { ErrorPage, HomePage, RegularPage } from '../pages';
 import type { CretadocClientConfig } from '../types';
 import { ROUTES } from '../utils/constants';
-import { pageLoader } from './loaders';
+import { pagesLoader } from './pages';
+import { pagesHandler } from './pages/pages.handler';
 
 /**
  * Create the application routes.
@@ -17,6 +19,15 @@ export const createRoutes = ({
 }: CretadocClientConfig): RouteObject[] => [
   {
     element: <App name={name} theme={theme} />,
+    handle: {
+      getBreadcrumbItem: (): BreadcrumbsItem => {
+        return {
+          id: 'homepage',
+          label: 'Home',
+          url: ROUTES.HOMEPAGE,
+        };
+      },
+    },
     children: [
       {
         errorElement: <ErrorPage />,
@@ -28,7 +39,8 @@ export const createRoutes = ({
           {
             path: '/:slug',
             element: <RegularPage />,
-            loader: pageLoader,
+            loader: pagesLoader,
+            handle: pagesHandler,
           },
         ],
       },
