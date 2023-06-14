@@ -1,24 +1,29 @@
 import { Spinner } from '@cretadoc/ui';
 import type { FC } from 'react';
 import { useIntl } from 'react-intl';
-import { useParams } from 'react-router-dom';
+import { useLoaderData, useParams } from 'react-router-dom';
+import type { pageLoader } from 'src/routes/loaders';
 import { MarkdownContents } from '../components';
-import { use404If, usePage } from '../utils/hooks';
+import { usePage } from '../utils/hooks';
 
 export const RegularPage: FC = () => {
   const intl = useIntl();
   const { slug } = useParams();
-  const { isLoading, isValidating, page } = usePage({
-    slug: slug ? `/${slug}` : undefined,
-  });
+  const fallbackData = useLoaderData() as Awaited<
+    ReturnType<typeof pageLoader>
+  >;
+  const { isLoading, isValidating, page } = usePage(
+    {
+      slug: slug ? `/${slug}` : undefined,
+    },
+    fallbackData
+  );
 
   const loadingPage = intl.formatMessage({
     defaultMessage: 'The requested page is loading...',
     id: 'R1rt/u',
     description: 'Page: loading page message',
   });
-
-  use404If(!isValidating && !isLoading && !page);
 
   if (isValidating || isLoading) return <Spinner>{loadingPage}</Spinner>;
 

@@ -9,12 +9,15 @@ import type { APIResponse } from '../../../types';
  * @returns An object with the maybe the queried page.
  */
 export const usePage = (
-  variables?: FetchAPIProps<typeof pageQuery>['variables']
+  variables: FetchAPIProps<typeof pageQuery>['variables'],
+  fallbackData?: APIResponse<typeof pageQuery>
 ) => {
   const { data, error, isLoading, isValidating } = useSWR<
     APIResponse<typeof pageQuery>,
     Error
-  >({ query: pageQuery, variables }, fetchAPI<typeof pageQuery>);
+  >({ query: pageQuery, variables }, fetchAPI<typeof pageQuery>, {
+    fallbackData,
+  });
 
   if (error) console.error(error);
 

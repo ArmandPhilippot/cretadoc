@@ -27,13 +27,15 @@ export type FetchAPIProps<Q extends Queries> = {
  * Fetch the Cretadoc API.
  *
  * @param {FetchAPIProps<Q>} props - The query and maybe variables.
+ * @param {string} baseUrl - The protocol, host and port as string.
  * @returns {Promise<APIResponse<Q>>} The response.
  */
-export const fetchAPI = async <Q extends Queries>({
-  query,
-  variables,
-}: FetchAPIProps<Q>): Promise<APIResponse<Q>> => {
-  const response = await fetch(new URL(ROUTES.API, window.location.origin), {
+export const fetchAPI = async <Q extends Queries>(
+  { query, variables }: FetchAPIProps<Q>,
+  baseUrl?: string
+): Promise<APIResponse<Q>> => {
+  const apiOrigin = baseUrl ?? window.location.origin;
+  const response = await fetch(new URL(ROUTES.API, apiOrigin), {
     method: 'POST',
     headers: {
       'content-type': 'application/json;charset=UTF-8',

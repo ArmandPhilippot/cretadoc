@@ -3,6 +3,7 @@ import { App } from '../app';
 import { HomePage, NotFoundPage, RegularPage } from '../pages';
 import type { CretadocClientConfig } from '../types';
 import { ROUTES } from '../utils/constants';
+import { pageLoader } from './loaders';
 
 /**
  * Create the application routes.
@@ -28,6 +29,7 @@ export const createRoutes = ({
       {
         path: '/:slug',
         element: <RegularPage />,
+        loader: pageLoader,
       },
       {
         path: '*',
