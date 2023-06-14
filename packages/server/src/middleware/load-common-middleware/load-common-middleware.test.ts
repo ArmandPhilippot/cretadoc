@@ -1,9 +1,9 @@
+import { HTTP_STATUS_CODE } from '@cretadoc/utils';
 import cors, { type CorsOptions } from 'cors';
 import express, { type RequestHandler, type Express } from 'express';
 import helmet from 'helmet';
 import request from 'supertest';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { HTTP_CODE } from '../../utils/constants';
 import { loadCommonMiddleware } from './load-common-middleware';
 
 vi.mock('cors', () => {
@@ -48,12 +48,12 @@ describe('load-common-middleware', () => {
   }) => {
     app.use(loadCommonMiddleware('production'));
     app.get(endpoint, (_req, res) => {
-      res.status(HTTP_CODE.SUCCESS).send('Some contents.');
+      res.status(HTTP_STATUS_CODE.OK).send('Some contents.');
     });
 
     const response = await request(app).get(endpoint);
 
-    expect(response.statusCode).toBe(HTTP_CODE.SUCCESS);
+    expect(response.statusCode).toBe(HTTP_STATUS_CODE.OK);
     expect(cors).toHaveBeenCalledWith({ origin: false });
     expect(helmet).toHaveBeenCalledOnce();
   });
@@ -64,12 +64,12 @@ describe('load-common-middleware', () => {
   }) => {
     app.use(loadCommonMiddleware('development'));
     app.get(endpoint, (_req, res) => {
-      res.status(HTTP_CODE.SUCCESS).send('Some contents.');
+      res.status(HTTP_STATUS_CODE.OK).send('Some contents.');
     });
 
     const response = await request(app).get(endpoint);
 
-    expect(response.statusCode).toBe(HTTP_CODE.SUCCESS);
+    expect(response.statusCode).toBe(HTTP_STATUS_CODE.OK);
     expect(cors).toHaveBeenCalledWith({ origin: '*' });
     expect(helmet).not.toHaveBeenCalled();
   });

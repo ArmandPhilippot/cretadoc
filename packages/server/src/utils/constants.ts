@@ -24,11 +24,6 @@ export const DEFAULT_CONFIG = {
   staticDir: undefined,
 } as const satisfies ServerConfig;
 
-export const HTTP_CODE = {
-  ERROR: 500,
-  SUCCESS: 200,
-} as const;
-
 export const SERVER_ERROR_CODE = {
   /**
    * The server is misconfigured.

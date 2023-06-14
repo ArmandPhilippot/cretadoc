@@ -1,8 +1,8 @@
 import { createAPI } from '@cretadoc/api';
+import { HTTP_STATUS_CODE } from '@cretadoc/utils';
 import express, { type Express } from 'express';
 import request from 'supertest';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { HTTP_CODE } from '../../utils/constants';
 import { loadAPI } from './load-api';
 
 type LoadAPIContext = {
@@ -15,12 +15,11 @@ describe('load-api', () => {
   });
 
   it<LoadAPIContext>('can serve the given instance', async ({ app }) => {
-    const endpoint = '/api';
-    const api = createAPI({ endpoint });
-    app.use(endpoint, loadAPI(api));
+    const api = createAPI();
+    app.use(api.graphqlEndpoint, loadAPI(api));
 
-    const response = await request(app).get(endpoint);
+    const response = await request(app).get(api.graphqlEndpoint);
 
-    expect(response.statusCode).toBe(HTTP_CODE.SUCCESS);
+    expect(response.statusCode).toBe(HTTP_STATUS_CODE.OK);
   });
 });

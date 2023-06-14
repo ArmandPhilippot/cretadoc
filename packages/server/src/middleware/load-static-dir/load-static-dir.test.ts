@@ -1,7 +1,8 @@
+import { HTTP_STATUS_CODE } from '@cretadoc/utils';
 import express, { type Express } from 'express';
 import request from 'supertest';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { DEFAULT_ENTRYPOINT_FILE, HTTP_CODE } from '../../utils/constants';
+import { DEFAULT_ENTRYPOINT_FILE } from '../../utils/constants';
 import { loadStaticDir } from './load-static-dir';
 
 type LoadStaticDirContext = {
@@ -20,7 +21,7 @@ describe('load-static-dir', () => {
 
     const response = await request(app).get('/');
 
-    expect(response.statusCode).toBe(HTTP_CODE.SUCCESS);
+    expect(response.statusCode).toBe(HTTP_STATUS_CODE.OK);
     expect(response.text).toMatch('Hello from Cretadoc default entrypoint!');
   });
 });

@@ -1,9 +1,10 @@
 import { readFileSync } from 'fs';
+import { HTTP_STATUS_CODE } from '@cretadoc/utils';
 import type { Request as ExpressRequest, RequestHandler } from 'express';
 import type { ViteDevServer } from 'vite';
 import type { Render, SSRConfig, SSRPlaceholders } from '../../types';
 import type { ValidRenderExport } from '../../types/internal';
-import { SERVER_ERROR_CODE, HTTP_CODE } from '../../utils/constants';
+import { SERVER_ERROR_CODE } from '../../utils/constants';
 import { CretadocServerError } from '../../utils/exceptions';
 import {
   getPreloadLinkElements,
@@ -129,7 +130,7 @@ export const renderContents =
     try {
       const html = await renderHTMLTemplate(req, config, viteServer);
       res
-        .status(HTTP_CODE.SUCCESS)
+        .status(HTTP_STATUS_CODE.OK)
         .set({ 'Content-Type': 'text/html' })
         .end(html);
     } catch (error) {

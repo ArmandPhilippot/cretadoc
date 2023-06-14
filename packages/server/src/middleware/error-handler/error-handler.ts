@@ -1,6 +1,6 @@
 /* eslint-disable max-params */
+import { HTTP_STATUS_CODE } from '@cretadoc/utils';
 import type { ErrorRequestHandler } from 'express';
-import { HTTP_CODE } from '../../utils/constants';
 
 /**
  * Error handler middleware.
@@ -13,6 +13,8 @@ import { HTTP_CODE } from '../../utils/constants';
 export const errorHandler: ErrorRequestHandler = (err, _req, res, next) => {
   if (err instanceof Error) {
     console.error(err.stack);
-    res.status(HTTP_CODE.ERROR).send(`${err.name}: ${err.message}`);
+    res
+      .status(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR)
+      .send(`${err.name}: ${err.message}`);
   } else next(err);
 };

@@ -1,7 +1,7 @@
+import { HTTP_STATUS_CODE } from '@cretadoc/utils';
 import express, { type Express } from 'express';
 import request from 'supertest';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { HTTP_CODE } from '../../utils/constants';
 import { errorHandler } from './error-handler';
 
 type ErrorHandlerContext = {
@@ -25,7 +25,7 @@ describe('error-handler', () => {
     app.use(errorHandler);
     const response = await request(app).get(endpoint);
 
-    expect(response.status).toBe(HTTP_CODE.ERROR);
+    expect(response.status).toBe(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR);
     expect(response.text).toContain(message);
     expect(consoleSpy).toHaveBeenCalledOnce();
     // eslint-disable-next-line @typescript-eslint/no-magic-numbers

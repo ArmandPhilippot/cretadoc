@@ -1,3 +1,4 @@
+import { HTTP_STATUS_CODE } from '@cretadoc/utils';
 import express, { type Request as ExpressRequest, type Express } from 'express';
 import request from 'supertest';
 import { type InlineConfig, createServer } from 'vite';
@@ -5,7 +6,6 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { render } from '../../../tests/fixtures/ssr/entry-server';
 import { render as renderWithoutState } from '../../../tests/fixtures/ssr/entry-server-html-only';
 import type { SSRConfig } from '../../types';
-import { HTTP_CODE } from '../../utils/constants';
 import { renderContents } from './render-contents';
 
 type RenderContentsContext = {
@@ -53,7 +53,7 @@ describe('render-contents', () => {
     const req = {} as ExpressRequest;
     const { html } = await render('', req);
 
-    expect(response.statusCode).toBe(HTTP_CODE.SUCCESS);
+    expect(response.statusCode).toBe(HTTP_STATUS_CODE.OK);
     expect(response.text).toContain(html);
     expect.assertions(2);
   });
@@ -72,7 +72,7 @@ describe('render-contents', () => {
     const req = {} as ExpressRequest;
     const { html } = await render('', req);
 
-    expect(response.statusCode).toBe(HTTP_CODE.SUCCESS);
+    expect(response.statusCode).toBe(HTTP_STATUS_CODE.OK);
     expect(response.text).toContain(html);
     expect.assertions(2);
   });
@@ -98,7 +98,7 @@ describe('render-contents', () => {
     const req = {} as ExpressRequest;
     const { initialState } = await render('', req);
 
-    expect(response.statusCode).toBe(HTTP_CODE.SUCCESS);
+    expect(response.statusCode).toBe(HTTP_STATUS_CODE.OK);
     expect(response.text).toContain(
       `\n<script>window.__INITIAL_STATE__='${JSON.stringify(
         initialState
@@ -131,7 +131,7 @@ describe('render-contents', () => {
     const response = await request(app).get(route);
     const { initialState } = await renderWithoutState('', {} as ExpressRequest);
 
-    expect(response.statusCode).toBe(HTTP_CODE.SUCCESS);
+    expect(response.statusCode).toBe(HTTP_STATUS_CODE.OK);
     expect(response.text).not.toContain(
       `\n<script>window.__INITIAL_STATE__='${JSON.stringify(
         initialState
@@ -161,7 +161,7 @@ describe('render-contents', () => {
 
     const response = await request(app).get(route);
 
-    expect(response.statusCode).toBe(HTTP_CODE.SUCCESS);
+    expect(response.statusCode).toBe(HTTP_STATUS_CODE.OK);
     expect(response.text).toContain('rel="preload"');
     expect.assertions(2);
   });
@@ -189,7 +189,7 @@ describe('render-contents', () => {
 
     const response = await request(app).get(route);
 
-    expect(response.statusCode).toBe(HTTP_CODE.SUCCESS);
+    expect(response.statusCode).toBe(HTTP_STATUS_CODE.OK);
     expect(response.text).not.toContain('rel="preload"');
     expect(response.text).not.toContain(config.placeholders.preloadedLinks);
     // eslint-disable-next-line @typescript-eslint/no-magic-numbers
@@ -213,7 +213,7 @@ describe('render-contents', () => {
 
     const response = await request(app).get(route);
 
-    expect(response.statusCode).toBe(HTTP_CODE.ERROR);
+    expect(response.statusCode).toBe(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR);
     expect(response.text).toMatch(
       'The server entrypoint must export a render function.'
     );
