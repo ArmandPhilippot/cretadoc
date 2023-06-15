@@ -1,17 +1,17 @@
 import { unlink, writeFile } from 'fs/promises';
 import { inspect } from 'util';
-import { isObjKeyExist, isObject } from '@cretadoc/utils';
+import { type PartialDeep, isObjKeyExist, isObject } from '@cretadoc/utils';
 import type { CretadocConfig } from '../../../src/types/config';
 
 const emptyConfig = '';
 
-const getConfigExportFrom = (config: Partial<CretadocConfig>) => `
+const getConfigExportFrom = (config: PartialDeep<CretadocConfig>) => `
 export default ${inspect(config)}
 `;
 
 const getConfig = (
   kind: 'empty' | 'custom',
-  customConfig?: Partial<CretadocConfig>
+  customConfig?: PartialDeep<CretadocConfig>
 ) => {
   if (kind === 'empty') return emptyConfig;
   if (customConfig) return getConfigExportFrom(customConfig);
@@ -21,7 +21,7 @@ const getConfig = (
 export const createConfigFile = async (
   path: string,
   kind: 'empty' | 'custom',
-  customConfig?: Partial<CretadocConfig>
+  customConfig?: PartialDeep<CretadocConfig>
 ) => {
   const config = getConfig(kind, customConfig);
 

@@ -11,14 +11,19 @@ import {
   removeConfigFile,
 } from './tests/utils/helpers';
 
+const legalNoticeFixtureName = 'Legal notice';
 const fixtures: Fixture[] = [
-  { name: 'homepage', contents: '# Home\n\nWelcome to Cretadoc homepage!' },
+  { name: 'home', contents: '# Home\n\nWelcome to Cretadoc homepage!' },
   { name: 'about', contents: '# About' },
+  { name: legalNoticeFixtureName, contents: '# Legal notice' },
 ];
 
 await createConfigFile(ROOT_CONFIG_PATH, 'custom', {
   name: 'Cretadoc',
   locale: 'en',
+  pages: {
+    legalNotice: legalNoticeFixtureName,
+  },
   paths: {
     pages: PAGES_FIXTURES_DIR_PATH,
   },

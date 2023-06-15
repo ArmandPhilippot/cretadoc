@@ -10,6 +10,7 @@ import {
   validateHideGeneratorProp,
   validateLocaleProp,
   validateNameProp,
+  validatePagesProp,
   validateThemeProp,
 } from './validators';
 
@@ -33,6 +34,8 @@ const validateClientConfigProp = (
       return validateLocaleProp(value);
     case 'name':
       return validateNameProp(value);
+    case 'pages':
+      return validatePagesProp(value);
     case 'theme':
       return validateThemeProp(value);
     default: {

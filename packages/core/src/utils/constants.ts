@@ -5,6 +5,8 @@ import type {
   CretadocServerConfig,
 } from '../types/config';
 
+export const MARKDOWN_EXT = '.md';
+
 export const CONFIG_FILE_NAME = 'cretadoc.config.js';
 
 export const CRETADOC_REPOSITORY = {
@@ -44,8 +46,12 @@ export const DEFAULT_LOCALE = 'en' as const satisfies CretadocLocale;
 export const DEFAULT_CLIENT_CONFIG = {
   copyright: null,
   hideGenerator: false,
-  locale: 'en',
+  locale: DEFAULT_LOCALE,
   name: 'Cretadoc',
+  pages: {
+    homepage: 'home',
+    legalNotice: null,
+  },
   theme: 'cretadoc-light',
 } as const satisfies CretadocClientConfig;
 

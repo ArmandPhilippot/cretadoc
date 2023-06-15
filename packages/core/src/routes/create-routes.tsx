@@ -14,6 +14,7 @@ import { pagesHandler, pagesLoader } from './pages';
  */
 export const createRoutes = ({
   name,
+  pages,
   theme,
 }: CretadocClientConfig): RouteObject[] => [
   {
@@ -34,12 +35,12 @@ export const createRoutes = ({
           {
             path: ROUTES.HOMEPAGE,
             element: <RegularPage />,
-            loader: pagesLoader,
+            loader: async (args) => pagesLoader({ ...args, pages }),
           },
           {
             path: '/:slug',
             element: <RegularPage />,
-            loader: pagesLoader,
+            loader: async (args) => pagesLoader({ ...args, pages }),
             handle: pagesHandler,
           },
         ],

@@ -1,18 +1,23 @@
 import { HTTP_STATUS_CODE } from '@cretadoc/utils';
 import { type LoaderFunctionArgs, redirect } from 'react-router-dom';
 import { fetchAPI, pageQuery } from '../../services';
-import type { APIResponse } from '../../types';
+import type { APIResponse, CretadocClientConfig } from '../../types';
+
+export type PagesLoaderProps = LoaderFunctionArgs &
+  Pick<CretadocClientConfig, 'pages'>;
 
 export const pagesLoader = async ({
+  pages,
   params,
   request,
-}: LoaderFunctionArgs): Promise<APIResponse<typeof pageQuery>> => {
-  const slug = params['slug'] ?? 'homepage';
+}: PagesLoaderProps): Promise<APIResponse<typeof pageQuery>> => {
   const url = new URL(request.url);
   const response = await fetchAPI(
     {
       query: pageQuery,
-      variables: { slug: `/${slug}` },
+      variables: params['slug']
+        ? { slug: `/${params['slug']}` }
+        : { name: pages.homepage },
     },
     url.origin
   );

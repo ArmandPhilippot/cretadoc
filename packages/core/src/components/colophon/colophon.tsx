@@ -6,13 +6,16 @@ import {
 import type { FC } from 'react';
 import { useIntl } from 'react-intl';
 import { CRETADOC_REPOSITORY } from '../../utils/constants';
-import { useConfig } from '../../utils/hooks';
+import { useConfig, usePage } from '../../utils/hooks';
 
 export type ColophonProps = Omit<BaseColophonProps, 'copyright' | 'generator'>;
 
 export const Colophon: FC<ColophonProps> = (props) => {
   const intl = useIntl();
-  const { copyright, hideGenerator } = useConfig();
+  const { copyright, hideGenerator, pages } = useConfig();
+  const { page: legalNotice } = usePage(
+    pages.legalNotice ? { name: pages.legalNotice } : undefined
+  );
 
   const generatorLink = intl.formatMessage(
     {
@@ -32,6 +35,11 @@ export const Colophon: FC<ColophonProps> = (props) => {
       {...props}
       copyright={copyright}
       generator={hideGenerator ? undefined : generatorLink}
+      legalNotice={
+        legalNotice
+          ? { label: legalNotice.name, link: legalNotice.slug }
+          : undefined
+      }
     />
   );
 };

@@ -5,6 +5,21 @@ import type { Expand } from './utils';
 
 export type CretadocLocale = (typeof SUPPORTED_LOCALES)[number];
 
+export type CretadocPages = {
+  /**
+   * The filename of the homepage.
+   *
+   * @default 'home'
+   */
+  homepage: string;
+  /**
+   * The filename of the legal notice page.
+   *
+   * @default null
+   */
+  legalNotice: Nullable<string>;
+};
+
 export type CretadocPaths = {
   /**
    * The path of the directory that contains the pages.
@@ -45,9 +60,14 @@ export type CretadocClientConfig = {
   /**
    * Your website name.
    *
-   * @default Cretadoc
+   * @default 'Cretadoc'
    */
   name: string;
+  /**
+   * Define which file to use for some specific pages. Must be an existent file
+   * in your pages directory.
+   */
+  pages: CretadocPages;
   /**
    * The website themes.
    */

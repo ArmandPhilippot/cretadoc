@@ -8,7 +8,7 @@ import {
 import type { FC } from 'react';
 import { useIntl } from 'react-intl';
 import { useParams } from 'react-router-dom';
-import { usePagesList } from '../../utils/hooks';
+import { useConfig, usePagesList } from '../../utils/hooks';
 
 export type MainNavProps = Omit<
   MainNavBaseProps,
@@ -16,7 +16,10 @@ export type MainNavProps = Omit<
 >;
 
 export const MainNav: FC<MainNavProps> = (props) => {
-  const { isLoading, pages } = usePagesList();
+  const { pages: config } = useConfig();
+  const { isLoading, pages } = usePagesList({
+    exclude: { names: config.legalNotice ? [config.legalNotice] : [] },
+  });
   const { slug } = useParams();
   const intl = useIntl();
 

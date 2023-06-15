@@ -3,12 +3,14 @@ import type {
   ClientConfigShape,
   ConfigShape,
   CretadocClientConfig,
+  CretadocPages,
   EnsureExactShape,
 } from '../../types';
 import { DEFAULT_CLIENT_CONFIG } from '../constants';
 import { ConfigError, ConfigValidationError } from '../exceptions';
 import { isConfigShapeValid } from '../shared/is-config-shape-valid';
 import { loadConfigFile } from '../shared/load-config-file';
+import { sanitizePagesProp } from './sanitizers';
 import { validateClientConfig } from './validate-client-config';
 
 /**
@@ -28,6 +30,10 @@ const getClientConfig = <T extends ClientConfigShape>(
   return {
     ...DEFAULT_CLIENT_CONFIG,
     ...config,
+    pages: sanitizePagesProp({
+      ...DEFAULT_CLIENT_CONFIG.pages,
+      ...(config.pages as Partial<CretadocPages>),
+    }),
   };
 };
 
@@ -48,6 +54,7 @@ export const loadClientConfig = async (
     'hideGenerator',
     'locale',
     'name',
+    'pages',
     'theme',
   ];
 
