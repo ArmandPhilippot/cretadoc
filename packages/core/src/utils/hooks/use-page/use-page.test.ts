@@ -6,13 +6,13 @@ import { usePage } from './use-page';
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
 
-describe('use-page-list', () => {
+describe('use-page', () => {
   beforeEach(() => {
     fetchMocker.resetMocks();
   });
 
   it('should return no errors and no data when fetch is not available', () => {
-    const { result } = renderHook(() => usePage());
+    const { result } = renderHook(() => usePage({ slug: '/' }));
     expect(result.current.errors).toBeUndefined();
     expect(result.current.isError).toBe(false);
     expect(result.current.isLoading).toBe(true);

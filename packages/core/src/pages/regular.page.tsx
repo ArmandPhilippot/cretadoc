@@ -14,7 +14,7 @@ export const RegularPage: FC = () => {
   >;
   const { isLoading, isValidating, page } = usePage(
     {
-      slug: slug ? `/${slug}` : undefined,
+      slug: slug ? `/${slug}` : '/homepage',
     },
     fallbackData
   );

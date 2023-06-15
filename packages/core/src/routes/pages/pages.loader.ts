@@ -7,7 +7,7 @@ export const pagesLoader = async ({
   params,
   request,
 }: LoaderFunctionArgs): Promise<APIResponse<typeof pageQuery>> => {
-  const slug = params['slug'] ?? '';
+  const slug = params['slug'] ?? 'homepage';
   const url = new URL(request.url);
   const response = await fetchAPI(
     {
