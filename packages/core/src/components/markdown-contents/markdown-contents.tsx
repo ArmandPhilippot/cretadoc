@@ -1,5 +1,11 @@
-import type { FC } from 'react';
+import type { Maybe, Nullable } from '@cretadoc/utils';
+import {
+  type ForwardRefRenderFunction,
+  type HTMLAttributes,
+  forwardRef,
+} from 'react';
 import ReactMarkdown, { type Components } from 'react-markdown';
+import rehypeSlug from 'rehype-slug';
 import { MarkdownField } from './markdown-field';
 import { MarkdownHeading } from './markdown-heading';
 import { MarkdownImage } from './markdown-image';
@@ -8,14 +14,20 @@ import { MarkdownList } from './markdown-list';
 import { MarkdownListItem } from './markdown-list-item';
 import { MarkdownOrderedList } from './markdown-ordered-list';
 
-export type MarkdownContentsProps = {
+export type MarkdownContentsProps = Omit<
+  HTMLAttributes<HTMLDivElement>,
+  'children'
+> & {
   /**
    * A string containing Markdown syntax.
    */
-  contents: string;
+  contents: Maybe<Nullable<string>>;
 };
 
-export const MarkdownContents: FC<MarkdownContentsProps> = ({ contents }) => {
+const MarkdownContentsWithRef: ForwardRefRenderFunction<
+  HTMLDivElement,
+  MarkdownContentsProps
+> = ({ contents, ...props }, ref) => {
   const components: Components = {
     a: MarkdownLink,
     h1: MarkdownHeading,
@@ -31,5 +43,13 @@ export const MarkdownContents: FC<MarkdownContentsProps> = ({ contents }) => {
     ul: MarkdownList,
   };
 
-  return <ReactMarkdown components={components}>{contents}</ReactMarkdown>;
+  return (
+    <div {...props} ref={ref}>
+      <ReactMarkdown components={components} rehypePlugins={[rehypeSlug]}>
+        {contents ?? ''}
+      </ReactMarkdown>
+    </div>
+  );
 };
+
+export const MarkdownContents = forwardRef(MarkdownContentsWithRef);

@@ -8,6 +8,7 @@ formatjs
 graphiql
 nodenext
 pnpm
+rehype
 sbdocs
 sublicensable
 versionrc
