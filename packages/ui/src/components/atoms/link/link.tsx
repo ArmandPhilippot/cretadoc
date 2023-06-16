@@ -3,8 +3,9 @@ import {
   type ForwardRefRenderFunction,
   forwardRef,
   type ReactNode,
+  useContext,
 } from 'react';
-import { UIContext, useComponentsFrom } from '../../context';
+import { LinkContext } from '../../../contexts';
 import * as styles from './link.css';
 
 export type LinkProps = Omit<
@@ -25,7 +26,7 @@ const LinkWithRef: ForwardRefRenderFunction<HTMLAnchorElement, LinkProps> = (
   { children, className = '', hrefLang, to, ...props },
   ref
 ) => {
-  const { LinkComponent } = useComponentsFrom(UIContext);
+  const LinkComponent = useContext(LinkContext);
   const hasLang = !!hrefLang;
   const linkClassName = `${styles.link({ hasLang })} ${className}`;
 
