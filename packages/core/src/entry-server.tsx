@@ -1,7 +1,7 @@
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import type { RenderFunction } from '@cretadoc/server';
-import { UIProvider } from '@cretadoc/ui';
+import { LinkProvider } from '@cretadoc/ui';
 import { isObjKeyExist, isObject } from '@cretadoc/utils';
 import type { Request as ExpressRequest } from 'express';
 import { StrictMode } from 'react';
@@ -62,9 +62,9 @@ export const render: RenderFunction = async (url, req) => {
     <StrictMode>
       <ConfigProvider config={config}>
         <IntlProvider locale={config.locale}>
-          <UIProvider components={{ LinkComponent: RouterLink }}>
+          <LinkProvider value={RouterLink}>
             <StaticRouterProvider context={context} router={router} />
-          </UIProvider>
+          </LinkProvider>
         </IntlProvider>
       </ConfigProvider>
     </StrictMode>

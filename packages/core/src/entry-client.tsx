@@ -1,4 +1,4 @@
-import { UIProvider } from '@cretadoc/ui';
+import { LinkProvider } from '@cretadoc/ui';
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { IntlProvider } from 'react-intl';
@@ -32,9 +32,9 @@ ReactDOM.hydrateRoot(
   <StrictMode>
     <ConfigProvider config={initialState.config}>
       <IntlProvider locale={initialState.config.locale}>
-        <UIProvider components={{ LinkComponent: RouterLink }}>
+        <LinkProvider value={RouterLink}>
           <RouterProvider router={router} />
-        </UIProvider>
+        </LinkProvider>
       </IntlProvider>
     </ConfigProvider>
   </StrictMode>
