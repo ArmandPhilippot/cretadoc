@@ -1,6 +1,7 @@
-import type { Maybe } from '@cretadoc/utils';
+import type { Maybe, Nullable } from '@cretadoc/utils';
 import { useEffect, useState } from 'react';
 import type { HeadingLevel } from '../../components';
+import { isBrowser } from '../../helpers';
 
 export type HeadingsTreeNode = {
   children: HeadingsTreeNode[];
@@ -10,6 +11,8 @@ export type HeadingsTreeNode = {
 };
 
 const headingTags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const;
+
+type HeadingTagNames = (typeof headingTags)[number];
 
 /**
  * Convert a node list of heading elements to a tree.
@@ -90,8 +93,6 @@ type GetHeadingTagsListConfig = {
   toLevel: Maybe<HeadingLevel>;
 };
 
-type HeadingTagNames = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
-
 /**
  * Retrieve a list of heading tags.
  *
@@ -128,7 +129,7 @@ export type UseHeadingsTreeOptions = {
    *
    * @default undefined
    */
-  wrapper?: HTMLElement;
+  wrapper?: Nullable<HTMLElement>;
 };
 
 /**
@@ -137,31 +138,30 @@ export type UseHeadingsTreeOptions = {
  * @param {UseHeadingsTreeOptions} [options] - The headings tree options.
  * @returns {HeadingsTreeNode[]} The headings tree.
  */
-export const useHeadingsTree = (
-  options?: UseHeadingsTreeOptions
-): HeadingsTreeNode[] => {
-  if (
-    options?.fromLevel &&
-    options.toLevel &&
-    options.fromLevel > options.toLevel
-  )
+export const useHeadingsTree = ({
+  fromLevel,
+  toLevel,
+  wrapper,
+}: UseHeadingsTreeOptions = {}): HeadingsTreeNode[] => {
+  if (fromLevel && toLevel && fromLevel > toLevel)
     throw new Error(
       'Invalid options: `fromLevel` must be lower or equal to `toLevel`.'
     );
 
   const [headings, setHeadings] = useState<NodeListOf<HTMLHeadingElement>>();
-  const requestedTags = getHeadingTagsList({
-    fromLevel: options?.fromLevel,
-    toLevel: options?.toLevel,
-  });
+  const requestedTags = getHeadingTagsList({ fromLevel, toLevel });
   const headingsQuery = requestedTags.join(', ');
 
   useEffect(() => {
-    const headingNodes: NodeListOf<HTMLHeadingElement> = options?.wrapper
-      ? options.wrapper.querySelectorAll(headingsQuery)
-      : document.querySelectorAll(headingsQuery);
-    setHeadings(headingNodes);
-  }, [headingsQuery, options?.wrapper]);
+    if (!isBrowser()) return;
+
+    const el =
+      typeof wrapper === 'undefined'
+        ? window.document.documentElement
+        : wrapper;
+
+    if (el) setHeadings(el.querySelectorAll(headingsQuery));
+  }, [headingsQuery, wrapper]);
 
   return headings ? buildHeadingsTreeFrom(headings) : [];
 };

@@ -17,17 +17,17 @@ export const UseHeadingsTreeDemo: FC<UseHeadingsTreeDemoProps> = ({
   showOnlyHeadingsInDemo = false,
   toLevel,
 }) => {
-  const inputRef = useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const headingsNode = useHeadingsTree({
     fromLevel,
     toLevel,
-    wrapper: showOnlyHeadingsInDemo ? inputRef.current ?? undefined : undefined,
+    wrapper: showOnlyHeadingsInDemo ? wrapperRef.current : undefined,
   });
 
   return (
     <Demo>
       <DemoPanel heading="Given the following structure:">
-        <div ref={inputRef}>
+        <div ref={wrapperRef}>
           <h1>1. Level 1</h1>
           <h2>1.1. Level 2</h2>
           <h2>1.2. Level 2</h2>
