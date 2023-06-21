@@ -12,21 +12,21 @@ import type { QueryResultWithErrors } from '../../types';
 import { expect } from '../../utils';
 import { PAGES_FIXTURES_DIR } from '../../utils/constants';
 import {
-  cleanFixtures,
   createAPIServer,
   createFixtures,
+  deleteFixturesIn,
   sendQuery,
   type Variables,
 } from '../../utils/helpers';
 import { pages } from './pages.fixtures';
 import { pageDelete } from './pages.mutations';
 
-const api = createAPIServer({
+const api = await createAPIServer({
   data: { pages: PAGES_FIXTURES_DIR },
   port: 3230,
 });
 
-const misconfiguredAPI = createAPIServer({ port: 3280 });
+const misconfiguredAPI = await createAPIServer({ port: 3280 });
 
 const deletePage = async (variables?: Variables[typeof pageDelete]) =>
   sendQuery({ api: api.instance, query: pageDelete, variables });
@@ -49,7 +49,7 @@ describe('pageDelete', () => {
 
   afterAll(async () => {
     api.stop();
-    await cleanFixtures(PAGES_FIXTURES_DIR);
+    await deleteFixturesIn(PAGES_FIXTURES_DIR);
   });
 
   it('can delete a page by id', async () => {

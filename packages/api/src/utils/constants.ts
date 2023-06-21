@@ -1,5 +1,10 @@
-export const DEFAULT_ENDPOINT = '/graphql' as const;
-export const DEFAULT_GRAPHIQL = true as const;
+import type { APIConfig } from '../types';
+
+export const DEFAULT_CONFIG = {
+  data: undefined,
+  endpoint: '/graphql',
+  graphiql: true,
+} as const satisfies APIConfig;
 
 export const DIRECTION = {
   ASC: 'ASC',

@@ -1,3 +1,5 @@
 # Fixtures
-tests/fixtures/doc
-tests/fixtures/pages
+tests/fixtures/doc/*
+!tests/fixtures/doc/.keep
+tests/fixtures/pages/*
+!tests/fixtures/pages/.keep

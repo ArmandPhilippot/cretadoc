@@ -1,3 +1,4 @@
+export * from './config';
 export * from './contexts';
 export * from './paths';
 export * from './sanitizers';

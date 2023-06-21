@@ -30,7 +30,7 @@ import type {
   QueryInput,
 } from '../../../src/types';
 import type { QueryResult } from '../../../src/types/gql';
-import { DEFAULT_ENDPOINT } from '../../../src/utils/constants';
+import { DEFAULT_CONFIG } from '../../../src/utils/constants';
 import {
   docDirectoryCreate,
   docDirectoryDelete,
@@ -146,5 +146,5 @@ export const sendQuery = async <Q extends Mutations | Queries>({
   SuperTestResponse<QueryResult<Result[Q]> | QueryResultWithErrors<Result[Q]>>
 > =>
   request(api)
-    .post(endpoint ?? DEFAULT_ENDPOINT)
+    .post(endpoint ?? DEFAULT_CONFIG.endpoint)
     .send({ query, variables });

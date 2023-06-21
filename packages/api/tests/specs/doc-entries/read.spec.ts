@@ -10,16 +10,16 @@ import {
   sendQuery,
   type Variables,
 } from '../../utils/helpers';
-import { cleanFixtures, createFixtures } from '../../utils/helpers/fixtures';
+import { createFixtures, deleteFixturesIn } from '../../utils/helpers/fixtures';
 import { docEntries } from './doc-entries.fixtures';
 import { docEntryQuery } from './doc-entries.queries';
 
-const api = createAPIServer({
+const api = await createAPIServer({
   data: { doc: DOC_FIXTURES_DIR },
   port: 3200,
 });
 
-const misconfiguredAPI = createAPIServer({ port: 3250 });
+const misconfiguredAPI = await createAPIServer({ port: 3250 });
 
 const sendDocEntryQuery = async (variables?: Variables[typeof docEntryQuery]) =>
   sendQuery({ api: api.instance, query: docEntryQuery, variables });
@@ -32,7 +32,7 @@ describe('docEntry', () => {
 
   afterAll(async () => {
     api.stop();
-    await cleanFixtures(DOC_FIXTURES_DIR);
+    await deleteFixturesIn(DOC_FIXTURES_DIR);
   });
 
   it('returns a documentation entry by id', async () => {

@@ -1,3 +1,4 @@
+import type { Maybe } from '@cretadoc/utils';
 import type { YogaServerInstance } from 'graphql-yoga';
 import type { APIContext, ServerContext } from './internals';
 
@@ -22,7 +23,7 @@ export type APIConfig = {
    * The data configuration.
    * @default undefined
    */
-  data?: APIDataConfig;
+  data: Maybe<APIDataConfig>;
   /**
    * The API endpoint.
    * @default "/graphql"

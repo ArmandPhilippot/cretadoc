@@ -5,13 +5,13 @@ import {
   slugify,
   type Nullable,
 } from '@cretadoc/utils';
+import { afterAll, beforeAll, describe, it } from 'vitest';
 import type {
   DocDirectoryDeleteErrors,
   DocDirectoryDeletePayload,
   DocDirectoryDeleteResult,
   DocDirectoryPayload,
-} from 'src/types';
-import { afterAll, beforeAll, describe, it } from 'vitest';
+} from '../../../src/types';
 import { API_ERROR_CODE } from '../../../src/utils/constants';
 import { generateBase64String } from '../../../src/utils/helpers';
 import { docFixtures } from '../../fixtures/doc';
@@ -19,9 +19,9 @@ import type { QueryResultWithErrors } from '../../types';
 import { expect } from '../../utils';
 import { DOC_FIXTURES_DIR } from '../../utils/constants';
 import {
-  cleanFixtures,
   createAPIServer,
   createFixtures,
+  deleteFixturesIn,
   sendQuery,
   type Variables,
 } from '../../utils/helpers';
@@ -31,12 +31,12 @@ import {
   docDirectoryDelete,
 } from './doc-directories.mutations';
 
-const api = createAPIServer({
+const api = await createAPIServer({
   data: { doc: DOC_FIXTURES_DIR },
   port: 3230,
 });
 
-const misconfiguredAPI = createAPIServer({ port: 3280 });
+const misconfiguredAPI = await createAPIServer({ port: 3280 });
 
 const deleteDocDirectory = async (
   variables?: Variables[typeof docDirectoryDelete]
@@ -60,7 +60,7 @@ describe('docDirectoryDelete', () => {
 
   afterAll(async () => {
     api.stop();
-    await cleanFixtures(DOC_FIXTURES_DIR);
+    await deleteFixturesIn(DOC_FIXTURES_DIR);
   });
 
   it('cannot delete a non-empty doc directory without option', async () => {

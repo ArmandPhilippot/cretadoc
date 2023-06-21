@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import request from 'supertest';
 import { describe, it } from 'vitest';
-import { DEFAULT_ENDPOINT } from '../../../src/utils/constants';
+import { DEFAULT_CONFIG } from '../../../src/utils/constants';
 import { expect } from '../../utils';
 import { createAPIServer } from '../../utils/helpers';
 
 describe('response', () => {
   it('returns a successful response when using the default endpoint', async () => {
-    const api = createAPIServer({});
+    const api = await createAPIServer({});
     api.start();
 
     const response = await request(api.instance)
-      .post(DEFAULT_ENDPOINT)
+      .post(DEFAULT_CONFIG.endpoint)
       .send({ query: '' });
 
     const text = 'errors'; // We are not passing a query.
@@ -24,12 +24,12 @@ describe('response', () => {
   it('returns a successful response when using a custom endpoint', async () => {
     const customEndpoint = '/api';
 
-    if (customEndpoint === (DEFAULT_ENDPOINT as string))
+    if (customEndpoint === (DEFAULT_CONFIG.endpoint as string))
       throw new Error(
         'The test should be updated: the custom endpoint is the same as the default one.'
       );
 
-    const api = createAPIServer({ endpoint: customEndpoint });
+    const api = await createAPIServer({ endpoint: customEndpoint });
     api.start();
 
     const response = await request(api.instance)
@@ -46,12 +46,12 @@ describe('response', () => {
   it('returns a 404 response when using a wrong endpoint', async () => {
     const customEndpoint = '/api';
 
-    if (customEndpoint === (DEFAULT_ENDPOINT as string))
+    if (customEndpoint === (DEFAULT_CONFIG.endpoint as string))
       throw new Error(
         'The test should be updated: the custom endpoint is the same as the default one.'
       );
 
-    const api = createAPIServer({});
+    const api = await createAPIServer({});
     api.start();
 
     const response = await request(api.instance)

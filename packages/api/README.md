@@ -44,7 +44,7 @@ createAPI()
 import { createAPI } from '@cretadoc/api';
 import { createServer } from 'http';
 
-const api = createAPI();
+const api = await createAPI();
 const server = createServer(api);
 server.listen(4000, () => {
   console.log(`API is available at http://localhost:4000/graphql.`);
@@ -114,7 +114,7 @@ This setting allows you to define if the web interface (GraphiQL) should be acce
 import { createAPI } from '@cretadoc/api';
 import { createServer } from 'http';
 
-const api = createAPI({
+const api = await createAPI({
   data: {
     doc: '/absolute/path/to/a/directory',
     pages: '/absolute/path/to/another/directory',

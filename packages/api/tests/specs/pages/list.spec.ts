@@ -9,21 +9,21 @@ import type { QueryResultWithErrors } from '../../types';
 import { expect } from '../../utils';
 import { PAGES_FIXTURES_DIR } from '../../utils/constants';
 import {
-  cleanFixtures,
   createAPIServer,
   createFixtures,
+  deleteFixturesIn,
   sendQuery,
   type Variables,
 } from '../../utils/helpers';
 import { pages } from './pages.fixtures';
 import { pagesQuery } from './pages.queries';
 
-const api = createAPIServer({
+const api = await createAPIServer({
   data: { pages: PAGES_FIXTURES_DIR },
   port: 3210,
 });
 
-const misconfiguredAPI = createAPIServer({ port: 3260 });
+const misconfiguredAPI = await createAPIServer({ port: 3260 });
 
 const sendPagesQuery = async (variables?: Variables[typeof pagesQuery]) =>
   sendQuery({ api: api.instance, query: pagesQuery, variables });
@@ -41,7 +41,7 @@ describe('pages', () => {
 
   afterAll(async () => {
     api.stop();
-    await cleanFixtures(PAGES_FIXTURES_DIR);
+    await deleteFixturesIn(PAGES_FIXTURES_DIR);
   });
 
   it('returns the paginated pages', async () => {

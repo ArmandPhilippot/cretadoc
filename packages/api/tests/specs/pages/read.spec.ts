@@ -11,16 +11,16 @@ import {
   sendQuery,
   type Variables,
 } from '../../utils/helpers';
-import { cleanFixtures, createFixtures } from '../../utils/helpers/fixtures';
+import { createFixtures, deleteFixturesIn } from '../../utils/helpers/fixtures';
 import { pages } from './pages.fixtures';
 import { pageQuery } from './pages.queries';
 
-const api = createAPIServer({
+const api = await createAPIServer({
   data: { pages: PAGES_FIXTURES_DIR },
   port: 3200,
 });
 
-const misconfiguredAPI = createAPIServer({ port: 3250 });
+const misconfiguredAPI = await createAPIServer({ port: 3250 });
 
 const sendPageQuery = async (variables?: Variables[typeof pageQuery]) =>
   sendQuery({ api: api.instance, query: pageQuery, variables });
@@ -33,7 +33,7 @@ describe('page', () => {
 
   afterAll(async () => {
     api.stop();
-    await cleanFixtures(PAGES_FIXTURES_DIR);
+    await deleteFixturesIn(PAGES_FIXTURES_DIR);
   });
 
   it('returns a page by id', async () => {

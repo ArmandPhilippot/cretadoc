@@ -10,16 +10,16 @@ import {
   sendQuery,
   type Variables,
 } from '../../utils/helpers';
-import { cleanFixtures, createFixtures } from '../../utils/helpers/fixtures';
+import { createFixtures, deleteFixturesIn } from '../../utils/helpers/fixtures';
 import { docDirectories } from './doc-directories.fixtures';
 import { docDirectoryQuery } from './doc-directories.queries';
 
-const api = createAPIServer({
+const api = await createAPIServer({
   data: { doc: DOC_FIXTURES_DIR },
   port: 3200,
 });
 
-const misconfiguredAPI = createAPIServer({ port: 3250 });
+const misconfiguredAPI = await createAPIServer({ port: 3250 });
 
 const sendDocDirectoryQuery = async (
   variables?: Variables[typeof docDirectoryQuery]
@@ -33,7 +33,7 @@ describe('docDirectory', () => {
 
   afterAll(async () => {
     api.stop();
-    await cleanFixtures(DOC_FIXTURES_DIR);
+    await deleteFixturesIn(DOC_FIXTURES_DIR);
   });
 
   it('returns a documentation directory by id', async () => {

@@ -4,34 +4,34 @@ import {
   slugify,
   type Nullable,
 } from '@cretadoc/utils';
+import { afterAll, beforeAll, describe, it } from 'vitest';
 import type {
   DocDirectoryCreateErrors,
   DocDirectoryCreatePayload,
   DocDirectoryCreateResult,
   DocDirectoryPayload,
-} from 'src/types';
-import { afterAll, beforeAll, describe, it } from 'vitest';
+} from '../../../src/types';
 import { generateBase64String } from '../../../src/utils/helpers';
 import { docFixtures } from '../../fixtures/doc';
 import type { QueryResultWithErrors } from '../../types';
 import { expect } from '../../utils';
 import { DOC_FIXTURES_DIR } from '../../utils/constants';
 import {
-  cleanFixtures,
   createAPIServer,
   createFixtures,
+  deleteFixturesIn,
   sendQuery,
   type Variables,
 } from '../../utils/helpers';
 import { docDirectories } from './doc-directories.fixtures';
 import { docDirectoryCreate } from './doc-directories.mutations';
 
-const api = createAPIServer({
+const api = await createAPIServer({
   data: { doc: DOC_FIXTURES_DIR },
   port: 3220,
 });
 
-const misconfiguredAPI = createAPIServer({ port: 3270 });
+const misconfiguredAPI = await createAPIServer({ port: 3270 });
 
 const createDocDirectory = async (
   variables?: Variables[typeof docDirectoryCreate]
@@ -55,7 +55,7 @@ describe('docDirectoryCreate', () => {
 
   afterAll(async () => {
     api.stop();
-    await cleanFixtures(DOC_FIXTURES_DIR);
+    await deleteFixturesIn(DOC_FIXTURES_DIR);
   });
 
   it('can create a new doc directory in root directory', async () => {

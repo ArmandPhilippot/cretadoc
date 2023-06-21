@@ -1,20 +1,19 @@
 import { createServer, type Server } from 'http';
 import type { Nullable } from '@cretadoc/utils';
 import { type APIConfig, createAPI } from '../../../src';
-import { DEFAULT_ENDPOINT } from '../../../src/utils/constants';
 
 type CreateAPIServerConfig = Pick<Partial<APIConfig>, 'data' | 'endpoint'> & {
   hostname?: string;
   port?: number;
 };
 
-export const createAPIServer = ({
+export const createAPIServer = async ({
   data,
-  endpoint = DEFAULT_ENDPOINT,
+  endpoint,
   hostname = 'localhost',
   port = 3100,
 }: CreateAPIServerConfig) => {
-  const api = createAPI({ data, endpoint });
+  const api = await createAPI({ data, endpoint });
   const server = createServer((req, res) => {
     void (async () => {
       await api(req, res);
@@ -26,7 +25,7 @@ export const createAPIServer = ({
     serverInstance = server.listen(port, () => {
       console.log(`[api]: Server is running.`);
       console.log(
-        `[api]: API is available at http://${hostname}:${port}${endpoint}`
+        `[api]: API is available at http://${hostname}:${port}${api.graphqlEndpoint}`
       );
     });
   };

@@ -18,21 +18,21 @@ import type { QueryResultWithErrors } from '../../types';
 import { expect } from '../../utils';
 import { PAGES_FIXTURES_DIR } from '../../utils/constants';
 import {
-  cleanFixtures,
   createAPIServer,
   createFixtures,
+  deleteFixturesIn,
   sendQuery,
   type Variables,
 } from '../../utils/helpers';
 import { pages } from './pages.fixtures';
 import { pageCreate } from './pages.mutations';
 
-const api = createAPIServer({
+const api = await createAPIServer({
   data: { pages: PAGES_FIXTURES_DIR },
   port: 3220,
 });
 
-const misconfiguredAPI = createAPIServer({ port: 3270 });
+const misconfiguredAPI = await createAPIServer({ port: 3270 });
 
 const createPage = async (variables?: Variables[typeof pageCreate]) =>
   sendQuery({ api: api.instance, query: pageCreate, variables });
@@ -55,7 +55,7 @@ describe('pageCreate', () => {
 
   afterAll(async () => {
     api.stop();
-    await cleanFixtures(PAGES_FIXTURES_DIR);
+    await deleteFixturesIn(PAGES_FIXTURES_DIR);
   });
 
   it('can create a new page without content', async () => {
