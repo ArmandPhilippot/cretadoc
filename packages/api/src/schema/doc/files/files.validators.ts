@@ -8,7 +8,6 @@ import type {
   DocFileUpdate,
   ValidationErrors,
 } from '../../../types';
-import { error } from '../../../utils/errors/messages';
 import { decodeBase64String } from '../../../utils/helpers';
 import {
   initValidationErrors,
@@ -25,7 +24,7 @@ import {
 export const validateDocFileContent = (content: string): string[] => {
   const errors: string[] = [];
 
-  if (!isString(content)) errors.push(error.invalid.type('string'));
+  if (!isString(content)) errors.push('Must be a string');
 
   return errors;
 };
@@ -40,7 +39,7 @@ export const validateDocFileId = (id: string): string[] => {
   const errors: string[] = [];
   const relativePath = decodeBase64String(id);
 
-  if (!relativePath.startsWith('./')) errors.push(error.validation.format.id);
+  if (!relativePath.startsWith('./')) errors.push('Invalid id');
 
   return errors;
 };
@@ -69,7 +68,7 @@ export const validateDocFileParentPath = async (
 
   const maybeDir = await loader.load(path);
 
-  if (!maybeDir) errors.push(error.validation.missing('directory'));
+  if (!maybeDir) errors.push('The requested directory does not exist');
 
   return errors;
 };
@@ -156,7 +155,7 @@ const validateDocFileDeleteByIdOrByPath = async (
 
   const maybeDocFile = await loader.load(value);
 
-  if (!maybeDocFile) errors.push(error.validation.missing('file'));
+  if (!maybeDocFile) errors.push('The requested file does not exist');
 
   return errors;
 };

@@ -30,3 +30,13 @@ export type ServerContext = {
 };
 
 export type APIErrorCode = (typeof API_ERROR_CODE)[keyof typeof API_ERROR_CODE];
+
+export type ErrorKind = 'range' | 'reference' | 'syntax' | 'type';
+
+export type ErrorDetails<T extends Maybe<Record<string, unknown>> = undefined> =
+  {
+    errorKind: ErrorKind;
+    key?: T extends undefined ? never : keyof T;
+    reason: string;
+    received: string;
+  };

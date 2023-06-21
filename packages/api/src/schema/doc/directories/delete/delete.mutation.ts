@@ -6,13 +6,12 @@ import type {
   DocDirectoryDeleteInput,
   DocDirectoryDeletePayload,
 } from '../../../../types';
+import { CretadocAPIError, UserInputError } from '../../../../utils/exceptions';
 import {
-  InputValidationError,
-  LoadersError,
-  MutatorsError,
-} from '../../../../utils/errors/exceptions';
-import { error } from '../../../../utils/errors/messages';
-import { hasValidationErrors } from '../../../../utils/helpers';
+  hasValidationErrors,
+  isValidContext,
+  validateContext,
+} from '../../../../utils/helpers';
 import { clearDocDirectoryLoaders } from '../directories.loaders';
 import { validateDocDirectoryDeleteInput } from '../directories.validators';
 import {
@@ -37,17 +36,20 @@ export const directoryDelete: GraphQLFieldConfig<
     { input },
     context
   ): Promise<DocDirectoryDeletePayload> => {
-    if (!context.mutators?.doc)
-      throw new MutatorsError(error.missing.mutator('Documentation'));
+    const errors = validateContext(context, 'doc');
 
-    if (!context.loaders?.doc)
-      throw new LoadersError(error.missing.loader('Documentation'));
+    if (!isValidContext(context, 'doc', errors))
+      throw new CretadocAPIError('Cannot delete directory', errors);
 
     if (!input.id && !input.path)
-      throw new InputValidationError(error.missing.input, ['id', 'path']);
+      throw new UserInputError('Missing required argument', {
+        expected: 'Either an id or a path',
+      });
 
     if (input.id && input.path)
-      throw new InputValidationError(error.invalid.input, ['id', 'path']);
+      throw new UserInputError('Too many arguments', {
+        expected: 'Either an id or a path',
+      });
 
     const loader: DocDirectoryByIdLoader | DocDirectoryByPathLoader = input.id
       ? context.loaders.doc.directory.byId

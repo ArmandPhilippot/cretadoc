@@ -7,7 +7,6 @@ import type {
   DocDirectoryUpdate,
   ValidationErrors,
 } from '../../../types';
-import { error } from '../../../utils/errors/messages';
 import { decodeBase64String } from '../../../utils/helpers';
 import {
   initValidationErrors,
@@ -25,7 +24,7 @@ export const validateDocDirectoryId = (id: string): string[] => {
   const errors: string[] = [];
   const relativePath = decodeBase64String(id);
 
-  if (!relativePath.startsWith('./')) errors.push(error.validation.format.id);
+  if (!relativePath.startsWith('./')) errors.push('Invalid id');
 
   return errors;
 };
@@ -54,7 +53,7 @@ export const validateDocDirectoryParentPath = async (
 
   const maybeDir = await loader.load(path);
 
-  if (!maybeDir) errors.push(error.validation.missing('directory'));
+  if (!maybeDir) errors.push('The requested directory does not exist');
 
   return errors;
 };
@@ -178,9 +177,9 @@ const validateDocDirectoryToDelete = async <
   const maybeDocDirectory = await loader.load(value);
 
   if (maybeDocDirectory && mustBeEmpty && !isDirectoryEmpty(maybeDocDirectory))
-    errors.push(error.validation.directory.contents);
+    errors.push('The directory must be empty');
   else if (!maybeDocDirectory)
-    errors.push(error.validation.missing('directory'));
+    errors.push('The requested directory does not exist');
 
   return errors;
 };

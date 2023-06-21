@@ -4,12 +4,13 @@ import type {
   DocFileUpdateInput,
   DocFileUpdatePayload,
 } from '../../../../types';
+import { CretadocAPIError } from '../../../../utils/exceptions';
 import {
-  LoadersError,
-  MutatorsError,
-} from '../../../../utils/errors/exceptions';
-import { error } from '../../../../utils/errors/messages';
-import { hasValidationErrors, sanitizeString } from '../../../../utils/helpers';
+  hasValidationErrors,
+  isValidContext,
+  sanitizeString,
+  validateContext,
+} from '../../../../utils/helpers';
 import { clearDocFileLoaders } from '../files.loaders';
 import { validateDocFileUpdateInput } from '../files.validators';
 import {
@@ -34,11 +35,10 @@ export const fileUpdate: GraphQLFieldConfig<
     { input },
     context
   ): Promise<DocFileUpdatePayload> => {
-    if (!context.mutators?.doc)
-      throw new MutatorsError(error.missing.mutator('Documentation'));
+    const errors = validateContext(context, 'doc');
 
-    if (!context.loaders?.doc)
-      throw new LoadersError(error.missing.loader('Documentation'));
+    if (!isValidContext(context, 'doc', errors))
+      throw new CretadocAPIError('Cannot update doc file', errors);
 
     const validationErrors = await validateDocFileUpdateInput(
       input,
@@ -50,7 +50,7 @@ export const fileUpdate: GraphQLFieldConfig<
     const maybeExistentDocFile = await context.loaders.doc.file.byId.load(id);
 
     if (!maybeExistentDocFile)
-      validationErrors.id.push(error.validation.missing('file'));
+      validationErrors.id.push('The requested doc file id does not exist');
 
     if (hasValidationErrors(validationErrors))
       return { errors: validationErrors };

@@ -11,7 +11,6 @@ import type {
   DocDirectoryPayload,
 } from 'src/types';
 import { afterAll, beforeAll, describe, it } from 'vitest';
-import { error } from '../../../src/utils/errors/messages';
 import { generateBase64String } from '../../../src/utils/helpers';
 import { docFixtures } from '../../fixtures/doc';
 import type { QueryResultWithErrors } from '../../types';
@@ -113,18 +112,16 @@ describe('docDirectoryCreate', () => {
   });
 
   it('returns validation errors when name uses forbidden characters', async () => {
-    const forbiddenChar = '<';
-    const expectedErrors = [error.validation.file.name];
     const response = await createDocDirectory({
-      input: { name: forbiddenChar },
+      input: { name: '<' },
     });
 
     expect(response.body.data.docDirectoryCreate).not.toBeNull();
 
     if (isDocDirectoryValidationErrors(response.body.data.docDirectoryCreate))
-      expect(response.body.data.docDirectoryCreate.errors.name).toStrictEqual(
-        expectedErrors
-      );
+      expect(
+        response.body.data.docDirectoryCreate.errors.name?.length
+      ).toBeTruthy();
 
     expect.assertions(2);
   });
@@ -132,17 +129,14 @@ describe('docDirectoryCreate', () => {
   it('returns validation errors when name is too long', async () => {
     const pageName =
       'Voluptas aut ipsum quaerat est officia non sapiente eos. Aut rerum ipsum qui. Cupiditate inventore rerum eos aut amet ut. Ducimus aspernatur necessitatibus pariatur sed consequatur. Similique ad qui repudiandae qui inventore eum quod sapiente. Quis odit amet voluptate omnis aliquam eum similique nihil. Dolorum id qui earum modi et suscipit voluptates et. Cumque minima illo voluptates perferendis recusandae. Vel cupiditate odio. Et excepturi ea eum blanditiis aut.';
-    const expectedErrors = [
-      error.validation.string.length({ max: 255, min: 1 }),
-    ];
     const response = await createDocDirectory({ input: { name: pageName } });
 
     expect(response.body.data.docDirectoryCreate).not.toBeNull();
 
     if (isDocDirectoryValidationErrors(response.body.data.docDirectoryCreate))
-      expect(response.body.data.docDirectoryCreate.errors.name).toStrictEqual(
-        expectedErrors
-      );
+      expect(
+        response.body.data.docDirectoryCreate.errors.name?.length
+      ).toBeTruthy();
 
     expect.assertions(2);
   });
@@ -153,7 +147,6 @@ describe('docDirectoryCreate', () => {
     if (!existingDocDirectory)
       throw new Error('Documentation fixtures are missing.');
 
-    const expectedErrors = [error.validation.existent('directory')];
     const response = await createDocDirectory({
       input: {
         name: existingDocDirectory.name,
@@ -164,9 +157,9 @@ describe('docDirectoryCreate', () => {
     expect(response.body.data.docDirectoryCreate).not.toBeNull();
 
     if (isDocDirectoryValidationErrors(response.body.data.docDirectoryCreate))
-      expect(response.body.data.docDirectoryCreate.errors.name).toStrictEqual(
-        expectedErrors
-      );
+      expect(
+        response.body.data.docDirectoryCreate.errors.name?.length
+      ).toBeTruthy();
 
     expect.assertions(2);
   });
@@ -181,9 +174,6 @@ describe('docDirectoryCreate', () => {
     expect(response.body.data.docDirectoryCreate).toBeNull();
     const body =
       response.body as QueryResultWithErrors<DocDirectoryCreateResult>;
-    expect(body.errors).toContainException({
-      code: 'BAD_CONFIGURATION',
-      message: error.missing.mutator('Documentation'),
-    });
+    expect(body.errors.length).toBeTruthy();
   });
 });

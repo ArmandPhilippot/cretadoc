@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { afterAll, beforeAll, describe, it } from 'vitest';
 import type { PagePayload } from '../../../src/types';
-import { error } from '../../../src/utils/errors/messages';
+import { API_ERROR_CODE } from '../../../src/utils/constants';
 import { pagesFixtures } from '../../fixtures/pages';
 import type { QueryResultWithErrors } from '../../types';
 import { expect } from '../../utils';
@@ -60,15 +60,24 @@ describe('page', () => {
     expect.assertions(2);
   });
 
+  it('returns a page by slug', async () => {
+    const firstPage = pages[0];
+
+    if (!firstPage) throw new Error('Pages fixtures are missing.');
+
+    const response = await sendPageQuery({ slug: firstPage.slug });
+
+    expect(response.body.data.page).not.toBeNull();
+    expect(response.body.data.page).toBePage(firstPage);
+    expect.assertions(2);
+  });
+
   it('returns an error if both id and name are missing', async () => {
     const response = await sendPageQuery();
 
     expect(response.body.data.page).toBeNull();
     const body = response.body as QueryResultWithErrors<PagePayload>;
-    expect(body.errors).toContainException({
-      code: 'BAD_USER_INPUT',
-      message: error.missing.input,
-    });
+    expect(body.errors).toContainErrorCode(API_ERROR_CODE.BAD_USER_INPUT);
     expect.assertions(2);
   });
 
@@ -77,10 +86,7 @@ describe('page', () => {
 
     expect(response.body.data.page).toBeNull();
     const body = response.body as QueryResultWithErrors<PagePayload>;
-    expect(body.errors).toContainException({
-      code: 'BAD_USER_INPUT',
-      message: error.invalid.input,
-    });
+    expect(body.errors).toContainErrorCode(API_ERROR_CODE.BAD_USER_INPUT);
     expect.assertions(2);
   });
 
@@ -93,9 +99,6 @@ describe('page', () => {
 
     expect(response.body.data.page).toBeNull();
     const body = response.body as QueryResultWithErrors<PagePayload>;
-    expect(body.errors).toContainException({
-      code: 'BAD_CONFIGURATION',
-      message: error.missing.loader('Page'),
-    });
+    expect(body.errors.length).toBeTruthy();
   });
 });

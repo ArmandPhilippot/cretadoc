@@ -1,10 +1,6 @@
 import { type GraphQLFieldConfig, GraphQLString } from 'graphql';
 import type { APIContext, Page, QueryInput } from '../../../types';
-import {
-  InputValidationError,
-  LoadersError,
-} from '../../../utils/errors/exceptions';
-import { error } from '../../../utils/errors/messages';
+import { CretadocAPIError, UserInputError } from '../../../utils/exceptions';
 import { PageType } from '../pages.types';
 
 export const page: GraphQLFieldConfig<null, APIContext, QueryInput<Page>> = {
@@ -25,21 +21,21 @@ export const page: GraphQLFieldConfig<null, APIContext, QueryInput<Page>> = {
   },
   resolve: async (_source, { id, name, slug }, context) => {
     if (!context.loaders?.page)
-      throw new LoadersError(error.missing.loader('Page'));
+      throw new CretadocAPIError('Cannot get page', {
+        errorKind: 'reference',
+        reason: 'Page loaders are not initialized',
+        received: typeof context.loaders?.doc,
+      });
 
     if (!id && !name && !slug)
-      throw new InputValidationError(error.missing.input, [
-        'id',
-        'name',
-        'slug',
-      ]);
+      throw new UserInputError('An argument is required', {
+        expected: 'Either an id, a name or a slug.',
+      });
 
     if ((id && name) || (id && slug) || (name && slug))
-      throw new InputValidationError(error.invalid.input, [
-        'id',
-        'name',
-        'slug',
-      ]);
+      throw new UserInputError('Too many arguments', {
+        expected: 'Either an id, a name or a slug.',
+      });
 
     if (name) return context.loaders.page.byName.load(name);
     if (id) return context.loaders.page.byId.load(id);

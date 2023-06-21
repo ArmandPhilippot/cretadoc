@@ -7,7 +7,10 @@ export default defineConfig({
       inline: ['graphql', 'graphql-yoga'], // Prevent graphql resolution errors.
       fallbackCJS: true, // Prevent duplicate graphql errors
     },
-    include: ['./tests/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts}'],
+    include: [
+      './src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts}',
+      './tests/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts}',
+    ],
     reporters: 'verbose',
     watch: false,
   },

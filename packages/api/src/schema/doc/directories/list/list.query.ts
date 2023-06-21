@@ -5,8 +5,7 @@ import type {
   ConnectionInput,
   DocDirectory,
 } from '../../../../types';
-import { LoadersError } from '../../../../utils/errors/exceptions';
-import { error } from '../../../../utils/errors/messages';
+import { CretadocAPIError } from '../../../../utils/exceptions';
 import { getConnection } from '../../../../utils/gql';
 import { decodeCursor, generateCursor } from '../../../../utils/helpers';
 import {
@@ -51,7 +50,11 @@ export const directories: GraphQLFieldConfig<
     context
   ): Promise<Connection<DocDirectory>> => {
     if (!context.loaders?.doc)
-      throw new LoadersError(error.missing.loader('Documentation'));
+      throw new CretadocAPIError('Cannot get directories connection', {
+        errorKind: 'reference',
+        reason: 'Doc loaders are not initialized',
+        received: typeof context.loaders?.doc,
+      });
 
     const after = offset ?? decodeCursor(afterCursor);
     const foundDocDirectories = await context.loaders.doc.directory.list({

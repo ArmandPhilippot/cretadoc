@@ -4,12 +4,13 @@ import type {
   DocFileCreateInput,
   DocFileCreatePayload,
 } from '../../../../types';
+import { CretadocAPIError } from '../../../../utils/exceptions';
 import {
-  LoadersError,
-  MutatorsError,
-} from '../../../../utils/errors/exceptions';
-import { error } from '../../../../utils/errors/messages';
-import { hasValidationErrors, sanitizeString } from '../../../../utils/helpers';
+  hasValidationErrors,
+  isValidContext,
+  sanitizeString,
+  validateContext,
+} from '../../../../utils/helpers';
 import { clearDocFileLoaders } from '../files.loaders';
 import { validateDocFileCreateInput } from '../files.validators';
 import {
@@ -34,11 +35,10 @@ export const fileCreate: GraphQLFieldConfig<
     { input },
     context
   ): Promise<DocFileCreatePayload> => {
-    if (!context.mutators?.doc)
-      throw new MutatorsError(error.missing.mutator('Documentation'));
+    const errors = validateContext(context, 'doc');
 
-    if (!context.loaders?.doc)
-      throw new LoadersError(error.missing.loader('Documentation'));
+    if (!isValidContext(context, 'doc', errors))
+      throw new CretadocAPIError('Cannot create file', errors);
 
     const validationErrors = await validateDocFileCreateInput(
       input,
@@ -51,7 +51,7 @@ export const fileCreate: GraphQLFieldConfig<
     });
 
     if (existentDocFiles.total === 1)
-      validationErrors.name.push(error.validation.existent('file'));
+      validationErrors.name.push(`File must be unique, ${name} already exists`);
 
     if (hasValidationErrors(validationErrors))
       return {

@@ -4,12 +4,12 @@ import type {
   DocDirectoryCreateInput,
   DocDirectoryCreatePayload,
 } from '../../../../types';
+import { CretadocAPIError } from '../../../../utils/exceptions';
 import {
-  LoadersError,
-  MutatorsError,
-} from '../../../../utils/errors/exceptions';
-import { error } from '../../../../utils/errors/messages';
-import { hasValidationErrors } from '../../../../utils/helpers';
+  hasValidationErrors,
+  isValidContext,
+  validateContext,
+} from '../../../../utils/helpers';
 import { clearDocDirectoryLoaders } from '../directories.loaders';
 import { validateDocDirectoryCreateInput } from '../directories.validators';
 import {
@@ -34,11 +34,10 @@ export const directoryCreate: GraphQLFieldConfig<
     { input },
     context
   ): Promise<DocDirectoryCreatePayload> => {
-    if (!context.mutators?.doc)
-      throw new MutatorsError(error.missing.mutator('Documentation'));
+    const errors = validateContext(context, 'doc');
 
-    if (!context.loaders?.doc)
-      throw new LoadersError(error.missing.loader('Documentation'));
+    if (!isValidContext(context, 'doc', errors))
+      throw new CretadocAPIError('Cannot create directory', errors);
 
     const validationErrors = await validateDocDirectoryCreateInput(
       input,
@@ -51,7 +50,9 @@ export const directoryCreate: GraphQLFieldConfig<
     });
 
     if (existentDocDirectories.total === 1)
-      validationErrors.name.push(error.validation.existent('directory'));
+      validationErrors.name.push(
+        `Directory name must be unique, ${name} already exist`
+      );
 
     if (hasValidationErrors(validationErrors))
       return {

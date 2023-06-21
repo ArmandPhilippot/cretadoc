@@ -7,7 +7,6 @@ import type {
   PageUpdate,
   ValidationErrors,
 } from '../../types';
-import { error } from '../../utils/errors/messages';
 import { decodeBase64String } from '../../utils/helpers';
 import {
   initValidationErrors,
@@ -23,7 +22,7 @@ import {
 export const validatePageContents = (contents: string): string[] => {
   const errors: string[] = [];
 
-  if (!isString(contents)) errors.push(error.invalid.type('string'));
+  if (!isString(contents)) errors.push('Must be a string');
 
   return errors;
 };
@@ -38,7 +37,7 @@ export const validatePageId = (id: string): string[] => {
   const errors: string[] = [];
   const relativePath = decodeBase64String(id);
 
-  if (!relativePath.startsWith('./')) errors.push(error.validation.format.id);
+  if (!relativePath.startsWith('./')) errors.push('Invalid id');
 
   return errors;
 };
@@ -114,7 +113,7 @@ const validatePageDeleteByIdOrByName = async (
 
   const maybePage = await loader.load(value);
 
-  if (!maybePage) errors.push(error.validation.missing('page'));
+  if (!maybePage) errors.push('The requested page does not exist');
 
   return errors;
 };

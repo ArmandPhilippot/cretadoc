@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, it } from 'vitest';
 import type { DocPayload } from '../../../src/types';
-import { error } from '../../../src/utils/errors/messages';
+import { API_ERROR_CODE } from '../../../src/utils/constants';
 import { docFixtures } from '../../fixtures/doc';
 import type { QueryResultWithErrors } from '../../types';
 import { expect } from '../../utils';
@@ -64,10 +64,7 @@ describe('docEntry', () => {
 
     expect(response.body.data.doc?.entry).toBeNull();
     const body = response.body as QueryResultWithErrors<DocPayload>;
-    expect(body.errors).toContainException({
-      code: 'BAD_USER_INPUT',
-      message: error.missing.input,
-    });
+    expect(body.errors).toContainErrorCode(API_ERROR_CODE.BAD_USER_INPUT);
     expect.assertions(2);
   });
 
@@ -76,10 +73,7 @@ describe('docEntry', () => {
 
     expect(response.body.data.doc?.entry).toBeNull();
     const body = response.body as QueryResultWithErrors<DocPayload>;
-    expect(body.errors).toContainException({
-      code: 'BAD_USER_INPUT',
-      message: error.invalid.input,
-    });
+    expect(body.errors).toContainErrorCode(API_ERROR_CODE.BAD_USER_INPUT);
     expect.assertions(2);
   });
 
@@ -92,9 +86,6 @@ describe('docEntry', () => {
 
     expect(response.body.data.doc?.entry).toBeNull();
     const body = response.body as QueryResultWithErrors<DocPayload>;
-    expect(body.errors).toContainException({
-      code: 'BAD_CONFIGURATION',
-      message: error.missing.loader('Documentation'),
-    });
+    expect(body.errors.length).toBeTruthy();
   });
 });

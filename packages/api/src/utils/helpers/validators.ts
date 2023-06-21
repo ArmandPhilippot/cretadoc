@@ -1,7 +1,6 @@
 import { isString } from '@cretadoc/utils';
 import validator from 'validator';
 import type { ValidationErrors } from '../../types';
-import { error } from '../errors/messages';
 import { isRelativePath } from './paths';
 
 /**
@@ -62,12 +61,14 @@ export const validateFilename = (filename: string): string[] => {
     max: 255,
   };
 
-  if (!isString(filename)) errors.push(error.invalid.type('string'));
+  if (!isString(filename)) errors.push('Must be a string');
 
   if (!validator.isLength(filename, nameLength))
-    errors.push(error.validation.string.length(nameLength));
+    errors.push(
+      `Must be between ${nameLength.min} and ${nameLength.max} characters`
+    );
 
-  if (!isValidFilename(filename)) errors.push(error.validation.file.name);
+  if (!isValidFilename(filename)) errors.push('Invalid characters');
 
   return errors;
 };
@@ -81,7 +82,7 @@ export const validateFilename = (filename: string): string[] => {
 export const validateRelativePath = (path: string): string[] => {
   const errors: string[] = [];
 
-  if (!isRelativePath(path)) errors.push(error.validation.format.path);
+  if (!isRelativePath(path)) errors.push('Must be a relative path');
 
   return errors;
 };

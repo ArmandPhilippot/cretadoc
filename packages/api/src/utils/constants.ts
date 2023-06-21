@@ -14,11 +14,11 @@ export const API_ERROR_CODE = {
    */
   BAD_CONFIGURATION: 'BAD_CONFIGURATION',
   /**
-   * Includes an invalid value for a field argument.
+   * Includes an invalid value for a GraphQL field.
    */
   BAD_USER_INPUT: 'BAD_USER_INPUT',
   /**
-   * An unspecified error occurred.
+   * An internal error occurred.
    */
-  INTERNAL_SERVER_ERROR: 'INTERNAL_SERVER_ERROR',
+  INTERNAL_ERROR: 'INTERNAL_ERROR',
 } as const;

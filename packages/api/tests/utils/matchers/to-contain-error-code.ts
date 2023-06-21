@@ -3,29 +3,22 @@ import type { ExpectStatic } from 'vitest';
 import type { APIErrorCode } from '../../../src/types';
 import type { MatcherResult } from '../../types';
 
-type APIException = {
-  code: APIErrorCode;
-  message: string;
+export type ToContainErrorCode = {
+  toContainErrorCode: (expected: APIErrorCode) => MatcherResult;
 };
 
-export type ToContainException = {
-  toContainException: (expected: APIException) => MatcherResult;
-};
-
-export function toContainException(
+export function toContainErrorCode(
   this: ReturnType<ExpectStatic['getState']>,
   errors: GraphQLError[],
-  expected: APIException
+  expected: APIErrorCode
 ): MatcherResult {
   const match = this.isNot ? 'does not match' : 'matches';
-  const message = () => `Exception ${match}.`;
+  const message = () => `Error code ${match}.`;
 
   const stringifiedErrors = this.utils.stringify(errors);
-  const hasCode = stringifiedErrors.includes(`"code": "${expected.code}"`);
-  const hasMessage = stringifiedErrors.includes(expected.message);
 
   return {
-    pass: hasCode && hasMessage,
+    pass: stringifiedErrors.includes(`"code": "${expected}"`),
     message,
     actual: errors,
     expected,

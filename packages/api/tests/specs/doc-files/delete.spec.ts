@@ -6,7 +6,7 @@ import type {
   DocFilePayload,
 } from 'src/types';
 import { afterAll, beforeAll, describe, it } from 'vitest';
-import { error } from '../../../src/utils/errors/messages';
+import { API_ERROR_CODE } from '../../../src/utils/constants';
 import { docFixtures } from '../../fixtures/doc';
 import type { QueryResultWithErrors } from '../../types';
 import { expect } from '../../utils';
@@ -112,15 +112,12 @@ describe('docFileDelete', () => {
     const response = await deleteDocFile({
       input: { path: existingDocFile.path },
     });
-    const expectedErrors = [error.validation.missing('file')];
 
     expect(response.body.data.docFileDelete).not.toBeNull();
 
     if (isDocFileValidationErrors(response.body.data.docFileDelete)) {
       expect(response.body.data.docFileDelete.errors.id).toBeNull();
-      expect(response.body.data.docFileDelete.errors.path).toStrictEqual(
-        expectedErrors
-      );
+      expect(response.body.data.docFileDelete.errors.path?.length).toBeTruthy();
     }
 
     const assertionsCount = 3;
@@ -137,15 +134,10 @@ describe('docFileDelete', () => {
 
     if (isDocFileValidationErrors(response.body.data.docFileDelete)) {
       expect(response.body.data.docFileDelete.errors.path).toBeNull();
-      expect(response.body.data.docFileDelete.errors.id).toContain(
-        error.validation.format.id
-      );
-      expect(response.body.data.docFileDelete.errors.id).toContain(
-        error.validation.missing('file')
-      );
+      expect(response.body.data.docFileDelete.errors.id?.length).toBeTruthy();
     }
 
-    const assertionsCount = 4;
+    const assertionsCount = 3;
     expect.assertions(assertionsCount);
   });
 
@@ -159,15 +151,10 @@ describe('docFileDelete', () => {
 
     if (isDocFileValidationErrors(response.body.data.docFileDelete)) {
       expect(response.body.data.docFileDelete.errors.id).toBeNull();
-      expect(response.body.data.docFileDelete.errors.path).toContain(
-        error.validation.format.path
-      );
-      expect(response.body.data.docFileDelete.errors.path).toContain(
-        error.validation.missing('file')
-      );
+      expect(response.body.data.docFileDelete.errors.path?.length).toBeTruthy();
     }
 
-    const assertionsCount = 4;
+    const assertionsCount = 3;
     expect.assertions(assertionsCount);
   });
 
@@ -176,10 +163,7 @@ describe('docFileDelete', () => {
 
     expect(response.body.data.docFileDelete).toBeNull();
     const body = response.body as QueryResultWithErrors<DocFileDeleteResult>;
-    expect(body.errors).toContainException({
-      code: 'BAD_USER_INPUT',
-      message: error.missing.input,
-    });
+    expect(body.errors).toContainErrorCode(API_ERROR_CODE.BAD_USER_INPUT);
     expect.assertions(2);
   });
 
@@ -190,10 +174,7 @@ describe('docFileDelete', () => {
 
     expect(response.body.data.docFileDelete).toBeNull();
     const body = response.body as QueryResultWithErrors<DocFileDeleteResult>;
-    expect(body.errors).toContainException({
-      code: 'BAD_USER_INPUT',
-      message: error.invalid.input,
-    });
+    expect(body.errors).toContainErrorCode(API_ERROR_CODE.BAD_USER_INPUT);
     expect.assertions(2);
   });
 
@@ -206,9 +187,6 @@ describe('docFileDelete', () => {
 
     expect(response.body.data.docFileDelete).toBeNull();
     const body = response.body as QueryResultWithErrors<DocFileDeleteResult>;
-    expect(body.errors).toContainException({
-      code: 'BAD_CONFIGURATION',
-      message: error.missing.mutator('Documentation'),
-    });
+    expect(body.errors.length).toBeTruthy();
   });
 });

@@ -4,12 +4,12 @@ import type {
   DocDirectoryUpdateInput,
   DocDirectoryUpdatePayload,
 } from '../../../../types';
+import { CretadocAPIError } from '../../../../utils/exceptions';
 import {
-  LoadersError,
-  MutatorsError,
-} from '../../../../utils/errors/exceptions';
-import { error } from '../../../../utils/errors/messages';
-import { hasValidationErrors } from '../../../../utils/helpers';
+  hasValidationErrors,
+  isValidContext,
+  validateContext,
+} from '../../../../utils/helpers';
 import { clearDocDirectoryLoaders } from '../directories.loaders';
 import { validateDocDirectoryUpdateInput } from '../directories.validators';
 import {
@@ -34,11 +34,10 @@ export const directoryUpdate: GraphQLFieldConfig<
     { input },
     context
   ): Promise<DocDirectoryUpdatePayload> => {
-    if (!context.mutators?.doc)
-      throw new MutatorsError(error.missing.mutator('Documentation'));
+    const errors = validateContext(context, 'doc');
 
-    if (!context.loaders?.doc)
-      throw new LoadersError(error.missing.loader('Documentation'));
+    if (!isValidContext(context, 'doc', errors))
+      throw new CretadocAPIError('Cannot update directory', errors);
 
     const validationErrors = await validateDocDirectoryUpdateInput(
       input,
@@ -50,7 +49,7 @@ export const directoryUpdate: GraphQLFieldConfig<
     const maybeExistentDir = await context.loaders.doc.directory.byId.load(id);
 
     if (!maybeExistentDir)
-      validationErrors.id.push(error.validation.missing('directory'));
+      validationErrors.id.push('The requested directory does not exist');
 
     if (hasValidationErrors(validationErrors))
       return { errors: validationErrors };

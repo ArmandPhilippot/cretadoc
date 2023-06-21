@@ -5,8 +5,7 @@ import type {
   ConnectionInput,
   Page,
 } from '../../../types';
-import { LoadersError } from '../../../utils/errors/exceptions';
-import { error } from '../../../utils/errors/messages';
+import { CretadocAPIError } from '../../../utils/exceptions';
 import { getConnection } from '../../../utils/gql';
 import { decodeCursor, generateCursor } from '../../../utils/helpers';
 import {
@@ -51,7 +50,11 @@ export const pages: GraphQLFieldConfig<
     context
   ): Promise<Connection<Page>> => {
     if (!context.loaders?.page)
-      throw new LoadersError(error.missing.loader('Page'));
+      throw new CretadocAPIError('Cannot get pages connection', {
+        errorKind: 'reference',
+        reason: 'Page loaders are not initialized',
+        received: typeof context.loaders?.doc,
+      });
 
     const after = offset ?? decodeCursor(afterCursor);
     const foundPages = await context.loaders.page.list({ ...args, after });

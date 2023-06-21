@@ -6,9 +6,9 @@ import {
   type Directory,
 } from '@cretadoc/read-dir';
 import { isString, type Maybe } from '@cretadoc/utils';
+import type { ErrorDetails } from '../types';
 import { MARKDOWN_EXTENSION } from '../utils/constants';
-import { ConfigError } from '../utils/errors/exceptions';
-import { error } from '../utils/errors/messages';
+import { CretadocAPIError } from '../utils/exceptions';
 
 export type FileSystemRepositoryContext = 'Documentation' | 'Pages';
 
@@ -16,22 +16,33 @@ export class FileSystemRepository {
   #rootDir: string;
 
   constructor(dir: string, context: FileSystemRepositoryContext) {
+    const errors: ErrorDetails[] = [];
+
     if (!isString(context))
-      throw new ConfigError(
-        'FileSystem Repository context',
-        error.invalid.type('string')
-      );
+      errors.push({
+        errorKind: 'type',
+        reason: `Repository context must be a string`,
+        received: typeof context,
+      });
 
     if (!isString(dir))
-      throw new ConfigError(
-        `${context} repository`,
-        error.invalid.type('string')
-      );
+      errors.push({
+        errorKind: 'type',
+        reason: `Repository directory must be a string`,
+        received: typeof dir,
+      });
 
     if (!isAbsolute(dir))
-      throw new ConfigError(
-        `${context} repository`,
-        error.invalid.path('absolute')
+      errors.push({
+        errorKind: 'syntax',
+        reason: `Repository directory must be an absolute path`,
+        received: dir,
+      });
+
+    if (errors.length)
+      throw new CretadocAPIError(
+        'Cannot initialize FileSystemRepository',
+        errors
       );
 
     this.#rootDir = dir;
@@ -78,7 +89,11 @@ export class FileSystemRepository {
    */
   public getRelativePathFrom(absolutePath: string): string {
     if (!isAbsolute(absolutePath))
-      throw new Error(error.invalid.path('absolute'));
+      throw new CretadocAPIError('Cannot get relative path', {
+        errorKind: 'syntax',
+        reason: 'Must be an absolute path',
+        received: absolutePath,
+      });
 
     return absolutePath.replace(this.#rootDir, './');
   }

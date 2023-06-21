@@ -4,9 +4,9 @@ import { toBeDocFile, type ToBeDocFile } from './to-be-doc-file';
 import { toBePage, type ToBePage } from './to-be-page';
 import { toBePageInfo, type ToBePageInfo } from './to-be-page-info';
 import {
-  toContainException,
-  type ToContainException,
-} from './to-contain-exception';
+  toContainErrorCode,
+  type ToContainErrorCode,
+} from './to-contain-error-code';
 import { toRespondWith, type ToRespondWithMatcher } from './to-respond-with';
 
 export type CustomMatchers = ToBeDocDirectory &
@@ -14,7 +14,7 @@ export type CustomMatchers = ToBeDocDirectory &
   ToBeDocFile &
   ToBePage &
   ToBePageInfo &
-  ToContainException &
+  ToContainErrorCode &
   ToRespondWithMatcher;
 
 export const matchers = {
@@ -23,6 +23,6 @@ export const matchers = {
   toBeDocFile,
   toBePage,
   toBePageInfo,
-  toContainException,
+  toContainErrorCode,
   toRespondWith,
 };

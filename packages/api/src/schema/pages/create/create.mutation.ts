@@ -4,9 +4,13 @@ import type {
   PageCreateInput,
   PageCreatePayload,
 } from '../../../types';
-import { LoadersError, MutatorsError } from '../../../utils/errors/exceptions';
-import { error } from '../../../utils/errors/messages';
-import { hasValidationErrors, sanitizeString } from '../../../utils/helpers';
+import { CretadocAPIError } from '../../../utils/exceptions';
+import {
+  hasValidationErrors,
+  isValidContext,
+  sanitizeString,
+  validateContext,
+} from '../../../utils/helpers';
 import { clearPageLoaders } from '../pages.loaders';
 import { validatePageCreateInput } from '../pages.validators';
 import { PageCreateInputType, PageCreateResultType } from './create.types';
@@ -25,18 +29,17 @@ export const pageCreate: GraphQLFieldConfig<null, APIContext, PageCreateInput> =
       { input },
       context
     ): Promise<PageCreatePayload> => {
-      if (!context.mutators?.page)
-        throw new MutatorsError(error.missing.mutator('Page'));
+      const errors = validateContext(context, 'page');
 
-      if (!context.loaders?.page)
-        throw new LoadersError(error.missing.loader('Page'));
+      if (!isValidContext(context, 'page', errors))
+        throw new CretadocAPIError('Cannot create page', errors);
 
       const validationErrors = validatePageCreateInput(input);
       const { contents, name } = input;
       const maybeExistentPage = await context.loaders.page.byName.load(name);
 
       if (maybeExistentPage !== undefined)
-        validationErrors.name.push(error.validation.existent('page'));
+        validationErrors.name.push(`Must be unique, ${name} already exists`);
 
       if (hasValidationErrors(validationErrors))
         return {

@@ -6,13 +6,12 @@ import type {
   PageDeleteInput,
   PageDeletePayload,
 } from '../../../types';
+import { CretadocAPIError, UserInputError } from '../../../utils/exceptions';
 import {
-  InputValidationError,
-  LoadersError,
-  MutatorsError,
-} from '../../../utils/errors/exceptions';
-import { error } from '../../../utils/errors/messages';
-import { hasValidationErrors } from '../../../utils/helpers';
+  hasValidationErrors,
+  isValidContext,
+  validateContext,
+} from '../../../utils/helpers';
 import { clearPageLoaders } from '../pages.loaders';
 import { validatePageDeleteInput } from '../pages.validators';
 import { PageDeleteInputType, PageDeleteResultType } from './delete.types';
@@ -31,17 +30,20 @@ export const pageDelete: GraphQLFieldConfig<null, APIContext, PageDeleteInput> =
       { input },
       context
     ): Promise<PageDeletePayload> => {
-      if (!context.mutators?.page)
-        throw new MutatorsError(error.missing.mutator('Page'));
+      const errors = validateContext(context, 'page');
 
-      if (!context.loaders?.page)
-        throw new LoadersError(error.missing.loader('Page'));
+      if (!isValidContext(context, 'page', errors))
+        throw new CretadocAPIError('Cannot delete page', errors);
 
       if (!input.id && !input.name)
-        throw new InputValidationError(error.missing.input, ['id', 'name']);
+        throw new UserInputError('Missing required argument', {
+          expected: 'Either an id or a name',
+        });
 
       if (input.id && input.name)
-        throw new InputValidationError(error.invalid.input, ['id', 'name']);
+        throw new UserInputError('Too many arguments', {
+          expected: 'Either an id or a name',
+        });
 
       const loader: PageByIdLoader | PageByNameLoader = input.id
         ? context.loaders.page.byId

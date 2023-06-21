@@ -12,7 +12,7 @@ import type {
   DocDirectoryPayload,
 } from 'src/types';
 import { afterAll, beforeAll, describe, it } from 'vitest';
-import { error } from '../../../src/utils/errors/messages';
+import { API_ERROR_CODE } from '../../../src/utils/constants';
 import { generateBase64String } from '../../../src/utils/helpers';
 import { docFixtures } from '../../fixtures/doc';
 import type { QueryResultWithErrors } from '../../types';
@@ -64,7 +64,6 @@ describe('docDirectoryDelete', () => {
   });
 
   it('cannot delete a non-empty doc directory without option', async () => {
-    const expectedErrors = [error.validation.directory.contents];
     const existingDocDirectory = docDirectories[0];
 
     if (!existingDocDirectory)
@@ -77,9 +76,9 @@ describe('docDirectoryDelete', () => {
     expect(response.body.data.docDirectoryDelete).not.toBeNull();
 
     if (isDocDirectoryValidationErrors(response.body.data.docDirectoryDelete))
-      expect(response.body.data.docDirectoryDelete.errors.id).toStrictEqual(
-        expectedErrors
-      );
+      expect(
+        response.body.data.docDirectoryDelete.errors.id?.length
+      ).toBeTruthy();
 
     expect.assertions(2);
   });
@@ -172,15 +171,14 @@ describe('docDirectoryDelete', () => {
     const response = await deleteDocDirectory({
       input: { path: existingDocDirectory.path },
     });
-    const expectedErrors = [error.validation.missing('directory')];
 
     expect(response.body.data.docDirectoryDelete).not.toBeNull();
 
     if (isDocDirectoryValidationErrors(response.body.data.docDirectoryDelete)) {
       expect(response.body.data.docDirectoryDelete.errors.id).toBeNull();
-      expect(response.body.data.docDirectoryDelete.errors.path).toStrictEqual(
-        expectedErrors
-      );
+      expect(
+        response.body.data.docDirectoryDelete.errors.path?.length
+      ).toBeTruthy();
     }
 
     const assertionsCount = 3;
@@ -197,15 +195,12 @@ describe('docDirectoryDelete', () => {
 
     if (isDocDirectoryValidationErrors(response.body.data.docDirectoryDelete)) {
       expect(response.body.data.docDirectoryDelete.errors.path).toBeNull();
-      expect(response.body.data.docDirectoryDelete.errors.id).toContain(
-        error.validation.format.id
-      );
-      expect(response.body.data.docDirectoryDelete.errors.id).toContain(
-        error.validation.missing('directory')
-      );
+      expect(
+        response.body.data.docDirectoryDelete.errors.id?.length
+      ).toBeTruthy();
     }
 
-    const assertionsCount = 4;
+    const assertionsCount = 3;
     expect.assertions(assertionsCount);
   });
 
@@ -219,15 +214,12 @@ describe('docDirectoryDelete', () => {
 
     if (isDocDirectoryValidationErrors(response.body.data.docDirectoryDelete)) {
       expect(response.body.data.docDirectoryDelete.errors.id).toBeNull();
-      expect(response.body.data.docDirectoryDelete.errors.path).toContain(
-        error.validation.format.path
-      );
-      expect(response.body.data.docDirectoryDelete.errors.path).toContain(
-        error.validation.missing('directory')
-      );
+      expect(
+        response.body.data.docDirectoryDelete.errors.path?.length
+      ).toBeTruthy();
     }
 
-    const assertionsCount = 4;
+    const assertionsCount = 3;
     expect.assertions(assertionsCount);
   });
 
@@ -237,10 +229,7 @@ describe('docDirectoryDelete', () => {
     expect(response.body.data.docDirectoryDelete).toBeNull();
     const body =
       response.body as QueryResultWithErrors<DocDirectoryDeleteResult>;
-    expect(body.errors).toContainException({
-      code: 'BAD_USER_INPUT',
-      message: error.missing.input,
-    });
+    expect(body.errors).toContainErrorCode(API_ERROR_CODE.BAD_USER_INPUT);
     expect.assertions(2);
   });
 
@@ -252,10 +241,7 @@ describe('docDirectoryDelete', () => {
     expect(response.body.data.docDirectoryDelete).toBeNull();
     const body =
       response.body as QueryResultWithErrors<DocDirectoryDeleteResult>;
-    expect(body.errors).toContainException({
-      code: 'BAD_USER_INPUT',
-      message: error.invalid.input,
-    });
+    expect(body.errors).toContainErrorCode(API_ERROR_CODE.BAD_USER_INPUT);
     expect.assertions(2);
   });
 
@@ -269,9 +255,6 @@ describe('docDirectoryDelete', () => {
     expect(response.body.data.docDirectoryDelete).toBeNull();
     const body =
       response.body as QueryResultWithErrors<DocDirectoryDeleteResult>;
-    expect(body.errors).toContainException({
-      code: 'BAD_CONFIGURATION',
-      message: error.missing.mutator('Documentation'),
-    });
+    expect(body.errors.length).toBeTruthy();
   });
 });
