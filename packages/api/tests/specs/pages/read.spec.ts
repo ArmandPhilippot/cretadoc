@@ -2,7 +2,7 @@
 import { afterAll, beforeAll, describe, it } from 'vitest';
 import type { PagePayload } from '../../../src/types';
 import { API_ERROR_CODE } from '../../../src/utils/constants';
-import { pagesFixtures } from '../../fixtures/pages';
+import { pages, pagesFixtures } from '../../fixtures/pages';
 import type { QueryResultWithErrors } from '../../types';
 import { expect } from '../../utils';
 import { PAGES_FIXTURES_DIR } from '../../utils/constants';
@@ -12,7 +12,6 @@ import {
   type Variables,
 } from '../../utils/helpers';
 import { createFixtures, deleteFixturesIn } from '../../utils/helpers/fixtures';
-import { pages } from './pages.fixtures';
 import { pageQuery } from './pages.queries';
 
 const api = await createAPIServer({

@@ -1,10 +1,10 @@
+import type { DocRepository } from '../../../repositories';
 import type {
   DocFile,
   DocFileInput,
   DocFileLoaders,
   ListInput,
 } from '../../../types';
-import type { DocRepository } from '../doc.repository';
 import { listDocFiles } from './list/list.loaders';
 import { getDocFileById, getDocFileByPath } from './read/read.loaders';
 

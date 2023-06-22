@@ -1,9 +1,9 @@
 /* eslint-disable max-statements */
-import { sep } from 'path';
 import { afterAll, beforeAll, describe, it } from 'vitest';
 import type { DocPayload } from '../../../src/types';
-import { byNameProp, generateCursor } from '../../../src/utils/helpers';
-import { docFixtures } from '../../fixtures/doc';
+import { DEFAULT_EDGES_NUMBER } from '../../../src/utils/constants';
+import { generateCursor } from '../../../src/utils/helpers';
+import { docEntries, docFixtures, rootDocEntries } from '../../fixtures/doc';
 import type { QueryResultWithErrors } from '../../types';
 import { expect } from '../../utils';
 import { DOC_FIXTURES_DIR } from '../../utils/constants';
@@ -14,7 +14,6 @@ import {
   sendQuery,
   type Variables,
 } from '../../utils/helpers';
-import { docEntries } from './doc-entries.fixtures';
 import { docEntriesQuery } from './doc-entries.queries';
 
 const api = await createAPIServer({
@@ -28,10 +27,6 @@ const sendDocEntriesQuery = async (
   variables?: Variables[typeof docEntriesQuery]
 ) => sendQuery({ api: api.instance, query: docEntriesQuery, variables });
 
-const rootDocEntries = [...docEntries]
-  .sort(byNameProp)
-  .filter((entry) => entry.path.replace('./', '').split(sep).length === 1);
-
 describe('docEntries', () => {
   beforeAll(async () => {
     await createFixtures(docFixtures);
@@ -44,7 +39,6 @@ describe('docEntries', () => {
   });
 
   it('returns the paginated documentation entries', async () => {
-    const defaultReturnNumber = 10;
     const response = await sendDocEntriesQuery();
 
     expect(response.body.data.doc?.entries).not.toBeNull();
@@ -53,7 +47,7 @@ describe('docEntries', () => {
     );
     expect(response.body.data.doc?.entries?.pageInfo).toBePageInfo({
       endCursor: generateCursor(rootDocEntries.length),
-      hasNextPage: rootDocEntries.length > defaultReturnNumber,
+      hasNextPage: rootDocEntries.length > DEFAULT_EDGES_NUMBER,
       hasPreviousPage: false,
       startCursor: generateCursor(1),
       total: rootDocEntries.length,
@@ -86,18 +80,17 @@ describe('docEntries', () => {
   });
 
   it('return the documentation entries filtered by name', async () => {
-    const perPage = 10;
     const requestedName = 'sch';
     const requestedFixtures = rootDocEntries.filter((file) =>
       file.name.includes(requestedName)
     );
     const response = await sendDocEntriesQuery({
-      first: perPage,
+      first: DEFAULT_EDGES_NUMBER,
       where: { name: requestedName },
     });
-    const hasNextPage = requestedFixtures.length > perPage;
+    const hasNextPage = requestedFixtures.length > DEFAULT_EDGES_NUMBER;
     const requestedFixturesCount = hasNextPage
-      ? perPage
+      ? DEFAULT_EDGES_NUMBER
       : requestedFixtures.length;
 
     expect(response.body.data.doc?.entries).not.toBeNull();
@@ -117,19 +110,18 @@ describe('docEntries', () => {
   });
 
   it('return the documentation entries in the given path', async () => {
-    const perPage = 10;
     // An existing subfolders.
     const parentPath = './excepturi';
     const requestedFixtures = docEntries.filter(
       (page) => page.parent?.path === parentPath
     );
     const response = await sendDocEntriesQuery({
-      first: perPage,
+      first: DEFAULT_EDGES_NUMBER,
       where: { path: parentPath },
     });
-    const hasNextPage = requestedFixtures.length > perPage;
+    const hasNextPage = requestedFixtures.length > DEFAULT_EDGES_NUMBER;
     const requestedFixturesCount = hasNextPage
-      ? perPage
+      ? DEFAULT_EDGES_NUMBER
       : requestedFixtures.length;
 
     expect(response.body.data.doc?.entries).not.toBeNull();
@@ -149,9 +141,8 @@ describe('docEntries', () => {
   });
 
   it('returns the documentation entries ordered by name', async () => {
-    const perPage = 10;
     const response = await sendDocEntriesQuery({
-      first: perPage,
+      first: DEFAULT_EDGES_NUMBER,
       orderBy: { direction: 'DESC', field: 'name' },
     });
 
@@ -161,7 +152,7 @@ describe('docEntries', () => {
       (edge) => edge.node.name
     );
     const reversedRootDocEntriesNames = rootDocEntries
-      .slice(0, perPage)
+      .slice(0, DEFAULT_EDGES_NUMBER)
       .map((page) => page.name)
       .reverse();
 
@@ -173,9 +164,8 @@ describe('docEntries', () => {
   });
 
   it('returns the documentation entries ordered by path', async () => {
-    const perPage = 10;
     const response = await sendDocEntriesQuery({
-      first: perPage,
+      first: DEFAULT_EDGES_NUMBER,
       orderBy: { direction: 'ASC', field: 'path' },
     });
 
@@ -185,9 +175,8 @@ describe('docEntries', () => {
   });
 
   it('returns the documentation entries ordered by creation date', async () => {
-    const perPage = 10;
     const response = await sendDocEntriesQuery({
-      first: perPage,
+      first: DEFAULT_EDGES_NUMBER,
       orderBy: { direction: 'ASC', field: 'createdAt' },
     });
 
@@ -197,9 +186,8 @@ describe('docEntries', () => {
   });
 
   it('returns the documentation entries ordered by update date', async () => {
-    const perPage = 10;
     const response = await sendDocEntriesQuery({
-      first: perPage,
+      first: DEFAULT_EDGES_NUMBER,
       orderBy: { direction: 'ASC', field: 'updatedAt' },
     });
 

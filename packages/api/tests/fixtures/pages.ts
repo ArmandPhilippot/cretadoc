@@ -1,4 +1,7 @@
-import { join } from 'path';
+import { join, parse, sep } from 'path';
+import { slugify } from '@cretadoc/utils';
+import { MARKDOWN_EXTENSION } from '../../src/utils/constants';
+import { byNameProp } from '../../src/utils/helpers';
 import { PAGES_FIXTURES_DIR } from '../utils/constants';
 import type { Fixture } from '../utils/helpers/fixtures';
 
@@ -40,3 +43,21 @@ export const pagesFixtures: Fixture[] = [
     path: join(PAGES_FIXTURES_DIR, './folder/private.md'),
   },
 ];
+
+export const pages = pagesFixtures.map((page) => {
+  const relativePath = page.path.replace(PAGES_FIXTURES_DIR, './');
+  const { name } = parse(relativePath);
+
+  return {
+    contents: page.contents,
+    id: Buffer.from(relativePath).toString('base64'),
+    name,
+    path: relativePath,
+    slug: `/${slugify(name)}` as const,
+  };
+});
+
+export const rootPages = [...pages]
+  .sort(byNameProp)
+  .filter((page) => page.path.replace('./', '').split(sep).length === 1)
+  .filter((page) => page.path.endsWith(MARKDOWN_EXTENSION));

@@ -1,5 +1,5 @@
+import type { PagesRepository } from '../../../repositories';
 import type { ListInput, ListReturn, Page } from '../../../types';
-import type { PagesRepository } from '../pages.repository';
 
 /**
  * Find pages using list parameters.

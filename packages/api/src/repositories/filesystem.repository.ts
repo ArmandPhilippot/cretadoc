@@ -1,51 +1,62 @@
 import { rename, rm, writeFile } from 'fs/promises';
-import { isAbsolute, join } from 'path';
-import {
-  type DirectoryContents,
-  readDir,
-  type Directory,
-} from '@cretadoc/read-dir';
-import { isString, type Maybe } from '@cretadoc/utils';
-import type { ErrorDetails } from '../types';
+import { isAbsolute, join, parse } from 'path';
+import { type DirectoryContents, readDir } from '@cretadoc/read-dir';
+import { type Maybe, isObjKeyExist, isString } from '@cretadoc/utils';
+import type {
+  APIDataConfig,
+  DocEntry,
+  OrderBy,
+  Page,
+  ResolveOrderFields,
+  ResolveWhereFields,
+} from '../types';
 import { MARKDOWN_EXTENSION } from '../utils/constants';
 import { CretadocAPIError } from '../utils/exceptions';
+import {
+  byCreatedAtProp,
+  byNameProp,
+  byPathProp,
+  bySlugProp,
+  byUpdatedAtProp,
+  getFilenameWithExt,
+  getRelativePath,
+  isMarkdownFile,
+  isPathInRoot,
+  normalizePath,
+} from '../utils/helpers';
 
-export type FileSystemRepositoryContext = 'Documentation' | 'Pages';
+type FileSystemData = {
+  /**
+   * The file contents if it is a Markdown file.
+   */
+  contents?: string;
+  /**
+   * A filename (without extension).
+   */
+  name: string;
+  /**
+   * The relative path of directory where the file is located.
+   */
+  parentPath?: string;
+};
+
+const isDocEntry = (entry: DocEntry | Page): entry is DocEntry =>
+  isObjKeyExist(entry, 'parent');
 
 export class FileSystemRepository {
+  #context: string;
   #rootDir: string;
 
-  constructor(dir: string, context: FileSystemRepositoryContext) {
-    const errors: ErrorDetails[] = [];
-
-    if (!isString(context))
-      errors.push({
-        errorKind: 'type',
-        reason: `Repository context must be a string`,
-        received: typeof context,
-      });
-
-    if (!isString(dir))
-      errors.push({
-        errorKind: 'type',
-        reason: `Repository directory must be a string`,
-        received: typeof dir,
-      });
-
+  constructor(dir: string, context: keyof APIDataConfig) {
     if (!isAbsolute(dir))
-      errors.push({
+      throw new CretadocAPIError('Cannot initialize FileSystemRepository', {
         errorKind: 'syntax',
-        reason: `Repository directory must be an absolute path`,
+        reason: `${context} directory must be an absolute path`,
         received: dir,
       });
 
-    if (errors.length)
-      throw new CretadocAPIError(
-        'Cannot initialize FileSystemRepository',
-        errors
-      );
-
-    this.#rootDir = dir;
+    this.#context = context;
+    this.#rootDir = normalizePath(dir);
   }
 
   /**
@@ -53,20 +64,49 @@ export class FileSystemRepository {
    *
    * @returns {string} The root directory path.
    */
-  public getRootDir(): string {
+  protected getRootDir(): string {
     return this.#rootDir;
   }
 
   /**
-   * Retrieve the directory data from a path.
+   * Transform a relative path to an absolute path.
    *
-   * @returns {Promise<Directory>} The directory data.
+   * @param {string} relativePath - A relative path.
+   * @returns {string} The absolute path.
    */
-  public async getDirectoryDataFrom(path: string): Promise<Directory> {
-    return readDir(path, {
-      extensions: [MARKDOWN_EXTENSION],
-      includeFileContents: true,
-    });
+  protected getAbsolutePathFrom(relativePath: string): string {
+    if (isAbsolute(relativePath))
+      throw new CretadocAPIError('Cannot get absolute path', {
+        errorKind: 'syntax',
+        reason: 'Must be a relative path',
+        received: relativePath,
+      });
+
+    return normalizePath(join(this.getRootDir(), relativePath));
+  }
+
+  /**
+   * Transform the given path to a relative path.
+   *
+   * @param {string} path - A path.
+   * @returns {string} The relative path compared to root directory.
+   */
+  protected getRelativePathFrom(path: string): string {
+    const absolutePath = isAbsolute(path)
+      ? path
+      : this.getAbsolutePathFrom(path);
+
+    return getRelativePath(this.getRootDir(), absolutePath);
+  }
+
+  /**
+   * Check if the given path starts with the repository's root directory.
+   *
+   * @param {string} path - A path
+   * @returns {boolean} True if the path is in root directory.
+   */
+  #isInRootDir(path: string): boolean {
+    return isPathInRoot(this.getRootDir(), path);
   }
 
   /**
@@ -75,100 +115,155 @@ export class FileSystemRepository {
    * @param {string} dir - The absolute path of a directory.
    * @returns {Promise<Maybe<DirectoryContents>>} The directory contents.
    */
-  public async getContentsOf(dir: string): Promise<Maybe<DirectoryContents>> {
-    const requestedDir = await this.getDirectoryDataFrom(dir);
+  protected async getContentsOf(
+    dir: string
+  ): Promise<Maybe<DirectoryContents>> {
+    if (!this.#isInRootDir(dir))
+      throw new CretadocAPIError('Cannot get the directory contents', {
+        errorKind: 'syntax',
+        reason: `The given dir must be inside the ${this.#context} directory`,
+        received: dir,
+      });
+
+    const requestedDir = await readDir(dir, {
+      extensions: [MARKDOWN_EXTENSION],
+      includeFileContents: true,
+    });
 
     return requestedDir.contents;
   }
 
   /**
-   * Transform an absolute path to a relative path.
+   * Filter the entries.
    *
-   * @param {string} absolutePath - An absolute path.
-   * @returns {string} A relative path.
+   * @param {Page[]} entries - The entries.
+   * @param {PageWhereFields} where - The filter parameters.
+   * @returns {Page[]} The filtered entries.
    */
-  public getRelativePathFrom(absolutePath: string): string {
-    if (!isAbsolute(absolutePath))
-      throw new CretadocAPIError('Cannot get relative path', {
-        errorKind: 'syntax',
-        reason: 'Must be an absolute path',
-        received: absolutePath,
-      });
+  protected filter<T extends DocEntry | Page, I extends ResolveWhereFields<T>>(
+    entries: T[],
+    { createdAt, name, updatedAt, ...input }: I
+  ): T[] {
+    const path = 'path' in input ? input.path : undefined;
+    let filteredEntries = [...entries];
 
-    return absolutePath.replace(this.#rootDir, './');
+    if (createdAt)
+      filteredEntries = filteredEntries.filter(
+        (entry) => entry.createdAt === createdAt
+      );
+
+    if (name)
+      filteredEntries = filteredEntries.filter((entry) =>
+        entry.name.includes(name)
+      );
+
+    if (entries.every(isDocEntry) && isString(path))
+      filteredEntries = filteredEntries.filter((entry) =>
+        entry.path.includes(path)
+      );
+
+    if (updatedAt)
+      filteredEntries = filteredEntries.filter(
+        (entry) => entry.updatedAt === updatedAt
+      );
+
+    return filteredEntries;
   }
 
   /**
-   * Retrieve an absolute file path from its name.
+   * Order the given pages.
    *
-   * @param {string} name - The filename without extension.
-   * @param {string} [parentPath] - The relative parent path.
-   * @returns {string} The absolute path.
+   * @param {Page[]} entries - The entries.
+   * @param {OrderBy<PageOrderFields>} orderBy - The order by instructions.
+   * @returns {Page[]} The ordered entries.
    */
-  #getAbsolutePathFrom(name: string, parentPath?: string): string {
-    const fileWithParentPath = parentPath ? join(parentPath, name) : name;
+  protected order<
+    T extends DocEntry | Page,
+    I extends OrderBy<ResolveOrderFields<T>>
+  >(entries: T[], { direction, field }: I): T[] {
+    let orderedEntries = [...entries];
 
-    return join(this.getRootDir(), fileWithParentPath);
+    switch (field) {
+      case 'createdAt':
+        orderedEntries = orderedEntries.sort(byCreatedAtProp);
+        break;
+      case 'path':
+        orderedEntries = orderedEntries.sort(byPathProp);
+        break;
+      case 'slug':
+        orderedEntries = orderedEntries.sort(bySlugProp);
+        break;
+      case 'updatedAt':
+        orderedEntries = orderedEntries.sort(byUpdatedAtProp);
+        break;
+      case 'name':
+      default:
+        orderedEntries = orderedEntries.sort(byNameProp);
+        break;
+    }
+
+    return direction === 'ASC' ? orderedEntries : orderedEntries.reverse();
   }
 
   /**
-   * Retrieve the filename with markdown extension.
+   * Create a new markdown file.
    *
-   * @param {string} name - The filename without extension.
-   * @returns {string} The filename with extension.
-   */
-  public getMDFilenameFrom(name: string): string {
-    return `${name}${MARKDOWN_EXTENSION}`;
-  }
-
-  /**
-   * Retrieve the absolute path of a markdown file.
-   *
-   * @param {string} name - The filename without extension.
-   * @param {string} [parentPath] - The relative path of its parent.
-   * @returns {string} The absolute path.
-   */
-  #getMarkdownFileAbsolutePath(name: string, parentPath?: string): string {
-    return this.#getAbsolutePathFrom(this.getMDFilenameFrom(name), parentPath);
-  }
-
-  /**
-   * Create a new markdown file in the given directory.
-   *
-   * @param {string} path - A relative path where to create the new file.
-   * @param {string} name - The filename to create.
-   * @param {string} [content] - The file contents to write.
+   * @param {FileSystemData} data - The data to create a markdown file.
    * @returns {Promise<string>} The absolute file path.
    */
-  public async createMarkdownFile(
-    path: string,
-    name: string,
-    content?: string
-  ): Promise<string> {
-    const filePath = this.#getMarkdownFileAbsolutePath(name, path);
-    await writeFile(filePath, content ?? '', { encoding: 'utf8' });
+  protected async createMarkdownFile({
+    name,
+    contents = '',
+    parentPath = '',
+  }: FileSystemData): Promise<string> {
+    const filename = getFilenameWithExt(name);
+    const relativePath = this.getRelativePathFrom(join(parentPath, filename));
+    const absolutePath = this.getAbsolutePathFrom(relativePath);
 
-    return filePath;
+    await writeFile(absolutePath, contents, { encoding: 'utf8' });
+
+    return absolutePath;
   }
 
   /**
-   * Rename a file.
+   * Update the file contents.
    *
-   * @param {string} newName - The new file name.
-   * @param {string} oldPath - The old absolute path.
-   * @param {string} [newParentPath] - The new relative parent path.
-   * @returns {Promise<string>} The new absolute path.
+   * @param {string} path - The file path.
+   * @param {string} contents - The new file contents.
    */
-  public async renameFile(
-    newName: string,
-    oldPath: string,
-    newParentPath?: string
+  async #updateFileContents(path: string, contents: string) {
+    if (isMarkdownFile(path))
+      await writeFile(path, contents, { encoding: 'utf8' });
+    else
+      throw new CretadocAPIError('Cannot update contents', {
+        errorKind: 'syntax',
+        reason: 'Only markdown file can be updated',
+        received: path,
+      });
+  }
+
+  /**
+   * Update the entry at the given path with the given data.
+   *
+   * @param {string} path - The entry path to update.
+   * @param {Partial<FileSystemData>} data - The data to update.
+   * @returns {Promise<string>} The new path.
+   */
+  protected async update(
+    path: string,
+    { contents, name, parentPath }: Partial<FileSystemData>
   ): Promise<string> {
-    const isMarkdownFile = oldPath.endsWith(MARKDOWN_EXTENSION);
-    const newPath = isMarkdownFile
-      ? this.#getMarkdownFileAbsolutePath(newName, newParentPath)
-      : this.#getAbsolutePathFrom(newName, newParentPath);
-    await rename(oldPath, newPath);
+    const currentPath = parse(path);
+    const hasNewContent = !!contents;
+    const newName =
+      isMarkdownFile(path) && name
+        ? getFilenameWithExt(name)
+        : name ?? currentPath.base;
+    const basePath = parentPath ?? this.getRelativePathFrom(currentPath.dir);
+    const newPath = this.getAbsolutePathFrom(join(basePath, newName));
+
+    if (hasNewContent) await this.#updateFileContents(path, contents);
+    if (newPath !== path) await rename(path, newPath);
 
     return newPath;
   }
@@ -180,8 +275,12 @@ export class FileSystemRepository {
    * @param {boolean} [isRecursive] - Should the removal be recursive?
    * @returns {Promise<void>}
    */
-  public async del(relativePath: string, isRecursive?: boolean): Promise<void> {
+  protected async del(
+    relativePath: string,
+    isRecursive?: boolean
+  ): Promise<void> {
     const absolutePath = join(this.getRootDir(), relativePath);
+
     await rm(absolutePath, { recursive: !!isRecursive });
   }
 }

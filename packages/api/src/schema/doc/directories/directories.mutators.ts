@@ -1,5 +1,5 @@
+import type { DocRepository } from '../../../repositories';
 import type { DocDirectoryMutators } from '../../../types';
-import type { DocRepository } from '../doc.repository';
 import { createDocDirectory } from './create/create.mutator';
 import { deleteDocDirectory } from './delete/delete.mutator';
 import { updateDocDirectory } from './update/update.mutator';

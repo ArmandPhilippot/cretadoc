@@ -1,6 +1,6 @@
 import type { Maybe } from '@cretadoc/utils';
+import type { DocRepository } from '../../../../repositories';
 import type { DocFile, DocFileUpdate } from '../../../../types';
-import type { DocRepository } from '../../doc.repository';
 
 /**
  * Update an existing documentation file.

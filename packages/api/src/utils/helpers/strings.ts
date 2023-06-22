@@ -1,4 +1,5 @@
 import { isUndefined, type Maybe } from '@cretadoc/utils';
+import { MARKDOWN_EXTENSION } from '../constants';
 
 /**
  * Transform a string to a buffer converted in base64 string.
@@ -56,4 +57,25 @@ export const generateCursor = (num: number): string =>
 export const decodeCursor = (cursor: Maybe<string>): number => {
   if (isUndefined(cursor)) return 0;
   return decodePrefixedId('cursor', cursor);
+};
+
+/**
+ * Check if the given string ends with a markdown extension.
+ *
+ * @param {string} str - A string.
+ * @returns {boolean} True if it is a markdown file.
+ */
+export const isMarkdownFile = (str: string): boolean =>
+  str.endsWith(MARKDOWN_EXTENSION);
+
+/**
+ * Add a markdown extension to the filename if needed.
+ *
+ * @param {string} filename - The filename.
+ * @returns {string} The filename with `.md` extension.
+ */
+export const getFilenameWithExt = (filename: string): string => {
+  if (filename.endsWith(MARKDOWN_EXTENSION)) return filename;
+
+  return `${filename}${MARKDOWN_EXTENSION}`;
 };

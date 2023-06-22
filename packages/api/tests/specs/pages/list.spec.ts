@@ -1,10 +1,9 @@
 /* eslint-disable max-statements */
-import { sep } from 'path';
 import { afterAll, beforeAll, describe, it } from 'vitest';
 import type { PageConnectionPayload } from '../../../src/types';
-import { MARKDOWN_EXTENSION } from '../../../src/utils/constants';
-import { byNameProp, generateCursor } from '../../../src/utils/helpers';
-import { pagesFixtures } from '../../fixtures/pages';
+import { DEFAULT_EDGES_NUMBER } from '../../../src/utils/constants';
+import { generateCursor } from '../../../src/utils/helpers';
+import { pagesFixtures, rootPages } from '../../fixtures/pages';
 import type { QueryResultWithErrors } from '../../types';
 import { expect } from '../../utils';
 import { PAGES_FIXTURES_DIR } from '../../utils/constants';
@@ -15,7 +14,6 @@ import {
   sendQuery,
   type Variables,
 } from '../../utils/helpers';
-import { pages } from './pages.fixtures';
 import { pagesQuery } from './pages.queries';
 
 const api = await createAPIServer({
@@ -27,11 +25,6 @@ const misconfiguredAPI = await createAPIServer({ port: 3260 });
 
 const sendPagesQuery = async (variables?: Variables[typeof pagesQuery]) =>
   sendQuery({ api: api.instance, query: pagesQuery, variables });
-
-const rootPages = [...pages]
-  .sort(byNameProp)
-  .filter((page) => page.path.replace('./', '').split(sep).length === 1)
-  .filter((page) => page.path.endsWith(MARKDOWN_EXTENSION));
 
 describe('pages', () => {
   beforeAll(async () => {
@@ -45,14 +38,13 @@ describe('pages', () => {
   });
 
   it('returns the paginated pages', async () => {
-    const defaultReturnNumber = 10;
     const response = await sendPagesQuery();
 
     expect(response.body.data.pages).not.toBeNull();
     expect(response.body.data.pages?.edges?.length).toBe(rootPages.length);
     expect(response.body.data.pages?.pageInfo).toBePageInfo({
       endCursor: generateCursor(rootPages.length),
-      hasNextPage: rootPages.length > defaultReturnNumber,
+      hasNextPage: rootPages.length > DEFAULT_EDGES_NUMBER,
       hasPreviousPage: false,
       startCursor: generateCursor(1),
       total: rootPages.length,
@@ -81,18 +73,17 @@ describe('pages', () => {
   });
 
   it('return the pages filtered by name', async () => {
-    const perPage = 10;
     const requestedName = 'in';
     const requestedFixtures = rootPages.filter((page) =>
       page.name.includes(requestedName)
     );
     const response = await sendPagesQuery({
-      first: perPage,
+      first: DEFAULT_EDGES_NUMBER,
       where: { name: requestedName },
     });
-    const hasNextPage = requestedFixtures.length > perPage;
+    const hasNextPage = requestedFixtures.length > DEFAULT_EDGES_NUMBER;
     const requestedFixturesCount = hasNextPage
-      ? perPage
+      ? DEFAULT_EDGES_NUMBER
       : requestedFixtures.length;
 
     expect(response.body.data.pages).not.toBeNull();
@@ -112,9 +103,8 @@ describe('pages', () => {
   });
 
   it('returns the pages ordered by name', async () => {
-    const perPage = 10;
     const response = await sendPagesQuery({
-      first: perPage,
+      first: DEFAULT_EDGES_NUMBER,
       orderBy: { direction: 'DESC', field: 'name' },
     });
 
@@ -124,7 +114,7 @@ describe('pages', () => {
       (edge) => edge.node.name
     );
     const reversedRootPagesNames = rootPages
-      .slice(0, perPage)
+      .slice(0, DEFAULT_EDGES_NUMBER)
       .map((page) => page.name)
       .reverse();
 
@@ -136,9 +126,8 @@ describe('pages', () => {
   });
 
   it('returns the pages ordered by slug', async () => {
-    const perPage = 10;
     const response = await sendPagesQuery({
-      first: perPage,
+      first: DEFAULT_EDGES_NUMBER,
       orderBy: { direction: 'DESC', field: 'slug' },
     });
 
@@ -148,7 +137,7 @@ describe('pages', () => {
       (edge) => edge.node.slug
     );
     const reversedRootPagesSlugs = rootPages
-      .slice(0, perPage)
+      .slice(0, DEFAULT_EDGES_NUMBER)
       .map((page) => page.slug)
       .reverse();
 
@@ -160,9 +149,8 @@ describe('pages', () => {
   });
 
   it('returns the pages ordered by creation date', async () => {
-    const perPage = 10;
     const response = await sendPagesQuery({
-      first: perPage,
+      first: DEFAULT_EDGES_NUMBER,
       orderBy: { direction: 'ASC', field: 'createdAt' },
     });
 
@@ -172,15 +160,34 @@ describe('pages', () => {
   });
 
   it('returns the pages ordered by update date', async () => {
-    const perPage = 10;
     const response = await sendPagesQuery({
-      first: perPage,
+      first: DEFAULT_EDGES_NUMBER,
       orderBy: { direction: 'ASC', field: 'updatedAt' },
     });
 
     expect(response.body.data.pages?.edges).not.toBeNull();
 
     expect.assertions(1);
+  });
+
+  it('does not return pages if directory is empty', async () => {
+    await deleteFixturesIn(PAGES_FIXTURES_DIR);
+    const response = await sendPagesQuery();
+
+    expect(response.body.data.pages).not.toBeNull();
+    expect(response.body.data.pages?.edges?.length).toBe(0);
+    expect(response.body.data.pages?.pageInfo).toBePageInfo({
+      endCursor: null,
+      hasNextPage: false,
+      hasPreviousPage: false,
+      startCursor: null,
+      total: 0,
+    });
+
+    await createFixtures(pagesFixtures);
+
+    const assertionsCount = 3;
+    expect.assertions(assertionsCount);
   });
 
   it('returns an error when API is misconfigured', async () => {

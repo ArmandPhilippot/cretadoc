@@ -1,4 +1,8 @@
-import { join } from 'path';
+import { basename, join, parse, sep } from 'path';
+import { type Nullable, slugify } from '@cretadoc/utils';
+import type { DocEntryParent } from '../../src';
+import { MARKDOWN_EXTENSION } from '../../src/utils/constants';
+import { byNameProp, generateBase64String } from '../../src/utils/helpers';
 import { DOC_FIXTURES_DIR } from '../utils/constants';
 import type { Fixture } from '../utils/helpers';
 
@@ -58,3 +62,76 @@ export const docFixtures: Fixture[] = [
     path: join(DOC_FIXTURES_DIR, './cumque/minus-exercitationem-deleniti.md'),
   },
 ];
+
+export const docFiles = docFixtures
+  .filter((fileOrDir) => fileOrDir.path.endsWith(MARKDOWN_EXTENSION))
+  .map((fileOrDir) => {
+    const relativePath = fileOrDir.path.replace(DOC_FIXTURES_DIR, './');
+    const parentPath = parse(relativePath).dir;
+    const parent: Nullable<DocEntryParent> =
+      parentPath === '.'
+        ? null
+        : {
+            id: generateBase64String(parentPath),
+            name: basename(parentPath),
+            path: parentPath,
+            slug: `/${slugify(basename(parentPath))}` as const,
+          };
+
+    return {
+      contents: fileOrDir.contents,
+      id: Buffer.from(relativePath).toString('base64'),
+      name: parse(relativePath).name,
+      parent,
+      path: relativePath,
+      slug: `/${slugify(parse(relativePath).name)}` as const,
+      type: 'file' as const,
+    };
+  });
+
+const onlyDocDirectories = docFixtures
+  .map((fileOrDir) => {
+    const relativePath = fileOrDir.path.replace(DOC_FIXTURES_DIR, './');
+    const dirPath = parse(relativePath).dir;
+    const parentPath = parse(dirPath).dir;
+    const parent: Nullable<DocEntryParent> =
+      parentPath === '.'
+        ? null
+        : {
+            id: generateBase64String(parentPath),
+            name: basename(parentPath),
+            path: parentPath,
+            slug: `/${slugify(basename(parentPath))}` as const,
+          };
+
+    return {
+      id: Buffer.from(dirPath).toString('base64'),
+      name: parse(dirPath).name,
+      parent,
+      path: dirPath,
+      slug: `/${slugify(parse(dirPath).name)}` as const,
+      type: 'directory' as const,
+    };
+  })
+  .filter((dir) => dir.path !== '.');
+
+const getUniqueListBy = (
+  arr: typeof onlyDocDirectories,
+  key: keyof (typeof onlyDocDirectories)[number]
+) => [...new Map(arr.map((item) => [item[key], item])).values()];
+
+export const docDirectories = getUniqueListBy(onlyDocDirectories, 'id');
+
+export const docEntries = [...docDirectories, ...docFiles];
+
+export const rootDocFiles = [...docFiles]
+  .sort(byNameProp)
+  .filter((file) => file.path.replace('./', '').split(sep).length === 1);
+
+export const rootDocDirectories = [...docDirectories]
+  .sort(byNameProp)
+  .filter((dir) => dir.path.replace('./', '').split(sep).length === 1);
+
+export const rootDocEntries = [...docEntries]
+  .sort(byNameProp)
+  .filter((entry) => entry.path.replace('./', '').split(sep).length === 1);

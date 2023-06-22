@@ -1,7 +1,7 @@
+import type { PagesRepository } from '../../repositories';
 import type { PageMutators } from '../../types';
 import { createPage } from './create/create.mutator';
 import { deletePage } from './delete/delete.mutator';
-import type { PagesRepository } from './pages.repository';
 import { updatePage } from './update/update.mutator';
 
 /**

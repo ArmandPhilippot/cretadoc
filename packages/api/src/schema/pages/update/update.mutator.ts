@@ -1,6 +1,6 @@
 import type { Maybe } from '@cretadoc/utils';
+import type { PagesRepository } from '../../../repositories';
 import type { Page, PageUpdate } from '../../../types';
-import type { PagesRepository } from '../pages.repository';
 
 /**
  * Update an existing page.
@@ -12,4 +12,4 @@ import type { PagesRepository } from '../pages.repository';
 export const updatePage = async (
   repository: PagesRepository,
   data: PageUpdate
-): Promise<Maybe<Page>> => repository.update(data);
+): Promise<Maybe<Page>> => repository.updatePage(data);

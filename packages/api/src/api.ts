@@ -1,8 +1,7 @@
 import type { PartialDeep } from '@cretadoc/utils';
 import { createYoga } from 'graphql-yoga';
+import { DocRepository, PagesRepository } from './repositories';
 import { schema } from './schema';
-import { DocRepository } from './schema/doc/doc.repository';
-import { PagesRepository } from './schema/pages/pages.repository';
 import { initLoaders } from './schema/schema.loaders';
 import { initMutators } from './schema/schema.mutators';
 import type {

@@ -1,6 +1,6 @@
+import type { PagesRepository } from '../../repositories';
 import type { ListInput, Page, PageInput, PageLoaders } from '../../types';
 import { listPages } from './list/list.loaders';
-import type { PagesRepository } from './pages.repository';
 import { getPageById, getPageByName, getPageBySlug } from './read/read.loaders';
 
 /**

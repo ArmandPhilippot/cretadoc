@@ -1,10 +1,10 @@
+import type { DocRepository } from '../../../repositories';
 import type {
   DocDirectory,
   DocDirectoryInput,
   DocDirectoryLoaders,
   ListInput,
 } from '../../../types';
-import type { DocRepository } from '../doc.repository';
 import { listDocDirectories } from './list/list.loaders';
 import {
   getDocDirectoryById,

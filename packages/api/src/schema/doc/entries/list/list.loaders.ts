@@ -1,5 +1,5 @@
+import type { DocRepository } from '../../../../repositories';
 import type { DocEntry, ListInput, ListReturn } from '../../../../types';
-import type { DocRepository } from '../../doc.repository';
 
 /**
  * Find documentation entries using list parameters.

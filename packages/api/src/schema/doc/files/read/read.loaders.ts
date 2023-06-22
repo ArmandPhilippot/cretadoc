@@ -1,9 +1,9 @@
 import { dirname } from 'path';
 import type { Maybe } from '@cretadoc/utils';
 import DataLoader from 'dataloader';
+import type { DocRepository } from '../../../../repositories';
 import type { DocFile, DocFileInput } from '../../../../types';
 import { decodeBase64String } from '../../../../utils/helpers';
-import type { DocRepository } from '../../doc.repository';
 
 /**
  * Retrieve many files using values to looking for in a property.

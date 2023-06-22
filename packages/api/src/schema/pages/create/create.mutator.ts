@@ -1,6 +1,6 @@
 import type { Maybe } from '@cretadoc/utils';
+import type { PagesRepository } from '../../../repositories';
 import type { Page, PageCreate } from '../../../types';
-import type { PagesRepository } from '../pages.repository';
 
 /**
  * Create a new page.

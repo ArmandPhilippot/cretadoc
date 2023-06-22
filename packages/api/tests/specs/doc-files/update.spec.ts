@@ -14,7 +14,7 @@ import type {
 } from '../../../src/types';
 import { MARKDOWN_EXTENSION } from '../../../src/utils/constants';
 import { generateBase64String } from '../../../src/utils/helpers';
-import { docFixtures } from '../../fixtures/doc';
+import { docFiles, docFixtures } from '../../fixtures/doc';
 import type { QueryResultWithErrors } from '../../types';
 import { expect } from '../../utils';
 import { DOC_FIXTURES_DIR } from '../../utils/constants';
@@ -25,7 +25,6 @@ import {
   sendQuery,
   type Variables,
 } from '../../utils/helpers';
-import { docFiles } from './doc-files.fixtures';
 import { docFileUpdate } from './doc-files.mutations';
 
 const api = await createAPIServer({

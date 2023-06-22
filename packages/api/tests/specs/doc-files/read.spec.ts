@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, it } from 'vitest';
 import type { DocPayload } from '../../../src/types';
 import { API_ERROR_CODE } from '../../../src/utils/constants';
-import { docFixtures } from '../../fixtures/doc';
+import { docFiles, docFixtures } from '../../fixtures/doc';
 import type { QueryResultWithErrors } from '../../types';
 import { expect } from '../../utils';
 import { DOC_FIXTURES_DIR } from '../../utils/constants';
@@ -11,7 +11,6 @@ import {
   type Variables,
 } from '../../utils/helpers';
 import { createFixtures, deleteFixturesIn } from '../../utils/helpers/fixtures';
-import { docFiles } from './doc-files.fixtures';
 import { docFileQuery } from './doc-files.queries';
 
 const api = await createAPIServer({

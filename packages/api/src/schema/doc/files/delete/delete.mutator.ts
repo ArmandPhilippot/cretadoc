@@ -1,28 +1,20 @@
 import type { Maybe } from '@cretadoc/utils';
+import type { DocRepository } from '../../../../repositories';
 import type { DocFile, DocFileDeleteInput } from '../../../../types';
 import { decodeBase64String } from '../../../../utils/helpers';
-import type { DocRepository } from '../../doc.repository';
 
 /**
  * Delete an existing documentation file.
  *
  * @param {DocRepository} repository - The Documentation repository.
  * @param {DocFileDeleteInput['input']} input - Either an id or a path.
- * @returns {Promise<Maybe<DocFile>>}
+ * @returns {Promise<Maybe<DocFile>>} The deleted doc file if found.
  */
 export const deleteDocFile = async (
   repository: DocRepository,
   { id, path }: DocFileDeleteInput['input']
 ): Promise<Maybe<DocFile>> => {
-  let file: Maybe<DocFile> = undefined;
-  let relativePath = path ?? '';
+  const relativePath = id ? decodeBase64String(id) : path ?? '';
 
-  if (id) {
-    file = await repository.get('id', id, 'file');
-    relativePath = decodeBase64String(id);
-  } else if (path) file = await repository.get('path', path, 'file');
-
-  await repository.del(relativePath);
-
-  return file;
+  return repository.remove(relativePath);
 };

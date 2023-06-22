@@ -1,37 +1,26 @@
-import { writeFile } from 'fs/promises';
-import { join, parse } from 'path';
+import { parse } from 'path';
 import type { RegularFile } from '@cretadoc/read-dir';
 import { type Maybe, slugify } from '@cretadoc/utils';
-import { FileSystemRepository } from '../../repositories/filesystem.repository';
 import type {
   ListInput,
   ListReturn,
-  OrderBy,
   Page,
   PageCreate,
   PageInput,
-  PageOrderFields,
   PageUpdate,
-  PageWhereFields,
-} from '../../types';
-import {
-  byCreatedAtProp,
-  byNameProp,
-  bySlugProp,
-  byUpdatedAtProp,
-  decodeBase64String,
-  generateBase64String,
-} from '../../utils/helpers';
+} from '../types';
+import { decodeBase64String, generateBase64String } from '../utils/helpers';
+import { FileSystemRepository } from './filesystem.repository';
 
 export class PagesRepository extends FileSystemRepository {
   constructor(dir: string) {
-    super(dir, 'Pages');
+    super(dir, 'pages');
   }
 
   /**
    * Convert a RegularFile object to a Page object.
    *
-   * @param {RegularFile} file - An object.
+   * @param {RegularFile} file - A regular file object.
    * @returns {Page} A Page object.
    */
   #convertRegularFileToPage({
@@ -41,7 +30,7 @@ export class PagesRepository extends FileSystemRepository {
     updatedAt,
     contents,
   }: RegularFile): Page {
-    const relativePath = path.replace(this.getRootDir(), './');
+    const relativePath = this.getRelativePathFrom(path);
 
     return {
       contents,
@@ -100,68 +89,6 @@ export class PagesRepository extends FileSystemRepository {
   }
 
   /**
-   * Filter the pages.
-   *
-   * @param {Page[]} pages - The pages.
-   * @param {PageWhereFields} where - The filter parameters.
-   * @returns {Page[]} The filtered pages.
-   */
-  #filter(
-    pages: Page[],
-    { createdAt, name, updatedAt }: PageWhereFields
-  ): Page[] {
-    let filteredPages = pages;
-
-    if (createdAt)
-      filteredPages = filteredPages.filter(
-        (page) => page.createdAt === createdAt
-      );
-
-    if (name)
-      filteredPages = filteredPages.filter((page) => page.name.includes(name));
-
-    if (updatedAt)
-      filteredPages = filteredPages.filter(
-        (page) => page.updatedAt === updatedAt
-      );
-
-    return filteredPages;
-  }
-
-  /**
-   * Order the given pages.
-   *
-   * @param {Page[]} pages - The pages.
-   * @param {OrderBy<PageOrderFields>} orderBy - The order by instructions.
-   * @returns {Page[]} The ordered pages.
-   */
-  #order(
-    pages: Page[],
-    { direction, field }: OrderBy<PageOrderFields>
-  ): Page[] {
-    let orderedPages = pages;
-
-    switch (field) {
-      case 'createdAt':
-        orderedPages = orderedPages.sort(byCreatedAtProp);
-        break;
-      case 'name':
-        orderedPages = orderedPages.sort(byNameProp);
-        break;
-      case 'slug':
-        orderedPages = orderedPages.sort(bySlugProp);
-        break;
-      case 'updatedAt':
-        orderedPages = orderedPages.sort(byUpdatedAtProp);
-        break;
-      default:
-        break;
-    }
-
-    return direction === 'ASC' ? orderedPages : orderedPages.reverse();
-  }
-
-  /**
    * Find the pages matching the given parameters.
    *
    * @param {ListInput<Page>} params - The list parameters.
@@ -173,17 +100,11 @@ export class PagesRepository extends FileSystemRepository {
     orderBy,
     where,
   }: ListInput<Page>): Promise<ListReturn<Page[]>> {
-    const pages = await this.#getPages();
+    const pages = (await this.#getPages()) ?? [];
 
-    if (!pages)
-      return {
-        data: undefined,
-        total: 0,
-      };
-
-    const filteredPages = where ? this.#filter(pages, where) : pages;
+    const filteredPages = where ? this.filter(pages, where) : pages;
     const orderedPages = orderBy
-      ? this.#order(filteredPages, orderBy)
+      ? this.order(filteredPages, orderBy)
       : filteredPages;
 
     return {
@@ -199,7 +120,7 @@ export class PagesRepository extends FileSystemRepository {
    * @returns {Promise<Maybe<Page>>} The new page.
    */
   public async create({ name, contents }: PageCreate): Promise<Maybe<Page>> {
-    await this.createMarkdownFile('./', name, contents);
+    await this.createMarkdownFile({ contents, name });
 
     return this.get('name', name);
   }
@@ -210,25 +131,31 @@ export class PagesRepository extends FileSystemRepository {
    * @param {PageUpdate} data - The data to update.
    * @returns {Promise<Maybe<Page>>} The updated page.
    */
-  public async update({
+  public async updatePage({
     contents,
     id,
     name,
   }: PageUpdate): Promise<Maybe<Page>> {
     const relativePath = decodeBase64String(id);
-    const oldName = parse(relativePath).name;
-    const newName = name ?? oldName;
-    const absolutePath = join(this.getRootDir(), relativePath);
-    const newAbsolutePath =
-      name && oldName !== name
-        ? await this.renameFile(name, absolutePath)
-        : absolutePath;
+    const absolutePath = this.getAbsolutePathFrom(relativePath);
+    const newAbsolutePath = await this.update(absolutePath, { contents, name });
+    const newPageName = parse(newAbsolutePath).name;
 
-    if (contents)
-      await writeFile(newAbsolutePath, contents, {
-        encoding: 'utf8',
-      });
+    return this.get('name', newPageName);
+  }
 
-    return this.get('name', newName);
+  /**
+   * Remove a page from the repository.
+   *
+   * @param {string} path - The relative path of the page.
+   * @returns {Promise<Maybe<Page>>} The deleted page.
+   */
+  public async remove(path: string): Promise<Maybe<Page>> {
+    const pageName = parse(path).name;
+    const page = await this.get('name', pageName);
+
+    if (page) await this.del(path);
+
+    return page;
   }
 }

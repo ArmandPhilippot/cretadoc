@@ -1,7 +1,7 @@
+import { isAbsolute } from 'path';
 import { isString } from '@cretadoc/utils';
 import validator from 'validator';
 import type { ValidationErrors } from '../../types';
-import { isRelativePath } from './paths';
 
 /**
  * Init the validation errors.
@@ -82,7 +82,7 @@ export const validateFilename = (filename: string): string[] => {
 export const validateRelativePath = (path: string): string[] => {
   const errors: string[] = [];
 
-  if (!isRelativePath(path)) errors.push('Must be a relative path');
+  if (isAbsolute(path)) errors.push('Must be a relative path');
 
   return errors;
 };

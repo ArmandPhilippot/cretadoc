@@ -14,7 +14,7 @@ import type {
 } from '../../../src/types';
 import { API_ERROR_CODE } from '../../../src/utils/constants';
 import { generateBase64String } from '../../../src/utils/helpers';
-import { docFixtures } from '../../fixtures/doc';
+import { docDirectories, docFixtures } from '../../fixtures/doc';
 import type { QueryResultWithErrors } from '../../types';
 import { expect } from '../../utils';
 import { DOC_FIXTURES_DIR } from '../../utils/constants';
@@ -25,7 +25,6 @@ import {
   sendQuery,
   type Variables,
 } from '../../utils/helpers';
-import { docDirectories } from './doc-directories.fixtures';
 import {
   docDirectoryCreate,
   docDirectoryDelete,

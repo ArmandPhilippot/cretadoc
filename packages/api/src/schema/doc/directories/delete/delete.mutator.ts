@@ -1,28 +1,20 @@
 import type { Maybe } from '@cretadoc/utils';
+import type { DocRepository } from '../../../../repositories';
 import type { DocDirectory, DocDirectoryDeleteInput } from '../../../../types';
 import { decodeBase64String } from '../../../../utils/helpers';
-import type { DocRepository } from '../../doc.repository';
 
 /**
  * Delete an existing documentation directory.
  *
  * @param {DocRepository} repository - The Documentation repository.
  * @param {DocDirectoryDeleteInput['input']} input - Either an id or a path.
- * @returns {Promise<Maybe<DocDirectory>>}
+ * @returns {Promise<Maybe<DocDirectory>>} The deleted doc directory if found.
  */
 export const deleteDocDirectory = async (
   repository: DocRepository,
   { id, path }: DocDirectoryDeleteInput['input']
 ): Promise<Maybe<DocDirectory>> => {
-  let directory: Maybe<DocDirectory> = undefined;
-  let relativePath = path ?? '';
+  const relativePath = id ? decodeBase64String(id) : path ?? '';
 
-  if (id) {
-    directory = await repository.get('id', id, 'directory');
-    relativePath = decodeBase64String(id);
-  } else if (path) directory = await repository.get('path', path, 'directory');
-
-  await repository.del(relativePath, true);
-
-  return directory;
+  return repository.remove(relativePath, true);
 };

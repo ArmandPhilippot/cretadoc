@@ -7,7 +7,7 @@ import type {
   PagePayload,
 } from '../../../src/types';
 import { API_ERROR_CODE } from '../../../src/utils/constants';
-import { pagesFixtures } from '../../fixtures/pages';
+import { pages, pagesFixtures } from '../../fixtures/pages';
 import type { QueryResultWithErrors } from '../../types';
 import { expect } from '../../utils';
 import { PAGES_FIXTURES_DIR } from '../../utils/constants';
@@ -18,7 +18,6 @@ import {
   sendQuery,
   type Variables,
 } from '../../utils/helpers';
-import { pages } from './pages.fixtures';
 import { pageDelete } from './pages.mutations';
 
 const api = await createAPIServer({

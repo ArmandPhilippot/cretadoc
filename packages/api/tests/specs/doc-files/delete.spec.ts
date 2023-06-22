@@ -7,7 +7,7 @@ import type {
   DocFilePayload,
 } from '../../../src/types';
 import { API_ERROR_CODE } from '../../../src/utils/constants';
-import { docFixtures } from '../../fixtures/doc';
+import { docFiles, docFixtures } from '../../fixtures/doc';
 import type { QueryResultWithErrors } from '../../types';
 import { expect } from '../../utils';
 import { DOC_FIXTURES_DIR } from '../../utils/constants';
@@ -18,7 +18,6 @@ import {
   sendQuery,
   type Variables,
 } from '../../utils/helpers';
-import { docFiles } from './doc-files.fixtures';
 import { docFileDelete } from './doc-files.mutations';
 
 const api = await createAPIServer({

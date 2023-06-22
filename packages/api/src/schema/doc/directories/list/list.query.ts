@@ -5,6 +5,7 @@ import type {
   ConnectionInput,
   DocDirectory,
 } from '../../../../types';
+import { DEFAULT_EDGES_NUMBER } from '../../../../utils/constants';
 import { CretadocAPIError } from '../../../../utils/exceptions';
 import { getConnection } from '../../../../utils/gql';
 import { decodeCursor, generateCursor } from '../../../../utils/helpers';
@@ -22,7 +23,7 @@ export const directories: GraphQLFieldConfig<
   type: DocDirectoryConnectionType,
   args: {
     first: {
-      defaultValue: 10,
+      defaultValue: DEFAULT_EDGES_NUMBER,
       description: `Limits the number of results returned in a page.`,
       type: GraphQLInt,
     },

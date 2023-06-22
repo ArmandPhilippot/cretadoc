@@ -1,7 +1,7 @@
 import type { Maybe } from '@cretadoc/utils';
 import DataLoader from 'dataloader';
+import type { PagesRepository } from '../../../repositories';
 import type { Page, PageInput } from '../../../types';
-import type { PagesRepository } from '../pages.repository';
 
 /**
  * Retrieve many pages using values to looking for in a property.

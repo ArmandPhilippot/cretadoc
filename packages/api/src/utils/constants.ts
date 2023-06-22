@@ -6,6 +6,8 @@ export const DEFAULT_CONFIG = {
   graphiql: true,
 } as const satisfies APIConfig;
 
+export const DEFAULT_EDGES_NUMBER = 10;
+
 export const DIRECTION = {
   ASC: 'ASC',
   DESC: 'DESC',

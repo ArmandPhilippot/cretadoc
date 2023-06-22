@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from 'fs/promises';
+import { mkdir } from 'fs/promises';
 import { basename, join, parse } from 'path';
 import type {
   Directory,
@@ -6,14 +6,11 @@ import type {
   RegularFile,
 } from '@cretadoc/read-dir';
 import { type Maybe, type Nullable, slugify } from '@cretadoc/utils';
-import { FileSystemRepository } from '../../repositories/filesystem.repository';
 import type {
   DocDirectory,
   DocDirectoryCreate,
   DocDirectoryInput,
-  DocDirectoryOrderFields,
   DocDirectoryUpdate,
-  DocDirectoryWhereFields,
   DocEntry,
   DocEntryInput,
   DocEntryKind,
@@ -21,22 +18,12 @@ import type {
   DocFile,
   DocFileCreate,
   DocFileInput,
-  DocFileOrderFields,
   DocFileUpdate,
-  DocFileWhereFields,
   ListInput,
   ListReturn,
-  OrderBy,
-} from '../../types';
-import {
-  byCreatedAtProp,
-  byNameProp,
-  byPathProp,
-  bySlugProp,
-  byUpdatedAtProp,
-  decodeBase64String,
-  generateBase64String,
-} from '../../utils/helpers';
+} from '../types';
+import { decodeBase64String, generateBase64String } from '../utils/helpers';
+import { FileSystemRepository } from './filesystem.repository';
 
 type DocInput = DocDirectoryInput | DocEntryInput | DocFileInput;
 
@@ -56,7 +43,7 @@ type ResolveReturnTypeFrom<Kind extends Maybe<DocEntryKind>> =
 
 export class DocRepository extends FileSystemRepository {
   constructor(dir: string) {
-    super(dir, 'Documentation');
+    super(dir, 'doc');
   }
 
   /**
@@ -84,7 +71,7 @@ export class DocRepository extends FileSystemRepository {
    * Convert the DirectoryContents.
    *
    * @param {Maybe<DirectoryContents>} contents - An object.
-   * @returns {Maybe<DirectoryContents>} The converted object.
+   * @returns {Maybe<DirectoryContents>} The converted contents.
    */
   #convertDirectoryContents(
     contents: Maybe<DirectoryContents>
@@ -101,13 +88,13 @@ export class DocRepository extends FileSystemRepository {
    * Convert a Directory to a DocDirectory or a RegularFile to a DocFile.
    *
    * @param {Directory | RegularFile} fileOrDir - An object.
-   * @returns {DocDirectory | DocFile} The converted object.
+   * @returns {DocDirectory | DocFile} The converted entry.
    */
   #convert<
     T extends Directory | RegularFile,
     R = T extends Directory ? DocDirectory : DocFile
   >({ createdAt, name, path, type, updatedAt, contents }: T): R {
-    const relativePath = path.replace(this.getRootDir(), './');
+    const relativePath = this.getRelativePathFrom(path);
 
     return {
       contents:
@@ -209,31 +196,26 @@ export class DocRepository extends FileSystemRepository {
    * @param {DocEntryKind} [kind] - The expected entry kind.
    * @returns {Promise<Maybe<DocReturn>>} The matching documentation entry.
    */
-  public async get<K extends undefined, P extends keyof DocEntryInput>(
-    prop: P,
-    value: DocInput[P],
-    kind?: K
-  ): Promise<Maybe<DocEntry>>;
-  public async get<K extends 'directory', P extends keyof DocDirectoryInput>(
-    prop: P,
-    value: DocInput[P],
-    kind?: K
-  ): Promise<Maybe<DocDirectory>>;
-  public async get<K extends 'file', P extends keyof DocFileInput>(
-    prop: P,
-    value: DocInput[P],
-    kind?: K
-  ): Promise<Maybe<DocFile>>;
-  public async get<K extends Maybe<DocEntryKind>, P extends keyof DocInput>(
-    prop: P,
-    value: DocInput[P],
-    kind?: K
-  ): Promise<Maybe<DocReturn>>;
-  public async get<K extends Maybe<DocEntryKind>, P extends keyof DocInput>(
-    prop: P,
-    value: DocInput[P],
-    kind?: K
-  ): Promise<Maybe<DocReturn>> {
+  public async get<
+    K extends undefined,
+    P extends keyof DocEntryInput = keyof DocEntryInput
+  >(prop: P, value: DocInput[P], kind?: K): Promise<Maybe<DocEntry>>;
+  public async get<
+    K extends 'directory',
+    P extends keyof DocDirectoryInput = keyof DocDirectoryInput
+  >(prop: P, value: DocInput[P], kind?: K): Promise<Maybe<DocDirectory>>;
+  public async get<
+    K extends 'file',
+    P extends keyof DocFileInput = keyof DocFileInput
+  >(prop: P, value: DocInput[P], kind?: K): Promise<Maybe<DocFile>>;
+  public async get<
+    K extends Maybe<DocEntryKind>,
+    P extends keyof DocInput = keyof DocInput
+  >(prop: P, value: DocInput[P], kind?: K): Promise<Maybe<DocReturn>>;
+  public async get<
+    K extends Maybe<DocEntryKind>,
+    P extends keyof DocInput = keyof DocInput
+  >(prop: P, value: DocInput[P], kind?: K): Promise<Maybe<DocReturn>> {
     const relativePath = prop === 'id' ? decodeBase64String(value) : value;
     const parent = this.#getParentOf(relativePath);
     const path = parent?.path
@@ -284,85 +266,10 @@ export class DocRepository extends FileSystemRepository {
       kind: undefined,
       parentPath: undefined,
     };
-    const path = parentPath
-      ? join(this.getRootDir(), parentPath)
-      : this.getRootDir();
+    const path = this.getAbsolutePathFrom(parentPath ?? './');
     const entries = await this.#findEntriesIn(path, kind);
 
     return entries?.filter((entry) => values.includes(entry[prop]));
-  }
-
-  /**
-   * Filter the documentation entries.
-   *
-   * @param {T[]} entries - The entries.
-   * @param {W} where - The filter parameters.
-   * @returns {T[]} The filtered entries.
-   */
-  #filter<
-    T extends DocDirectory | DocFile,
-    W extends
-      | DocDirectoryWhereFields
-      | DocFileWhereFields = T extends DocDirectory
-      ? DocDirectoryWhereFields
-      : DocFileWhereFields
-  >(entries: T[], { createdAt, name, updatedAt }: Omit<W, 'path'>): T[] {
-    let filteredDocEntries = entries.slice(0);
-
-    if (createdAt)
-      filteredDocEntries = filteredDocEntries.filter(
-        (page) => page.createdAt === createdAt
-      );
-
-    if (name)
-      filteredDocEntries = filteredDocEntries.filter((page) =>
-        page.name.includes(name)
-      );
-
-    if (updatedAt)
-      filteredDocEntries = filteredDocEntries.filter(
-        (page) => page.updatedAt === updatedAt
-      );
-
-    return filteredDocEntries;
-  }
-
-  /**
-   * Order the given documentation entries.
-   *
-   * @param {T[]} entries - The documentation entries.
-   * @param {OrderBy<F>} orderBy - The order by instructions.
-   * @returns {T[]} The ordered documentation entries.
-   */
-  #order<
-    T extends DocDirectory | DocFile,
-    F = T extends DocDirectory ? DocDirectoryOrderFields : DocFileOrderFields
-  >(entries: T[], { direction, field }: OrderBy<F>): T[] {
-    let orderedDocEntries = entries.slice(0);
-
-    switch (field) {
-      case 'createdAt':
-        orderedDocEntries = orderedDocEntries.sort(byCreatedAtProp);
-        break;
-      case 'name':
-        orderedDocEntries = orderedDocEntries.sort(byNameProp);
-        break;
-      case 'path':
-        orderedDocEntries = orderedDocEntries.sort(byPathProp);
-        break;
-      case 'slug':
-        orderedDocEntries = orderedDocEntries.sort(bySlugProp);
-        break;
-      case 'updatedAt':
-        orderedDocEntries = orderedDocEntries.sort(byUpdatedAtProp);
-        break;
-      default:
-        break;
-    }
-
-    return direction === 'ASC'
-      ? orderedDocEntries
-      : orderedDocEntries.reverse();
   }
 
   /**
@@ -382,20 +289,12 @@ export class DocRepository extends FileSystemRepository {
     const path = where?.path
       ? join(this.getRootDir(), where.path)
       : this.getRootDir();
-    const entries: Maybe<T[]> = (await this.#findEntriesIn(
-      path,
-      kind
-    )) as Maybe<T[]>;
+    const entries: Maybe<T[]> =
+      ((await this.#findEntriesIn(path, kind)) as Maybe<T[]>) ?? [];
 
-    if (!entries)
-      return {
-        data: undefined,
-        total: 0,
-      };
-
-    const filteredDocEntries = where ? this.#filter(entries, where) : entries;
+    const filteredDocEntries = where ? this.filter(entries, where) : entries;
     const orderedDocEntries = orderBy
-      ? this.#order(filteredDocEntries, orderBy)
+      ? this.order(filteredDocEntries, orderBy)
       : filteredDocEntries;
 
     return {
@@ -432,18 +331,16 @@ export class DocRepository extends FileSystemRepository {
     name,
     parentPath,
   }: DocDirectoryUpdate): Promise<Maybe<DocDirectory>> {
-    const currentRelativePath = decodeBase64String(id);
-    const currentName = parse(currentRelativePath).name;
-    const absolutePath = join(this.getRootDir(), currentRelativePath);
-    const newAbsolutePath =
-      name || parentPath
-        ? await this.renameFile(name ?? currentName, absolutePath, parentPath)
-        : absolutePath;
+    const relativePath = decodeBase64String(id);
+    const absolutePath = this.getAbsolutePathFrom(relativePath);
+    const newAbsolutePath = await this.update(absolutePath, {
+      name,
+      parentPath,
+    });
 
     const newRelativePath = this.getRelativePathFrom(newAbsolutePath);
-    const dir = await this.get('path', newRelativePath, 'directory');
 
-    return dir;
+    return this.get('path', newRelativePath, 'directory');
   }
 
   /**
@@ -457,8 +354,11 @@ export class DocRepository extends FileSystemRepository {
     contents,
     parentPath,
   }: DocFileCreate): Promise<Maybe<DocFile>> {
-    const basePath = parentPath ?? './';
-    const filePath = await this.createMarkdownFile(basePath, name, contents);
+    const filePath = await this.createMarkdownFile({
+      parentPath,
+      contents,
+      name,
+    });
 
     return this.get('path', this.getRelativePathFrom(filePath), 'file');
   }
@@ -476,21 +376,34 @@ export class DocRepository extends FileSystemRepository {
     parentPath,
   }: DocFileUpdate): Promise<Maybe<DocFile>> {
     const relativePath = decodeBase64String(id);
-    const oldName = parse(relativePath).name;
-    const absolutePath = join(this.getRootDir(), relativePath);
-    const newAbsolutePath =
-      name && oldName !== name
-        ? await this.renameFile(name, absolutePath, parentPath)
-        : absolutePath;
-
-    if (contents)
-      await writeFile(newAbsolutePath, contents, {
-        encoding: 'utf8',
-      });
-
+    const absolutePath = this.getAbsolutePathFrom(relativePath);
+    const newAbsolutePath = await this.update(absolutePath, {
+      contents,
+      name,
+      parentPath,
+    });
     const newRelativePath = this.getRelativePathFrom(newAbsolutePath);
-    const file = await this.get('path', newRelativePath, 'file');
 
-    return file;
+    return this.get('path', newRelativePath, 'file');
+  }
+
+  /**
+   * Remove a documentation entry from the repository.
+   *
+   * @param {string} path - The relative path of the entry.
+   * @param {boolean} [isDirectory] - Is the entry a directory?
+   * @returns {Promise<Maybe<DocDirectory | DocFile>>} The deleted entry.
+   */
+  public async remove<
+    T extends boolean = false,
+    R = T extends true ? DocDirectory : DocFile
+  >(path: string, isDirectory?: T): Promise<Maybe<R>> {
+    const entry = await this.get('path', path);
+    const isEntryMatching =
+      entry && entry.type === (isDirectory ? 'directory' : 'file');
+
+    if (isEntryMatching) await this.del(path, isDirectory);
+
+    return entry as Maybe<R>;
   }
 }

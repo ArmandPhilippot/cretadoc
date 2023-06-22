@@ -1,9 +1,9 @@
 /* eslint-disable max-statements */
-import { sep } from 'path';
 import { afterAll, beforeAll, describe, it } from 'vitest';
 import type { DocPayload } from '../../../src/types';
-import { byNameProp, generateCursor } from '../../../src/utils/helpers';
-import { docFixtures } from '../../fixtures/doc';
+import { DEFAULT_EDGES_NUMBER } from '../../../src/utils/constants';
+import { generateCursor } from '../../../src/utils/helpers';
+import { docFiles, docFixtures, rootDocFiles } from '../../fixtures/doc';
 import type { QueryResultWithErrors } from '../../types';
 import { expect } from '../../utils';
 import { DOC_FIXTURES_DIR } from '../../utils/constants';
@@ -14,7 +14,6 @@ import {
   sendQuery,
   type Variables,
 } from '../../utils/helpers';
-import { docFiles } from './doc-files.fixtures';
 import { docFilesQuery } from './doc-files.queries';
 
 const api = await createAPIServer({
@@ -26,10 +25,6 @@ const misconfiguredAPI = await createAPIServer({ port: 3260 });
 
 const sendDocFilesQuery = async (variables?: Variables[typeof docFilesQuery]) =>
   sendQuery({ api: api.instance, query: docFilesQuery, variables });
-
-const rootDocFiles = [...docFiles]
-  .sort(byNameProp)
-  .filter((file) => file.path.replace('./', '').split(sep).length === 1);
 
 describe('docFiles', () => {
   beforeAll(async () => {
@@ -43,7 +38,6 @@ describe('docFiles', () => {
   });
 
   it('returns the paginated documentation files', async () => {
-    const defaultReturnNumber = 10;
     const response = await sendDocFilesQuery();
 
     expect(response.body.data.doc?.files).not.toBeNull();
@@ -52,7 +46,7 @@ describe('docFiles', () => {
     );
     expect(response.body.data.doc?.files?.pageInfo).toBePageInfo({
       endCursor: generateCursor(rootDocFiles.length),
-      hasNextPage: rootDocFiles.length > defaultReturnNumber,
+      hasNextPage: rootDocFiles.length > DEFAULT_EDGES_NUMBER,
       hasPreviousPage: false,
       startCursor: generateCursor(1),
       total: rootDocFiles.length,
@@ -83,18 +77,17 @@ describe('docFiles', () => {
   });
 
   it('return the documentation files filtered by name', async () => {
-    const perPage = 10;
     const requestedName = 'sch';
     const requestedFixtures = rootDocFiles.filter((file) =>
       file.name.includes(requestedName)
     );
     const response = await sendDocFilesQuery({
-      first: perPage,
+      first: DEFAULT_EDGES_NUMBER,
       where: { name: requestedName },
     });
-    const hasNextPage = requestedFixtures.length > perPage;
+    const hasNextPage = requestedFixtures.length > DEFAULT_EDGES_NUMBER;
     const requestedFixturesCount = hasNextPage
-      ? perPage
+      ? DEFAULT_EDGES_NUMBER
       : requestedFixtures.length;
 
     expect(response.body.data.doc?.files).not.toBeNull();
@@ -114,19 +107,18 @@ describe('docFiles', () => {
   });
 
   it('return the documentation files in the given path', async () => {
-    const perPage = 10;
     // An existing subfolders.
     const parentPath = './excepturi';
     const requestedFixtures = docFiles.filter(
       (page) => page.parent?.path === parentPath
     );
     const response = await sendDocFilesQuery({
-      first: perPage,
+      first: DEFAULT_EDGES_NUMBER,
       where: { path: parentPath },
     });
-    const hasNextPage = requestedFixtures.length > perPage;
+    const hasNextPage = requestedFixtures.length > DEFAULT_EDGES_NUMBER;
     const requestedFixturesCount = hasNextPage
-      ? perPage
+      ? DEFAULT_EDGES_NUMBER
       : requestedFixtures.length;
 
     expect(response.body.data.doc?.files).not.toBeNull();
@@ -146,9 +138,8 @@ describe('docFiles', () => {
   });
 
   it('returns the documentation files ordered by name', async () => {
-    const perPage = 10;
     const response = await sendDocFilesQuery({
-      first: perPage,
+      first: DEFAULT_EDGES_NUMBER,
       orderBy: { direction: 'DESC', field: 'name' },
     });
 
@@ -158,7 +149,7 @@ describe('docFiles', () => {
       (edge) => edge.node.name
     );
     const reversedRootDocFilesNames = rootDocFiles
-      .slice(0, perPage)
+      .slice(0, DEFAULT_EDGES_NUMBER)
       .map((page) => page.name)
       .reverse();
 
@@ -170,9 +161,8 @@ describe('docFiles', () => {
   });
 
   it('returns the documentation files ordered by slug', async () => {
-    const perPage = 10;
     const response = await sendDocFilesQuery({
-      first: perPage,
+      first: DEFAULT_EDGES_NUMBER,
       orderBy: { direction: 'DESC', field: 'slug' },
     });
 
@@ -182,7 +172,7 @@ describe('docFiles', () => {
       (edge) => edge.node.slug
     );
     const reversedRootDocFilesSlugs = rootDocFiles
-      .slice(0, perPage)
+      .slice(0, DEFAULT_EDGES_NUMBER)
       .map((page) => page.slug)
       .reverse();
 
@@ -194,9 +184,8 @@ describe('docFiles', () => {
   });
 
   it('returns the documentation files ordered by path', async () => {
-    const perPage = 10;
     const response = await sendDocFilesQuery({
-      first: perPage,
+      first: DEFAULT_EDGES_NUMBER,
       orderBy: { direction: 'ASC', field: 'path' },
     });
 
@@ -206,9 +195,8 @@ describe('docFiles', () => {
   });
 
   it('returns the documentation files ordered by creation date', async () => {
-    const perPage = 10;
     const response = await sendDocFilesQuery({
-      first: perPage,
+      first: DEFAULT_EDGES_NUMBER,
       orderBy: { direction: 'ASC', field: 'createdAt' },
     });
 
@@ -218,9 +206,8 @@ describe('docFiles', () => {
   });
 
   it('returns the documentation files ordered by update date', async () => {
-    const perPage = 10;
     const response = await sendDocFilesQuery({
-      first: perPage,
+      first: DEFAULT_EDGES_NUMBER,
       orderBy: { direction: 'ASC', field: 'updatedAt' },
     });
 
