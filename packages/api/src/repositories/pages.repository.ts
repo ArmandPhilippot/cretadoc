@@ -9,7 +9,11 @@ import type {
   PageInput,
   PageUpdate,
 } from '../types';
-import { decodeBase64String, generateBase64String } from '../utils/helpers';
+import {
+  decodeBase64String,
+  generateBase64String,
+  parseMarkdown,
+} from '../utils/helpers';
 import { FileSystemRepository } from './filesystem.repository';
 
 export class PagesRepository extends FileSystemRepository {
@@ -31,11 +35,13 @@ export class PagesRepository extends FileSystemRepository {
     contents,
   }: RegularFile): Page {
     const relativePath = this.getRelativePathFrom(path);
+    const { content, meta } = parseMarkdown(contents ?? '');
 
     return {
-      contents,
+      contents: content,
       createdAt,
       id: generateBase64String(relativePath),
+      meta,
       name,
       path: relativePath,
       slug: `/${slugify(name)}`,

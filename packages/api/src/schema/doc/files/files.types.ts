@@ -4,7 +4,47 @@ import type {
   DocEntryParent,
   DocFile,
   DocFilePayload,
+  Meta,
 } from '../../../types';
+
+export const DocFileMetaType = new GraphQLObjectType<Meta>({
+  name: 'DocFileMeta',
+  description: 'The metadata of a documentation file.',
+  fields: () => {
+    return {
+      createdAt: {
+        type: GraphQLString,
+        description: 'The creation date of the file.',
+        resolve: ({ createdAt }) => createdAt,
+      },
+      seoDescription: {
+        type: GraphQLString,
+        description: 'The meta description.',
+        resolve: ({ seoDescription }) => seoDescription,
+      },
+      seoTitle: {
+        type: GraphQLString,
+        description: 'The title used by search engines.',
+        resolve: ({ seoTitle }) => seoTitle,
+      },
+      status: {
+        type: GraphQLString,
+        description: 'The status of the file.',
+        resolve: ({ status }) => status,
+      },
+      title: {
+        type: GraphQLString,
+        description: 'The title of the file.',
+        resolve: ({ title }) => title,
+      },
+      updatedAt: {
+        type: GraphQLString,
+        description: 'The update date of the file.',
+        resolve: ({ updatedAt }) => updatedAt,
+      },
+    };
+  },
+});
 
 export const DocFileParentType = new GraphQLObjectType<DocEntryParent>({
   name: 'DocFileParent',
@@ -54,6 +94,11 @@ export const DocFileType = new GraphQLObjectType<DocFile, APIContext>({
         type: new GraphQLNonNull(GraphQLString),
         description: 'The id of the file.',
         resolve: ({ id }) => id,
+      },
+      meta: {
+        type: DocFileMetaType,
+        description: 'The frontmatter metadata of the file.',
+        resolve: ({ meta }) => meta,
       },
       name: {
         type: new GraphQLNonNull(GraphQLString),

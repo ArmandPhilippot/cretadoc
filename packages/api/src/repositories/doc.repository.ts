@@ -32,6 +32,7 @@ import {
   decodeBase64String,
   generateBase64String,
   getSlugFrom,
+  parseMarkdown,
 } from '../utils/helpers';
 import { FileSystemRepository } from './filesystem.repository';
 
@@ -132,27 +133,47 @@ export class DocRepository extends FileSystemRepository {
    * @param {Directory | RegularFile} fileOrDir - An object.
    * @returns {DocDirectory | DocFile} The converted entry.
    */
-  #convert<
-    T extends Directory | RegularFile,
-    R = T extends Directory ? DocDirectory : DocFile
-  >({ createdAt, name, path, type, updatedAt, contents }: T): R {
+  #convert<T extends Directory>(fileOrDir: T): DocDirectory;
+  #convert<T extends RegularFile>(fileOrDir: T): DocFile;
+  #convert<T extends Directory | RegularFile>(
+    fileOrDir: T
+  ): DocDirectory | DocFile;
+  #convert<T extends Directory | RegularFile>({
+    createdAt,
+    name,
+    path,
+    type,
+    updatedAt,
+    contents,
+  }: T): DocDirectory | DocFile {
     const relativePath = this.getRelativePathFrom(path);
     const slug = getSlugFrom(relativePath);
 
-    return {
-      contents:
-        type === 'directory'
-          ? this.#convertDirectoryContents(contents)
-          : contents,
+    const commonData: Omit<DocDirectory | DocFile, 'contents' | 'type'> = {
       createdAt,
       id: generateBase64String(relativePath),
       name,
       parent: this.#getParentOf(relativePath),
       path: relativePath,
       slug,
-      type,
       updatedAt,
-    } as R;
+    };
+
+    if (type === 'directory')
+      return {
+        ...commonData,
+        contents: this.#convertDirectoryContents(contents),
+        type: 'directory',
+      };
+
+    const { content, meta } = parseMarkdown(contents ?? '');
+
+    return {
+      ...commonData,
+      contents: content,
+      meta,
+      type: 'file',
+    };
   }
 
   /**
