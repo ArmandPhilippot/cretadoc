@@ -1,6 +1,6 @@
-export const docFileQuery = `query DocFile($id: String, $path: String) {
+export const docFileQuery = `query DocFile($id: String, $path: String, $slug: String) {
   doc {
-    file(id: $id, path: $path) {
+    file(id: $id, path: $path, slug: $slug) {
       contents
       createdAt
       id

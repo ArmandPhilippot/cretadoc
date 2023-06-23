@@ -1,9 +1,4 @@
-import {
-  isObject,
-  isObjKeyExist,
-  slugify,
-  type Nullable,
-} from '@cretadoc/utils';
+import { isObject, isObjKeyExist, type Nullable } from '@cretadoc/utils';
 import { afterAll, beforeAll, describe, it } from 'vitest';
 import type {
   DocFileCreateErrors,
@@ -12,8 +7,8 @@ import type {
   DocFilePayload,
 } from '../../../src/types';
 import { MARKDOWN_EXTENSION } from '../../../src/utils/constants';
-import { generateBase64String } from '../../../src/utils/helpers';
-import { docFiles, docFixtures } from '../../fixtures/doc';
+import { generateBase64String, getSlugFrom } from '../../../src/utils/helpers';
+import { docDirectories, docFiles, docFixtures } from '../../fixtures/doc';
 import type { QueryResultWithErrors } from '../../types';
 import { expect } from '../../utils';
 import { DOC_FIXTURES_DIR } from '../../utils/constants';
@@ -71,7 +66,7 @@ describe('docFileCreate', () => {
         name: newDocFileName,
         parent: null,
         path: newDocFilePath,
-        slug: `/${slugify(newDocFileName)}`,
+        slug: getSlugFrom(newDocFilePath),
         type: 'file',
       });
 
@@ -96,7 +91,38 @@ describe('docFileCreate', () => {
         name: newDocFileName,
         parent: null,
         path: newDocFilePath,
-        slug: `/${slugify(newDocFileName)}`,
+        slug: getSlugFrom(newDocFilePath),
+        type: 'file',
+      });
+
+    expect.assertions(2);
+  });
+
+  it('can create a new doc file in a subdirectory', async () => {
+    const parent = docDirectories[0];
+
+    if (!parent) throw new Error('Documentation fixtures are missing.');
+
+    const newDocFileName = 'architecto';
+    const newDocFilePath = `${parent.path}/${newDocFileName}${MARKDOWN_EXTENSION}`;
+    const response = await createDocFile({
+      input: { name: newDocFileName, parentPath: parent.path },
+    });
+
+    expect(response.body.data.docFileCreate).not.toBeNull();
+
+    if (isDocFilePayload(response.body.data.docFileCreate))
+      expect(response.body.data.docFileCreate.file).toBeDocFile({
+        id: generateBase64String(newDocFilePath),
+        name: newDocFileName,
+        parent: {
+          id: parent.id,
+          name: parent.name,
+          path: parent.path,
+          slug: getSlugFrom(parent.path),
+        },
+        path: newDocFilePath,
+        slug: getSlugFrom(newDocFilePath),
         type: 'file',
       });
 

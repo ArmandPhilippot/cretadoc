@@ -58,6 +58,18 @@ describe('docEntry', () => {
     expect.assertions(2);
   });
 
+  it('returns a documentation entry by slug', async () => {
+    const lastEntry = docEntries[docEntries.length - 1];
+
+    if (!lastEntry) throw new Error('Documentation fixtures are missing.');
+
+    const response = await sendDocEntryQuery({ slug: lastEntry.slug });
+
+    expect(response.body.data.doc?.entry).not.toBeNull();
+    expect(response.body.data.doc?.entry).toBeDocEntry(lastEntry);
+    expect.assertions(2);
+  });
+
   it('returns an error if both id and path are missing', async () => {
     const response = await sendDocEntryQuery();
 

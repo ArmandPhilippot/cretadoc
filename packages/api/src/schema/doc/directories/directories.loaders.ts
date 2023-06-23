@@ -9,6 +9,7 @@ import { listDocDirectories } from './list/list.loaders';
 import {
   getDocDirectoryById,
   getDocDirectoryByPath,
+  getDocDirectoryBySlug,
 } from './read/read.loaders';
 
 /**
@@ -24,6 +25,7 @@ export const initDocDirectoryLoaders = (
     directory: {
       byId: getDocDirectoryById(repository),
       byPath: getDocDirectoryByPath(repository),
+      bySlug: getDocDirectoryBySlug(repository),
       list: async (params: ListInput<DocDirectory>) =>
         listDocDirectories(repository, params),
     },

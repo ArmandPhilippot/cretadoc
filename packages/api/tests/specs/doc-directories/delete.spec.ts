@@ -1,10 +1,5 @@
 /* eslint-disable max-statements */
-import {
-  isObject,
-  isObjKeyExist,
-  slugify,
-  type Nullable,
-} from '@cretadoc/utils';
+import { isObject, isObjKeyExist, type Nullable } from '@cretadoc/utils';
 import { afterAll, beforeAll, describe, it } from 'vitest';
 import type {
   DocDirectoryDeleteErrors,
@@ -13,7 +8,7 @@ import type {
   DocDirectoryPayload,
 } from '../../../src/types';
 import { API_ERROR_CODE } from '../../../src/utils/constants';
-import { generateBase64String } from '../../../src/utils/helpers';
+import { generateBase64String, getSlugFrom } from '../../../src/utils/helpers';
 import { docDirectories, docFixtures } from '../../fixtures/doc';
 import type { QueryResultWithErrors } from '../../types';
 import { expect } from '../../utils';
@@ -103,7 +98,7 @@ describe('docDirectoryDelete', () => {
         name: dirName,
         parent: null,
         path: dirPath,
-        slug: `/${slugify(dirName)}`,
+        slug: getSlugFrom(dirPath),
         type: 'directory',
       });
 

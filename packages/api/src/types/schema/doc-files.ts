@@ -130,10 +130,16 @@ export type DocFileByPathLoader = DataLoader<
   Maybe<DocFile>
 >;
 
+export type DocFileBySlugLoader = DataLoader<
+  DocFileInput['slug'],
+  Maybe<DocFile>
+>;
+
 export type DocFileLoaders = {
   file: {
     byId: DocFileByIdLoader;
     byPath: DocFileByPathLoader;
+    bySlug: DocFileBySlugLoader;
     list: ListLoader<DocFile>;
   };
 };

@@ -16,8 +16,11 @@ export const directory: GraphQLFieldConfig<
     path: {
       type: GraphQLString,
     },
+    slug: {
+      type: GraphQLString,
+    },
   },
-  resolve: async (_source, { id, path }, context) => {
+  resolve: async (_source, { id, path, slug }, context) => {
     if (!context.loaders?.doc)
       throw new CretadocAPIError('Cannot get directory', {
         errorKind: 'reference',
@@ -25,18 +28,19 @@ export const directory: GraphQLFieldConfig<
         received: typeof context.loaders?.doc,
       });
 
-    if (!id && !path)
+    if (!id && !path && !slug)
       throw new UserInputError('An argument is required', {
-        expected: 'Either an id or a path',
+        expected: 'Either an id, a path or a slug',
       });
 
-    if (id && path)
+    if ((id && path) || (id && slug) || (path && slug))
       throw new UserInputError('Too many arguments', {
-        expected: 'Either an id or a path',
+        expected: 'Either an id, a path or a slug',
       });
 
     if (id) return context.loaders.doc.directory.byId.load(id);
     if (path) return context.loaders.doc.directory.byPath.load(path);
+    if (slug) return context.loaders.doc.directory.bySlug.load(slug);
     return undefined;
   },
 };

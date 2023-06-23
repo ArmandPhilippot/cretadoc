@@ -5,9 +5,15 @@ import type {
   DirectoryContents,
   RegularFile,
 } from '@cretadoc/read-dir';
-import { type Maybe, type Nullable, slugify } from '@cretadoc/utils';
+import {
+  type Maybe,
+  type Nullable,
+  isObject,
+  isObjKeyExist,
+} from '@cretadoc/utils';
 import type {
   DocDirectory,
+  DocDirectoryContents,
   DocDirectoryCreate,
   DocDirectoryInput,
   DocDirectoryUpdate,
@@ -22,17 +28,14 @@ import type {
   ListInput,
   ListReturn,
 } from '../types';
-import { decodeBase64String, generateBase64String } from '../utils/helpers';
+import {
+  decodeBase64String,
+  generateBase64String,
+  getSlugFrom,
+} from '../utils/helpers';
 import { FileSystemRepository } from './filesystem.repository';
 
 type DocInput = DocDirectoryInput | DocEntryInput | DocFileInput;
-
-type DocReturn = DocDirectory | DocEntry | DocFile;
-
-type GetManyOptions<K extends Maybe<DocEntryKind>> = {
-  kind?: K;
-  parentPath?: string;
-};
 
 type ResolveReturnTypeFrom<Kind extends Maybe<DocEntryKind>> =
   Kind extends 'directory'
@@ -40,6 +43,33 @@ type ResolveReturnTypeFrom<Kind extends Maybe<DocEntryKind>> =
     : Kind extends 'file'
     ? DocFile
     : DocEntry;
+
+/**
+ * Check if the given value is a DocEntry.
+ *
+ * @param {unknown} value - A value to compare.
+ * @returns {boolean} True if value is a DocEntry object.
+ */
+const isDocEntry = (value: unknown): value is DocEntry => {
+  if (!value) return false;
+  if (!isObject(value)) return false;
+
+  const keys: Array<keyof DocEntry> = [
+    'contents',
+    'createdAt',
+    'id',
+    'name',
+    'parent',
+    'path',
+    'slug',
+    'type',
+    'updatedAt',
+  ];
+
+  for (const key of keys) if (!isObjKeyExist(value, key)) return false;
+
+  return true;
+};
 
 export class DocRepository extends FileSystemRepository {
   constructor(dir: string) {
@@ -63,24 +93,36 @@ export class DocRepository extends FileSystemRepository {
       id: generateBase64String(parent.dir),
       name,
       path: parent.dir,
-      slug: `/${slugify(name)}`,
+      slug: getSlugFrom(parent.dir),
     };
   }
 
   /**
-   * Convert the DirectoryContents.
+   * Retrieve the contents of a directory.
+   *
+   * @param {string} dir - A directory path.
+   * @returns {Promise<DocDirectoryContents>} The directory contents.
+   */
+  protected override async getContentsOf(
+    dir: string
+  ): Promise<DocDirectoryContents> {
+    const dirContents = await super.getContentsOf(dir);
+
+    return this.#convertDirectoryContents(dirContents);
+  }
+
+  /**
+   * Convert the directory contents.
    *
    * @param {Maybe<DirectoryContents>} contents - An object.
-   * @returns {Maybe<DirectoryContents>} The converted contents.
+   * @returns {DocDirectoryContents} The converted contents.
    */
   #convertDirectoryContents(
     contents: Maybe<DirectoryContents>
-  ): Maybe<DirectoryContents> {
-    if (!contents) return undefined;
-
+  ): DocDirectoryContents {
     return {
-      directories: contents.directories.map((dir) => this.#convert(dir)),
-      files: contents.files.map((file) => this.#convert(file)),
+      directories: contents?.directories.map((dir) => this.#convert(dir)) ?? [],
+      files: contents?.files.map((file) => this.#convert(file)) ?? [],
     };
   }
 
@@ -95,6 +137,7 @@ export class DocRepository extends FileSystemRepository {
     R = T extends Directory ? DocDirectory : DocFile
   >({ createdAt, name, path, type, updatedAt, contents }: T): R {
     const relativePath = this.getRelativePathFrom(path);
+    const slug = getSlugFrom(relativePath);
 
     return {
       contents:
@@ -106,7 +149,7 @@ export class DocRepository extends FileSystemRepository {
       name,
       parent: this.#getParentOf(relativePath),
       path: relativePath,
-      slug: `/${slugify(name)}`,
+      slug,
       type,
       updatedAt,
     } as R;
@@ -115,22 +158,20 @@ export class DocRepository extends FileSystemRepository {
   /**
    * Retrieve the converted documentation directories from a directory contents.
    *
-   * @param {Maybe<DirectoryContents>} contents - The directory contents.
+   * @param {DocDirectoryContents} contents - The directory contents.
    * @returns {Maybe<DocDirectory[]>} The documentation directories.
    */
-  #getDirectoriesFrom(
-    contents: Maybe<DirectoryContents>
-  ): Maybe<DocDirectory[]> {
-    return contents?.directories.map((dir) => this.#convert(dir));
+  #getDirectoriesFrom(contents: DocDirectoryContents): DocDirectory[] {
+    return contents.directories.map((dir) => this.#convert(dir));
   }
 
   /**
    * Retrieve the documentation directories in the given path.
    *
    * @param {string} path - A directory path.
-   * @returns {Promise<Maybe<DocDirectory[]>>} The documentation directories.
+   * @returns {Promise<DocDirectory[]>} The documentation directories.
    */
-  async #getDirectoriesIn(path: string): Promise<Maybe<DocDirectory[]>> {
+  async #getDirectoriesIn(path: string): Promise<DocDirectory[]> {
     const dirContents = await this.getContentsOf(path);
 
     return this.#getDirectoriesFrom(dirContents);
@@ -139,20 +180,20 @@ export class DocRepository extends FileSystemRepository {
   /**
    * Retrieve the converted documentation files from a directory contents.
    *
-   * @param {Maybe<DirectoryContents>} contents - The directory contents.
-   * @returns {Maybe<DocFile[]>} The documentation files.
+   * @param {DocDirectoryContents} contents - The directory contents.
+   * @returns {DocFile[]} The documentation files.
    */
-  #getFilesFrom(contents: Maybe<DirectoryContents>): Maybe<DocFile[]> {
-    return contents?.files.map((file) => this.#convert(file));
+  #getFilesFrom(contents: DocDirectoryContents): DocFile[] {
+    return contents.files.map((file) => this.#convert(file));
   }
 
   /**
    * Retrieve the documentation files in the given path.
    *
    * @param {string} path - A directory path.
-   * @returns {Promise<Maybe<DocFile[]>>} The documentation files.
+   * @returns {Promise<DocFile[]>} The documentation files.
    */
-  async #getFilesIn(path: string): Promise<Maybe<DocFile[]>> {
+  async #getFilesIn(path: string): Promise<DocFile[]> {
     const dirContents = await this.getContentsOf(path);
 
     return this.#getFilesFrom(dirContents);
@@ -166,8 +207,8 @@ export class DocRepository extends FileSystemRepository {
    */
   async #getEntriesIn(path: string): Promise<DocEntry[]> {
     const dirContents = await this.getContentsOf(path);
-    const docDirectories = this.#getDirectoriesFrom(dirContents) ?? [];
-    const docFiles = this.#getFilesFrom(dirContents) ?? [];
+    const docDirectories = this.#getDirectoriesFrom(dirContents);
+    const docFiles = this.#getFilesFrom(dirContents);
 
     return [...docDirectories, ...docFiles];
   }
@@ -177,12 +218,28 @@ export class DocRepository extends FileSystemRepository {
    *
    * @param {string} path - A directory path.
    * @param {DocEntryKind} [kind] - The expected entry kind.
-   * @returns {Promise<Maybe<DocDirectory[] | DocFile[]> | DocEntry[]>}
+   * @returns {Promise<DocDirectory[] | DocFile[] | DocEntry[]>}
    */
-  async #findEntriesIn(
+  async #findEntriesIn<K extends undefined>(
     path: string,
-    kind?: DocEntryKind
-  ): Promise<Maybe<DocDirectory[] | DocFile[]> | DocEntry[]> {
+    kind?: K
+  ): Promise<DocEntry[]>;
+  async #findEntriesIn<K extends 'directory'>(
+    path: string,
+    kind?: K
+  ): Promise<DocDirectory[]>;
+  async #findEntriesIn<K extends 'file'>(
+    path: string,
+    kind?: K
+  ): Promise<DocFile[]>;
+  async #findEntriesIn<K extends DocEntryKind>(
+    path: string,
+    kind?: K
+  ): Promise<DocDirectory[] | DocFile[] | DocEntry[]>;
+  async #findEntriesIn<K extends DocEntryKind>(
+    path: string,
+    kind?: K
+  ): Promise<DocDirectory[] | DocFile[] | DocEntry[]> {
     if (kind === 'directory') return this.#getDirectoriesIn(path);
     if (kind === 'file') return this.#getFilesIn(path);
     return this.#getEntriesIn(path);
@@ -194,7 +251,7 @@ export class DocRepository extends FileSystemRepository {
    * @param {P} prop - The prop name.
    * @param {DocInput[P]} value - The value to looking for.
    * @param {DocEntryKind} [kind] - The expected entry kind.
-   * @returns {Promise<Maybe<DocReturn>>} The matching documentation entry.
+   * @returns {Promise<Maybe<DocEntry>>} The matching documentation entry.
    */
   public async get<
     K extends undefined,
@@ -211,19 +268,26 @@ export class DocRepository extends FileSystemRepository {
   public async get<
     K extends Maybe<DocEntryKind>,
     P extends keyof DocInput = keyof DocInput
-  >(prop: P, value: DocInput[P], kind?: K): Promise<Maybe<DocReturn>>;
+  >(prop: P, value: DocInput[P], kind?: K): Promise<Maybe<DocEntry>>;
   public async get<
     K extends Maybe<DocEntryKind>,
     P extends keyof DocInput = keyof DocInput
-  >(prop: P, value: DocInput[P], kind?: K): Promise<Maybe<DocReturn>> {
-    const relativePath = prop === 'id' ? decodeBase64String(value) : value;
-    const parent = this.#getParentOf(relativePath);
-    const path = parent?.path
-      ? join(this.getRootDir(), parent.path)
-      : this.getRootDir();
-    const entries = await this.#findEntriesIn(path, kind);
+  >(prop: P, value: DocInput[P], kind?: K): Promise<Maybe<DocEntry>> {
+    const dirContents = await this.getContentsOf(this.getRootDir());
+    let entry: Maybe<DocEntry> = undefined;
 
-    return entries?.find((entry) => entry[prop] === value);
+    JSON.stringify(dirContents, (_, currentValue: unknown) => {
+      if (
+        isDocEntry(currentValue) &&
+        (!kind || currentValue.type === kind) &&
+        currentValue[prop] === value
+      )
+        entry = currentValue;
+
+      return currentValue;
+    });
+
+    return entry;
   }
 
   /**
@@ -237,7 +301,7 @@ export class DocRepository extends FileSystemRepository {
   public async getMany<K extends undefined, P extends keyof DocEntryInput>(
     prop: P,
     values: ReadonlyArray<DocInput[P]>,
-    options?: GetManyOptions<K>
+    kind?: K
   ): Promise<Maybe<DocEntry[]>>;
   public async getMany<
     K extends 'directory',
@@ -245,31 +309,38 @@ export class DocRepository extends FileSystemRepository {
   >(
     prop: P,
     values: ReadonlyArray<DocInput[P]>,
-    options?: GetManyOptions<K>
+    kind?: K
   ): Promise<Maybe<DocDirectory[]>>;
   public async getMany<K extends 'file', P extends keyof DocFileInput>(
     prop: P,
     values: ReadonlyArray<DocInput[P]>,
-    options?: GetManyOptions<K>
+    kind?: K
   ): Promise<Maybe<DocFile[]>>;
   public async getMany<K extends Maybe<DocEntryKind>, P extends keyof DocInput>(
     prop: P,
     values: ReadonlyArray<DocInput[P]>,
-    options?: GetManyOptions<K>
-  ): Promise<Maybe<DocReturn[]>>;
+    kind?: K
+  ): Promise<Maybe<DocEntry[]>>;
   public async getMany<K extends Maybe<DocEntryKind>, P extends keyof DocInput>(
     prop: P,
     values: ReadonlyArray<DocInput[P]>,
-    options?: GetManyOptions<K>
-  ): Promise<Maybe<DocReturn[]>> {
-    const { kind, parentPath } = options ?? {
-      kind: undefined,
-      parentPath: undefined,
-    };
-    const path = this.getAbsolutePathFrom(parentPath ?? './');
-    const entries = await this.#findEntriesIn(path, kind);
+    kind?: K
+  ): Promise<Maybe<DocEntry[]>> {
+    const dirContents = await this.getContentsOf(this.getRootDir());
+    const entries: DocEntry[] = [];
 
-    return entries?.filter((entry) => values.includes(entry[prop]));
+    JSON.stringify(dirContents, (_, value: unknown) => {
+      if (
+        isDocEntry(value) &&
+        (!kind || value.type === kind) &&
+        values.includes(value[prop])
+      )
+        entries.push(value);
+
+      return value;
+    });
+
+    return entries;
   }
 
   /**
@@ -289,12 +360,11 @@ export class DocRepository extends FileSystemRepository {
     const path = where?.path
       ? join(this.getRootDir(), where.path)
       : this.getRootDir();
-    const entries: Maybe<T[]> =
-      ((await this.#findEntriesIn(path, kind)) as Maybe<T[]>) ?? [];
+    const entries = (await this.#findEntriesIn<K>(path, kind)) as T[];
 
-    const filteredDocEntries = where ? this.filter(entries, where) : entries;
+    const filteredDocEntries = where ? this.filter<T>(entries, where) : entries;
     const orderedDocEntries = orderBy
-      ? this.order(filteredDocEntries, orderBy)
+      ? this.order<T>(filteredDocEntries, orderBy)
       : filteredDocEntries;
 
     return {

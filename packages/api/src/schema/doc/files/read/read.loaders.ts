@@ -1,9 +1,7 @@
-import { dirname } from 'path';
 import type { Maybe } from '@cretadoc/utils';
 import DataLoader from 'dataloader';
 import type { DocRepository } from '../../../../repositories';
 import type { DocFile, DocFileInput } from '../../../../types';
-import { decodeBase64String } from '../../../../utils/helpers';
 
 /**
  * Retrieve many files using values to looking for in a property.
@@ -18,18 +16,7 @@ const getDocFileBy = async <P extends keyof DocFileInput>(
   prop: P,
   values: ReadonlyArray<DocFileInput[P]>
 ): Promise<Array<Maybe<DocFile>>> => {
-  let relativePath: Maybe<string> = undefined;
-
-  if (prop === 'id') {
-    const lastId = values[values.length - 1];
-    if (lastId) relativePath = decodeBase64String(lastId);
-  } else relativePath = values[values.length - 1];
-
-  const basePath = relativePath ? dirname(relativePath) : undefined;
-  const docFiles = await repository.getMany(prop, values, {
-    kind: 'file',
-    parentPath: basePath,
-  });
+  const docFiles = await repository.getMany(prop, values, 'file');
 
   return values.map((value) => docFiles?.find((file) => file[prop] === value));
 };
@@ -58,4 +45,17 @@ export const getDocFileByPath = (
 ): DataLoader<string, Maybe<DocFile>, string> =>
   new DataLoader<DocFileInput['path'], Maybe<DocFile>>(async (paths) =>
     getDocFileBy(repository, 'path', paths)
+  );
+
+/**
+ * Retrieve many files by slug.
+ *
+ * @param {DocRepository} repository - The Documentation repository.
+ * @returns {DataLoader<string, Maybe<DocFile>, string>} The Data Loader.
+ */
+export const getDocFileBySlug = (
+  repository: DocRepository
+): DataLoader<string, Maybe<DocFile>, string> =>
+  new DataLoader<DocFileInput['slug'], Maybe<DocFile>>(async (slugs) =>
+    getDocFileBy(repository, 'slug', slugs)
   );

@@ -58,6 +58,18 @@ describe('docFile', () => {
     expect.assertions(2);
   });
 
+  it('returns a documentation file by slug', async () => {
+    const firstFile = docFiles[0];
+
+    if (!firstFile) throw new Error('Documentation fixtures are missing.');
+
+    const response = await sendDocFileQuery({ slug: firstFile.slug });
+
+    expect(response.body.data.doc?.file).not.toBeNull();
+    expect(response.body.data.doc?.file).toBeDocFile(firstFile);
+    expect.assertions(2);
+  });
+
   it('returns an error if both id and path are missing', async () => {
     const response = await sendDocFileQuery();
 

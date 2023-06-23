@@ -1,6 +1,6 @@
-export const docEntryQuery = `query DocEntry($id: String, $path: String) {
+export const docEntryQuery = `query DocEntry($id: String, $path: String, $slug: String) {
   doc {
-    entry(id: $id, path: $path) {
+    entry(id: $id, path: $path, slug: $slug) {
       __typename
       ... on DocFile {
         id

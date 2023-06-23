@@ -1,8 +1,12 @@
 import { basename, join, parse, sep } from 'path';
-import { type Nullable, slugify } from '@cretadoc/utils';
+import type { Nullable } from '@cretadoc/utils';
 import type { DocEntryParent } from '../../src';
 import { MARKDOWN_EXTENSION } from '../../src/utils/constants';
-import { byNameProp, generateBase64String } from '../../src/utils/helpers';
+import {
+  byNameProp,
+  generateBase64String,
+  getSlugFrom,
+} from '../../src/utils/helpers';
 import { DOC_FIXTURES_DIR } from '../utils/constants';
 import type { Fixture } from '../utils/helpers';
 
@@ -75,7 +79,7 @@ export const docFiles = docFixtures
             id: generateBase64String(parentPath),
             name: basename(parentPath),
             path: parentPath,
-            slug: `/${slugify(basename(parentPath))}` as const,
+            slug: getSlugFrom(parentPath),
           };
 
     return {
@@ -84,7 +88,7 @@ export const docFiles = docFixtures
       name: parse(relativePath).name,
       parent,
       path: relativePath,
-      slug: `/${slugify(parse(relativePath).name)}` as const,
+      slug: getSlugFrom(relativePath),
       type: 'file' as const,
     };
   });
@@ -101,7 +105,7 @@ const onlyDocDirectories = docFixtures
             id: generateBase64String(parentPath),
             name: basename(parentPath),
             path: parentPath,
-            slug: `/${slugify(basename(parentPath))}` as const,
+            slug: getSlugFrom(parentPath),
           };
 
     return {
@@ -109,7 +113,7 @@ const onlyDocDirectories = docFixtures
       name: parse(dirPath).name,
       parent,
       path: dirPath,
-      slug: `/${slugify(parse(dirPath).name)}` as const,
+      slug: getSlugFrom(dirPath),
       type: 'directory' as const,
     };
   })

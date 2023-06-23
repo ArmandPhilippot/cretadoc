@@ -1,6 +1,6 @@
-export const docDirectoryQuery = `query DocDirectory($id: String, $path: String ) {
+export const docDirectoryQuery = `query DocDirectory($id: String, $path: String, $slug: String) {
   doc {
-    directory(id: $id, path: $path) {
+    directory(id: $id, path: $path, slug: $slug) {
       contents {
         directories {
           createdAt

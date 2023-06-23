@@ -1,10 +1,5 @@
 /* eslint-disable max-statements */
-import {
-  isObject,
-  isObjKeyExist,
-  slugify,
-  type Nullable,
-} from '@cretadoc/utils';
+import { isObject, isObjKeyExist, type Nullable } from '@cretadoc/utils';
 import { afterAll, beforeAll, describe, it } from 'vitest';
 import type {
   DocFilePayload,
@@ -13,7 +8,7 @@ import type {
   DocFileUpdateResult,
 } from '../../../src/types';
 import { MARKDOWN_EXTENSION } from '../../../src/utils/constants';
-import { generateBase64String } from '../../../src/utils/helpers';
+import { generateBase64String, getSlugFrom } from '../../../src/utils/helpers';
 import { docFiles, docFixtures } from '../../fixtures/doc';
 import type { QueryResultWithErrors } from '../../types';
 import { expect } from '../../utils';
@@ -107,7 +102,7 @@ describe('updateDocFile', () => {
         name: newDocFileName,
         parent: null,
         path: newDocFilePath,
-        slug: `/${slugify(newDocFileName)}`,
+        slug: getSlugFrom(newDocFilePath),
         type: 'file',
       });
 

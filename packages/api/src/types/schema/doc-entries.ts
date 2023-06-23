@@ -58,10 +58,16 @@ export type DocEntryByPathLoader = DataLoader<
   Maybe<DocEntry>
 >;
 
+export type DocEntryBySlugLoader = DataLoader<
+  DocEntryInput['slug'],
+  Maybe<DocEntry>
+>;
+
 export type DocEntryLoaders = {
   entry: {
     byId: DocEntryByIdLoader;
     byPath: DocEntryByPathLoader;
+    bySlug: DocEntryBySlugLoader;
     list: ListLoader<DocEntry>;
   };
 };

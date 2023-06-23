@@ -59,6 +59,18 @@ describe('docDirectory', () => {
     expect.assertions(2);
   });
 
+  it('returns a documentation directory by slug', async () => {
+    const firstDirectory = docDirectories[0];
+
+    if (!firstDirectory) throw new Error('Documentation fixtures are missing.');
+
+    const response = await sendDocDirectoryQuery({ slug: firstDirectory.slug });
+
+    expect(response.body.data.doc?.directory).not.toBeNull();
+    expect(response.body.data.doc?.directory).toBeDocDirectory(firstDirectory);
+    expect.assertions(2);
+  });
+
   it('returns an error if both id and path are missing', async () => {
     const response = await sendDocDirectoryQuery();
 

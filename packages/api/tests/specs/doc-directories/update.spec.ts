@@ -1,11 +1,6 @@
 /* eslint-disable max-statements */
 import { basename, join } from 'path';
-import {
-  isObject,
-  isObjKeyExist,
-  slugify,
-  type Nullable,
-} from '@cretadoc/utils';
+import { isObject, isObjKeyExist, type Nullable } from '@cretadoc/utils';
 import { afterAll, beforeAll, describe, it } from 'vitest';
 import type {
   DocDirectoryPayload,
@@ -13,7 +8,7 @@ import type {
   DocDirectoryUpdatePayload,
   DocDirectoryUpdateResult,
 } from '../../../src/types';
-import { generateBase64String } from '../../../src/utils/helpers';
+import { generateBase64String, getSlugFrom } from '../../../src/utils/helpers';
 import { docDirectories, docFixtures } from '../../fixtures/doc';
 import type { QueryResultWithErrors } from '../../types';
 import { expect } from '../../utils';
@@ -111,7 +106,7 @@ describe('updateDocDirectory', () => {
         name: newDocDirectoryName,
         parent: existingDocDirectory.parent,
         path: newDocDirectoryPath,
-        slug: `/${slugify(newDocDirectoryName)}`,
+        slug: getSlugFrom(newDocDirectoryPath),
         type: 'directory',
       });
 
@@ -144,10 +139,10 @@ describe('updateDocDirectory', () => {
           id: generateBase64String(parentPath),
           name: basename(parentPath),
           path: parentPath,
-          slug: `/${slugify(basename(parentPath))}`,
+          slug: getSlugFrom(parentPath),
         },
         path: newPath,
-        slug: existingDocDirectory.slug,
+        slug: getSlugFrom(newPath),
         type: 'directory',
       });
 

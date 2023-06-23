@@ -1,4 +1,5 @@
-import { isUndefined, type Maybe } from '@cretadoc/utils';
+import { sep } from 'path';
+import { isUndefined, slugify, type Maybe } from '@cretadoc/utils';
 import { MARKDOWN_EXTENSION } from '../constants';
 
 /**
@@ -78,4 +79,24 @@ export const getFilenameWithExt = (filename: string): string => {
   if (filename.endsWith(MARKDOWN_EXTENSION)) return filename;
 
   return `${filename}${MARKDOWN_EXTENSION}`;
+};
+
+/**
+ * Convert a relative path to a slug.
+ *
+ * @param {string} relativePath - A relative path.
+ * @returns {string} The slug
+ */
+export const getSlugFrom = (relativePath: string): `/${string}` => {
+  const pathParts = relativePath.split(sep);
+  const slugParts = pathParts.map((pathPart, index) => {
+    const slugPart =
+      index === pathParts.length - 1
+        ? pathPart.replace(new RegExp(`${MARKDOWN_EXTENSION}$`), '')
+        : pathPart;
+
+    return slugify(slugPart);
+  });
+
+  return slugParts.join('/') as `/${string}`;
 };

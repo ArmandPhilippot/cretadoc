@@ -1,9 +1,4 @@
-import {
-  isObject,
-  isObjKeyExist,
-  slugify,
-  type Nullable,
-} from '@cretadoc/utils';
+import { isObject, isObjKeyExist, type Nullable } from '@cretadoc/utils';
 import { afterAll, beforeAll, describe, it } from 'vitest';
 import type {
   DocDirectoryCreateErrors,
@@ -11,7 +6,7 @@ import type {
   DocDirectoryCreateResult,
   DocDirectoryPayload,
 } from '../../../src/types';
-import { generateBase64String } from '../../../src/utils/helpers';
+import { generateBase64String, getSlugFrom } from '../../../src/utils/helpers';
 import { docDirectories, docFixtures } from '../../fixtures/doc';
 import type { QueryResultWithErrors } from '../../types';
 import { expect } from '../../utils';
@@ -72,7 +67,7 @@ describe('docDirectoryCreate', () => {
         name: newDocDirectoryName,
         parent: null,
         path: newDocDirectoryPath,
-        slug: `/${slugify(newDocDirectoryName)}`,
+        slug: getSlugFrom(newDocDirectoryPath),
         type: 'directory',
       });
 
@@ -100,10 +95,10 @@ describe('docDirectoryCreate', () => {
           id: parent.id,
           name: parent.name,
           path: parent.path,
-          slug: `/${slugify(parent.name)}`,
+          slug: getSlugFrom(parent.path),
         },
         path: newDocDirectoryPath,
-        slug: `/${slugify(newDocDirectoryName)}`,
+        slug: getSlugFrom(newDocDirectoryPath),
         type: 'directory',
       });
 

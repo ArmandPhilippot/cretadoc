@@ -140,10 +140,10 @@ export class FileSystemRepository {
    * @param {PageWhereFields} where - The filter parameters.
    * @returns {Page[]} The filtered entries.
    */
-  protected filter<T extends DocEntry | Page, I extends ResolveWhereFields<T>>(
-    entries: T[],
-    { createdAt, name, updatedAt, ...input }: I
-  ): T[] {
+  protected filter<
+    T extends DocEntry | Page,
+    I extends ResolveWhereFields<T> = ResolveWhereFields<T>
+  >(entries: T[], { createdAt, name, updatedAt, ...input }: I): T[] {
     const path = 'path' in input ? input.path : undefined;
     let filteredEntries = [...entries];
 
@@ -179,7 +179,7 @@ export class FileSystemRepository {
    */
   protected order<
     T extends DocEntry | Page,
-    I extends OrderBy<ResolveOrderFields<T>>
+    I extends OrderBy<ResolveOrderFields<T>> = OrderBy<ResolveOrderFields<T>>
   >(entries: T[], { direction, field }: I): T[] {
     let orderedEntries = [...entries];
 

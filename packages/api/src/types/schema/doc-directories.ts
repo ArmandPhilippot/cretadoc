@@ -11,8 +11,15 @@ import type {
 } from '../generics';
 import type { Connection, QueryResult } from '../gql';
 import type { DocEntryParent } from './doc';
+import type { DocFile } from './doc-files';
 
-export type DocDirectory = Omit<Directory, 'extension'> & {
+export type DocDirectoryContents = {
+  directories: DocDirectory[];
+  files: DocFile[];
+};
+
+export type DocDirectory = Omit<Directory, 'contents' | 'extension'> & {
+  contents: DocDirectoryContents;
   parent: Nullable<DocEntryParent>;
   slug: `/${string}`;
 };
@@ -159,10 +166,16 @@ export type DocDirectoryByPathLoader = DataLoader<
   Maybe<DocDirectory>
 >;
 
+export type DocDirectoryBySlugLoader = DataLoader<
+  DocDirectoryInput['slug'],
+  Maybe<DocDirectory>
+>;
+
 export type DocDirectoryLoaders = {
   directory: {
     byId: DocDirectoryByIdLoader;
     byPath: DocDirectoryByPathLoader;
+    bySlug: DocDirectoryBySlugLoader;
     list: ListLoader<DocDirectory>;
   };
 };

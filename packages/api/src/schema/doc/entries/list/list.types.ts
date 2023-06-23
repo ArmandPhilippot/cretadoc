@@ -21,6 +21,9 @@ export const DocEntryOrderFieldType = new GraphQLEnumType({
     path: {
       value: 'path',
     },
+    slug: {
+      value: 'slug',
+    },
     updatedAt: {
       value: 'updatedAt',
     },
