@@ -1,26 +1,23 @@
-import type { Nullable } from '@cretadoc/utils';
+import { type Nullable, isObjKeyExist } from '@cretadoc/utils';
 import type { ExpectStatic } from 'vitest';
 import type { DocDirectory } from '../../../src/types';
-import type {
-  MatcherResult,
-  DocDirectoryWithoutDatesAndContents,
-} from '../../types';
+import type { MatcherResult } from '../../types';
 
 export type ToBeDocDirectory = {
   toBeDocDirectory: (
-    expected: Nullable<DocDirectoryWithoutDatesAndContents>
+    expected: Partial<Nullable<DocDirectory>>
   ) => MatcherResult;
 };
 
 export function toBeDocDirectory(
   this: ReturnType<ExpectStatic['getState']>,
   directory: Nullable<DocDirectory>,
-  expected: Nullable<DocDirectoryWithoutDatesAndContents>
+  expected: Partial<Nullable<DocDirectory>>
 ): MatcherResult {
   const match = this.isNot ? 'does not match' : 'matches';
   const message = () => `DocDirectory ${match}.`;
 
-  if (directory === null)
+  if (directory === null || expected === null)
     return {
       message,
       pass: this.equals(directory, expected),
@@ -28,10 +25,21 @@ export function toBeDocDirectory(
       expected,
     };
 
-  const { contents, createdAt, updatedAt, ...actual } = directory;
+  const actual = Object.fromEntries(
+    Object.entries(directory).filter(([key]) => isObjKeyExist(expected, key))
+  );
+  let pass = true;
+
+  for (const [key, value] of Object.entries(expected)) {
+    if (!isObjKeyExist(directory, key)) continue;
+
+    pass = this.equals(directory[key], value);
+
+    if (!pass) break;
+  }
 
   return {
-    pass: this.equals(actual, expected),
+    pass,
     message,
     actual,
     expected,

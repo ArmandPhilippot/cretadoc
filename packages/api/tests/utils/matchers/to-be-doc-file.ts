@@ -1,21 +1,21 @@
-import type { Nullable } from '@cretadoc/utils';
+import { type Nullable, isObjKeyExist } from '@cretadoc/utils';
 import type { ExpectStatic } from 'vitest';
 import type { DocFile } from '../../../src/types';
-import type { MatcherResult, DocFileWithoutDates } from '../../types';
+import type { MatcherResult } from '../../types';
 
 export type ToBeDocFile = {
-  toBeDocFile: (expected: Nullable<DocFileWithoutDates>) => MatcherResult;
+  toBeDocFile: (expected: Partial<Nullable<DocFile>>) => MatcherResult;
 };
 
 export function toBeDocFile(
   this: ReturnType<ExpectStatic['getState']>,
   file: Nullable<DocFile>,
-  expected: Nullable<DocFileWithoutDates>
+  expected: Partial<Nullable<DocFile>>
 ): MatcherResult {
   const match = this.isNot ? 'does not match' : 'matches';
   const message = () => `DocFile ${match}.`;
 
-  if (file === null)
+  if (file === null || expected === null)
     return {
       message,
       pass: this.equals(file, expected),
@@ -23,10 +23,21 @@ export function toBeDocFile(
       expected,
     };
 
-  const { createdAt, updatedAt, ...actual } = file;
+  const actual = Object.fromEntries(
+    Object.entries(file).filter(([key]) => isObjKeyExist(expected, key))
+  );
+  let pass = true;
+
+  for (const [key, value] of Object.entries(expected)) {
+    if (!isObjKeyExist(file, key)) continue;
+
+    pass = this.equals(file[key], value);
+
+    if (!pass) break;
+  }
 
   return {
-    pass: this.equals(actual, expected),
+    pass,
     message,
     actual,
     expected,

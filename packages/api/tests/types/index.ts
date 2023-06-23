@@ -1,10 +1,5 @@
 import type { GraphQLError } from 'graphql';
-import type {
-  DocDirectoryPayload,
-  DocFilePayload,
-  PagePayload,
-  QueryResult,
-} from '../../src/types';
+import type { QueryResult } from '../../src/types';
 
 export type GraphQLErrors = {
   errors: GraphQLError[];
@@ -25,18 +20,3 @@ export type MatcherResult = {
   actual?: unknown;
   expected?: unknown;
 };
-
-export type DocDirectoryWithoutDatesAndContents = Omit<
-  NonNullable<DocDirectoryPayload['directory']>,
-  'contents' | 'createdAt' | 'updatedAt'
->;
-
-export type DocFileWithoutDates = Omit<
-  NonNullable<DocFilePayload['file']>,
-  'createdAt' | 'updatedAt'
->;
-
-export type PageWithoutDates = Omit<
-  NonNullable<PagePayload['page']>,
-  'createdAt' | 'updatedAt'
->;
