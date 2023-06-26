@@ -1,4 +1,9 @@
-import { GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
+import {
+  GraphQLInputObjectType,
+  GraphQLNonNull,
+  GraphQLObjectType,
+  GraphQLString,
+} from 'graphql';
 import type { APIContext, Meta, Page, PagePayload } from '../../types';
 
 export const PageMetaType = new GraphQLObjectType<Meta>({
@@ -37,6 +42,37 @@ export const PageMetaType = new GraphQLObjectType<Meta>({
         resolve: ({ updatedAt }) => updatedAt,
       },
     };
+  },
+});
+
+export const PageMetaInputType = new GraphQLInputObjectType({
+  name: 'PageMetaInput',
+  description: 'The page metadata.',
+  fields: {
+    createdAt: {
+      type: GraphQLString,
+      description: 'The creation date of the page.',
+    },
+    seoDescription: {
+      type: GraphQLString,
+      description: 'The meta description.',
+    },
+    seoTitle: {
+      type: GraphQLString,
+      description: 'The title used by search engines.',
+    },
+    status: {
+      type: GraphQLString,
+      description: 'The status of the page.',
+    },
+    title: {
+      type: GraphQLString,
+      description: 'The title of the page.',
+    },
+    updatedAt: {
+      type: GraphQLString,
+      description: 'The update date of the page.',
+    },
   },
 });
 

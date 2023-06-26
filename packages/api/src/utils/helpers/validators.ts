@@ -212,11 +212,11 @@ export const validateMetaKeyValue = (
       return validateDateTime(value);
     case 'seoDescription':
     case 'seoTitle':
-      return validateString(value, { lengthRange: { min: 1 } });
+      return validateString(value, { lengthRange: { min: 0 } });
     case 'status':
       return validateFileStatus(value);
     case 'title':
     default:
-      return validateString(value, { lengthRange: { min: 1, max: 150 } });
+      return validateString(value, { lengthRange: { min: 0, max: 150 } });
   }
 };

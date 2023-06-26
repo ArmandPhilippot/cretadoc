@@ -137,7 +137,7 @@ export const validateDocFileUpdateInput = async <T extends DocFileUpdate>(
   loader: DocDirectoryByPathLoader
 ): Promise<ValidationErrors<T>> => {
   const validationErrors = initValidationErrors(input);
-  const { id, contents, name, parentPath } = input;
+  const { id, contents, meta, name, parentPath } = input;
 
   validationErrors.id.push(...validateDocFileId(id));
 
@@ -145,6 +145,8 @@ export const validateDocFileUpdateInput = async <T extends DocFileUpdate>(
     validationErrors.contents.push(...validateDocFileContent(contents));
 
   if (name) validationErrors.name.push(...validateDocFileName(name));
+
+  if (meta) validationErrors.meta.push(...validateDocFileMeta(meta));
 
   if (parentPath) {
     const parentPathErrors = await validateDocFileParentPath(

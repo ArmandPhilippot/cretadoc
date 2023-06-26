@@ -91,7 +91,7 @@ export type PageDeleteMutator = Mutator<PageDelete, Page>;
  * ===========================================================================
  */
 
-export type PageUpdate = Pick<Page, 'id'> & Partial<Omit<PageCreate, 'meta'>>;
+export type PageUpdate = Pick<Page, 'id'> & Partial<PageCreate>;
 
 export type PageUpdateInput = InputFrom<PageUpdate>;
 

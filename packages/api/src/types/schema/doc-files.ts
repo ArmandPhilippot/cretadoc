@@ -104,8 +104,7 @@ export type DocFileDeleteMutator = Mutator<DocFileDelete, DocFile>;
  * ===========================================================================
  */
 
-export type DocFileUpdate = Pick<DocFile, 'id'> &
-  Partial<Omit<DocFileCreate, 'meta'>>;
+export type DocFileUpdate = Pick<DocFile, 'id'> & Partial<DocFileCreate>;
 
 export type DocFileUpdateInput = InputFrom<DocFileUpdate>;
 

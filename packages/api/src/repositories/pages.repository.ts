@@ -144,11 +144,16 @@ export class PagesRepository extends FileSystemRepository {
   public async updatePage({
     contents,
     id,
+    meta,
     name,
   }: PageUpdate): Promise<Maybe<Page>> {
     const relativePath = decodeBase64String(id);
     const absolutePath = this.getAbsolutePathFrom(relativePath);
-    const newAbsolutePath = await this.update(absolutePath, { contents, name });
+    const newAbsolutePath = await this.update(absolutePath, {
+      contents,
+      meta,
+      name,
+    });
     const newPageName = parse(newAbsolutePath).name;
 
     return this.get('name', newPageName);

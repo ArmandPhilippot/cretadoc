@@ -102,12 +102,14 @@ export const validatePageUpdateInput = <T extends PageUpdate>(
   input: T
 ): ValidationErrors<T> => {
   const validationErrors = initValidationErrors(input);
-  const { id, contents, name } = input;
+  const { id, contents, meta, name } = input;
 
   validationErrors.id.push(...validatePageId(id));
 
   if (contents)
     validationErrors.contents.push(...validatePageContents(contents));
+
+  if (meta) validationErrors.meta.push(...validatePageMeta(meta));
 
   if (name) validationErrors.name.push(...validatePageName(name));
 

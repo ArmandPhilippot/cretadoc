@@ -1,4 +1,4 @@
-import { rename, rm, writeFile } from 'fs/promises';
+import { readFile, rename, rm, writeFile } from 'fs/promises';
 import { isAbsolute, join, parse } from 'path';
 import { type DirectoryContents, readDir } from '@cretadoc/read-dir';
 import { type Maybe, isObjKeyExist, isString } from '@cretadoc/utils';
@@ -25,9 +25,10 @@ import {
   isMarkdownFile,
   isPathInRoot,
   normalizePath,
+  parseMarkdown,
 } from '../utils/helpers';
 
-type FileSystemData = {
+export type FileSystemData = {
   /**
    * The file contents if it is a Markdown file.
    */
@@ -264,21 +265,83 @@ export class FileSystemRepository {
     return absolutePath;
   }
 
+  async #getCurrentFileContents(path: string) {
+    const currentContents = await readFile(path, { encoding: 'utf8' });
+    const markdownContents = parseMarkdown(currentContents);
+
+    return markdownContents;
+  }
+
+  /**
+   * Merge the received meta with the current ones.
+   *
+   * @param {Meta} current - The current meta.
+   * @param {Meta} newMeta - The received meta.
+   * @returns {Meta} The merged meta.
+   */
+  #mergeMeta(current: Meta, newMeta: Meta): Meta {
+    const keys = Object.keys({ ...current, ...newMeta }) as Array<keyof Meta>;
+    const mergedEntries: Array<[keyof Meta, Required<Meta[keyof Meta]>]> = [];
+
+    for (const key of keys) {
+      // An empty string should mean erase the current value.
+      if (current[key] && newMeta[key] === '') continue;
+
+      if (!newMeta[key] && current[key])
+        if (key === 'updatedAt')
+          mergedEntries.push([key, getDatetimeFormat(new Date())]);
+        else mergedEntries.push([key, current[key]]);
+      else mergedEntries.push([key, newMeta[key]]);
+    }
+
+    return Object.fromEntries(mergedEntries) as Meta;
+  }
+
+  /**
+   * Update the frontmatter using current and new meta.
+   *
+   * @param {Maybe<Meta>} current - The current meta.
+   * @param {Maybe<Meta>} newMeta - The received meta.
+   * @returns {string} The updated frontmatter
+   */
+  #getUpdatedFrontMatter(current: Maybe<Meta>, newMeta: Maybe<Meta>): string {
+    if (current && !newMeta) return this.#convertMetaToFrontMatter(current);
+
+    if (!current && newMeta) return this.#convertMetaToFrontMatter(newMeta);
+
+    if (current && newMeta) {
+      const mergedMeta = this.#mergeMeta(current, newMeta);
+
+      return this.#convertMetaToFrontMatter(mergedMeta);
+    }
+
+    return '';
+  }
+
   /**
    * Update the file contents.
    *
    * @param {string} path - The file path.
    * @param {string} contents - The new file contents.
    */
-  async #updateFileContents(path: string, contents: string) {
-    if (isMarkdownFile(path))
-      await writeFile(path, contents, { encoding: 'utf8' });
-    else
+  async #updateFileContents(
+    path: string,
+    { contents, meta }: Pick<FileSystemData, 'contents' | 'meta'>
+  ) {
+    if (!isMarkdownFile(path))
       throw new CretadocAPIError('Cannot update contents', {
         errorKind: 'syntax',
         reason: 'Only markdown file can be updated',
         received: path,
       });
+
+    const { content: currentContent, meta: currentMeta } =
+      await this.#getCurrentFileContents(path);
+    const frontMatter = this.#getUpdatedFrontMatter(currentMeta, meta);
+    const regularContents = contents ?? currentContent;
+    const mdContents = `${frontMatter}${regularContents}`;
+
+    await writeFile(path, mdContents, { encoding: 'utf8' });
   }
 
   /**
@@ -290,10 +353,9 @@ export class FileSystemRepository {
    */
   protected async update(
     path: string,
-    { contents, name, parentPath }: Partial<FileSystemData>
+    { contents, meta, name, parentPath }: Partial<FileSystemData>
   ): Promise<string> {
     const currentPath = parse(path);
-    const hasNewContent = !!contents;
     const newName =
       isMarkdownFile(path) && name
         ? getFilenameWithExt(name)
@@ -301,7 +363,9 @@ export class FileSystemRepository {
     const basePath = parentPath ?? this.getRelativePathFrom(currentPath.dir);
     const newPath = this.getAbsolutePathFrom(join(basePath, newName));
 
-    if (hasNewContent) await this.#updateFileContents(path, contents);
+    if (!!contents || !!meta)
+      await this.#updateFileContents(path, { contents, meta });
+
     if (newPath !== path) await rename(path, newPath);
 
     return newPath;

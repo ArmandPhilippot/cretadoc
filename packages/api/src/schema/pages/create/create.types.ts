@@ -11,38 +11,7 @@ import type {
   PageCreateErrors,
   PageCreatePayload,
 } from '../../../types';
-import { PagePayloadType } from '../pages.types';
-
-export const PageMetaInputType = new GraphQLInputObjectType({
-  name: 'PageMetaInput',
-  description: 'The page metadata.',
-  fields: {
-    createdAt: {
-      type: GraphQLString,
-      description: 'The creation date of the page.',
-    },
-    seoDescription: {
-      type: GraphQLString,
-      description: 'The meta description.',
-    },
-    seoTitle: {
-      type: GraphQLString,
-      description: 'The title used by search engines.',
-    },
-    status: {
-      type: GraphQLString,
-      description: 'The status of the page.',
-    },
-    title: {
-      type: GraphQLString,
-      description: 'The title of the page.',
-    },
-    updatedAt: {
-      type: GraphQLString,
-      description: 'The update date of the page.',
-    },
-  },
-});
+import { PageMetaInputType, PagePayloadType } from '../pages.types';
 
 export const PageCreateInputType = new GraphQLInputObjectType({
   name: 'PageCreateInput',

@@ -11,7 +11,7 @@ import type {
   DocFileUpdateErrors,
   DocFileUpdatePayload,
 } from '../../../../types';
-import { DocFilePayloadType } from '../files.types';
+import { DocFileMetaInputType, DocFilePayloadType } from '../files.types';
 
 export const DocFileUpdateInputType = new GraphQLInputObjectType({
   name: 'DocFileUpdateInput',
@@ -28,6 +28,10 @@ export const DocFileUpdateInputType = new GraphQLInputObjectType({
     name: {
       description: 'The file name without extension.',
       type: GraphQLString,
+    },
+    meta: {
+      description: 'The file metadata.',
+      type: DocFileMetaInputType,
     },
     parentPath: {
       description: 'The path where to move the file.',
@@ -54,6 +58,10 @@ export const DocFileUpdateErrorsType = new GraphQLObjectType<
           id: {
             type: new GraphQLList(GraphQLString),
             resolve: ({ id }) => id,
+          },
+          meta: {
+            type: new GraphQLList(GraphQLString),
+            resolve: ({ meta }) => meta,
           },
           name: {
             type: new GraphQLList(GraphQLString),

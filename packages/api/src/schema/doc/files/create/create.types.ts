@@ -11,38 +11,7 @@ import type {
   DocFileCreateErrors,
   DocFileCreatePayload,
 } from '../../../../types';
-import { DocFilePayloadType } from '../files.types';
-
-export const DocFileMetaInputType = new GraphQLInputObjectType({
-  name: 'DocFileMetaInput',
-  description: 'The documentation file metadata.',
-  fields: {
-    createdAt: {
-      type: GraphQLString,
-      description: 'The creation date of the file.',
-    },
-    seoDescription: {
-      type: GraphQLString,
-      description: 'The meta description.',
-    },
-    seoTitle: {
-      type: GraphQLString,
-      description: 'The title used by search engines.',
-    },
-    status: {
-      type: GraphQLString,
-      description: 'The status of the documentation file.',
-    },
-    title: {
-      type: GraphQLString,
-      description: 'The title of the documentation file.',
-    },
-    updatedAt: {
-      type: GraphQLString,
-      description: 'The update date of the file.',
-    },
-  },
-});
+import { DocFileMetaInputType, DocFilePayloadType } from '../files.types';
 
 export const DocFileCreateInputType = new GraphQLInputObjectType({
   name: 'DocFileCreateInput',

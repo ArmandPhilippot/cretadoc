@@ -10,11 +10,14 @@ import {
   PAGES_FIXTURES_DIR,
 } from '../../tests/utils/constants';
 import { createFixtures, deleteFixturesIn } from '../../tests/utils/helpers';
-import type { APIDataConfig, ErrorDetails } from '../types';
+import type { APIDataConfig, ErrorDetails, Meta } from '../types';
 import { MARKDOWN_EXTENSION } from '../utils/constants';
 import { CretadocAPIError } from '../utils/exceptions';
 import { getDatetimeFormat } from '../utils/helpers';
-import { FileSystemRepository } from './filesystem.repository';
+import {
+  type FileSystemData,
+  FileSystemRepository,
+} from './filesystem.repository';
 
 class FileSystemRepositoryChild extends FileSystemRepository {
   public override getRootDir() {
@@ -35,11 +38,9 @@ class FileSystemRepositoryChild extends FileSystemRepository {
     return super.getContentsOf(dir);
   }
 
-  public override async createMarkdownFile(props: {
-    contents?: string;
-    name: string;
-    parentPath?: string;
-  }): Promise<string> {
+  public override async createMarkdownFile(
+    props: FileSystemData
+  ): Promise<string> {
     return super.createMarkdownFile(props);
   }
 
@@ -52,17 +53,9 @@ class FileSystemRepositoryChild extends FileSystemRepository {
 
   public override async update(
     path: string,
-    {
-      contents,
-      name,
-      parentPath,
-    }: Partial<{
-      contents?: string;
-      name: string;
-      parentPath?: string;
-    }>
+    data: Partial<FileSystemData>
   ): Promise<string> {
-    return super.update(path, { contents, name, parentPath });
+    return super.update(path, data);
   }
 }
 
@@ -202,12 +195,73 @@ describe('FileSystemRepository', () => {
       parentPath: './',
     });
     const newContents = 'recusandae ipsam molestiae';
+    const updateDateTime = getDatetimeFormat(new Date());
+    const [date, _time] = updateDateTime.split(' ');
     const newPath = await repo.update(filePath, { contents: newContents });
     const updatedFileContents = await readFile(filePath, { encoding: 'utf8' });
 
     expect(newPath).toBe(filePath);
-    expect(updatedFileContents).toBe(newContents);
-    expect.assertions(2);
+    expect(updatedFileContents).toContain(newContents);
+    expect(updatedFileContents).toContain(date);
+
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    expect.assertions(3);
+  });
+
+  it('can update the frontmatter of a markdown file', async () => {
+    const repo = new FileSystemRepositoryChild(PAGES_FIXTURES_DIR, 'pages');
+    const initialMeta: Meta = {
+      title: 'et et nihil',
+    };
+    const filePath = await repo.createMarkdownFile({
+      contents: 'aperiam omnis beatae',
+      meta: initialMeta,
+      name: 'eaque',
+      parentPath: './',
+    });
+    const newMeta: Meta = {
+      title: 'eum libero et',
+    };
+    const updateDateTime = getDatetimeFormat(new Date());
+    const [date, _time] = updateDateTime.split(' ');
+    await repo.update(filePath, { meta: newMeta });
+    const updatedFileContents = await readFile(filePath, { encoding: 'utf8' });
+
+    expect(updatedFileContents).not.toContain(initialMeta.title);
+    expect(updatedFileContents).toContain(newMeta.title);
+    expect(updatedFileContents).toContain(date);
+
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    expect.assertions(3);
+  });
+
+  it('can override a frontmatter meta in a markdown file', async () => {
+    const repo = new FileSystemRepositoryChild(PAGES_FIXTURES_DIR, 'pages');
+    const initialMeta = {
+      seoTitle: 'blanditiis quia porro',
+      title: 'et et nihil',
+    } satisfies Meta;
+    const filePath = await repo.createMarkdownFile({
+      contents: 'aperiam omnis beatae',
+      meta: initialMeta,
+      name: 'commodi',
+      parentPath: './',
+    });
+    const newMeta = {
+      seoTitle: '',
+      status: 'draft',
+    } satisfies Meta;
+    await repo.update(filePath, { meta: newMeta });
+    const updatedFileContents = await readFile(filePath, { encoding: 'utf8' });
+
+    expect(updatedFileContents).not.toContain(
+      `seoTitle: ${initialMeta.seoTitle}`
+    );
+    expect(updatedFileContents).toContain(`title: ${initialMeta.title}`);
+    expect(updatedFileContents).toContain(`status: ${newMeta.status}`);
+
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    expect.assertions(3);
   });
 
   it('throws an error when trying to update a non markdown file', async () => {

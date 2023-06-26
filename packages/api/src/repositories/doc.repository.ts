@@ -465,6 +465,7 @@ export class DocRepository extends FileSystemRepository {
   public async updateFile({
     contents,
     id,
+    meta,
     name,
     parentPath,
   }: DocFileUpdate): Promise<Maybe<DocFile>> {
@@ -472,6 +473,7 @@ export class DocRepository extends FileSystemRepository {
     const absolutePath = this.getAbsolutePathFrom(relativePath);
     const newAbsolutePath = await this.update(absolutePath, {
       contents,
+      meta,
       name,
       parentPath,
     });
