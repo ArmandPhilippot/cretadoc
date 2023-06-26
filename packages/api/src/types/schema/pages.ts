@@ -55,7 +55,7 @@ export type PageConnectionResult = QueryResult<PageConnectionPayload>;
  * ===========================================================================
  */
 
-export type PageCreate = Pick<Page, 'contents' | 'name'>;
+export type PageCreate = Pick<Page, 'contents' | 'meta' | 'name'>;
 
 export type PageCreateInput = InputFrom<PageCreate>;
 
@@ -91,7 +91,7 @@ export type PageDeleteMutator = Mutator<PageDelete, Page>;
  * ===========================================================================
  */
 
-export type PageUpdate = Pick<Page, 'id'> & Partial<PageCreate>;
+export type PageUpdate = Pick<Page, 'id'> & Partial<Omit<PageCreate, 'meta'>>;
 
 export type PageUpdateInput = InputFrom<PageUpdate>;
 

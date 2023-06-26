@@ -7,7 +7,11 @@ import type {
   DocFilePayload,
 } from '../../../src/types';
 import { MARKDOWN_EXTENSION } from '../../../src/utils/constants';
-import { generateBase64String, getSlugFrom } from '../../../src/utils/helpers';
+import {
+  generateBase64String,
+  getDatetimeFormat,
+  getSlugFrom,
+} from '../../../src/utils/helpers';
 import { docDirectories, docFiles, docFixtures } from '../../fixtures/doc';
 import type { QueryResultWithErrors } from '../../types';
 import { expect } from '../../utils';
@@ -55,13 +59,14 @@ describe('docFileCreate', () => {
   it('can create a new doc file without content', async () => {
     const newDocFileName = 'odio';
     const newDocFilePath = `./${newDocFileName}${MARKDOWN_EXTENSION}`;
+    const creationDateTime = getDatetimeFormat(new Date());
+    const [date, _time] = creationDateTime.split(' ');
     const response = await createDocFile({ input: { name: newDocFileName } });
 
     expect(response.body.data.docFileCreate).not.toBeNull();
 
-    if (isDocFilePayload(response.body.data.docFileCreate))
+    if (isDocFilePayload(response.body.data.docFileCreate)) {
       expect(response.body.data.docFileCreate.file).toBeDocFile({
-        contents: '',
         id: generateBase64String(newDocFilePath),
         name: newDocFileName,
         parent: null,
@@ -69,8 +74,13 @@ describe('docFileCreate', () => {
         slug: getSlugFrom(newDocFilePath),
         type: 'file',
       });
+      expect(response.body.data.docFileCreate.file?.meta?.createdAt).toContain(
+        date
+      );
+    }
 
-    expect.assertions(2);
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    expect.assertions(3);
   });
 
   it('can create a new doc file with content', async () => {

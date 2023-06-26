@@ -441,14 +441,16 @@ export class DocRepository extends FileSystemRepository {
    * @returns {Promise<Maybe<DocFile>>} The new documentation file.
    */
   public async createFile({
-    name,
     contents,
+    meta,
+    name,
     parentPath,
   }: DocFileCreate): Promise<Maybe<DocFile>> {
     const filePath = await this.createMarkdownFile({
-      parentPath,
       contents,
+      meta,
       name,
+      parentPath,
     });
 
     return this.get('path', this.getRelativePathFrom(filePath), 'file');

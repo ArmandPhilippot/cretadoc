@@ -60,7 +60,7 @@ export type DocFileConnectionResult = QueryResult<DocFileConnectionPayload>;
  * ===========================================================================
  */
 
-export type DocFileCreate = Pick<DocFile, 'contents' | 'name'> & {
+export type DocFileCreate = Pick<DocFile, 'contents' | 'meta' | 'name'> & {
   parentPath?: string;
 };
 
@@ -104,7 +104,8 @@ export type DocFileDeleteMutator = Mutator<DocFileDelete, DocFile>;
  * ===========================================================================
  */
 
-export type DocFileUpdate = Pick<DocFile, 'id'> & Partial<DocFileCreate>;
+export type DocFileUpdate = Pick<DocFile, 'id'> &
+  Partial<Omit<DocFileCreate, 'meta'>>;
 
 export type DocFileUpdateInput = InputFrom<DocFileUpdate>;
 

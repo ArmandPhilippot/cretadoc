@@ -125,8 +125,12 @@ export class PagesRepository extends FileSystemRepository {
    * @param {PageCreate} page - The page to write.
    * @returns {Promise<Maybe<Page>>} The new page.
    */
-  public async create({ name, contents }: PageCreate): Promise<Maybe<Page>> {
-    await this.createMarkdownFile({ contents, name });
+  public async create({
+    contents,
+    meta,
+    name,
+  }: PageCreate): Promise<Maybe<Page>> {
+    await this.createMarkdownFile({ contents, meta, name });
 
     return this.get('name', name);
   }

@@ -13,6 +13,7 @@ import { createFixtures, deleteFixturesIn } from '../../tests/utils/helpers';
 import type { APIDataConfig, ErrorDetails } from '../types';
 import { MARKDOWN_EXTENSION } from '../utils/constants';
 import { CretadocAPIError } from '../utils/exceptions';
+import { getDatetimeFormat } from '../utils/helpers';
 import { FileSystemRepository } from './filesystem.repository';
 
 class FileSystemRepositoryChild extends FileSystemRepository {
@@ -129,6 +130,8 @@ describe('FileSystemRepository', () => {
     const parentPath = './';
     const filename = 'natus';
     const contents = 'adipisci quod odio';
+    const creationDateTime = getDatetimeFormat(new Date());
+    const [date, _time] = creationDateTime.split(' ');
     const filePath = await repo.createMarkdownFile({
       contents,
       name: filename,
@@ -139,8 +142,11 @@ describe('FileSystemRepository', () => {
     expect(filePath).toBe(
       join(PAGES_FIXTURES_DIR, `${filename}${MARKDOWN_EXTENSION}`)
     );
-    expect(createdFileContents).toBe(contents);
-    expect.assertions(2);
+    expect(createdFileContents).toContain(contents);
+    if (date) expect(createdFileContents).toContain(date);
+
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    expect.assertions(3);
   });
 
   it('can create a new file with a full filename', async () => {
@@ -148,6 +154,8 @@ describe('FileSystemRepository', () => {
     const parentPath = './';
     const filename = 'soluta.md';
     const contents = 'sit quia libero';
+    const creationDateTime = getDatetimeFormat(new Date());
+    const [date, _time] = creationDateTime.split(' ');
     const filePath = await repo.createMarkdownFile({
       contents,
       name: filename,
@@ -156,8 +164,11 @@ describe('FileSystemRepository', () => {
     const createdFileContents = await readFile(filePath, { encoding: 'utf8' });
 
     expect(filePath).toBe(join(PAGES_FIXTURES_DIR, filename));
-    expect(createdFileContents).toBe(contents);
-    expect.assertions(2);
+    expect(createdFileContents).toContain(contents);
+    if (date) expect(createdFileContents).toContain(date);
+
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    expect.assertions(3);
   });
 
   it('can rename a file', async () => {
@@ -177,7 +188,7 @@ describe('FileSystemRepository', () => {
     expect(newPath).toBe(
       join(PAGES_FIXTURES_DIR, `${newName}${MARKDOWN_EXTENSION}`)
     );
-    expect(renamedFileContents).toBe(contents);
+    expect(renamedFileContents).toContain(contents);
     expect(existsSync(filePath)).toBe(false);
     // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     expect.assertions(3);

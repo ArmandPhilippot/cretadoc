@@ -44,7 +44,7 @@ export const fileCreate: GraphQLFieldConfig<
       input,
       context.loaders.doc.directory.byPath
     );
-    const { contents, name, parentPath } = input;
+    const { contents, meta, name, parentPath } = input;
     const existentDocFiles = await context.loaders.doc.file.list({
       first: 1,
       where: { name, path: parentPath },
@@ -60,6 +60,7 @@ export const fileCreate: GraphQLFieldConfig<
 
     const docFile = await context.mutators.doc.file.create({
       contents: contents ? sanitizeString(contents) : undefined,
+      meta,
       name,
       parentPath,
     });

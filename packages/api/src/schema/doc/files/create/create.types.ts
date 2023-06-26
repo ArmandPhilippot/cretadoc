@@ -13,6 +13,37 @@ import type {
 } from '../../../../types';
 import { DocFilePayloadType } from '../files.types';
 
+export const DocFileMetaInputType = new GraphQLInputObjectType({
+  name: 'DocFileMetaInput',
+  description: 'The documentation file metadata.',
+  fields: {
+    createdAt: {
+      type: GraphQLString,
+      description: 'The creation date of the file.',
+    },
+    seoDescription: {
+      type: GraphQLString,
+      description: 'The meta description.',
+    },
+    seoTitle: {
+      type: GraphQLString,
+      description: 'The title used by search engines.',
+    },
+    status: {
+      type: GraphQLString,
+      description: 'The status of the documentation file.',
+    },
+    title: {
+      type: GraphQLString,
+      description: 'The title of the documentation file.',
+    },
+    updatedAt: {
+      type: GraphQLString,
+      description: 'The update date of the file.',
+    },
+  },
+});
+
 export const DocFileCreateInputType = new GraphQLInputObjectType({
   name: 'DocFileCreateInput',
   description: 'The input to create a new documentation file.',
@@ -20,6 +51,10 @@ export const DocFileCreateInputType = new GraphQLInputObjectType({
     contents: {
       description: 'The file contents.',
       type: GraphQLString,
+    },
+    meta: {
+      description: 'The file metadata.',
+      type: DocFileMetaInputType,
     },
     name: {
       description: 'The file name without extension.',
@@ -46,6 +81,10 @@ export const DocFileCreateErrorsType = new GraphQLObjectType<
           contents: {
             type: new GraphQLList(GraphQLString),
             resolve: ({ contents }) => contents,
+          },
+          meta: {
+            type: new GraphQLList(GraphQLString),
+            resolve: ({ meta }) => meta,
           },
           name: {
             type: new GraphQLList(GraphQLString),

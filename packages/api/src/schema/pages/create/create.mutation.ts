@@ -35,7 +35,7 @@ export const pageCreate: GraphQLFieldConfig<null, APIContext, PageCreateInput> =
         throw new CretadocAPIError('Cannot create page', errors);
 
       const validationErrors = validatePageCreateInput(input);
-      const { contents, name } = input;
+      const { contents, meta, name } = input;
       const maybeExistentPage = await context.loaders.page.byName.load(name);
 
       if (maybeExistentPage !== undefined)
@@ -48,6 +48,7 @@ export const pageCreate: GraphQLFieldConfig<null, APIContext, PageCreateInput> =
 
       const page = await context.mutators.page.create({
         contents: contents ? sanitizeString(contents) : undefined,
+        meta,
         name,
       });
 

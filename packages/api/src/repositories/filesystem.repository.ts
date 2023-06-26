@@ -5,6 +5,7 @@ import { type Maybe, isObjKeyExist, isString } from '@cretadoc/utils';
 import type {
   APIDataConfig,
   DocEntry,
+  Meta,
   OrderBy,
   Page,
   ResolveOrderFields,
@@ -18,6 +19,7 @@ import {
   byPathProp,
   bySlugProp,
   byUpdatedAtProp,
+  getDatetimeFormat,
   getFilenameWithExt,
   getRelativePath,
   isMarkdownFile,
@@ -30,6 +32,10 @@ type FileSystemData = {
    * The file contents if it is a Markdown file.
    */
   contents?: string;
+  /**
+   * The file metadata.
+   */
+  meta?: Meta;
   /**
    * A filename (without extension).
    */
@@ -206,12 +212,37 @@ export class FileSystemRepository {
   }
 
   /**
+   * Convert a Meta object to a string
+   *
+   * @param {Meta} meta - A Meta object.
+   * @returns {string} The meta as string
+   */
+  #convertMetaToStr(meta: Meta): string {
+    return Object.entries(meta)
+      .map(([key, value]) => `${key}: ${value}`)
+      .join('\n');
+  }
+
+  /**
+   * Convert a Meta object to front matter format.
+   *
+   * @param {Meta} meta - A Meta object
+   * @returns {string} The front matter string.
+   */
+  #convertMetaToFrontMatter(meta: Meta): string {
+    const metaStr = this.#convertMetaToStr(meta);
+
+    return `---\n${metaStr}\n---\n\n`;
+  }
+
+  /**
    * Create a new markdown file.
    *
    * @param {FileSystemData} data - The data to create a markdown file.
    * @returns {Promise<string>} The absolute file path.
    */
   protected async createMarkdownFile({
+    meta,
     name,
     contents = '',
     parentPath = '',
@@ -219,8 +250,16 @@ export class FileSystemRepository {
     const filename = getFilenameWithExt(name);
     const relativePath = this.getRelativePathFrom(join(parentPath, filename));
     const absolutePath = this.getAbsolutePathFrom(relativePath);
+    const creationDate = getDatetimeFormat(new Date());
+    const allMeta: Meta = {
+      ...meta,
+      createdAt: meta?.createdAt ?? creationDate,
+      updatedAt: meta?.updatedAt ?? creationDate,
+    };
+    const frontMatter = this.#convertMetaToFrontMatter(allMeta);
+    const mdContents = `${frontMatter}${contents}`;
 
-    await writeFile(absolutePath, contents, { encoding: 'utf8' });
+    await writeFile(absolutePath, mdContents, { encoding: 'utf8' });
 
     return absolutePath;
   }

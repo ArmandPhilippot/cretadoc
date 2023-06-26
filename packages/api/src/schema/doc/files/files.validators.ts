@@ -6,12 +6,14 @@ import type {
   DocFileCreate,
   DocFileDelete,
   DocFileUpdate,
+  Meta,
   ValidationErrors,
 } from '../../../types';
 import { decodeBase64String } from '../../../utils/helpers';
 import {
   initValidationErrors,
   validateFilename,
+  validateMetaKeyValue,
   validateRelativePath,
 } from '../../../utils/helpers/validators';
 
@@ -54,6 +56,24 @@ export const validateDocFileName = (name: string): string[] =>
   validateFilename(name);
 
 /**
+ * Validate the file meta.
+ *
+ * @param {Meta} meta - The meta to validate.
+ * @returns {string[]} An array of errors or an empty array.
+ */
+export const validateDocFileMeta = (meta: Meta): string[] => {
+  const errors: string[] = [];
+  const metaEntries = Object.entries(meta) as Array<[keyof Meta, string]>;
+
+  for (const [key, value] of metaEntries)
+    errors.push(
+      ...validateMetaKeyValue(key, value).map((err) => `${key}: ${err}`)
+    );
+
+  return errors;
+};
+
+/**
  * Validate the parent path of a documentation file.
  *
  * @param {string} path - The path to validate.
@@ -85,12 +105,14 @@ export const validateDocFileCreateInput = async <T extends DocFileCreate>(
   loader: DocDirectoryByPathLoader
 ): Promise<ValidationErrors<T>> => {
   const validationErrors = initValidationErrors(input);
-  const { name, contents, parentPath } = input;
+  const { contents, meta, name, parentPath } = input;
 
   validationErrors.name.push(...validateDocFileName(name));
 
   if (contents)
     validationErrors.contents.push(...validateDocFileContent(contents));
+
+  if (meta) validationErrors.meta.push(...validateDocFileMeta(meta));
 
   if (parentPath) {
     const parentPathErrors = await validateDocFileParentPath(
@@ -141,7 +163,7 @@ type Validator = (str: string) => string[];
  * Validate the value to delete a documentation file.
  *
  * @param {string} value - The value to delete a documentation file.
- * @param {DocFileByIdLoader | DocFileByPathLoader} loader - A method to load a documentation file.
+ * @param {DocFileByIdLoader | DocFileByPathLoader} loader - A doc file loader.
  * @param {Validator} validator - A method to validate the value.
  * @returns {Promise<string[]>} An array of error messages or an empty array.
  */
