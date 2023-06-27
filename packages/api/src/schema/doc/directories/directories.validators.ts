@@ -5,12 +5,14 @@ import type {
   DocDirectoryCreate,
   DocDirectoryDelete,
   DocDirectoryUpdate,
+  Meta,
   ValidationErrors,
 } from '../../../types';
 import { decodeBase64String } from '../../../utils/helpers';
 import {
   initValidationErrors,
   validateFilename,
+  validateMetaKeyValue,
   validateRelativePath,
 } from '../../../utils/helpers/validators';
 
@@ -37,6 +39,24 @@ export const validateDocDirectoryId = (id: string): string[] => {
  */
 export const validateDocDirectoryName = (name: string): string[] =>
   validateFilename(name);
+
+/**
+ * Validate the directory meta.
+ *
+ * @param {Meta} meta - The meta to validate.
+ * @returns {string[]} An array of errors or an empty array.
+ */
+export const validateDocDirectoryMeta = (meta: Meta): string[] => {
+  const errors: string[] = [];
+  const metaEntries = Object.entries(meta) as Array<[keyof Meta, string]>;
+
+  for (const [key, value] of metaEntries)
+    errors.push(
+      ...validateMetaKeyValue(key, value).map((err) => `${key}: ${err}`)
+    );
+
+  return errors;
+};
 
 /**
  * Validate the parent path of a documentation directory.
@@ -125,8 +145,8 @@ export const validateDocDirectoryUpdateInput = async <
  * @returns {boolean} True if it is empty.
  */
 const isDirectoryEmpty = (dir: DocDirectory): boolean => {
-  const hasSubDir = !!dir.contents?.directories.length;
-  const hasFiles = !!dir.contents?.files.length;
+  const hasSubDir = !!dir.contents.directories.length;
+  const hasFiles = !!dir.contents.files.length;
 
   return !hasFiles && !hasSubDir;
 };

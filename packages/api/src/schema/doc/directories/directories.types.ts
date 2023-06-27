@@ -1,5 +1,6 @@
 import type { DirectoryContents } from '@cretadoc/read-dir';
 import {
+  GraphQLInputObjectType,
   GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
@@ -10,6 +11,7 @@ import type {
   DocEntryParent,
   DocDirectory,
   DocDirectoryPayload,
+  Meta,
 } from '../../../types';
 import { DocFileType } from '../files/files.types';
 
@@ -33,6 +35,76 @@ export const DocDirectoryContentType: GraphQLObjectType<
         resolve: ({ files }) => files,
       },
     };
+  },
+});
+
+export const DocDirectoryMetaType = new GraphQLObjectType<Meta>({
+  name: 'DocDirectoryMeta',
+  description: 'The metadata of a documentation directory.',
+  fields: () => {
+    return {
+      createdAt: {
+        type: GraphQLString,
+        description: 'The creation date of the directory.',
+        resolve: ({ createdAt }) => createdAt,
+      },
+      seoDescription: {
+        type: GraphQLString,
+        description: 'The meta description.',
+        resolve: ({ seoDescription }) => seoDescription,
+      },
+      seoTitle: {
+        type: GraphQLString,
+        description: 'The title used by search engines.',
+        resolve: ({ seoTitle }) => seoTitle,
+      },
+      status: {
+        type: GraphQLString,
+        description: 'The status of the directory.',
+        resolve: ({ status }) => status,
+      },
+      title: {
+        type: GraphQLString,
+        description: 'The title of the directory.',
+        resolve: ({ title }) => title,
+      },
+      updatedAt: {
+        type: GraphQLString,
+        description: 'The update date of the directory.',
+        resolve: ({ updatedAt }) => updatedAt,
+      },
+    };
+  },
+});
+
+export const DocDirectoryMetaInputType = new GraphQLInputObjectType({
+  name: 'DocDirectoryMetaInput',
+  description: 'The documentation directory metadata.',
+  fields: {
+    createdAt: {
+      type: GraphQLString,
+      description: 'The creation date of the directory.',
+    },
+    seoDescription: {
+      type: GraphQLString,
+      description: 'The meta description.',
+    },
+    seoTitle: {
+      type: GraphQLString,
+      description: 'The title used by search engines.',
+    },
+    status: {
+      type: GraphQLString,
+      description: 'The status of the documentation directory.',
+    },
+    title: {
+      type: GraphQLString,
+      description: 'The title of the documentation directory.',
+    },
+    updatedAt: {
+      type: GraphQLString,
+      description: 'The update date of the directory.',
+    },
   },
 });
 
@@ -85,6 +157,11 @@ export const DocDirectoryType: GraphQLObjectType<DocDirectory, APIContext> =
           type: new GraphQLNonNull(GraphQLString),
           description: 'The id of the directory.',
           resolve: ({ id }) => id,
+        },
+        meta: {
+          type: DocDirectoryMetaType,
+          description: 'The metadata of the directory from meta file.',
+          resolve: ({ meta }) => meta,
         },
         name: {
           type: new GraphQLNonNull(GraphQLString),

@@ -1,6 +1,7 @@
 import type { Directory } from '@cretadoc/read-dir';
 import type { Maybe, Nullable, NullableOptionalKeysOf } from '@cretadoc/utils';
 import type DataLoader from 'dataloader';
+import type { Meta } from '../data';
 import type {
   ErrorsFrom,
   InputFrom,
@@ -20,6 +21,7 @@ export type DocDirectoryContents = {
 
 export type DocDirectory = Omit<Directory, 'contents' | 'extension'> & {
   contents: DocDirectoryContents;
+  meta?: Meta;
   parent: Nullable<DocEntryParent>;
   slug: `/${string}`;
 };
@@ -66,7 +68,7 @@ export type DocDirectoryConnectionResult =
  * ===========================================================================
  */
 
-export type DocDirectoryCreate = Pick<DocDirectory, 'name'> & {
+export type DocDirectoryCreate = Pick<DocDirectory, 'meta' | 'name'> & {
   parentPath?: string;
 };
 

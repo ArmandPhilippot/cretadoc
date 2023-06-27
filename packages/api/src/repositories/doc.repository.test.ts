@@ -1,5 +1,5 @@
 import { parse } from 'path';
-import { slugify } from '@cretadoc/utils';
+import { type Maybe, slugify } from '@cretadoc/utils';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
   docFixtures,
@@ -9,6 +9,7 @@ import {
 } from '../../tests/fixtures/doc';
 import { DOC_FIXTURES_DIR } from '../../tests/utils/constants';
 import { createFixtures, deleteFixturesIn } from '../../tests/utils/helpers';
+import type { DocDirectory, Meta } from '../types';
 import { DEFAULT_EDGES_NUMBER, MARKDOWN_EXTENSION } from '../utils/constants';
 import { generateBase64String } from '../utils/helpers';
 import { DocRepository } from './doc.repository';
@@ -125,6 +126,51 @@ describe('DocRepository', () => {
 
     expect(deletedDocFile).toStrictEqual(docFile);
     expect.assertions(1);
+  });
+
+  it('can create a directory with meta', async () => {
+    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    const dirName = 'veritatis';
+    const meta = {
+      status: 'published',
+      title: 'Voluptatem quia nobis',
+    } satisfies Meta;
+
+    const dir = await repo.createDirectory({ name: dirName, meta });
+
+    expect(dir).not.toBeUndefined();
+    expect(dir?.name).toBe(dirName);
+    expect(dir?.meta).toContain(meta);
+
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    expect.assertions(3);
+  });
+
+  it('can update the meta of a directory', async () => {
+    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    const dirName = 'provident';
+    const meta = {
+      status: 'draft',
+      title: 'A minima quia',
+    } satisfies Meta;
+
+    const dir = await repo.createDirectory({ name: dirName, meta });
+    const newMeta = {
+      status: 'published',
+      title: 'Iure natus officiis',
+    } satisfies Meta;
+    let updatedDir: Maybe<DocDirectory> = undefined;
+
+    if (dir?.id)
+      updatedDir = await repo.updateDirectory({ id: dir.id, meta: newMeta });
+
+    expect(updatedDir).not.toBeUndefined();
+    expect(updatedDir?.id).toBe(dir?.id);
+    expect(updatedDir?.meta).not.toContain(meta);
+    expect(updatedDir?.meta).toContain(newMeta);
+
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    expect.assertions(4);
   });
 });
 /* eslint-enable max-statements */

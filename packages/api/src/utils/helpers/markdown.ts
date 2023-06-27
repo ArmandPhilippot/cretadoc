@@ -171,3 +171,26 @@ export const parseMarkdown = (content: string): MarkdownParts => {
     meta: data?.rawMeta ? getMetaFrom(data.rawMeta) : undefined,
   };
 };
+
+/**
+ * Convert a Meta object to a string
+ *
+ * @param {Meta} meta - A Meta object.
+ * @returns {string} The meta as string
+ */
+export const convertMetaToStr = (meta: Meta): string =>
+  Object.entries(meta)
+    .map(([key, value]) => `${key}: ${value}`)
+    .join('\n');
+
+/**
+ * Convert a Meta object to front matter format.
+ *
+ * @param {Meta} meta - A Meta object
+ * @returns {string} The front matter string.
+ */
+export const convertMetaToFrontMatter = (meta: Meta): string => {
+  const metaStr = convertMetaToStr(meta);
+
+  return `---\n${metaStr}\n---\n\n`;
+};

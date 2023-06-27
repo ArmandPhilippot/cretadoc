@@ -19,6 +19,7 @@ import {
   byPathProp,
   bySlugProp,
   byUpdatedAtProp,
+  convertMetaToFrontMatter,
   getDatetimeFormat,
   getFilenameWithExt,
   getRelativePath,
@@ -213,30 +214,6 @@ export class FileSystemRepository {
   }
 
   /**
-   * Convert a Meta object to a string
-   *
-   * @param {Meta} meta - A Meta object.
-   * @returns {string} The meta as string
-   */
-  #convertMetaToStr(meta: Meta): string {
-    return Object.entries(meta)
-      .map(([key, value]) => `${key}: ${value}`)
-      .join('\n');
-  }
-
-  /**
-   * Convert a Meta object to front matter format.
-   *
-   * @param {Meta} meta - A Meta object
-   * @returns {string} The front matter string.
-   */
-  #convertMetaToFrontMatter(meta: Meta): string {
-    const metaStr = this.#convertMetaToStr(meta);
-
-    return `---\n${metaStr}\n---\n\n`;
-  }
-
-  /**
    * Create a new markdown file.
    *
    * @param {FileSystemData} data - The data to create a markdown file.
@@ -257,7 +234,7 @@ export class FileSystemRepository {
       createdAt: meta?.createdAt ?? creationDate,
       updatedAt: meta?.updatedAt ?? creationDate,
     };
-    const frontMatter = this.#convertMetaToFrontMatter(allMeta);
+    const frontMatter = convertMetaToFrontMatter(allMeta);
     const mdContents = `${frontMatter}${contents}`;
 
     await writeFile(absolutePath, mdContents, { encoding: 'utf8' });
@@ -305,14 +282,14 @@ export class FileSystemRepository {
    * @returns {string} The updated frontmatter
    */
   #getUpdatedFrontMatter(current: Maybe<Meta>, newMeta: Maybe<Meta>): string {
-    if (current && !newMeta) return this.#convertMetaToFrontMatter(current);
+    if (current && !newMeta) return convertMetaToFrontMatter(current);
 
-    if (!current && newMeta) return this.#convertMetaToFrontMatter(newMeta);
+    if (!current && newMeta) return convertMetaToFrontMatter(newMeta);
 
     if (current && newMeta) {
       const mergedMeta = this.#mergeMeta(current, newMeta);
 
-      return this.#convertMetaToFrontMatter(mergedMeta);
+      return convertMetaToFrontMatter(mergedMeta);
     }
 
     return '';
