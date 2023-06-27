@@ -11,7 +11,7 @@ import type {
   PageCreateErrors,
   PageCreatePayload,
 } from '../../../types';
-import { PagePayloadType } from '../pages.types';
+import { PageMetaInputType, PagePayloadType } from '../pages.types';
 
 export const PageCreateInputType = new GraphQLInputObjectType({
   name: 'PageCreateInput',
@@ -20,6 +20,10 @@ export const PageCreateInputType = new GraphQLInputObjectType({
     contents: {
       description: 'The page contents.',
       type: GraphQLString,
+    },
+    meta: {
+      description: 'The page metadata.',
+      type: PageMetaInputType,
     },
     name: {
       description: 'The page name.',
@@ -42,6 +46,10 @@ export const PageCreateErrorsType = new GraphQLObjectType<
           contents: {
             type: new GraphQLList(GraphQLString),
             resolve: ({ contents }) => contents,
+          },
+          meta: {
+            type: new GraphQLList(GraphQLString),
+            resolve: ({ meta }) => meta,
           },
           name: {
             type: new GraphQLList(GraphQLString),

@@ -1,4 +1,5 @@
-import { mkdir } from 'fs/promises';
+import { existsSync } from 'fs';
+import { mkdir, readFile } from 'fs/promises';
 import { basename, join, parse } from 'path';
 import type {
   Directory,
@@ -27,11 +28,15 @@ import type {
   DocFileUpdate,
   ListInput,
   ListReturn,
+  Meta,
 } from '../types';
+import { DIRECTORY_META_FILENAME } from '../utils/constants';
 import {
   decodeBase64String,
   generateBase64String,
+  getFilenameWithExt,
   getSlugFrom,
+  parseMarkdown,
 } from '../utils/helpers';
 import { FileSystemRepository } from './filesystem.repository';
 
@@ -54,7 +59,7 @@ const isDocEntry = (value: unknown): value is DocEntry => {
   if (!value) return false;
   if (!isObject(value)) return false;
 
-  const keys: Array<keyof DocEntry> = [
+  const mandatoryKeys: Array<keyof DocEntry> = [
     'contents',
     'createdAt',
     'id',
@@ -66,7 +71,7 @@ const isDocEntry = (value: unknown): value is DocEntry => {
     'updatedAt',
   ];
 
-  for (const key of keys) if (!isObjKeyExist(value, key)) return false;
+  for (const key of mandatoryKeys) if (!isObjKeyExist(value, key)) return false;
 
   return true;
 };
@@ -77,23 +82,58 @@ export class DocRepository extends FileSystemRepository {
   }
 
   /**
-   * Retrieve the parent directory of path.
+   * Retrieve the parent directory of path if it is not root directory.
    *
    * @param {string} path - A relative path.
-   * @returns {Nullable<DocEntryParent>} The parent if it is not root directory.
+   * @returns {Promise<Nullable<DocEntryParent>>} The parent or null.
    */
-  #getParentOf(path: string): Nullable<DocEntryParent> {
+  async #getParentOf(path: string): Promise<Nullable<DocEntryParent>> {
     const parent = parse(path);
 
     if (parent.dir === '.') return null;
 
-    const name = basename(parent.dir);
-
-    return {
+    const parentDirectory: DocEntryParent = {
       id: generateBase64String(parent.dir),
-      name,
+      name: basename(parent.dir),
       path: parent.dir,
       slug: getSlugFrom(parent.dir),
+    };
+    const metaFilePath = this.getAbsolutePathFrom(
+      join(parent.dir, getFilenameWithExt(DIRECTORY_META_FILENAME))
+    );
+
+    if (!existsSync(metaFilePath)) return parentDirectory;
+
+    const metaFileContents = await readFile(metaFilePath, { encoding: 'utf8' });
+    const { meta } = parseMarkdown(metaFileContents);
+
+    return {
+      ...parentDirectory,
+      meta,
+    };
+  }
+
+  /**
+   * Convert the directory contents.
+   *
+   * @param {Maybe<DirectoryContents>} contents - An object.
+   * @returns {Promise<DocDirectoryContents>} The converted contents.
+   */
+  async #convertDirectoryContents(
+    contents: Maybe<DirectoryContents>
+  ): Promise<DocDirectoryContents> {
+    if (!contents) return { directories: [], files: [] };
+
+    const dirPromises = contents.directories.map(async (dir) =>
+      this.#convert(dir)
+    );
+    const filesPromises = contents.files
+      .filter((file) => file.name !== DIRECTORY_META_FILENAME)
+      .map(async (file) => this.#convert(file));
+
+    return {
+      directories: await Promise.all(dirPromises),
+      files: await Promise.all(filesPromises),
     };
   }
 
@@ -112,57 +152,81 @@ export class DocRepository extends FileSystemRepository {
   }
 
   /**
-   * Convert the directory contents.
+   * Retrieve the meta of a directory from its contents.
    *
-   * @param {Maybe<DirectoryContents>} contents - An object.
-   * @returns {DocDirectoryContents} The converted contents.
+   * @param {Maybe<DirectoryContents>} contents - The directory contents.
+   * @returns {Maybe<Meta>} The directory meta.
    */
-  #convertDirectoryContents(
+  protected getDirectoryMetaFrom(
     contents: Maybe<DirectoryContents>
-  ): DocDirectoryContents {
-    return {
-      directories: contents?.directories.map((dir) => this.#convert(dir)) ?? [],
-      files: contents?.files.map((file) => this.#convert(file)) ?? [],
-    };
+  ): Maybe<Meta> {
+    if (!contents) return undefined;
+
+    const files = [...contents.files];
+    const metaFileIndex = files.findIndex(
+      (file) => file.name === DIRECTORY_META_FILENAME
+    );
+
+    if (metaFileIndex === -1) return undefined;
+
+    const extractedFiles = files.splice(metaFileIndex, 1);
+    const metaFile = extractedFiles[0];
+
+    if (!metaFile?.contents) return {};
+
+    const { meta } = parseMarkdown(metaFile.contents);
+
+    return meta;
   }
 
   /**
    * Convert a Directory to a DocDirectory or a RegularFile to a DocFile.
    *
    * @param {Directory | RegularFile} fileOrDir - An object.
-   * @returns {DocDirectory | DocFile} The converted entry.
+   * @returns {Promise<DocDirectory | DocFile>} The converted entry.
    */
-  #convert<
-    T extends Directory | RegularFile,
-    R = T extends Directory ? DocDirectory : DocFile
-  >({ createdAt, name, path, type, updatedAt, contents }: T): R {
+  async #convert<T extends Directory>(fileOrDir: T): Promise<DocDirectory>;
+  async #convert<T extends RegularFile>(fileOrDir: T): Promise<DocFile>;
+  async #convert<T extends Directory | RegularFile>(
+    fileOrDir: T
+  ): Promise<DocDirectory | DocFile>;
+  async #convert<T extends Directory | RegularFile>({
+    createdAt,
+    name,
+    path,
+    type,
+    updatedAt,
+    contents,
+  }: T): Promise<DocDirectory | DocFile> {
     const relativePath = this.getRelativePathFrom(path);
     const slug = getSlugFrom(relativePath);
-
-    return {
-      contents:
-        type === 'directory'
-          ? this.#convertDirectoryContents(contents)
-          : contents,
+    const parent = await this.#getParentOf(relativePath);
+    const commonData: Omit<DocDirectory | DocFile, 'contents' | 'type'> = {
       createdAt,
       id: generateBase64String(relativePath),
       name,
-      parent: this.#getParentOf(relativePath),
+      parent,
       path: relativePath,
       slug,
-      type,
       updatedAt,
-    } as R;
-  }
+    };
 
-  /**
-   * Retrieve the converted documentation directories from a directory contents.
-   *
-   * @param {DocDirectoryContents} contents - The directory contents.
-   * @returns {Maybe<DocDirectory[]>} The documentation directories.
-   */
-  #getDirectoriesFrom(contents: DocDirectoryContents): DocDirectory[] {
-    return contents.directories.map((dir) => this.#convert(dir));
+    if (type === 'directory')
+      return {
+        ...commonData,
+        contents: await this.#convertDirectoryContents(contents),
+        meta: this.getDirectoryMetaFrom(contents),
+        type: 'directory',
+      };
+
+    const { content, meta } = parseMarkdown(contents ?? '');
+
+    return {
+      ...commonData,
+      contents: content,
+      meta,
+      type: 'file',
+    };
   }
 
   /**
@@ -174,17 +238,7 @@ export class DocRepository extends FileSystemRepository {
   async #getDirectoriesIn(path: string): Promise<DocDirectory[]> {
     const dirContents = await this.getContentsOf(path);
 
-    return this.#getDirectoriesFrom(dirContents);
-  }
-
-  /**
-   * Retrieve the converted documentation files from a directory contents.
-   *
-   * @param {DocDirectoryContents} contents - The directory contents.
-   * @returns {DocFile[]} The documentation files.
-   */
-  #getFilesFrom(contents: DocDirectoryContents): DocFile[] {
-    return contents.files.map((file) => this.#convert(file));
+    return dirContents.directories;
   }
 
   /**
@@ -196,7 +250,7 @@ export class DocRepository extends FileSystemRepository {
   async #getFilesIn(path: string): Promise<DocFile[]> {
     const dirContents = await this.getContentsOf(path);
 
-    return this.#getFilesFrom(dirContents);
+    return dirContents.files;
   }
 
   /**
@@ -206,11 +260,9 @@ export class DocRepository extends FileSystemRepository {
    * @returns {Promise<DocEntry[]>} The doc entries.
    */
   async #getEntriesIn(path: string): Promise<DocEntry[]> {
-    const dirContents = await this.getContentsOf(path);
-    const docDirectories = this.#getDirectoriesFrom(dirContents);
-    const docFiles = this.#getFilesFrom(dirContents);
+    const { directories, files } = await this.getContentsOf(path);
 
-    return [...docDirectories, ...docFiles];
+    return [...directories, ...files];
   }
 
   /**
@@ -295,7 +347,7 @@ export class DocRepository extends FileSystemRepository {
    *
    * @param {P} prop - The prop name.
    * @param {ReadonlyArray<DocInput[P]>} values - The values to looking for.
-   * @param {GetManyOptions<K>} [options] - Some options.
+   * @param {K} [kind] - The entry kind.
    * @returns {Promise<Maybe<R[]>>} The matching documentation entries.
    */
   public async getMany<K extends undefined, P extends keyof DocEntryInput>(
@@ -380,14 +432,21 @@ export class DocRepository extends FileSystemRepository {
    * @returns {Promise<Maybe<DocDirectory>>} The new documentation directory.
    */
   public async createDirectory({
+    meta,
     name,
     parentPath,
   }: DocDirectoryCreate): Promise<Maybe<DocDirectory>> {
     const relativeParentPath = parentPath ?? './';
     const dirPath = join(this.getRootDir(), relativeParentPath, name);
     await mkdir(dirPath, { recursive: true });
+    const relativePath = this.getRelativePathFrom(dirPath);
+    await this.createFile({
+      name: getFilenameWithExt(DIRECTORY_META_FILENAME),
+      meta,
+      parentPath: relativePath,
+    });
 
-    return this.get('path', this.getRelativePathFrom(dirPath), 'directory');
+    return this.get('path', relativePath, 'directory');
   }
 
   /**
@@ -399,6 +458,7 @@ export class DocRepository extends FileSystemRepository {
   public async updateDirectory({
     id,
     name,
+    meta,
     parentPath,
   }: DocDirectoryUpdate): Promise<Maybe<DocDirectory>> {
     const relativePath = decodeBase64String(id);
@@ -407,8 +467,14 @@ export class DocRepository extends FileSystemRepository {
       name,
       parentPath,
     });
-
     const newRelativePath = this.getRelativePathFrom(newAbsolutePath);
+
+    if (meta) {
+      const metaFilePath = this.getAbsolutePathFrom(
+        join(newRelativePath, getFilenameWithExt(DIRECTORY_META_FILENAME))
+      );
+      await this.update(metaFilePath, { meta });
+    }
 
     return this.get('path', newRelativePath, 'directory');
   }
@@ -420,14 +486,16 @@ export class DocRepository extends FileSystemRepository {
    * @returns {Promise<Maybe<DocFile>>} The new documentation file.
    */
   public async createFile({
-    name,
     contents,
+    meta,
+    name,
     parentPath,
   }: DocFileCreate): Promise<Maybe<DocFile>> {
     const filePath = await this.createMarkdownFile({
-      parentPath,
       contents,
+      meta,
       name,
+      parentPath,
     });
 
     return this.get('path', this.getRelativePathFrom(filePath), 'file');
@@ -442,6 +510,7 @@ export class DocRepository extends FileSystemRepository {
   public async updateFile({
     contents,
     id,
+    meta,
     name,
     parentPath,
   }: DocFileUpdate): Promise<Maybe<DocFile>> {
@@ -449,6 +518,7 @@ export class DocRepository extends FileSystemRepository {
     const absolutePath = this.getAbsolutePathFrom(relativePath);
     const newAbsolutePath = await this.update(absolutePath, {
       contents,
+      meta,
       name,
       parentPath,
     });

@@ -20,6 +20,14 @@ export const docDirectoryQuery = `query DocDirectory($id: String, $path: String,
         files {
           createdAt
           id
+          meta {
+            createdAt
+            seoDescription
+            seoTitle
+            status
+            title
+            updatedAt
+          }
           name
           parent {
             id
@@ -81,6 +89,14 @@ export const docDirectoriesQuery = `query DocDirectories($after: String, $first:
             files {
               createdAt
               id
+              meta {
+                createdAt
+                seoDescription
+                seoTitle
+                status
+                title
+                updatedAt
+              }
               name
               parent {
                 id

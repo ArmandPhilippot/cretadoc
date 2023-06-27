@@ -11,7 +11,7 @@ import type {
   DocFileCreateErrors,
   DocFileCreatePayload,
 } from '../../../../types';
-import { DocFilePayloadType } from '../files.types';
+import { DocFileMetaInputType, DocFilePayloadType } from '../files.types';
 
 export const DocFileCreateInputType = new GraphQLInputObjectType({
   name: 'DocFileCreateInput',
@@ -20,6 +20,10 @@ export const DocFileCreateInputType = new GraphQLInputObjectType({
     contents: {
       description: 'The file contents.',
       type: GraphQLString,
+    },
+    meta: {
+      description: 'The file metadata.',
+      type: DocFileMetaInputType,
     },
     name: {
       description: 'The file name without extension.',
@@ -46,6 +50,10 @@ export const DocFileCreateErrorsType = new GraphQLObjectType<
           contents: {
             type: new GraphQLList(GraphQLString),
             resolve: ({ contents }) => contents,
+          },
+          meta: {
+            type: new GraphQLList(GraphQLString),
+            resolve: ({ meta }) => meta,
           },
           name: {
             type: new GraphQLList(GraphQLString),

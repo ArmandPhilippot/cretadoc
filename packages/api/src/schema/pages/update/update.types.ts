@@ -11,7 +11,7 @@ import type {
   PageUpdateErrors,
   PageUpdatePayload,
 } from '../../../types';
-import { PagePayloadType } from '../pages.types';
+import { PageMetaInputType, PagePayloadType } from '../pages.types';
 
 export const PageUpdateInputType = new GraphQLInputObjectType({
   name: 'PageUpdateInput',
@@ -24,6 +24,10 @@ export const PageUpdateInputType = new GraphQLInputObjectType({
     id: {
       description: 'The page id.',
       type: new GraphQLNonNull(GraphQLString),
+    },
+    meta: {
+      description: 'The page metadata.',
+      type: PageMetaInputType,
     },
     name: {
       description: 'The page name.',
@@ -50,6 +54,10 @@ export const PageUpdateErrorsType = new GraphQLObjectType<
           id: {
             type: new GraphQLList(GraphQLString),
             resolve: ({ id }) => id,
+          },
+          meta: {
+            type: new GraphQLList(GraphQLString),
+            resolve: ({ meta }) => meta,
           },
           name: {
             type: new GraphQLList(GraphQLString),

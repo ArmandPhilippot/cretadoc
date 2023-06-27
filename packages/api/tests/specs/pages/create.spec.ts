@@ -6,13 +6,17 @@ import {
 } from '@cretadoc/utils';
 import { afterAll, beforeAll, describe, it } from 'vitest';
 import type {
+  Meta,
   PageCreateErrors,
   PageCreatePayload,
   PageCreateResult,
   PagePayload,
 } from '../../../src/types';
 import { MARKDOWN_EXTENSION } from '../../../src/utils/constants';
-import { generateBase64String } from '../../../src/utils/helpers';
+import {
+  generateBase64String,
+  getDatetimeFormat,
+} from '../../../src/utils/helpers';
 import { pages, pagesFixtures } from '../../fixtures/pages';
 import type { QueryResultWithErrors } from '../../types';
 import { expect } from '../../utils';
@@ -60,20 +64,26 @@ describe('pageCreate', () => {
   it('can create a new page without content', async () => {
     const newPageName = 'odio';
     const newPagePath = `./${newPageName}${MARKDOWN_EXTENSION}`;
+    const creationDateTime = getDatetimeFormat(new Date());
+    const [date, _time] = creationDateTime.split(' ');
     const response = await createPage({ input: { name: newPageName } });
 
     expect(response.body.data.pageCreate).not.toBeNull();
 
-    if (isPagePayload(response.body.data.pageCreate))
+    if (isPagePayload(response.body.data.pageCreate)) {
       expect(response.body.data.pageCreate.page).toBePage({
-        contents: '',
         id: generateBase64String(newPagePath),
         name: newPageName,
         path: newPagePath,
         slug: `/${slugify(newPageName)}`,
       });
+      expect(response.body.data.pageCreate.page?.meta?.createdAt).toContain(
+        date
+      );
+    }
 
-    expect.assertions(2);
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    expect.assertions(3);
   });
 
   it('can create a new page with content', async () => {
@@ -97,6 +107,33 @@ describe('pageCreate', () => {
       });
 
     expect.assertions(2);
+  });
+
+  it('can create a new page with meta', async () => {
+    const newPageName = 'labore';
+    const newPagePath = `./${newPageName}${MARKDOWN_EXTENSION}`;
+    const meta: Meta = { seoTitle: 'repellendus quis autem', status: 'draft' };
+    const response = await createPage({ input: { meta, name: newPageName } });
+
+    expect(response.body.data.pageCreate).not.toBeNull();
+
+    if (isPagePayload(response.body.data.pageCreate)) {
+      expect(response.body.data.pageCreate.page).toBePage({
+        id: generateBase64String(newPagePath),
+        name: newPageName,
+        path: newPagePath,
+        slug: `/${slugify(newPageName)}`,
+      });
+      expect(response.body.data.pageCreate.page?.meta?.seoTitle).toBe(
+        meta.seoTitle
+      );
+      expect(response.body.data.pageCreate.page?.meta?.status).toBe(
+        meta.status
+      );
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    expect.assertions(4);
   });
 
   it('returns validation errors when name uses forbidden characters', async () => {

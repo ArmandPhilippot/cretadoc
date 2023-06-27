@@ -1,5 +1,6 @@
 import { isString } from '@cretadoc/utils';
 import type {
+  Meta,
   PageByIdLoader,
   PageByNameLoader,
   PageCreate,
@@ -7,7 +8,7 @@ import type {
   PageUpdate,
   ValidationErrors,
 } from '../../types';
-import { decodeBase64String } from '../../utils/helpers';
+import { decodeBase64String, validateMetaKeyValue } from '../../utils/helpers';
 import {
   initValidationErrors,
   validateFilename,
@@ -43,6 +44,24 @@ export const validatePageId = (id: string): string[] => {
 };
 
 /**
+ * Validate the page meta.
+ *
+ * @param {Meta} meta - The meta to validate.
+ * @returns {string[]} An array of errors or an empty array.
+ */
+export const validatePageMeta = (meta: Meta): string[] => {
+  const errors: string[] = [];
+  const metaEntries = Object.entries(meta) as Array<[keyof Meta, string]>;
+
+  for (const [key, value] of metaEntries)
+    errors.push(
+      ...validateMetaKeyValue(key, value).map((err) => `${key}: ${err}`)
+    );
+
+  return errors;
+};
+
+/**
  * Validate a page name.
  *
  * @param {string} name - The name to validate.
@@ -61,10 +80,12 @@ export const validatePageCreateInput = <T extends PageCreate>(
   input: T
 ): ValidationErrors<T> => {
   const validationErrors = initValidationErrors(input);
-  const { name, contents } = input;
+  const { contents, meta, name } = input;
 
   if (contents)
     validationErrors.contents.push(...validatePageContents(contents));
+
+  if (meta) validationErrors.meta.push(...validatePageMeta(meta));
 
   validationErrors.name.push(...validatePageName(name));
 
@@ -81,12 +102,14 @@ export const validatePageUpdateInput = <T extends PageUpdate>(
   input: T
 ): ValidationErrors<T> => {
   const validationErrors = initValidationErrors(input);
-  const { id, contents, name } = input;
+  const { id, contents, meta, name } = input;
 
   validationErrors.id.push(...validatePageId(id));
 
   if (contents)
     validationErrors.contents.push(...validatePageContents(contents));
+
+  if (meta) validationErrors.meta.push(...validatePageMeta(meta));
 
   if (name) validationErrors.name.push(...validatePageName(name));
 

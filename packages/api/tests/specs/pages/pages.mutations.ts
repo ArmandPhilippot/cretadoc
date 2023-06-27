@@ -6,6 +6,14 @@ export const pageCreate = `mutation CreatePage($input: PageCreateInput!) {
         contents
         createdAt
         id
+        meta {
+          createdAt
+          seoDescription
+          seoTitle
+          status
+          title
+          updatedAt
+        }
         name
         path
         slug
@@ -16,6 +24,7 @@ export const pageCreate = `mutation CreatePage($input: PageCreateInput!) {
       __typename
       errors {
         contents
+        meta
         name
       }
     }
@@ -30,6 +39,14 @@ export const pageDelete = `mutation DeletePage($input: PageDeleteInput!) {
         contents
         createdAt
         id
+        meta {
+          createdAt
+          seoDescription
+          seoTitle
+          status
+          title
+          updatedAt
+        }
         name
         path
         slug
@@ -54,6 +71,14 @@ export const pageUpdate = `mutation UpdatePage($input: PageUpdateInput!) {
         contents
         createdAt
         id
+        meta {
+          createdAt
+          seoDescription
+          seoTitle
+          status
+          title
+          updatedAt
+        }
         name
         path
         slug

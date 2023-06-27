@@ -1,5 +1,80 @@
-import { GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
-import type { APIContext, Page, PagePayload } from '../../types';
+import {
+  GraphQLInputObjectType,
+  GraphQLNonNull,
+  GraphQLObjectType,
+  GraphQLString,
+} from 'graphql';
+import type { APIContext, Meta, Page, PagePayload } from '../../types';
+
+export const PageMetaType = new GraphQLObjectType<Meta>({
+  name: 'PageMeta',
+  description: 'The metadata of a page.',
+  fields: () => {
+    return {
+      createdAt: {
+        type: GraphQLString,
+        description: 'The creation date of the page.',
+        resolve: ({ createdAt }) => createdAt,
+      },
+      seoDescription: {
+        type: GraphQLString,
+        description: 'The meta description.',
+        resolve: ({ seoDescription }) => seoDescription,
+      },
+      seoTitle: {
+        type: GraphQLString,
+        description: 'The title used by search engines.',
+        resolve: ({ seoTitle }) => seoTitle,
+      },
+      status: {
+        type: GraphQLString,
+        description: 'The status of the page.',
+        resolve: ({ status }) => status,
+      },
+      title: {
+        type: GraphQLString,
+        description: 'The title of the page.',
+        resolve: ({ title }) => title,
+      },
+      updatedAt: {
+        type: GraphQLString,
+        description: 'The update date of the page.',
+        resolve: ({ updatedAt }) => updatedAt,
+      },
+    };
+  },
+});
+
+export const PageMetaInputType = new GraphQLInputObjectType({
+  name: 'PageMetaInput',
+  description: 'The page metadata.',
+  fields: {
+    createdAt: {
+      type: GraphQLString,
+      description: 'The creation date of the page.',
+    },
+    seoDescription: {
+      type: GraphQLString,
+      description: 'The meta description.',
+    },
+    seoTitle: {
+      type: GraphQLString,
+      description: 'The title used by search engines.',
+    },
+    status: {
+      type: GraphQLString,
+      description: 'The status of the page.',
+    },
+    title: {
+      type: GraphQLString,
+      description: 'The title of the page.',
+    },
+    updatedAt: {
+      type: GraphQLString,
+      description: 'The update date of the page.',
+    },
+  },
+});
 
 export const PageType = new GraphQLObjectType<Page, APIContext>({
   name: 'Page',
@@ -20,6 +95,11 @@ export const PageType = new GraphQLObjectType<Page, APIContext>({
         type: new GraphQLNonNull(GraphQLString),
         description: 'The id of the page.',
         resolve: ({ id }) => id,
+      },
+      meta: {
+        type: PageMetaType,
+        description: 'The frontmatter metadata of the page.',
+        resolve: ({ meta }) => meta,
       },
       name: {
         type: new GraphQLNonNull(GraphQLString),

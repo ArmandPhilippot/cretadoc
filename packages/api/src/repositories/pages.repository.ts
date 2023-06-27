@@ -9,7 +9,11 @@ import type {
   PageInput,
   PageUpdate,
 } from '../types';
-import { decodeBase64String, generateBase64String } from '../utils/helpers';
+import {
+  decodeBase64String,
+  generateBase64String,
+  parseMarkdown,
+} from '../utils/helpers';
 import { FileSystemRepository } from './filesystem.repository';
 
 export class PagesRepository extends FileSystemRepository {
@@ -31,11 +35,13 @@ export class PagesRepository extends FileSystemRepository {
     contents,
   }: RegularFile): Page {
     const relativePath = this.getRelativePathFrom(path);
+    const { content, meta } = parseMarkdown(contents ?? '');
 
     return {
-      contents,
+      contents: content,
       createdAt,
       id: generateBase64String(relativePath),
+      meta,
       name,
       path: relativePath,
       slug: `/${slugify(name)}`,
@@ -119,8 +125,12 @@ export class PagesRepository extends FileSystemRepository {
    * @param {PageCreate} page - The page to write.
    * @returns {Promise<Maybe<Page>>} The new page.
    */
-  public async create({ name, contents }: PageCreate): Promise<Maybe<Page>> {
-    await this.createMarkdownFile({ contents, name });
+  public async create({
+    contents,
+    meta,
+    name,
+  }: PageCreate): Promise<Maybe<Page>> {
+    await this.createMarkdownFile({ contents, meta, name });
 
     return this.get('name', name);
   }
@@ -134,11 +144,16 @@ export class PagesRepository extends FileSystemRepository {
   public async updatePage({
     contents,
     id,
+    meta,
     name,
   }: PageUpdate): Promise<Maybe<Page>> {
     const relativePath = decodeBase64String(id);
     const absolutePath = this.getAbsolutePathFrom(relativePath);
-    const newAbsolutePath = await this.update(absolutePath, { contents, name });
+    const newAbsolutePath = await this.update(absolutePath, {
+      contents,
+      meta,
+      name,
+    });
     const newPageName = parse(newAbsolutePath).name;
 
     return this.get('name', newPageName);

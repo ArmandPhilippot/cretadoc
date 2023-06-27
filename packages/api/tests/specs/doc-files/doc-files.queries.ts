@@ -4,6 +4,14 @@ export const docFileQuery = `query DocFile($id: String, $path: String, $slug: St
       contents
       createdAt
       id
+      meta {
+        createdAt
+        seoDescription
+        seoTitle
+        status
+        title
+        updatedAt
+      }
       name
       parent {
         id
@@ -34,6 +42,14 @@ export const docFilesQuery = `query DocFiles($after: String, $first: Int, $offse
           contents
           createdAt
           id
+          meta {
+            createdAt
+            seoDescription
+            seoTitle
+            status
+            title
+            updatedAt
+          }
           name
           parent {
             id

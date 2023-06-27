@@ -1,7 +1,7 @@
 import { isAbsolute } from 'path';
 import { isString } from '@cretadoc/utils';
 import validator from 'validator';
-import type { ValidationErrors } from '../../types';
+import type { Meta, ValidationErrors } from '../../types';
 
 /**
  * Init the validation errors.
@@ -85,4 +85,138 @@ export const validateRelativePath = (path: string): string[] => {
   if (isAbsolute(path)) errors.push('Must be a relative path');
 
   return errors;
+};
+
+/**
+ * Validate a date.
+ *
+ * @param {string} date - The date to validate.
+ * @param {string} [format]  - The expected date format
+ * @returns {string[]} An empty array or an array of errors.
+ */
+export const validateDate = (date: string, format = 'YYYY-MM-DD'): string[] => {
+  const errors: string[] = [];
+
+  if (!validator.isDate(date, { format }))
+    errors.push(`Invalid date format, should be ${format}`);
+
+  return errors;
+};
+
+/**
+ * Validate a time compared to `HH:MM:SS` format.
+ *
+ * @param {string} time - The time to validate.
+ * @returns {string[]} An empty array or an array of errors.
+ */
+export const validateTime = (time: string): string[] => {
+  const errors: string[] = [];
+
+  if (!validator.isTime(time, { hourFormat: 'hour24', mode: 'withSeconds' }))
+    errors.push(`Invalid time format, should be HH:MM:SS`);
+
+  return errors;
+};
+
+/**
+ * Validate a date with time.
+ *
+ * @param {string} dateTime - The datetime to validate.
+ * @param {string} [format]  - The expected date format
+ * @returns {string[]} An empty array or an array of errors.
+ */
+export const validateDateTime = (
+  dateTime: string,
+  format = 'YYYY-MM-DD'
+): string[] => {
+  const [date, time, ..._rest] = dateTime.split(' ');
+
+  if (!date)
+    return [
+      `Invalid date, expected one of these formats: ${format} or ${format} HH:MM:SS`,
+    ];
+
+  const errors = [...validateDate(date, format)];
+
+  if (time) errors.push(...validateTime(time));
+
+  return errors;
+};
+
+/**
+ * Validate the status of file.
+ *
+ * @param {string} status - The status to validate.
+ * @returns {string[]} An empty array or an array of errors.
+ */
+export const validateFileStatus = (status: string): string[] => {
+  const errors: string[] = [];
+  const validStatus = ['draft', 'published'];
+
+  if (!validStatus.includes(status))
+    errors.push(`Invalid status, should be one of ${validStatus.join(', ')}`);
+
+  return errors;
+};
+
+type ValidateStringOptions = {
+  lengthRange?: {
+    min?: number;
+    max?: number;
+  };
+};
+
+/**
+ * Validate a string.
+ *
+ * @param {string} str - A string to validate.
+ * @param {ValidateStringOptions} options - Some validation options.
+ * @returns {string[]} An empty array or an array of errors.
+ */
+export const validateString = (
+  str: string,
+  options?: ValidateStringOptions
+): string[] => {
+  const errors: string[] = [];
+
+  if (
+    options?.lengthRange &&
+    !validator.isLength(str, {
+      max: options.lengthRange.max,
+      min: options.lengthRange.min,
+    })
+  )
+    errors.push(
+      `Invalid length, should be between ${options.lengthRange.min ?? 0} and ${
+        options.lengthRange.max ?? 'unlimited'
+      } characters`
+    );
+
+  return errors;
+};
+
+/**
+ * Validate a meta key/value pair.
+ *
+ * @param {keyof Meta} key - The meta key.
+ * @param {string} value - The meta value.
+ * @returns {string[]} An empty array or an array of errors.
+ */
+export const validateMetaKeyValue = (
+  key: keyof Meta,
+  value: string
+): string[] => {
+  switch (key) {
+    case 'createdAt':
+    case 'updatedAt':
+      return validateDateTime(value);
+    case 'seoDescription':
+    case 'seoTitle':
+      return validateString(value, { lengthRange: { min: 0 } });
+    case 'status':
+      return validateFileStatus(value);
+    case 'title':
+    default:
+      return validateString(value, { lengthRange: { min: 0, max: 150 } });
+  }
 };

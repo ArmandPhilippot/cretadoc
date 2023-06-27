@@ -6,6 +6,14 @@ export const docFileCreate = `mutation CreateDocFile($input: DocFileCreateInput!
         contents
         createdAt
         id
+        meta {
+          createdAt
+          seoDescription
+          seoTitle
+          status
+          title
+          updatedAt
+        }
         name
         parent {
           id
@@ -23,6 +31,7 @@ export const docFileCreate = `mutation CreateDocFile($input: DocFileCreateInput!
       __typename
       errors {
         contents
+        meta
         name
         parentPath
       }
@@ -38,6 +47,14 @@ export const docFileDelete = `mutation DeleteDocFile($input: DocFileDeleteInput!
         contents
         createdAt
         id
+        meta {
+          createdAt
+          seoDescription
+          seoTitle
+          status
+          title
+          updatedAt
+        }
         name
         parent {
           id
@@ -69,6 +86,14 @@ export const docFileUpdate = `mutation UpdateDocFile($input: DocFileUpdateInput!
         contents
         createdAt
         id
+        meta {
+          createdAt
+          seoDescription
+          seoTitle
+          status
+          title
+          updatedAt
+        }
         name
         parent {
           id

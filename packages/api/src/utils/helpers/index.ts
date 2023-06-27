@@ -1,5 +1,7 @@
 export * from './config';
 export * from './contexts';
+export * from './dates';
+export * from './markdown';
 export * from './paths';
 export * from './sanitizers';
 export * from './sort';
