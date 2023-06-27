@@ -128,6 +128,43 @@ server.listen(6000, () => {
 });
 ```
 
+## Usage
+
+### Metadata
+
+#### Pages and documentation files
+
+Each pages and documentation files can contain metadata through front matter.
+
+However, you can't use any key. Only the following ones are accepted:
+
+- createdAt (if not provided, it will be set automatically)
+- seoDescription
+- seoTitle
+- status (`draft` or `published` expected)
+- title
+- updatedAt (if not provided, it will be set automatically)
+
+**Example:**
+
+```md
+---
+title: My awesome page
+status: published
+---
+
+This is the main content of the page.
+```
+
+**Note:** If you use an empty string (`''`) when using a mutation to update a file/directory, if the key is already set, it will be removed.
+
+#### Documentation directories
+
+You can also define the metadata of a directory by providing a **`_meta.md`** file:
+
+- if you use the API to create the directory, it will be automatically created,
+- this file won't be listed in the directory's files and only the front matter part will be used.
+
 ## License
 
 This package is released under the [MIT license](./LICENSE).
