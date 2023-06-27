@@ -172,5 +172,33 @@ describe('DocRepository', () => {
     // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     expect.assertions(4);
   });
+
+  it('can retrieve the meta of a parent directory', async () => {
+    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    const parentName = 'delectus';
+    const parentMeta = {
+      status: 'published',
+      title: 'Delectus consequatur enim',
+    } satisfies Meta;
+
+    const parentDir = await repo.createDirectory({
+      name: parentName,
+      meta: parentMeta,
+    });
+
+    const childName = 'aut';
+    const childDir = await repo.createDirectory({
+      name: childName,
+      parentPath: parentDir?.path,
+    });
+
+    expect(childDir).not.toBeUndefined();
+    expect(childDir?.name).toBe(childName);
+    expect(childDir?.parent?.name).toContain(parentName);
+    expect(childDir?.parent?.meta).toContain(parentMeta);
+
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    expect.assertions(4);
+  });
 });
 /* eslint-enable max-statements */

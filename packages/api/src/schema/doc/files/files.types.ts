@@ -92,6 +92,11 @@ export const DocFileParentType = new GraphQLObjectType<DocEntryParent>({
         description: 'The parent id.',
         resolve: ({ id }) => id,
       },
+      meta: {
+        type: DocFileMetaType,
+        description: 'The frontmatter metadata of the parent.',
+        resolve: ({ meta }) => meta,
+      },
       name: {
         type: new GraphQLNonNull(GraphQLString),
         description: 'The filename of the parent.',
