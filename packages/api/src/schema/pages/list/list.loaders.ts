@@ -8,7 +8,7 @@ import type { ListInput, ListReturn, Page } from '../../../types';
  * @param {ListInput<Page>} params - The list parameters.
  * @returns {Promise<ListReturn<Page[]>>} The matching pages.
  */
-export const listPages = async (
+export const loadPagesList = async (
   repository: PagesRepository,
   params: ListInput<Page>
 ): Promise<ListReturn<Page[]>> => repository.find(params);

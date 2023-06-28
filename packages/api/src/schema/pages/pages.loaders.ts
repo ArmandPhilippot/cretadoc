@@ -1,7 +1,7 @@
 import type { PagesRepository } from '../../repositories';
 import type { ListInput, Page, PageInput, PageLoaders } from '../../types';
-import { listPages } from './list/list.loaders';
-import { getPageById, getPageByName, getPageBySlug } from './read/read.loaders';
+import { loadPagesList } from './list';
+import { loadPageById, loadPageByName, loadPageBySlug } from './read';
 
 /**
  * Initialize the page loaders.
@@ -12,10 +12,11 @@ import { getPageById, getPageByName, getPageBySlug } from './read/read.loaders';
 export const initPageLoaders = (repository: PagesRepository): PageLoaders => {
   return {
     page: {
-      byId: getPageById(repository),
-      byName: getPageByName(repository),
-      bySlug: getPageBySlug(repository),
-      list: async (params: ListInput<Page>) => listPages(repository, params),
+      byId: loadPageById(repository),
+      byName: loadPageByName(repository),
+      bySlug: loadPageBySlug(repository),
+      list: async (params: ListInput<Page>) =>
+        loadPagesList(repository, params),
     },
   };
 };
@@ -24,12 +25,13 @@ export const initPageLoaders = (repository: PagesRepository): PageLoaders => {
  * Clear the page loaders.
  *
  * @param {NonNullable<PageLoaders['page']>} pageLoaders - The page loaders.
- * @param {PageInput} input - The page id and name.
+ * @param {PageInput} input - The page id, name and slug.
  */
 export const clearPageLoaders = (
   pageLoaders: NonNullable<PageLoaders['page']>,
-  { id, name }: PageInput
+  { id, name, slug }: PageInput
 ) => {
   pageLoaders.byId.clear(id);
   pageLoaders.byName.clear(name);
+  pageLoaders.bySlug.clear(slug);
 };

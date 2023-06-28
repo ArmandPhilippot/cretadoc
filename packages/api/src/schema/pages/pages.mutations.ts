@@ -1,5 +1,5 @@
-import { pageCreate } from './create/create.mutation';
-import { pageDelete } from './delete/delete.mutation';
-import { pageUpdate } from './update/update.mutation';
+import { pageCreate } from './create';
+import { pageDelete } from './delete';
+import { pageUpdate } from './update';
 
 export const pageMutations = { pageCreate, pageDelete, pageUpdate };

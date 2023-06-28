@@ -1,14 +1,8 @@
 import { GraphQLInt, GraphQLString, type GraphQLFieldConfig } from 'graphql';
-import type {
-  APIContext,
-  Connection,
-  ConnectionInput,
-  Page,
-} from '../../../types';
+import type { APIContext, ConnectionInput, Page } from '../../../types';
 import { DEFAULT_EDGES_NUMBER } from '../../../utils/constants';
-import { CretadocAPIError } from '../../../utils/exceptions';
-import { getConnection } from '../../../utils/gql';
-import { decodeCursor, generateCursor } from '../../../utils/helpers';
+import { generateCursor } from '../../../utils/helpers';
+import { pagesListResolver } from './list.resolver';
 import {
   PageConnectionType,
   PageOrderType,
@@ -24,7 +18,7 @@ export const pages: GraphQLFieldConfig<
   args: {
     first: {
       defaultValue: DEFAULT_EDGES_NUMBER,
-      description: `Limits the number of results returned in a page.`,
+      description: 'Limits the number of results returned in a page.',
       type: GraphQLInt,
     },
     after: {
@@ -45,26 +39,5 @@ export const pages: GraphQLFieldConfig<
       type: PageWhereInputType,
     },
   },
-  resolve: async (
-    _source,
-    { after: afterCursor, offset, ...args },
-    context
-  ): Promise<Connection<Page>> => {
-    if (!context.loaders?.page)
-      throw new CretadocAPIError('Cannot get pages connection', {
-        errorKind: 'reference',
-        reason: 'Page loaders are not initialized',
-        received: typeof context.loaders?.doc,
-      });
-
-    const after = offset ?? decodeCursor(afterCursor);
-    const foundPages = await context.loaders.page.list({ ...args, after });
-
-    return getConnection({
-      after,
-      data: foundPages.data,
-      first: args.first,
-      total: foundPages.total,
-    });
-  },
+  resolve: pagesListResolver,
 };

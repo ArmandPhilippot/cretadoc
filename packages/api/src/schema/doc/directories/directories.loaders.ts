@@ -5,12 +5,12 @@ import type {
   DocDirectoryLoaders,
   ListInput,
 } from '../../../types';
-import { listDocDirectories } from './list/list.loaders';
+import { loadDocDirectoriesList } from './list';
 import {
-  getDocDirectoryById,
-  getDocDirectoryByPath,
-  getDocDirectoryBySlug,
-} from './read/read.loaders';
+  loadDocDirectoryById,
+  loadDocDirectoryByPath,
+  loadDocDirectoryBySlug,
+} from './read';
 
 /**
  * Initialize the documentation directory loaders.
@@ -23,11 +23,11 @@ export const initDocDirectoryLoaders = (
 ): DocDirectoryLoaders => {
   return {
     directory: {
-      byId: getDocDirectoryById(repository),
-      byPath: getDocDirectoryByPath(repository),
-      bySlug: getDocDirectoryBySlug(repository),
+      byId: loadDocDirectoryById(repository),
+      byPath: loadDocDirectoryByPath(repository),
+      bySlug: loadDocDirectoryBySlug(repository),
       list: async (params: ListInput<DocDirectory>) =>
-        listDocDirectories(repository, params),
+        loadDocDirectoriesList(repository, params),
     },
   };
 };
@@ -36,12 +36,13 @@ export const initDocDirectoryLoaders = (
  * Clear the documentation directories loaders.
  *
  * @param {DocDirectoryLoaders['directory']} directoryLoaders - The dir loaders.
- * @param {DocDirectoryInput} input - The directory id and path.
+ * @param {DocDirectoryInput} input - The directory id, path and slug.
  */
 export const clearDocDirectoryLoaders = (
   directoryLoaders: DocDirectoryLoaders['directory'],
-  { id, path }: DocDirectoryInput
+  { id, path, slug }: DocDirectoryInput
 ) => {
   directoryLoaders.byId.clear(id);
   directoryLoaders.byPath.clear(path);
+  directoryLoaders.bySlug.clear(slug);
 };

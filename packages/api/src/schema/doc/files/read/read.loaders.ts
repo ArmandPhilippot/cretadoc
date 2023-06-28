@@ -11,7 +11,7 @@ import type { DocFile, DocFileInput } from '../../../../types';
  * @param {ReadonlyArray<DocFileInput[P]>} values - The values to looking for.
  * @returns {Promise<Array<Maybe<DocFile>>>} The matching files.
  */
-const getDocFileBy = async <P extends keyof DocFileInput>(
+const loadDocFileBy = async <P extends keyof DocFileInput>(
   repository: DocRepository,
   prop: P,
   values: ReadonlyArray<DocFileInput[P]>
@@ -27,11 +27,11 @@ const getDocFileBy = async <P extends keyof DocFileInput>(
  * @param {DocRepository} repository - The Documentation repository.
  * @returns {DataLoader<string, Maybe<DocFile>, string>} The Data Loader.
  */
-export const getDocFileById = (
+export const loadDocFileById = (
   repository: DocRepository
 ): DataLoader<string, Maybe<DocFile>, string> =>
   new DataLoader<DocFileInput['id'], Maybe<DocFile>>(async (ids) =>
-    getDocFileBy(repository, 'id', ids)
+    loadDocFileBy(repository, 'id', ids)
   );
 
 /**
@@ -40,11 +40,11 @@ export const getDocFileById = (
  * @param {DocRepository} repository - The Documentation repository.
  * @returns {DataLoader<string, Maybe<DocFile>, string>} The Data Loader.
  */
-export const getDocFileByPath = (
+export const loadDocFileByPath = (
   repository: DocRepository
 ): DataLoader<string, Maybe<DocFile>, string> =>
   new DataLoader<DocFileInput['path'], Maybe<DocFile>>(async (paths) =>
-    getDocFileBy(repository, 'path', paths)
+    loadDocFileBy(repository, 'path', paths)
   );
 
 /**
@@ -53,9 +53,9 @@ export const getDocFileByPath = (
  * @param {DocRepository} repository - The Documentation repository.
  * @returns {DataLoader<string, Maybe<DocFile>, string>} The Data Loader.
  */
-export const getDocFileBySlug = (
+export const loadDocFileBySlug = (
   repository: DocRepository
 ): DataLoader<string, Maybe<DocFile>, string> =>
   new DataLoader<DocFileInput['slug'], Maybe<DocFile>>(async (slugs) =>
-    getDocFileBy(repository, 'slug', slugs)
+    loadDocFileBy(repository, 'slug', slugs)
   );

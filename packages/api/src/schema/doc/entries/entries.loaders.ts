@@ -1,11 +1,11 @@
 import type { DocRepository } from '../../../repositories';
 import type { DocEntry, DocEntryLoaders, ListInput } from '../../../types';
-import { listDocEntries } from './list/list.loaders';
+import { loadDocEntriesList } from './list';
 import {
-  getDocEntryById,
-  getDocEntryByPath,
-  getDocEntryBySlug,
-} from './read/read.loaders';
+  loadDocEntryById,
+  loadDocEntryByPath,
+  loadDocEntryBySlug,
+} from './read';
 
 /**
  * Initialize the documentation entry loaders.
@@ -18,11 +18,11 @@ export const initDocEntryLoaders = (
 ): DocEntryLoaders => {
   return {
     entry: {
-      byId: getDocEntryById(repository),
-      byPath: getDocEntryByPath(repository),
-      bySlug: getDocEntryBySlug(repository),
+      byId: loadDocEntryById(repository),
+      byPath: loadDocEntryByPath(repository),
+      bySlug: loadDocEntryBySlug(repository),
       list: async (params: ListInput<DocEntry>) =>
-        listDocEntries(repository, params),
+        loadDocEntriesList(repository, params),
     },
   };
 };

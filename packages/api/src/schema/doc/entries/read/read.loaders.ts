@@ -11,7 +11,7 @@ import type { DocEntry, DocEntryInput } from '../../../../types';
  * @param {ReadonlyArray<DocEntryInput[P]>} values - The values to looking for.
  * @returns {Promise<Array<Maybe<DocEntry>>>} The matching entries.
  */
-const getDocEntryBy = async <P extends keyof DocEntryInput>(
+const loadDocEntryBy = async <P extends keyof DocEntryInput>(
   repository: DocRepository,
   prop: P,
   values: ReadonlyArray<DocEntryInput[P]>
@@ -29,11 +29,11 @@ const getDocEntryBy = async <P extends keyof DocEntryInput>(
  * @param {DocRepository} repository - The Documentation repository.
  * @returns {DataLoader<string, Maybe<DocEntry>, string>} The Data Loader.
  */
-export const getDocEntryById = (
+export const loadDocEntryById = (
   repository: DocRepository
 ): DataLoader<string, Maybe<DocEntry>, string> =>
   new DataLoader<DocEntryInput['id'], Maybe<DocEntry>>(async (ids) =>
-    getDocEntryBy(repository, 'id', ids)
+    loadDocEntryBy(repository, 'id', ids)
   );
 
 /**
@@ -42,11 +42,11 @@ export const getDocEntryById = (
  * @param {DocRepository} repository - The Documentation repository.
  * @returns {DataLoader<string, Maybe<DocEntry>, string>} The Data Loader.
  */
-export const getDocEntryByPath = (
+export const loadDocEntryByPath = (
   repository: DocRepository
 ): DataLoader<string, Maybe<DocEntry>, string> =>
   new DataLoader<DocEntryInput['path'], Maybe<DocEntry>>(async (paths) =>
-    getDocEntryBy(repository, 'path', paths)
+    loadDocEntryBy(repository, 'path', paths)
   );
 
 /**
@@ -55,9 +55,9 @@ export const getDocEntryByPath = (
  * @param {DocRepository} repository - The Documentation repository.
  * @returns {DataLoader<string, Maybe<DocEntry>, string>} The Data Loader.
  */
-export const getDocEntryBySlug = (
+export const loadDocEntryBySlug = (
   repository: DocRepository
 ): DataLoader<string, Maybe<DocEntry>, string> =>
   new DataLoader<DocEntryInput['slug'], Maybe<DocEntry>>(async (slugs) =>
-    getDocEntryBy(repository, 'slug', slugs)
+    loadDocEntryBy(repository, 'slug', slugs)
   );

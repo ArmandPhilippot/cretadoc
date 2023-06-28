@@ -1,14 +1,8 @@
 import { GraphQLInt, GraphQLString, type GraphQLFieldConfig } from 'graphql';
-import type {
-  APIContext,
-  Connection,
-  ConnectionInput,
-  DocEntry,
-} from '../../../../types';
+import type { APIContext, ConnectionInput, DocEntry } from '../../../../types';
 import { DEFAULT_EDGES_NUMBER } from '../../../../utils/constants';
-import { CretadocAPIError } from '../../../../utils/exceptions';
-import { getConnection } from '../../../../utils/gql';
-import { decodeCursor, generateCursor } from '../../../../utils/helpers';
+import { generateCursor } from '../../../../utils/helpers';
+import { entriesListResolver } from './list.resolver';
 import {
   DocEntryConnectionType,
   DocEntryOrderType,
@@ -45,29 +39,5 @@ export const entries: GraphQLFieldConfig<
       type: DocEntryWhereInputType,
     },
   },
-  resolve: async (
-    _source,
-    { after: afterCursor, offset, ...args },
-    context
-  ): Promise<Connection<DocEntry>> => {
-    if (!context.loaders?.doc)
-      throw new CretadocAPIError('Cannot get entries connection', {
-        errorKind: 'reference',
-        reason: 'Doc loaders are not initialized',
-        received: typeof context.loaders?.doc,
-      });
-
-    const after = offset ?? decodeCursor(afterCursor);
-    const foundDocEntries = await context.loaders.doc.entry.list({
-      ...args,
-      after,
-    });
-
-    return getConnection({
-      after,
-      data: foundDocEntries.data,
-      first: args.first,
-      total: foundDocEntries.total,
-    });
-  },
+  resolve: entriesListResolver,
 };

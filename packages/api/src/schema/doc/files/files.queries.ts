@@ -1,4 +1,4 @@
-import { files } from './list/list.query';
-import { file } from './read/read.query';
+import { files } from './list';
+import { file } from './read';
 
 export { file, files };

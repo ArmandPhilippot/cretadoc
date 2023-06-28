@@ -11,7 +11,7 @@ import type { Page, PageInput } from '../../../types';
  * @param {readonly PageInput[P][]} values - The values to looking for.
  * @returns {Promise<(Maybe<Page>)[]>} The matching pages.
  */
-const getPageBy = async <P extends keyof PageInput>(
+const loadPageBy = async <P extends keyof PageInput>(
   repository: PagesRepository,
   prop: P,
   values: ReadonlyArray<PageInput[P]>
@@ -27,11 +27,11 @@ const getPageBy = async <P extends keyof PageInput>(
  * @param {PageRepository} repository - A Page repository.
  * @returns {DataLoader<string, Maybe<Page>, string>} The Data Loader.
  */
-export const getPageById = (
+export const loadPageById = (
   repository: PagesRepository
 ): DataLoader<string, Maybe<Page>, string> =>
   new DataLoader<PageInput['id'], Maybe<Page>>(async (ids) =>
-    getPageBy(repository, 'id', ids)
+    loadPageBy(repository, 'id', ids)
   );
 
 /**
@@ -40,11 +40,11 @@ export const getPageById = (
  * @param {PageRepository} repository - A Page repository.
  * @returns {DataLoader<string, Maybe<Page>, string>} The Data Loader.
  */
-export const getPageByName = (
+export const loadPageByName = (
   repository: PagesRepository
 ): DataLoader<string, Maybe<Page>, string> =>
   new DataLoader<PageInput['name'], Maybe<Page>>(async (names) =>
-    getPageBy(repository, 'name', names)
+    loadPageBy(repository, 'name', names)
   );
 
 /**
@@ -53,9 +53,9 @@ export const getPageByName = (
  * @param {PageRepository} repository - A Page repository.
  * @returns {DataLoader<string, Maybe<Page>, string>} The Data Loader.
  */
-export const getPageBySlug = (
+export const loadPageBySlug = (
   repository: PagesRepository
 ): DataLoader<string, Maybe<Page>, string> =>
   new DataLoader<PageInput['slug'], Maybe<Page>>(async (slugs) =>
-    getPageBy(repository, 'slug', slugs)
+    loadPageBy(repository, 'slug', slugs)
   );

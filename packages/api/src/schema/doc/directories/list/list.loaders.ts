@@ -8,7 +8,7 @@ import type { DocDirectory, ListInput, ListReturn } from '../../../../types';
  * @param {ListInput<DocDirectory>} params - The list parameters.
  * @returns {Promise<ListReturn<DocDirectory[]>>} The matching directories.
  */
-export const listDocDirectories = async (
+export const loadDocDirectoriesList = async (
   repository: DocRepository,
   params: ListInput<DocDirectory>
 ): Promise<ListReturn<DocDirectory[]>> => repository.find(params, 'directory');

@@ -8,7 +8,7 @@ import type { DocFile, ListInput, ListReturn } from '../../../../types';
  * @param {ListInput<DocFile>} params - The list parameters.
  * @returns {Promise<ListReturn<DocFile[]>>} The matching files.
  */
-export const listDocFiles = async (
+export const loadDocFilesList = async (
   repository: DocRepository,
   params: ListInput<DocFile>
 ): Promise<ListReturn<DocFile[]>> => repository.find(params, 'file');

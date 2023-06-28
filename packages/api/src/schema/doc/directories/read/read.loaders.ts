@@ -11,7 +11,7 @@ import type { DocDirectory, DocDirectoryInput } from '../../../../types';
  * @param {ReadonlyArray<DocDirectoryInput[P]>} values - The values to looking for.
  * @returns {Promise<Array<Maybe<DocDirectory>>>} The matching directories.
  */
-const getDocDirectoryBy = async <P extends keyof DocDirectoryInput>(
+const loadDocDirectoryBy = async <P extends keyof DocDirectoryInput>(
   repository: DocRepository,
   prop: P,
   values: ReadonlyArray<DocDirectoryInput[P]>
@@ -29,11 +29,11 @@ const getDocDirectoryBy = async <P extends keyof DocDirectoryInput>(
  * @param {DocRepository} repository - The Documentation repository.
  * @returns {DataLoader<string, Maybe<DocDirectory>, string>} The Data Loader.
  */
-export const getDocDirectoryById = (
+export const loadDocDirectoryById = (
   repository: DocRepository
 ): DataLoader<string, Maybe<DocDirectory>, string> =>
   new DataLoader<DocDirectoryInput['id'], Maybe<DocDirectory>>(async (ids) =>
-    getDocDirectoryBy(repository, 'id', ids)
+    loadDocDirectoryBy(repository, 'id', ids)
   );
 
 /**
@@ -42,11 +42,11 @@ export const getDocDirectoryById = (
  * @param {DocRepository} repository - The Documentation repository.
  * @returns {DataLoader<string, Maybe<DocDirectory>, string>} The Data Loader.
  */
-export const getDocDirectoryByPath = (
+export const loadDocDirectoryByPath = (
   repository: DocRepository
 ): DataLoader<string, Maybe<DocDirectory>, string> =>
   new DataLoader<DocDirectoryInput['path'], Maybe<DocDirectory>>(
-    async (paths) => getDocDirectoryBy(repository, 'path', paths)
+    async (paths) => loadDocDirectoryBy(repository, 'path', paths)
   );
 
 /**
@@ -55,9 +55,9 @@ export const getDocDirectoryByPath = (
  * @param {DocRepository} repository - The Documentation repository.
  * @returns {DataLoader<string, Maybe<DocDirectory>, string>} The Data Loader.
  */
-export const getDocDirectoryBySlug = (
+export const loadDocDirectoryBySlug = (
   repository: DocRepository
 ): DataLoader<string, Maybe<DocDirectory>, string> =>
   new DataLoader<DocDirectoryInput['slug'], Maybe<DocDirectory>>(
-    async (slugs) => getDocDirectoryBy(repository, 'slug', slugs)
+    async (slugs) => loadDocDirectoryBy(repository, 'slug', slugs)
   );

@@ -5,12 +5,8 @@ import type {
   DocFileLoaders,
   ListInput,
 } from '../../../types';
-import { listDocFiles } from './list/list.loaders';
-import {
-  getDocFileById,
-  getDocFileByPath,
-  getDocFileBySlug,
-} from './read/read.loaders';
+import { loadDocFilesList } from './list';
+import { loadDocFileById, loadDocFileByPath, loadDocFileBySlug } from './read';
 
 /**
  * Initialize the documentation file loaders.
@@ -23,11 +19,11 @@ export const initDocFileLoaders = (
 ): DocFileLoaders => {
   return {
     file: {
-      byId: getDocFileById(repository),
-      byPath: getDocFileByPath(repository),
-      bySlug: getDocFileBySlug(repository),
+      byId: loadDocFileById(repository),
+      byPath: loadDocFileByPath(repository),
+      bySlug: loadDocFileBySlug(repository),
       list: async (params: ListInput<DocFile>) =>
-        listDocFiles(repository, params),
+        loadDocFilesList(repository, params),
     },
   };
 };
@@ -36,12 +32,13 @@ export const initDocFileLoaders = (
  * Clear the documentation files loaders.
  *
  * @param {DocFileLoaders['file']} fileLoaders - The file loaders.
- * @param {DocFileInput} input - The file id and path.
+ * @param {DocFileInput} input - The file id, path and slug.
  */
 export const clearDocFileLoaders = (
   fileLoaders: DocFileLoaders['file'],
-  { id, path }: DocFileInput
+  { id, path, slug }: DocFileInput
 ) => {
   fileLoaders.byId.clear(id);
   fileLoaders.byPath.clear(path);
+  fileLoaders.bySlug.clear(slug);
 };

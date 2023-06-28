@@ -8,7 +8,7 @@ import type { DocEntry, ListInput, ListReturn } from '../../../../types';
  * @param {ListInput<DocEntry>} params - The list parameters.
  * @returns {Promise<ListReturn<DocEntry[]>>} The matching entries.
  */
-export const listDocEntries = async (
+export const loadDocEntriesList = async (
   repository: DocRepository,
   params: ListInput<DocEntry>
 ): Promise<ListReturn<DocEntry[]>> => repository.find(params);

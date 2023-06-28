@@ -1,8 +1,8 @@
 import type { DocRepository } from '../../../repositories';
 import type { DocFileMutators } from '../../../types';
-import { createDocFile } from './create/create.mutator';
-import { deleteDocFile } from './delete/delete.mutator';
-import { updateDocFile } from './update/update.mutator';
+import { createDocFile } from './create';
+import { deleteDocFile } from './delete';
+import { updateDocFile } from './update';
 
 /**
  * Initialize the documentation file mutators.

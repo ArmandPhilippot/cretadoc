@@ -1,4 +1,4 @@
-import { pages } from './list/list.query';
-import { page } from './read/read.query';
+import { pages } from './list';
+import { page } from './read';
 
 export { page, pages };

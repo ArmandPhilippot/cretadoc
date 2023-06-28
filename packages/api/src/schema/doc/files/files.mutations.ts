@@ -1,5 +1,5 @@
-import { fileCreate } from './create/create.mutation';
-import { fileDelete } from './delete/delete.mutation';
-import { fileUpdate } from './update/update.mutation';
+import { fileCreate } from './create';
+import { fileDelete } from './delete';
+import { fileUpdate } from './update';
 
 export { fileCreate, fileDelete, fileUpdate };
