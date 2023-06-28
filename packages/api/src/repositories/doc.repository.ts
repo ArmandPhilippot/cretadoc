@@ -16,6 +16,7 @@ import type {
   DocDirectory,
   DocDirectoryContents,
   DocDirectoryCreate,
+  DocDirectoryDeleteInput,
   DocDirectoryInput,
   DocDirectoryUpdate,
   DocEntry,
@@ -24,6 +25,7 @@ import type {
   DocEntryParent,
   DocFile,
   DocFileCreate,
+  DocFileDeleteInput,
   DocFileInput,
   DocFileUpdate,
   ListInput,
@@ -41,6 +43,10 @@ import {
 import { FileSystemRepository } from './filesystem.repository';
 
 type DocInput = DocDirectoryInput | DocEntryInput | DocFileInput;
+
+type DeleteDocEntryInput =
+  | DocDirectoryDeleteInput['input']
+  | DocFileDeleteInput['input'];
 
 type ResolveReturnTypeFrom<Kind extends Maybe<DocEntryKind>> =
   Kind extends 'directory'
@@ -530,20 +536,37 @@ export class DocRepository extends FileSystemRepository {
   /**
    * Remove a documentation entry from the repository.
    *
-   * @param {string} path - The relative path of the entry.
-   * @param {boolean} [isDirectory] - Is the entry a directory?
+   * @param {DeleteDocEntryInput} input - The entry path or id.
+   * @param {DocEntryKind} kind - The entry kind.
    * @returns {Promise<Maybe<DocDirectory | DocFile>>} The deleted entry.
    */
-  public async remove<
-    T extends boolean = false,
-    R = T extends true ? DocDirectory : DocFile
-  >(path: string, isDirectory?: T): Promise<Maybe<R>> {
-    const entry = await this.get('path', path);
+  public async remove<T extends 'directory'>(
+    { id, path }: DeleteDocEntryInput,
+    kind?: T
+  ): Promise<Maybe<DocDirectory>>;
+  public async remove<T extends 'file'>(
+    { id, path }: DeleteDocEntryInput,
+    kind?: T
+  ): Promise<Maybe<DocFile>>;
+  public async remove<T extends DocEntryKind>(
+    { id, path }: DeleteDocEntryInput,
+    kind?: T
+  ): Promise<Maybe<DocDirectory | DocFile>>;
+  public async remove<T extends DocEntryKind>(
+    { id, path }: DeleteDocEntryInput,
+    kind?: T
+  ): Promise<Maybe<DocDirectory | DocFile>> {
+    const relativePath = id ? decodeBase64String(id) : path;
+
+    if (!relativePath) return undefined;
+
+    const entry = await this.get('path', relativePath);
+    const isDirectory = kind === 'directory';
     const isEntryMatching =
       entry && entry.type === (isDirectory ? 'directory' : 'file');
 
-    if (isEntryMatching) await this.del(path, isDirectory);
+    if (isEntryMatching) await this.del(relativePath, isDirectory);
 
-    return entry as Maybe<R>;
+    return entry;
   }
 }

@@ -1,4 +1,6 @@
-export type MetaStatus = 'draft' | 'published';
+import type { ALLOWED_STATUS } from '../utils/constants';
+
+export type MetaStatus = (typeof ALLOWED_STATUS)[keyof typeof ALLOWED_STATUS];
 
 export type Meta = {
   /**

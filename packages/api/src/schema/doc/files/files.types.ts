@@ -1,186 +1,318 @@
 import {
+  GraphQLEnumType,
   GraphQLInputObjectType,
+  GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLString,
+  GraphQLUnionType,
 } from 'graphql';
 import type {
   APIContext,
-  DocEntryParent,
-  DocFile,
+  DocFileCreateErrors,
+  DocFileCreatePayload,
+  DocFileDeleteErrors,
+  DocFileDeleteResult,
   DocFilePayload,
-  Meta,
+  DocFileUpdateErrors,
+  DocFileUpdatePayload,
 } from '../../../types';
-
-export const DocFileMetaType = new GraphQLObjectType<Meta>({
-  name: 'DocFileMeta',
-  description: 'The metadata of a documentation file.',
-  fields: () => {
-    return {
-      createdAt: {
-        type: GraphQLString,
-        description: 'The creation date of the file.',
-        resolve: ({ createdAt }) => createdAt,
-      },
-      seoDescription: {
-        type: GraphQLString,
-        description: 'The meta description.',
-        resolve: ({ seoDescription }) => seoDescription,
-      },
-      seoTitle: {
-        type: GraphQLString,
-        description: 'The title used by search engines.',
-        resolve: ({ seoTitle }) => seoTitle,
-      },
-      status: {
-        type: GraphQLString,
-        description: 'The status of the file.',
-        resolve: ({ status }) => status,
-      },
-      title: {
-        type: GraphQLString,
-        description: 'The title of the file.',
-        resolve: ({ title }) => title,
-      },
-      updatedAt: {
-        type: GraphQLString,
-        description: 'The update date of the file.',
-        resolve: ({ updatedAt }) => updatedAt,
-      },
-    };
-  },
-});
-
-export const DocFileMetaInputType = new GraphQLInputObjectType({
-  name: 'DocFileMetaInput',
-  description: 'The documentation file metadata.',
-  fields: {
-    createdAt: {
-      type: GraphQLString,
-      description: 'The creation date of the file.',
-    },
-    seoDescription: {
-      type: GraphQLString,
-      description: 'The meta description.',
-    },
-    seoTitle: {
-      type: GraphQLString,
-      description: 'The title used by search engines.',
-    },
-    status: {
-      type: GraphQLString,
-      description: 'The status of the documentation file.',
-    },
-    title: {
-      type: GraphQLString,
-      description: 'The title of the documentation file.',
-    },
-    updatedAt: {
-      type: GraphQLString,
-      description: 'The update date of the file.',
-    },
-  },
-});
-
-export const DocFileParentType = new GraphQLObjectType<DocEntryParent>({
-  name: 'DocFileParent',
-  description: 'The parent of a documentation file.',
-  fields: () => {
-    return {
-      id: {
-        type: new GraphQLNonNull(GraphQLString),
-        description: 'The parent id.',
-        resolve: ({ id }) => id,
-      },
-      meta: {
-        type: DocFileMetaType,
-        description: 'The frontmatter metadata of the parent.',
-        resolve: ({ meta }) => meta,
-      },
-      name: {
-        type: new GraphQLNonNull(GraphQLString),
-        description: 'The filename of the parent.',
-        resolve: ({ name }) => name,
-      },
-      path: {
-        type: new GraphQLNonNull(GraphQLString),
-        description: 'The path of the parent.',
-        resolve: ({ path }) => path,
-      },
-      slug: {
-        type: new GraphQLNonNull(GraphQLString),
-        description: 'The slug of the parent.',
-        resolve: ({ slug }) => slug,
-      },
-    };
-  },
-});
-
-export const DocFileType = new GraphQLObjectType<DocFile, APIContext>({
-  name: 'DocFile',
-  description: 'A single documentation file.',
-  fields: () => {
-    return {
-      contents: {
-        type: GraphQLString,
-        description: 'The contents of the file.',
-        resolve: ({ contents }) => contents,
-      },
-      createdAt: {
-        type: new GraphQLNonNull(GraphQLString),
-        description: 'The creation date of the file.',
-        resolve: ({ createdAt }) => createdAt,
-      },
-      id: {
-        type: new GraphQLNonNull(GraphQLString),
-        description: 'The id of the file.',
-        resolve: ({ id }) => id,
-      },
-      meta: {
-        type: DocFileMetaType,
-        description: 'The frontmatter metadata of the file.',
-        resolve: ({ meta }) => meta,
-      },
-      name: {
-        type: new GraphQLNonNull(GraphQLString),
-        description: 'The file filename.',
-        resolve: ({ name }) => name,
-      },
-      parent: {
-        type: DocFileParentType,
-        description: 'The parent of the file.',
-        resolve: ({ parent }) => parent,
-      },
-      path: {
-        type: new GraphQLNonNull(GraphQLString),
-        description: 'The file path.',
-        resolve: ({ path }) => path,
-      },
-      slug: {
-        type: new GraphQLNonNull(GraphQLString),
-        description: 'The file slug.',
-        resolve: ({ slug }) => slug,
-      },
-      type: {
-        type: new GraphQLNonNull(GraphQLString),
-        description: 'The documentation entry type.',
-        resolve: ({ type }) => type,
-      },
-      updatedAt: {
-        type: new GraphQLNonNull(GraphQLString),
-        description: 'The update date of the file.',
-        resolve: ({ updatedAt }) => updatedAt,
-      },
-    };
-  },
-});
+import {
+  FrontMatterInputType,
+  createConnectionType,
+  createOrderByType,
+} from '../../../utils/gql';
+import { DocFileType } from '../doc.types';
 
 export const DocFilePayloadType = new GraphQLObjectType<
   DocFilePayload,
   APIContext
 >({
   name: 'DocFilePayload',
+  description: 'The documentation file payload.',
   fields: {
-    file: { type: DocFileType },
+    file: {
+      description: 'The requested documentation file.',
+      type: DocFileType,
+    },
+  },
+});
+
+export const DocFileConnectionType = createConnectionType(DocFileType);
+
+const DocFileOrderFieldType = new GraphQLEnumType({
+  name: `DocFileOrderField`,
+  description: 'The ordering field.',
+  values: {
+    createdAt: {
+      value: 'createdAt',
+      description: 'Order documentation files by creation date.',
+    },
+    name: {
+      value: 'name',
+      description: 'Order documentations files by name.',
+    },
+    path: {
+      value: 'path',
+      description: 'Order documentation files by path.',
+    },
+    slug: {
+      value: 'slug',
+      description: 'Order documentation files by slug.',
+    },
+    updatedAt: {
+      value: 'updatedAt',
+      description: 'Order documentation files by last modification date.',
+    },
+  },
+});
+
+export const DocFileOrderByInputType = createOrderByType(
+  DocFileType.name,
+  DocFileOrderFieldType
+);
+
+export const DocFileWhereInputType = new GraphQLInputObjectType({
+  name: 'DocFileWhereInput',
+  description: 'The arguments for filtering the files.',
+  fields: {
+    createdAt: {
+      description: 'A substring of the creation date of the file.',
+      type: GraphQLString,
+    },
+    name: {
+      description: 'A substring of the file name.',
+      type: GraphQLString,
+    },
+    path: {
+      description: 'The parent path.',
+      type: GraphQLString,
+    },
+    updatedAt: {
+      description: 'A substring of the last update date of the file.',
+      type: GraphQLString,
+    },
+  },
+});
+
+export const DocFileCreateInputType = new GraphQLInputObjectType({
+  name: 'DocFileCreateInput',
+  description: 'The input to create a new documentation file.',
+  fields: {
+    contents: {
+      description: 'The file contents.',
+      type: GraphQLString,
+    },
+    meta: {
+      description: 'The file metadata.',
+      type: FrontMatterInputType,
+    },
+    name: {
+      description: 'The file name without extension.',
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    parentPath: {
+      description: 'The path where to create the file.',
+      type: GraphQLString,
+    },
+  },
+});
+
+const DocFileCreationValidationErrorsType = new GraphQLObjectType<
+  DocFileCreateErrors['errors']
+>({
+  name: 'DocFileCreationValidationErrors',
+  description: 'The validation errors for each argument.',
+  fields: {
+    contents: {
+      description: 'The validation errors on contents argument.',
+      type: new GraphQLList(GraphQLString),
+      resolve: ({ contents }) => contents,
+    },
+    meta: {
+      description: 'The validation errors on meta argument.',
+      type: new GraphQLList(GraphQLString),
+      resolve: ({ meta }) => meta,
+    },
+    name: {
+      description: 'The validation errors on name argument.',
+      type: new GraphQLList(GraphQLString),
+      resolve: ({ name }) => name,
+    },
+    parentPath: {
+      description: 'The validation errors on parentPath argument.',
+      type: new GraphQLList(GraphQLString),
+      resolve: ({ parentPath }) => parentPath,
+    },
+  },
+});
+
+export const DocFileCreateErrorsType = new GraphQLObjectType<
+  DocFileCreateErrors,
+  APIContext
+>({
+  name: 'DocFileCreateErrors',
+  description: 'The validation errors when creating a new documentation file.',
+  fields: {
+    errors: {
+      description: 'The validation errors when creating a new doc file.',
+      type: DocFileCreationValidationErrorsType,
+    },
+  },
+});
+
+export const DocFileCreateResultType = new GraphQLUnionType({
+  name: 'DocFileCreateResult',
+  description: 'Either the documentation file data or errors.',
+  types: [DocFilePayloadType, DocFileCreateErrorsType],
+  resolveType(value: DocFileCreatePayload) {
+    if (Object.hasOwn(value, 'errors')) return 'DocFileCreateErrors';
+
+    return 'DocFilePayload';
+  },
+});
+
+export const DocFileDeleteInputType = new GraphQLInputObjectType({
+  name: 'DocFileDeleteInput',
+  description: 'The input to delete an existing documentation file.',
+  fields: {
+    id: {
+      description: 'The documentation file id.',
+      type: GraphQLString,
+    },
+    path: {
+      description: 'The documentation file path.',
+      type: GraphQLString,
+    },
+  },
+});
+
+const DocFileDeleteValidationErrorsType = new GraphQLObjectType<
+  DocFileDeleteErrors['errors']
+>({
+  name: 'DocFileDeleteValidationErrors',
+  description: 'The validation errors for each argument.',
+  fields: {
+    id: {
+      description: 'The validation errors on id argument.',
+      type: new GraphQLList(GraphQLString),
+      resolve: ({ id }) => id,
+    },
+    path: {
+      description: 'The validation errors on path argument.',
+      type: new GraphQLList(GraphQLString),
+      resolve: ({ path }) => path,
+    },
+  },
+});
+
+export const DocFileDeleteErrorsType = new GraphQLObjectType<
+  DocFileDeleteErrors,
+  APIContext
+>({
+  name: 'DocFileDeleteErrors',
+  description: 'The errors when deleting a documentation file.',
+  fields: {
+    errors: {
+      description: 'The validation errors when deleting a documentation file.',
+      type: DocFileDeleteValidationErrorsType,
+    },
+  },
+});
+
+export const DocFileDeleteResultType = new GraphQLUnionType({
+  name: 'DocFileDeleteResult',
+  description: 'Either the deleted documentation file or errors.',
+  types: [DocFilePayloadType, DocFileDeleteErrorsType],
+  resolveType(value: DocFileDeleteResult) {
+    if (Object.hasOwn(value, 'errors')) return 'DocFileDeleteErrors';
+
+    return 'DocFilePayload';
+  },
+});
+
+export const DocFileUpdateInputType = new GraphQLInputObjectType({
+  name: 'DocFileUpdateInput',
+  description: 'The input to update an existing documentation file.',
+  fields: {
+    contents: {
+      description: 'The file contents.',
+      type: GraphQLString,
+    },
+    id: {
+      description: 'The file id.',
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    name: {
+      description: 'The file name without extension.',
+      type: GraphQLString,
+    },
+    meta: {
+      description: 'The file metadata.',
+      type: FrontMatterInputType,
+    },
+    parentPath: {
+      description: 'The path where to move the file.',
+      type: GraphQLString,
+    },
+  },
+});
+
+const DocFileUpdateValidationErrorsType = new GraphQLObjectType<
+  DocFileUpdateErrors['errors']
+>({
+  name: 'DocFileUpdateValidationErrors',
+  description: 'The validation errors for each argument.',
+  fields: {
+    contents: {
+      description: 'The validation errors on contents argument.',
+      type: new GraphQLList(GraphQLString),
+      resolve: ({ contents }) => contents,
+    },
+    id: {
+      description: 'The validation errors on id argument.',
+      type: new GraphQLList(GraphQLString),
+      resolve: ({ id }) => id,
+    },
+    meta: {
+      description: 'The validation errors on meta argument.',
+      type: new GraphQLList(GraphQLString),
+      resolve: ({ meta }) => meta,
+    },
+    name: {
+      description: 'The validation errors on name argument.',
+      type: new GraphQLList(GraphQLString),
+      resolve: ({ name }) => name,
+    },
+    parentPath: {
+      description: 'The validation errors on parentPath argument.',
+      type: new GraphQLList(GraphQLString),
+      resolve: ({ parentPath }) => parentPath,
+    },
+  },
+});
+
+export const DocFileUpdateErrorsType = new GraphQLObjectType<
+  DocFileUpdateErrors,
+  APIContext
+>({
+  name: 'DocFileUpdateErrors',
+  description: 'The error when updating a documentation file.',
+  fields: {
+    errors: {
+      description: 'The validation errors when updating a documentation file.',
+      type: DocFileUpdateValidationErrorsType,
+    },
+  },
+});
+
+export const DocFileUpdateResultType = new GraphQLUnionType({
+  name: 'DocFileUpdateResult',
+  description: 'Either the updated documentation file or errors.',
+  types: [DocFilePayloadType, DocFileUpdateErrorsType],
+  resolveType(value: DocFileUpdatePayload) {
+    if (Object.hasOwn(value, 'errors')) return 'DocFileUpdateErrors';
+
+    return 'DocFilePayload';
   },
 });

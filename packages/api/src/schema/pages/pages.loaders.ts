@@ -1,7 +1,32 @@
+import type { Maybe } from '@cretadoc/utils';
+import DataLoader from 'dataloader';
 import type { PagesRepository } from '../../repositories';
 import type { ListInput, Page, PageInput, PageLoaders } from '../../types';
-import { loadPagesList } from './list';
-import { loadPageById, loadPageByName, loadPageBySlug } from './read';
+
+/**
+ * Use the repository to look for pages.
+ *
+ * @param {PagesRepository} repository - The Page repository.
+ */
+const use = (repository: PagesRepository) => {
+  return {
+    /**
+     * Retrieve many pages by looking for values in a property.
+     *
+     * @param {P} prop - The property where to look for matching pages.
+     * @param {ReadonlyArray<PageInput[P]>} values - The values to look for.
+     * @returns {Promise<Array<Maybe<Page>>>} The matching pages.
+     */
+    getPagesBy: async <P extends keyof PageInput>(
+      prop: P,
+      values: ReadonlyArray<PageInput[P]>
+    ): Promise<Array<Maybe<Page>>> => {
+      const pages = await repository.getMany(prop, values);
+
+      return values.map((value) => pages?.find((page) => page[prop] === value));
+    },
+  };
+};
 
 /**
  * Initialize the page loaders.
@@ -12,11 +37,16 @@ import { loadPageById, loadPageByName, loadPageBySlug } from './read';
 export const initPageLoaders = (repository: PagesRepository): PageLoaders => {
   return {
     page: {
-      byId: loadPageById(repository),
-      byName: loadPageByName(repository),
-      bySlug: loadPageBySlug(repository),
-      list: async (params: ListInput<Page>) =>
-        loadPagesList(repository, params),
+      byId: new DataLoader<PageInput['id'], Maybe<Page>>(async (ids) =>
+        use(repository).getPagesBy('id', ids)
+      ),
+      byName: new DataLoader<PageInput['name'], Maybe<Page>>(async (names) =>
+        use(repository).getPagesBy('name', names)
+      ),
+      bySlug: new DataLoader<PageInput['slug'], Maybe<Page>>(async (slugs) =>
+        use(repository).getPagesBy('slug', slugs)
+      ),
+      list: async (params: ListInput<Page>) => repository.find(params),
     },
   };
 };

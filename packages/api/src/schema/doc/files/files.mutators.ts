@@ -1,8 +1,5 @@
 import type { DocRepository } from '../../../repositories';
 import type { DocFileMutators } from '../../../types';
-import { createDocFile } from './create';
-import { deleteDocFile } from './delete';
-import { updateDocFile } from './update';
 
 /**
  * Initialize the documentation file mutators.
@@ -15,9 +12,9 @@ export const initDocFileMutators = (
 ): DocFileMutators => {
   return {
     file: {
-      create: async (data) => createDocFile(repository, data),
-      del: async (data) => deleteDocFile(repository, data),
-      update: async (data) => updateDocFile(repository, data),
+      create: async (data) => repository.createFile(data),
+      del: async (data) => repository.remove(data, 'file'),
+      update: async (data) => repository.updateFile(data),
     },
   };
 };

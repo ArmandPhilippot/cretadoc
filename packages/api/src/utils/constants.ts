@@ -17,6 +17,11 @@ export const DIRECTION = {
 
 export const MARKDOWN_EXTENSION = '.md' as const;
 
+export const ALLOWED_STATUS = {
+  DRAFT: 'draft',
+  PUBLISHED: 'published',
+} as const;
+
 export const API_ERROR_CODE = {
   /**
    * The API is misconfigured.

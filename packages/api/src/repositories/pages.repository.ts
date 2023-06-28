@@ -6,12 +6,14 @@ import type {
   ListReturn,
   Page,
   PageCreate,
+  PageDeleteInput,
   PageInput,
   PageUpdate,
 } from '../types';
 import {
   decodeBase64String,
   generateBase64String,
+  getFilenameWithExt,
   parseMarkdown,
 } from '../utils/helpers';
 import { FileSystemRepository } from './filesystem.repository';
@@ -162,14 +164,25 @@ export class PagesRepository extends FileSystemRepository {
   /**
    * Remove a page from the repository.
    *
-   * @param {string} path - The relative path of the page.
+   * @param {PageDeleteInput['input']} data - The id or path of the name.
    * @returns {Promise<Maybe<Page>>} The deleted page.
    */
-  public async remove(path: string): Promise<Maybe<Page>> {
-    const pageName = parse(path).name;
+  public async remove({
+    id,
+    name,
+  }: PageDeleteInput['input']): Promise<Maybe<Page>> {
+    const relativePath = id
+      ? decodeBase64String(id)
+      : name
+      ? this.getRelativePathFrom(getFilenameWithExt(name))
+      : undefined;
+
+    if (!relativePath) return undefined;
+
+    const pageName = parse(relativePath).name;
     const page = await this.get('name', pageName);
 
-    if (page) await this.del(path);
+    if (page) await this.del(relativePath);
 
     return page;
   }

@@ -1,7 +1,7 @@
 import type { Maybe } from '@cretadoc/utils';
 import type { Loaders, Repositories } from '../types';
-import { initDocLoaders } from './doc/doc.loaders';
-import { initPageLoaders } from './pages/pages.loaders';
+import { initDocLoaders } from './doc';
+import { initPageLoaders } from './pages';
 
 /**
  * Initialize the loaders.

@@ -1,8 +1,8 @@
 import type { DocRepository } from '../../repositories';
 import type { DocLoaders } from '../../types';
-import { initDocDirectoryLoaders } from './directories/directories.loaders';
-import { initDocEntryLoaders } from './entries/entries.loaders';
-import { initDocFileLoaders } from './files/files.loaders';
+import { initDocDirectoryLoaders } from './directories';
+import { initDocEntryLoaders } from './entries';
+import { initDocFileLoaders } from './files';
 
 /**
  * Initialize the documentation loaders.

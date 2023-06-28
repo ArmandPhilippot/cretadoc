@@ -221,7 +221,7 @@ describe('PagesRepository', () => {
       name: pageName,
       contents: pageContents,
     });
-    const deletedPage = await repo.remove(page?.path ?? '');
+    const deletedPage = await repo.remove({ name: page?.name });
 
     expect(deletedPage).toStrictEqual(page);
     expect.assertions(1);
@@ -229,8 +229,7 @@ describe('PagesRepository', () => {
 
   it('returns undefined if the page does not exist', async () => {
     const repo = new PagesRepository(PAGES_FIXTURES_DIR);
-    const path = './non-existent/path';
-    const deletedPage = await repo.remove(path);
+    const deletedPage = await repo.remove({ name: undefined });
 
     expect(deletedPage).toBeUndefined();
   });

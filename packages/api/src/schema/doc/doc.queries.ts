@@ -1,10 +1,23 @@
-import type { GraphQLFieldConfig } from 'graphql';
+import { type GraphQLFieldConfig, GraphQLObjectType } from 'graphql';
 import type { APIContext } from '../../types';
-import { DocType } from './doc.types';
+import { docDirectoriesQueries } from './directories';
+import { docEntriesQueries } from './entries';
+import { docFilesQueries } from './files';
 
-export const doc: GraphQLFieldConfig<null, APIContext, null> = {
-  type: DocType,
+const doc: GraphQLFieldConfig<null, APIContext, null> = {
   description: 'Return the documentation nodes.',
-
+  type: new GraphQLObjectType({
+    name: 'Doc',
+    description: 'The documentation nodes.',
+    fields: () => {
+      return {
+        ...docDirectoriesQueries,
+        ...docEntriesQueries,
+        ...docFilesQueries,
+      };
+    },
+  }),
   resolve: () => true,
 };
+
+export const docQueries = { doc };

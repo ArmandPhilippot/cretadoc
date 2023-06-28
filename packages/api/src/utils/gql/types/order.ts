@@ -11,7 +11,7 @@ import { DIRECTION } from '../../constants';
  * @param {string} typeName - The name of the type.
  * @returns {GraphQLEnumType} The order direction type.
  */
-export const createOrderDirectionType = (typeName: string): GraphQLEnumType =>
+const createOrderDirectionType = (typeName: string): GraphQLEnumType =>
   new GraphQLEnumType({
     name: `${typeName}OrderDirection`,
     description: 'The ordering direction.',
@@ -30,13 +30,13 @@ export const createOrderDirectionType = (typeName: string): GraphQLEnumType =>
   });
 
 /**
- * Create a new order GraphQL type.
+ * Create a new orderBy GraphQL type.
  *
  * @param {string} typeName - The name of the type.
  * @param {GraphQLEnumType} fieldType - The fields type.
- * @returns {GraphQLInputObjectType} The order type.
+ * @returns {GraphQLInputObjectType} The orderBy type.
  */
-export const createOrderType = (
+export const createOrderByType = (
   typeName: string,
   fieldType: GraphQLEnumType
 ): GraphQLInputObjectType => {

@@ -122,7 +122,7 @@ describe('DocRepository', () => {
       name: docFileName,
       contents: docFileContents,
     });
-    const deletedDocFile = await repo.remove(docFile?.path ?? '');
+    const deletedDocFile = await repo.remove({ path: docFile?.path });
 
     expect(deletedDocFile).toStrictEqual(docFile);
     expect.assertions(1);

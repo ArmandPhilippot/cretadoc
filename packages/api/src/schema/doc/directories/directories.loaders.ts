@@ -1,3 +1,5 @@
+import type { Maybe } from '@cretadoc/utils';
+import DataLoader from 'dataloader';
 import type { DocRepository } from '../../../repositories';
 import type {
   DocDirectory,
@@ -5,12 +7,37 @@ import type {
   DocDirectoryLoaders,
   ListInput,
 } from '../../../types';
-import { loadDocDirectoriesList } from './list';
-import {
-  loadDocDirectoryById,
-  loadDocDirectoryByPath,
-  loadDocDirectoryBySlug,
-} from './read';
+
+/**
+ * Use the repository to look for doc directories.
+ *
+ * @param {DocRepository} repository - The Doc repository.
+ */
+const use = (repository: DocRepository) => {
+  return {
+    /**
+     * Retrieve many directories by looking for values in a property.
+     *
+     * @param {P} prop - The property where to look for matching directories.
+     * @param {ReadonlyArray<DocDirectoryInput[P]>} values - The values to look for.
+     * @returns {Promise<Array<Maybe<DocDirectory>>>} The matching directories.
+     */
+    getDirectoriesBy: async <P extends keyof DocDirectoryInput>(
+      prop: P,
+      values: ReadonlyArray<DocDirectoryInput[P]>
+    ): Promise<Array<Maybe<DocDirectory>>> => {
+      const docDirectories = await repository.getMany(
+        prop,
+        values,
+        'directory'
+      );
+
+      return values.map((value) =>
+        docDirectories?.find((dir) => dir[prop] === value)
+      );
+    },
+  };
+};
 
 /**
  * Initialize the documentation directory loaders.
@@ -23,11 +50,17 @@ export const initDocDirectoryLoaders = (
 ): DocDirectoryLoaders => {
   return {
     directory: {
-      byId: loadDocDirectoryById(repository),
-      byPath: loadDocDirectoryByPath(repository),
-      bySlug: loadDocDirectoryBySlug(repository),
+      byId: new DataLoader<DocDirectoryInput['id'], Maybe<DocDirectory>>(
+        async (ids) => use(repository).getDirectoriesBy('id', ids)
+      ),
+      byPath: new DataLoader<DocDirectoryInput['path'], Maybe<DocDirectory>>(
+        async (paths) => use(repository).getDirectoriesBy('path', paths)
+      ),
+      bySlug: new DataLoader<DocDirectoryInput['slug'], Maybe<DocDirectory>>(
+        async (slugs) => use(repository).getDirectoriesBy('slug', slugs)
+      ),
       list: async (params: ListInput<DocDirectory>) =>
-        loadDocDirectoriesList(repository, params),
+        repository.find(params, 'directory'),
     },
   };
 };

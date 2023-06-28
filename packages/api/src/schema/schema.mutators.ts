@@ -1,7 +1,7 @@
 import type { Maybe } from '@cretadoc/utils';
 import type { Mutators, Repositories } from '../types';
-import { initDocMutators } from './doc/doc.mutators';
-import { initPageMutators } from './pages/pages.mutators';
+import { initDocMutators } from './doc';
+import { initPageMutators } from './pages';
 
 /**
  * Initialize the mutators.
