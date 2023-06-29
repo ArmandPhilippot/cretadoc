@@ -1,18 +1,47 @@
 import type { GraphQLFieldResolver } from 'graphql';
 import type {
   APIContext,
+  PageCreate,
   PageCreateInput,
   PageCreatePayload,
+  ValidationErrors,
 } from '../../../types';
 import { CretadocAPIError } from '../../../utils/exceptions';
 import {
   hasValidationErrors,
+  initValidationErrors,
   isValidContext,
   sanitizeString,
   validateContext,
 } from '../../../utils/helpers';
+import {
+  validateFileContents,
+  validateFilename,
+  validateFrontMatterMeta,
+} from '../../../utils/helpers/validators';
 import { clearPageLoaders } from '../pages.loaders';
-import { validatePageCreateInput } from '../pages.validators';
+
+/**
+ * Validate the input to create a page.
+ *
+ * @param {T} input - The page data.
+ * @returns {ValidationErrors<T>} The validation errors.
+ */
+const validatePageCreateInput = <T extends PageCreate>(
+  input: T
+): ValidationErrors<T> => {
+  const validationErrors = initValidationErrors(input);
+  const { contents, meta, name } = input;
+
+  if (contents)
+    validationErrors.contents.push(...validateFileContents(contents));
+
+  if (meta) validationErrors.meta.push(...validateFrontMatterMeta(meta));
+
+  validationErrors.name.push(...validateFilename(name));
+
+  return validationErrors;
+};
 
 export const resolvePageCreate: GraphQLFieldResolver<
   null,

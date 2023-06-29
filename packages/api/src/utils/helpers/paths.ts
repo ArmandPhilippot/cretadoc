@@ -77,14 +77,12 @@ export const getRelativePath = (from: string, to: string): string => {
 };
 
 /**
- * Check if a path is absolute and is a directory.
+ * Check if the given path is an existent directory.
  *
  * @param {string} path - A path.
- * @returns {Promise<boolean>} True if the dir has an absolute path.
+ * @returns {Promise<boolean>} True if the path is a directory.
  */
-export const isAbsoluteDirPath = async (path: string): Promise<boolean> => {
-  if (!isAbsolute(path)) return false;
-
+export const isDirectory = async (path: string): Promise<boolean> => {
   const stats = await stat(path);
 
   return stats.isDirectory();

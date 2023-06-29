@@ -1,17 +1,53 @@
 import type { GraphQLFieldResolver } from 'graphql';
 import type {
   APIContext,
+  DocDirectoryByPathLoader,
+  DocDirectoryUpdate,
   DocDirectoryUpdateInput,
   DocDirectoryUpdatePayload,
+  ValidationErrors,
 } from '../../../../types';
 import { CretadocAPIError } from '../../../../utils/exceptions';
 import {
   hasValidationErrors,
+  initValidationErrors,
   isValidContext,
   validateContext,
 } from '../../../../utils/helpers';
+import {
+  validateFileId,
+  validateFilename,
+  validateParentPath,
+} from '../../../../utils/helpers/validators';
 import { clearDocDirectoryLoaders } from '../directories.loaders';
-import { validateDocDirectoryUpdateInput } from '../directories.validators';
+
+/**
+ * Validate the input to update a documentation directory.
+ *
+ * @param {T} input - The documentation directory data.
+ * @param {DocDirectoryByPathLoader} loader - A directory loader.
+ * @returns {Promise<ValidationErrors<T>>} The validation errors.
+ */
+export const validateDocDirectoryUpdateInput = async <
+  T extends DocDirectoryUpdate
+>(
+  input: T,
+  loader: DocDirectoryByPathLoader
+): Promise<ValidationErrors<T>> => {
+  const validationErrors = initValidationErrors(input);
+  const { id, name, parentPath } = input;
+
+  validationErrors.id.push(...validateFileId(id));
+
+  if (name) validationErrors.name.push(...validateFilename(name));
+
+  if (parentPath)
+    validationErrors.parentPath.push(
+      ...(await validateParentPath(parentPath, loader))
+    );
+
+  return validationErrors;
+};
 
 export const resolveDocDirectoryUpdate: GraphQLFieldResolver<
   null,

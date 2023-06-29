@@ -1,18 +1,50 @@
 import type { GraphQLFieldResolver } from 'graphql';
 import type {
   APIContext,
+  PageUpdate,
   PageUpdateInput,
   PageUpdatePayload,
+  ValidationErrors,
 } from '../../../types';
 import { CretadocAPIError } from '../../../utils/exceptions';
 import {
   hasValidationErrors,
+  initValidationErrors,
   isValidContext,
   sanitizeString,
   validateContext,
 } from '../../../utils/helpers';
+import {
+  validateFileContents,
+  validateFileId,
+  validateFilename,
+  validateFrontMatterMeta,
+} from '../../../utils/helpers/validators';
 import { clearPageLoaders } from '../pages.loaders';
-import { validatePageUpdateInput } from '../pages.validators';
+
+/**
+ * Validate the input to update a page.
+ *
+ * @param {T} input - The page data.
+ * @returns {ValidationErrors<T>} The validation errors.
+ */
+const validatePageUpdateInput = <T extends PageUpdate>(
+  input: T
+): ValidationErrors<T> => {
+  const validationErrors = initValidationErrors(input);
+  const { id, contents, meta, name } = input;
+
+  validationErrors.id.push(...validateFileId(id));
+
+  if (contents)
+    validationErrors.contents.push(...validateFileContents(contents));
+
+  if (meta) validationErrors.meta.push(...validateFrontMatterMeta(meta));
+
+  if (name) validationErrors.name.push(...validateFilename(name));
+
+  return validationErrors;
+};
 
 export const resolvePageUpdate: GraphQLFieldResolver<
   null,

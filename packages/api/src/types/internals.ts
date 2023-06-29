@@ -39,3 +39,5 @@ export type ErrorDetails<T extends Maybe<Record<string, unknown>> = undefined> =
     reason: string;
     received: string;
   };
+
+export type Validator<T = string> = (value: T) => string[];

@@ -1,3 +1,4 @@
+import { isAbsolute } from 'path';
 import {
   type PartialDeep,
   isBoolean,
@@ -10,7 +11,7 @@ import {
 import type { APIConfig, APIDataConfig, ErrorDetails } from '../../types';
 import { DEFAULT_CONFIG } from '../constants';
 import { CretadocAPIError } from '../exceptions';
-import { isAbsoluteDirPath } from './paths';
+import { isDirectory } from './paths';
 
 export const validateDataKeyValue = async (
   key: keyof APIDataConfig,
@@ -26,14 +27,24 @@ export const validateDataKeyValue = async (
       },
     ];
 
-  const isDir = await isAbsoluteDirPath(value);
+  if (!isAbsolute(value))
+    return [
+      {
+        errorKind: 'range',
+        key: 'data',
+        reason: `${key} must be an absolute path`,
+        received: value,
+      },
+    ];
+
+  const isDir = await isDirectory(value);
 
   if (!isDir)
     return [
       {
-        errorKind: 'reference',
+        errorKind: 'range',
         key: 'data',
-        reason: `${key} must be an absolute path to an existent directory`,
+        reason: `${key} must be an existent directory`,
         received: value,
       },
     ];
