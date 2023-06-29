@@ -167,7 +167,7 @@ export const parseMarkdown = (content: string): MarkdownParts => {
   const data = getMarkdownGroups(content);
 
   return {
-    content: data?.content ?? content,
+    content: data?.content ?? '',
     meta: data?.rawMeta ? getMetaFrom(data.rawMeta) : undefined,
   };
 };
