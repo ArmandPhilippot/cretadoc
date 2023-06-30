@@ -48,7 +48,7 @@ export const App: FC<AppProps> = ({ name, theme }) => {
       <SkipToContent targetId={mainId} />
       <Header className={styles.header}>
         <Branding brand={name} to={ROUTES.HOMEPAGE} />
-        <div>
+        <div className={styles.navbar}>
           <MainNav
             isOpen={isMainNavOpen}
             onClickOutside={closeMainNav}
@@ -68,11 +68,13 @@ export const App: FC<AppProps> = ({ name, theme }) => {
         {isHomepage(pathname) ? null : (
           <Breadcrumbs className={styles.breadcrumbs} />
         )}
-        <Outlet />
+        <div className={styles.page}>
+          <Outlet />
+        </div>
       </Main>
       <Footer className={styles.footer}>
         <Colophon alignment={footerAlignment} />
-        <BackToTop targetId={topId} />
+        <BackToTop className={styles.backToTop} targetId={topId} />
       </Footer>
     </Layout>
   );

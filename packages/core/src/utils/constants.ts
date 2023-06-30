@@ -5,6 +5,11 @@ import type {
   CretadocServerConfig,
 } from '../types/config';
 
+export const BREAKPOINT = {
+  SM: 800,
+  MD: 1200,
+} as const;
+
 export const MARKDOWN_EXT = '.md';
 
 export const CONFIG_FILE_NAME = 'cretadoc.config.js';
