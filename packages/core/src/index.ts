@@ -9,7 +9,7 @@ export const createCretadocApp = async () => {
   const isProd = process.env['NODE_ENV'] === 'production';
   const currentDir = dirname(fileURLToPath(import.meta.url));
   const config = await loadServerConfig(CONFIG_FILE_NAME, currentDir);
-  const api = createAPI({
+  const api = await createAPI({
     data: {
       pages: config.paths.pages ?? undefined,
     },
