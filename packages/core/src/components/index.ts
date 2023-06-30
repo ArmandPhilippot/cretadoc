@@ -3,6 +3,7 @@ export * from './breadcrumbs';
 export * from './colophon';
 export * from './main-nav';
 export * from './markdown-contents';
+export * from './page';
 export * from './router-link';
 export * from './skip-to-content';
 export * from './table-of-contents';

@@ -23,14 +23,14 @@ import { ROUTES } from '../utils/constants';
 import { useOnRouteChange, useTheme } from '../utils/hooks';
 import * as styles from './app.css';
 
-const isHomepage = (slug: string) => slug === ROUTES.HOMEPAGE;
+const isHomepage = (path: string) => path === ROUTES.HOMEPAGE;
 
 export type AppProps = Pick<CretadocConfig, 'name' | 'theme'>;
 
 export const App: FC<AppProps> = ({ name, theme }) => {
-  const { pathname } = useLocation();
   const mainId = useId();
   const topId = useId();
+  const { pathname } = useLocation();
   const footerAlignment = 'center';
   const hasMultipleThemes = !isString(theme);
   const themes = hasMultipleThemes ? theme : { dark: theme, light: theme };
@@ -68,9 +68,7 @@ export const App: FC<AppProps> = ({ name, theme }) => {
         {isHomepage(pathname) ? null : (
           <Breadcrumbs className={styles.breadcrumbs} />
         )}
-        <div className={styles.page}>
-          <Outlet />
-        </div>
+        <Outlet />
       </Main>
       <Footer className={styles.footer}>
         <Colophon alignment={footerAlignment} />

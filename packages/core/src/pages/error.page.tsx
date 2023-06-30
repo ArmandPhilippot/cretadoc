@@ -1,8 +1,9 @@
-import { ButtonLink, Heading } from '@cretadoc/ui';
+import { ButtonLink } from '@cretadoc/ui';
 import { HTTP_STATUS_CODE, type HttpStatusCode } from '@cretadoc/utils';
 import type { FC } from 'react';
 import { useIntl } from 'react-intl';
 import { isRouteErrorResponse, useRouteError } from 'react-router-dom';
+import { Page } from '../components';
 import { ROUTES } from '../utils/constants';
 
 type ErrorMessages = {
@@ -73,10 +74,9 @@ export const ErrorPage: FC = () => {
   });
 
   return (
-    <>
-      <Heading level={1}>{messages.pageTitle}</Heading>
+    <Page title={messages.pageTitle}>
       <p>{messages.pageBody}</p>
       <ButtonLink to={ROUTES.HOMEPAGE}>{goBackToHome}</ButtonLink>
-    </>
+    </Page>
   );
 };

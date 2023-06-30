@@ -3,7 +3,7 @@ import type { Nullable } from '@cretadoc/utils';
 import { type FC, useCallback, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useLoaderData, useParams } from 'react-router-dom';
-import { MarkdownContents, TableOfContents } from '../components';
+import { MarkdownContents, Page } from '../components';
 import type { pagesLoader } from '../routes/pages';
 import { useConfig, usePage } from '../utils/hooks';
 
@@ -40,13 +40,17 @@ export const RegularPage: FC = () => {
     description: 'Page: loading page message',
   });
 
-  if (isValidating || isLoading) return <Spinner>{loadingPage}</Spinner>;
+  if (isValidating || isLoading || !page)
+    return <Spinner>{loadingPage}</Spinner>;
 
   return (
-    <>
-      {slug ? <TableOfContents tree={headingNodes} /> : null}
-      <MarkdownContents contents={page?.contents} ref={assignWrapper} />
-    </>
+    <Page
+      contentsRef={assignWrapper}
+      title={page.meta?.title ?? page.name}
+      toc={headingNodes}
+    >
+      <MarkdownContents contents={page.contents} />
+    </Page>
   );
 };
 /* eslint-enable max-statements */

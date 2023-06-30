@@ -13,7 +13,10 @@ import {
 
 const legalNoticeFixtureName = 'Legal notice';
 const fixtures: Fixture[] = [
-  { name: 'home', contents: '# Home\n\nWelcome to Cretadoc homepage!' },
+  {
+    name: 'home',
+    contents: '---\ntitle: Home\n---\n\n\n\nWelcome to Cretadoc homepage!',
+  },
   {
     name: 'about',
     contents:

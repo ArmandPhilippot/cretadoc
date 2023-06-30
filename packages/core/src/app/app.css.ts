@@ -3,6 +3,9 @@ import { createVar, style } from '@vanilla-extract/css';
 import { BREAKPOINT } from '../utils/constants';
 
 const navbarHeight = createVar();
+export const contentsWidth = createVar();
+export const sidebarGap = createVar();
+export const sidebarWidth = createVar();
 
 export const layout = style({
   vars: {
@@ -50,24 +53,22 @@ export const navbar = style({
 });
 
 export const main = style({
+  vars: {
+    [contentsWidth]: `min(${contract.size.full}, ${contract.size.prose})`,
+    [sidebarGap]: `clamp(${contract.spacing.md}, 4vw, ${contract.spacing.xxl})`,
+    [sidebarWidth]: contract.size.sidebar,
+  },
   flex: 1,
   display: 'grid',
-  gridTemplateColumns: `1fr min(${contract.size.full}, ${contract.size.prose}) 1fr`,
-  gridTemplateRows: 'minmax(0, auto) 1fr',
+  rowGap: contract.spacing.md,
+  gridTemplateColumns: `2fr minmax(0, calc(${contentsWidth} + ${sidebarGap} + ${sidebarWidth})) 1fr`,
+  gridTemplateRows: 'minmax(0, max-content) 1fr',
 });
 
 export const breadcrumbs = style({
   gridColumn: 2,
   gridRow: 1,
-  marginBlockEnd: contract.spacing.md,
-});
-
-export const page = style({
-  gridColumn: 2,
-  gridRow: 2,
-  display: 'grid',
-  gridTemplateRows: 'max-content',
-  rowGap: contract.spacing.md,
+  paddingBlockStart: contract.spacing.sm,
 });
 
 export const footer = style({
