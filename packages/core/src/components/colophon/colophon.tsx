@@ -37,7 +37,10 @@ export const Colophon: FC<ColophonProps> = (props) => {
       generator={hideGenerator ? undefined : generatorLink}
       legalNotice={
         legalNotice
-          ? { label: legalNotice.name, link: legalNotice.slug }
+          ? {
+              label: legalNotice.meta?.title ?? legalNotice.name,
+              link: legalNotice.slug,
+            }
           : undefined
       }
     />

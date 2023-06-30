@@ -58,7 +58,7 @@ export const MainNav: FC<MainNavProps> = (props) => {
             <NavItem
               isSelected={slug === page.slug}
               key={page.id}
-              label={page.name}
+              label={page.meta?.title ?? page.name}
               to={page.slug}
               // eslint-disable-next-line react/jsx-no-literals
               variant="block"

@@ -12,6 +12,14 @@ export const pagesQuery = `query Pages($after: String, $first: Int, $offset: Int
         contents
         createdAt
         id
+        meta {
+          createdAt
+          seoDescription
+          seoTitle
+          status
+          title
+          updatedAt
+        }
         name
         path
         slug

@@ -3,6 +3,14 @@ export const pageQuery = `query Page($id: String, $name: String, $slug: String) 
     contents
     createdAt
     id
+    meta {
+      createdAt
+      seoDescription
+      seoTitle
+      status
+      title
+      updatedAt
+    }
     name
     path
     slug

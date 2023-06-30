@@ -22,7 +22,7 @@ const fixtures: Fixture[] = [
   {
     name: legalNoticeFixtureName,
     contents:
-      '# Legal notice\n\n## Sed vel modi\n\n### Debitis enim eum\n\nSapiente autem saepe et quisquam voluptate. Harum eos odit autem eius. Laudantium voluptatum maxime accusantium dolor in sequi esse fuga sed. Voluptate aliquid ipsam animi saepe autem eius voluptatibus sapiente. Quis dolor repudiandae repudiandae. Et sunt est ab incidunt animi odit cum.\n\n### Nemo assumenda et\n\nNulla velit inventore. Officia expedita voluptas aliquid quo repellendus. Ut doloremque quia consequatur sunt est vitae culpa.\n\n## Accusantium quia id\n\nNatus sit inventore aut excepturi quis perferendis et. Rerum aspernatur maiores voluptatum animi consequatur iure. Mollitia et aut. Officiis ut odit inventore maxime.',
+      '---\ntitle: Legal notice\n---\n\n## Sed vel modi\n\n### Debitis enim eum\n\nSapiente autem saepe et quisquam voluptate. Harum eos odit autem eius. Laudantium voluptatum maxime accusantium dolor in sequi esse fuga sed. Voluptate aliquid ipsam animi saepe autem eius voluptatibus sapiente. Quis dolor repudiandae repudiandae. Et sunt est ab incidunt animi odit cum.\n\n### Nemo assumenda et\n\nNulla velit inventore. Officia expedita voluptas aliquid quo repellendus. Ut doloremque quia consequatur sunt est vitae culpa.\n\n## Accusantium quia id\n\nNatus sit inventore aut excepturi quis perferendis et. Rerum aspernatur maiores voluptatum animi consequatur iure. Mollitia et aut. Officiis ut odit inventore maxime.',
   },
 ];
 

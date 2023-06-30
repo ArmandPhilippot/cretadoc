@@ -18,7 +18,7 @@ export const getBreadcrumbItem = (
   if (isPageExist(response))
     return {
       id: response.data.page.id,
-      label: response.data.page.name,
+      label: response.data.page.meta?.title ?? response.data.page.name,
       url: response.data.page.slug,
     };
 
