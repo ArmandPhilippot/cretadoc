@@ -1,8 +1,22 @@
 import { writeFileSync } from 'fs';
 import { access, rm } from 'fs/promises';
 import { join } from 'path';
-import type { Page } from '@cretadoc/api';
-import { PAGES_FIXTURES_DIR_PATH } from '../constants';
+import { MARKDOWN_EXT } from '../../../src/utils/constants';
+
+export type Fixture = {
+  /**
+   * The file contents.
+   */
+  contents?: string;
+  /**
+   * The file name without extension.
+   */
+  name: string;
+};
+
+type DebugOptions = {
+  verbose?: boolean;
+};
 
 /**
  * Check if a path exists.
@@ -20,46 +34,53 @@ const isPathExists = async (path: string): Promise<boolean> => {
 };
 
 /**
- * Retrieve the fixture absolute path from its filename (without extension).
+ * Log the given message.
  *
- * @param {string} name - The filename.
- * @returns {string} The fixture path.
+ * @param {string} message - The message to log.
+ * @param {DebugOptions} [options] - An object with verbose option.
  */
-const getFixturePathFrom = (name: string): string =>
-  join(PAGES_FIXTURES_DIR_PATH, `${name}.md`);
-
-export type Fixture = Pick<Page, 'contents' | 'name'>;
+const log = (message: string, options?: DebugOptions) => {
+  if (options?.verbose) console.log(`[fixtures]: ${message}`);
+};
 
 /**
  * Add a new fixture.
  *
  * @param {Fixture} fixture - The fixture to add.
+ * @param {string} dirPath - The path where to add a fixture.
+ * @param {DebugOptions} [options] - Some debug options.
  * @returns {Promise<void>}
  */
-const add = async (fixture: Fixture): Promise<void> => {
-  const fixturePath = getFixturePathFrom(fixture.name);
+const add = async (
+  fixture: Fixture,
+  dirPath: string,
+  options?: DebugOptions
+): Promise<void> => {
+  const fixturePath = join(dirPath, `${fixture.name}${MARKDOWN_EXT}`);
   const isFileExist = await isPathExists(fixturePath);
 
   if (isFileExist) {
-    console.log(
-      `[fixtures]: ${fixture.name} already exist in ${PAGES_FIXTURES_DIR_PATH}, skipping.`
-    );
+    log(`${fixture.name} already exist in ${dirPath}, skipping.`, options);
     return;
   }
 
   writeFileSync(fixturePath, fixture.contents ?? '', { encoding: 'utf8' });
-  console.log(
-    `[fixtures]: ${fixture.name} added in ${PAGES_FIXTURES_DIR_PATH}`
-  );
+  log(`${fixture.name} added in ${dirPath}`, options);
 };
 
 /**
  * Create the given fixtures in fixtures directory.
  *
  * @param {Fixture[]} fixtures - The fixtures to create.
+ * @param {string} path - The path where to create the fixtures.
+ * @param {DebugOptions} [options] - Some debug options.
  */
-export const createFixtures = async (fixtures: Fixture[]) => {
-  const promises = fixtures.map(async (fixture) => add(fixture));
+export const createFixtures = async (
+  fixtures: Fixture[],
+  path: string,
+  options?: DebugOptions
+) => {
+  const promises = fixtures.map(async (fixture) => add(fixture, path, options));
 
   await Promise.all(promises);
 };
@@ -68,22 +89,36 @@ export const createFixtures = async (fixtures: Fixture[]) => {
  * Remove the given fixture.
  *
  * @param {Fixture} fixture - The fixture to remove.
+ * @param {string} dirPath - The path where to remove the fixture.
+ * @param {DebugOptions} [options] - Some debug options.
  */
-const remove = async (fixture: Fixture): Promise<void> => {
-  const fixturePath = getFixturePathFrom(fixture.name);
+const remove = async (
+  fixture: Fixture,
+  dirPath: string,
+  options?: DebugOptions
+): Promise<void> => {
+  const fixturePath = join(dirPath, `${fixture.name}${MARKDOWN_EXT}`);
+
   await rm(fixturePath, { recursive: true, force: true });
-  console.log(
-    `[fixtures]: ${fixture.name} removed from ${PAGES_FIXTURES_DIR_PATH}`
-  );
+
+  log(`${fixture.name} removed from ${dirPath}`, options);
 };
 
 /**
  * Delete the given fixtures in the fixtures path.
  *
  * @param {Fixture[]} fixtures - The fixtures to delete.
+ * @param {string} path - The path where to delete the fixtures.
+ * @param {DebugOptions} [options] - Some debug options.
  */
-export const deleteFixtures = async (fixtures: Fixture[]) => {
-  const promises = fixtures.map(async (fixture) => remove(fixture));
+export const deleteFixtures = async (
+  fixtures: Fixture[],
+  path: string,
+  options?: DebugOptions
+) => {
+  const promises = fixtures.map(async (fixture) =>
+    remove(fixture, path, options)
+  );
 
   await Promise.all(promises);
 };

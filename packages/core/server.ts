@@ -12,7 +12,7 @@ import {
 } from './tests/utils/helpers';
 
 const legalNoticeFixtureName = 'Legal notice';
-const fixtures: Fixture[] = [
+const pageFixtures: Fixture[] = [
   {
     name: 'home',
     contents: '---\ntitle: Home\n---\n\n\n\nWelcome to Cretadoc homepage!',
@@ -40,7 +40,7 @@ await createConfigFile(ROOT_CONFIG_PATH, 'custom', {
   },
 });
 
-await createFixtures(fixtures);
+await createFixtures(pageFixtures, PAGES_FIXTURES_DIR_PATH);
 
 await createCretadocApp()
   .then((app) => {
@@ -69,7 +69,7 @@ await createCretadocApp()
 
         void (async () => {
           await removeConfigFile(ROOT_CONFIG_PATH);
-          await deleteFixtures(fixtures);
+          await deleteFixtures(pageFixtures, PAGES_FIXTURES_DIR_PATH);
           process.exit();
         })();
       });
@@ -78,7 +78,7 @@ await createCretadocApp()
   .catch(async (err) => {
     if (err instanceof Error) {
       await removeConfigFile(ROOT_CONFIG_PATH);
-      await deleteFixtures(fixtures);
+      await deleteFixtures(pageFixtures, PAGES_FIXTURES_DIR_PATH);
     }
 
     console.error(err);
