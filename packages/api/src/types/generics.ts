@@ -41,7 +41,7 @@ export type ListInput<T> = Omit<ConnectionInput<T>, 'after' | 'offset'> & {
 };
 
 export type ListReturn<T> = {
-  data: Maybe<T>;
+  data: T;
   total: number;
 };
 

@@ -40,7 +40,7 @@ export const getConnection = <T>({
   after,
   data,
   first,
-  total,
+  total = 0,
 }: GetConnectionProps<T>): Connection<T> => {
   const edges = data ? getEdges(data, after) : [];
   const lastEdge = edges[edges.length - 1];

@@ -10,12 +10,12 @@ export type PageInfo = {
   hasNextPage: boolean;
   hasPreviousPage: boolean;
   startCursor: Nullable<string>;
-  total?: number;
+  total: number;
 };
 
 export type Connection<T> = {
-  edges?: Array<Edge<T>>;
-  pageInfo?: PageInfo;
+  edges: Array<Edge<T>>;
+  pageInfo: PageInfo;
 };
 
 export type QueryResult<T> = {

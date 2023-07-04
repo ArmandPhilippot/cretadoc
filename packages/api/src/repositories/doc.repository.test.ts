@@ -108,7 +108,7 @@ describe('DocRepository', () => {
     const repo = new DocRepository(DOC_FIXTURES_DIR);
     const edges = await repo.find({ first: DEFAULT_EDGES_NUMBER });
 
-    expect(edges.data?.length).toBe(rootDocEntries.length);
+    expect(edges.data.length).toBe(rootDocEntries.length);
     expect(edges.total).toBe(
       rootDocEntries.length > DEFAULT_EDGES_NUMBER
         ? DEFAULT_EDGES_NUMBER
@@ -129,7 +129,7 @@ describe('DocRepository', () => {
       where: { path: parentPath },
     });
 
-    expect(edges.data?.length).toBe(
+    expect(edges.data.length).toBe(
       requestedFixtures.length > DEFAULT_EDGES_NUMBER
         ? DEFAULT_EDGES_NUMBER
         : requestedFixtures.length
@@ -148,7 +148,7 @@ describe('DocRepository', () => {
       .slice(0, DEFAULT_EDGES_NUMBER)
       .map((page) => page.path)
       .reverse();
-    const receivedPaths = edges.data?.map((edge) => edge.path);
+    const receivedPaths = edges.data.map((edge) => edge.path);
 
     expect(receivedPaths).toStrictEqual(reversedRootDocEntriesPaths);
     expect.assertions(1);
@@ -158,7 +158,7 @@ describe('DocRepository', () => {
     const repo = new DocRepository(DOC_FIXTURES_DIR);
     const edges = await repo.find({ first: DEFAULT_EDGES_NUMBER }, 'file');
 
-    expect(edges.data?.length).toBe(rootDocFiles.length);
+    expect(edges.data.length).toBe(rootDocFiles.length);
     expect(edges.total).toBe(
       rootDocFiles.length > DEFAULT_EDGES_NUMBER
         ? DEFAULT_EDGES_NUMBER
@@ -171,7 +171,7 @@ describe('DocRepository', () => {
     const repo = new DocRepository(DOC_FIXTURES_DIR);
     const edges = await repo.find({ first: DEFAULT_EDGES_NUMBER }, 'directory');
 
-    expect(edges.data?.length).toBe(rootDocDirectories.length);
+    expect(edges.data.length).toBe(rootDocDirectories.length);
     expect(edges.total).toBe(
       rootDocDirectories.length > DEFAULT_EDGES_NUMBER
         ? DEFAULT_EDGES_NUMBER

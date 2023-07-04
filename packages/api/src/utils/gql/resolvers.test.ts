@@ -26,12 +26,12 @@ describe('get-connection', () => {
       total,
     });
 
-    expect(connection.edges?.length).toBe(data.length);
-    expect(connection.pageInfo?.hasNextPage).toBe(total > first);
-    expect(connection.pageInfo?.hasPreviousPage).toBe((offset as number) > 0);
-    expect(connection.pageInfo?.endCursor).toBeTruthy();
-    expect(connection.pageInfo?.startCursor).toBeTruthy();
-    expect(connection.pageInfo?.total).toBe(total);
+    expect(connection.edges.length).toBe(data.length);
+    expect(connection.pageInfo.hasNextPage).toBe(total > first);
+    expect(connection.pageInfo.hasPreviousPage).toBe((offset as number) > 0);
+    expect(connection.pageInfo.endCursor).toBeTruthy();
+    expect(connection.pageInfo.startCursor).toBeTruthy();
+    expect(connection.pageInfo.total).toBe(total);
   });
 });
 /* eslint-enable max-statements */

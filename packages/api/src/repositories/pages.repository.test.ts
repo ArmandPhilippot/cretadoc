@@ -76,7 +76,7 @@ describe('PagesRepository', () => {
     const repo = new PagesRepository(PAGES_FIXTURES_DIR);
     const edges = await repo.find({ first: DEFAULT_EDGES_NUMBER });
 
-    expect(edges.data?.length).toBe(rootPages.length);
+    expect(edges.data.length).toBe(rootPages.length);
     expect(edges.total).toBe(
       rootPages.length > DEFAULT_EDGES_NUMBER
         ? DEFAULT_EDGES_NUMBER
@@ -92,7 +92,7 @@ describe('PagesRepository', () => {
       orderBy: { direction: 'ASC', field: 'createdAt' },
     });
 
-    expect(edges.data?.length).toBe(rootPages.length);
+    expect(edges.data.length).toBe(rootPages.length);
     expect(edges.total).toBe(
       rootPages.length > DEFAULT_EDGES_NUMBER
         ? DEFAULT_EDGES_NUMBER
@@ -108,7 +108,7 @@ describe('PagesRepository', () => {
       orderBy: { direction: 'ASC', field: 'name' },
     });
 
-    expect(edges.data?.length).toBe(rootPages.length);
+    expect(edges.data.length).toBe(rootPages.length);
     expect(edges.total).toBe(
       rootPages.length > DEFAULT_EDGES_NUMBER
         ? DEFAULT_EDGES_NUMBER
@@ -124,7 +124,7 @@ describe('PagesRepository', () => {
       orderBy: { direction: 'ASC', field: 'slug' },
     });
 
-    expect(edges.data?.length).toBe(rootPages.length);
+    expect(edges.data.length).toBe(rootPages.length);
     expect(edges.total).toBe(
       rootPages.length > DEFAULT_EDGES_NUMBER
         ? DEFAULT_EDGES_NUMBER
@@ -140,7 +140,7 @@ describe('PagesRepository', () => {
       orderBy: { direction: 'ASC', field: 'updatedAt' },
     });
 
-    expect(edges.data?.length).toBe(rootPages.length);
+    expect(edges.data.length).toBe(rootPages.length);
     expect(edges.total).toBe(
       rootPages.length > DEFAULT_EDGES_NUMBER
         ? DEFAULT_EDGES_NUMBER
@@ -157,8 +157,8 @@ describe('PagesRepository', () => {
       where: { name: wantedFilename },
     });
 
-    expect(edges.data?.length).toBeTruthy();
-    expect(edges.data?.every((page) => page.name.includes(wantedFilename)));
+    expect(edges.data.length).toBeTruthy();
+    expect(edges.data.every((page) => page.name.includes(wantedFilename)));
     expect.assertions(2);
   });
 
@@ -171,8 +171,8 @@ describe('PagesRepository', () => {
       where: { createdAt: wantedDate },
     });
 
-    expect(edges.data?.length).toBeTruthy();
-    expect(edges.data?.every((page) => page.createdAt.includes(wantedDate)));
+    expect(edges.data.length).toBeTruthy();
+    expect(edges.data.every((page) => page.createdAt.includes(wantedDate)));
     expect.assertions(2);
   });
 
@@ -185,8 +185,8 @@ describe('PagesRepository', () => {
       where: { updatedAt: wantedDate },
     });
 
-    expect(edges.data?.length).toBeTruthy();
-    expect(edges.data?.every((page) => page.updatedAt.includes(wantedDate)));
+    expect(edges.data.length).toBeTruthy();
+    expect(edges.data.every((page) => page.updatedAt.includes(wantedDate)));
     expect.assertions(2);
   });
 
