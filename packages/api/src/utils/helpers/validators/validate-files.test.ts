@@ -1,6 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import { generateBase64String } from '..';
-import { validateFileId, validateFilename } from './validate-files';
+import {
+  validateFileContents,
+  validateFileId,
+  validateFilename,
+} from './validate-files';
+
+describe('validate-file-contents', () => {
+  it('returns an empty array when contents are valid', () => {
+    const result = validateFileContents('enim eius sed');
+    expect(result.length).toBe(0);
+  });
+});
 
 describe('validate-filename', () => {
   it('returns an empty array when the filename is valid', () => {

@@ -61,6 +61,17 @@ describe('PagesRepository', () => {
     expect.assertions(3);
   });
 
+  it('can get many pages by name', async () => {
+    const repo = new PagesRepository(PAGES_FIXTURES_DIR);
+    const pagePath = pagesFixtures[0]?.path ?? '';
+    const pageName = parse(pagePath).name;
+    const requestedPages = await repo.getMany('name', [pageName]);
+
+    expect(requestedPages?.length).toBe(1);
+    expect(requestedPages?.every((page) => page.name === pageName)).toBe(true);
+    expect.assertions(2);
+  });
+
   it('can find a list of pages', async () => {
     const repo = new PagesRepository(PAGES_FIXTURES_DIR);
     const edges = await repo.find({ first: DEFAULT_EDGES_NUMBER });
@@ -213,7 +224,7 @@ describe('PagesRepository', () => {
     expect.assertions(3);
   });
 
-  it('can remove a page', async () => {
+  it('can remove a page by name', async () => {
     const repo = new PagesRepository(PAGES_FIXTURES_DIR);
     const pageName = 'incidunt';
     const pageContents = 'a aliquid omnis';
@@ -222,6 +233,20 @@ describe('PagesRepository', () => {
       contents: pageContents,
     });
     const deletedPage = await repo.remove({ name: page?.name });
+
+    expect(deletedPage).toStrictEqual(page);
+    expect.assertions(1);
+  });
+
+  it('can remove a page by id', async () => {
+    const repo = new PagesRepository(PAGES_FIXTURES_DIR);
+    const pageName = 'commodi';
+    const pageContents = 'cum eius enim';
+    const page = await repo.create({
+      name: pageName,
+      contents: pageContents,
+    });
+    const deletedPage = await repo.remove({ id: page?.id });
 
     expect(deletedPage).toStrictEqual(page);
     expect.assertions(1);

@@ -2,6 +2,7 @@ import { parse } from 'path';
 import { type Maybe, slugify } from '@cretadoc/utils';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
+  docEntries,
   docFixtures,
   rootDocDirectories,
   rootDocEntries,
@@ -75,6 +76,34 @@ describe('DocRepository', () => {
     expect.assertions(3);
   });
 
+  it('can get many documentation files by slug', async () => {
+    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    const docFileFixture = docFixtures.find((fixture) =>
+      fixture.path.endsWith(MARKDOWN_EXTENSION)
+    );
+    const docFilePath = docFileFixture?.path ?? '';
+    const docFileName = parse(docFilePath).name;
+    const slug = `/${slugify(docFileName)}` as const;
+    const docFiles = await repo.getMany('slug', [slug], 'file');
+
+    expect(docFiles?.length).toBe(1);
+    expect(docFiles?.every((file) => file.slug.startsWith(slug))).toBe(true);
+    expect.assertions(2);
+  });
+
+  it('can get many documentation entries by path', async () => {
+    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    // An existing directory.
+    const path = './excepturi';
+    const requestedDocEntries = await repo.getMany('path', [path]);
+
+    expect(requestedDocEntries?.length).toBe(1);
+    expect(requestedDocEntries?.every((entry) => entry.path === path)).toBe(
+      true
+    );
+    expect.assertions(2);
+  });
+
   it('can find a list of documentation entries', async () => {
     const repo = new DocRepository(DOC_FIXTURES_DIR);
     const edges = await repo.find({ first: DEFAULT_EDGES_NUMBER });
@@ -86,6 +115,43 @@ describe('DocRepository', () => {
         : rootDocEntries.length
     );
     expect.assertions(2);
+  });
+
+  it('can find a list of documentation entries in the given path', async () => {
+    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    // An existing directory.
+    const parentPath = './excepturi';
+    const requestedFixtures = docEntries.filter(
+      (page) => page.parent?.path === parentPath
+    );
+    const edges = await repo.find({
+      first: DEFAULT_EDGES_NUMBER,
+      where: { path: parentPath },
+    });
+
+    expect(edges.data?.length).toBe(
+      requestedFixtures.length > DEFAULT_EDGES_NUMBER
+        ? DEFAULT_EDGES_NUMBER
+        : requestedFixtures.length
+    );
+    expect(edges.total).toBe(requestedFixtures.length);
+    expect.assertions(2);
+  });
+
+  it('can find a list of documentation entries ordered by path', async () => {
+    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    const edges = await repo.find({
+      first: DEFAULT_EDGES_NUMBER,
+      orderBy: { direction: 'DESC', field: 'path' },
+    });
+    const reversedRootDocEntriesPaths = rootDocEntries
+      .slice(0, DEFAULT_EDGES_NUMBER)
+      .map((page) => page.path)
+      .reverse();
+    const receivedPaths = edges.data?.map((edge) => edge.path);
+
+    expect(receivedPaths).toStrictEqual(reversedRootDocEntriesPaths);
+    expect.assertions(1);
   });
 
   it('can find a list of documentation files', async () => {
@@ -114,7 +180,7 @@ describe('DocRepository', () => {
     expect.assertions(2);
   });
 
-  it('can remove an entry', async () => {
+  it('can remove a file by path', async () => {
     const repo = new DocRepository(DOC_FIXTURES_DIR);
     const docFileName = 'incidunt';
     const docFileContents = 'a aliquid omnis';
@@ -126,6 +192,45 @@ describe('DocRepository', () => {
 
     expect(deletedDocFile).toStrictEqual(docFile);
     expect.assertions(1);
+  });
+
+  it('can remove a file by id', async () => {
+    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    const docFileName = 'asperiores';
+    const docFileContents = 'ut ut ut';
+    const docFile = await repo.createFile({
+      name: docFileName,
+      contents: docFileContents,
+    });
+    const deletedDocFile = await repo.remove({ id: docFile?.id });
+
+    expect(deletedDocFile).toStrictEqual(docFile);
+    expect.assertions(1);
+  });
+
+  it('can update a file', async () => {
+    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    const docFileName = 'dolorem blanditiis ipsam';
+    const docFileContents = 'delectus dolorem ut';
+    const docFile = await repo.createFile({
+      name: docFileName,
+      contents: docFileContents,
+    });
+
+    if (docFile) {
+      const newDocFileName = 'eligendi';
+      const updatedDocFile = await repo.updateFile({
+        id: docFile.id,
+        name: newDocFileName,
+      });
+
+      expect(updatedDocFile?.id).not.toBe(docFile.id);
+      expect(updatedDocFile?.name).not.toBe(docFile.name);
+      expect(updatedDocFile?.name).toBe(newDocFileName);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    expect.assertions(3);
   });
 
   it('can create a directory with meta', async () => {

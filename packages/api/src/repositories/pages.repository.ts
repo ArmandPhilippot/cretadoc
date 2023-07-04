@@ -171,11 +171,11 @@ export class PagesRepository extends FileSystemRepository {
     id,
     name,
   }: PageDeleteInput['input']): Promise<Maybe<Page>> {
-    const relativePath = id
-      ? decodeBase64String(id)
-      : name
-      ? this.getRelativePathFrom(getFilenameWithExt(name))
-      : undefined;
+    let relativePath: Maybe<string> = undefined;
+
+    if (id) relativePath = decodeBase64String(id);
+    else if (name)
+      relativePath = this.getRelativePathFrom(getFilenameWithExt(name));
 
     if (!relativePath) return undefined;
 

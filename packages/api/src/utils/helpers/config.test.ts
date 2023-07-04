@@ -1,7 +1,16 @@
 import { describe, expect, it } from 'vitest';
+import { DOC_FIXTURES_DIR } from '../../../tests/utils/constants';
 import type { APIConfig } from '../../types';
 import { DEFAULT_CONFIG } from '../constants';
-import { mergeDefaultConfigWith } from './config';
+import { mergeDefaultConfigWith, validateDataKeyValue } from './config';
+
+describe('validate-data-key-value', () => {
+  it('returns an empty array when valid', async () => {
+    const result = await validateDataKeyValue('doc', DOC_FIXTURES_DIR);
+
+    expect(result).toStrictEqual([]);
+  });
+});
 
 /* eslint-disable max-statements */
 describe('config', () => {
