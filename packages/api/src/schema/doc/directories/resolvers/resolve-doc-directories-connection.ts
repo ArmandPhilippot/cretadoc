@@ -15,7 +15,7 @@ export const resolveDocDirectoriesConnection: GraphQLFieldResolver<
   ConnectionInput<DocDirectory>
 > = async (
   _,
-  { after: afterCursor, offset, ...args },
+  { after: afterCursor, first, offset, ...input },
   context
 ): Promise<Connection<DocDirectory>> => {
   if (!context.loaders?.doc)
@@ -26,15 +26,7 @@ export const resolveDocDirectoriesConnection: GraphQLFieldResolver<
     });
 
   const after = offset ?? decodeCursor(afterCursor);
-  const foundDocDirectories = await context.loaders.doc.directory.list({
-    ...args,
-    after,
-  });
+  const data = await context.loaders.doc.directory.list(input);
 
-  return getConnection({
-    after,
-    data: foundDocDirectories.data,
-    first: args.first,
-    total: foundDocDirectories.total,
-  });
+  return getConnection({ after, data, first });
 };

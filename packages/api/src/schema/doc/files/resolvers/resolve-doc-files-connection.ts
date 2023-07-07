@@ -15,7 +15,7 @@ export const resolveDocFilesConnection: GraphQLFieldResolver<
   ConnectionInput<DocFile>
 > = async (
   _,
-  { after: afterCursor, offset, ...args },
+  { after: afterCursor, first, offset, ...input },
   context
 ): Promise<Connection<DocFile>> => {
   if (!context.loaders?.doc)
@@ -26,15 +26,7 @@ export const resolveDocFilesConnection: GraphQLFieldResolver<
     });
 
   const after = offset ?? decodeCursor(afterCursor);
-  const foundDocFiles = await context.loaders.doc.file.list({
-    ...args,
-    after,
-  });
+  const data = await context.loaders.doc.file.list(input);
 
-  return getConnection({
-    after,
-    data: foundDocFiles.data,
-    first: args.first,
-    total: foundDocFiles.total,
-  });
+  return getConnection({ after, data, first });
 };

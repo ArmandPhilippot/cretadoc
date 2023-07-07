@@ -3,7 +3,6 @@ import type { RegularFile } from '@cretadoc/read-dir';
 import { type Maybe, slugify } from '@cretadoc/utils';
 import type {
   ListInput,
-  ListReturn,
   Page,
   PageCreate,
   PageDeleteInput,
@@ -99,26 +98,16 @@ export class PagesRepository extends FileSystemRepository {
   /**
    * Find the pages matching the given parameters.
    *
-   * @param {ListInput<Page>} params - The list parameters.
-   * @returns {Promise<ListReturn<Page[]>>} The matching pages.
+   * @param {ListInput<Page>} params - The parameters.
+   * @returns {Promise<Page[]>} The matching pages.
    */
-  public async find({
-    first,
-    after,
-    orderBy,
-    where,
-  }: ListInput<Page>): Promise<ListReturn<Page[]>> {
+  public async find(params?: ListInput<Page>): Promise<Page[]> {
+    const { orderBy, where } = params ?? {};
     const pages = (await this.#getPages()) ?? [];
 
     const filteredPages = where ? this.filter(pages, where) : pages;
-    const orderedPages = orderBy
-      ? this.order(filteredPages, orderBy)
-      : filteredPages;
 
-    return {
-      data: orderedPages.slice(after, (after ?? 0) + first),
-      total: orderedPages.length,
-    };
+    return orderBy ? this.order(filteredPages, orderBy) : filteredPages;
   }
 
   /**

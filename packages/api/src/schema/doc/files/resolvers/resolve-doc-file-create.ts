@@ -76,11 +76,10 @@ export const resolveDocFileCreate: GraphQLFieldResolver<
   );
   const { contents, meta, name, parentPath } = input;
   const existentDocFiles = await context.loaders.doc.file.list({
-    first: 1,
     where: { name, path: parentPath },
   });
 
-  if (existentDocFiles.total === 1)
+  if (existentDocFiles.length)
     validationErrors.name.push(`File must be unique, ${name} already exists`);
 
   if (hasValidationErrors(validationErrors))

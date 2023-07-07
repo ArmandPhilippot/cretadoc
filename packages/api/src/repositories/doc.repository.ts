@@ -29,7 +29,6 @@ import type {
   DocFileInput,
   DocFileUpdate,
   ListInput,
-  ListReturn,
   Meta,
 } from '../types';
 import { DIRECTORY_META_FILENAME } from '../utils/constants';
@@ -404,31 +403,25 @@ export class DocRepository extends FileSystemRepository {
   /**
    * Find the documentation entries matching the given parameters.
    *
-   * @param {ListInput<T>} params - The list parameters.
+   * @param {ListInput<T>} params - The parameters.
    * @param {K} [kind] - The expected entries kind.
-   * @returns {Promise<ListReturn<T[]>>} The matching documentation entries.
+   * @returns {Promise<T[]>} The matching documentation entries.
    */
   public async find<
     K extends DocEntryKind,
     T extends DocDirectory | DocEntry | DocFile = ResolveReturnTypeFrom<K>
-  >(
-    { first, after, orderBy, where }: ListInput<T>,
-    kind?: K
-  ): Promise<ListReturn<T[]>> {
+  >(params?: ListInput<T>, kind?: K): Promise<T[]> {
+    const { orderBy, where } = params ?? {};
     const path = where?.path
       ? join(this.getRootDir(), where.path)
       : this.getRootDir();
     const entries = (await this.#findEntriesIn<K>(path, kind)) as T[];
 
     const filteredDocEntries = where ? this.filter<T>(entries, where) : entries;
-    const orderedDocEntries = orderBy
+
+    return orderBy
       ? this.order<T>(filteredDocEntries, orderBy)
       : filteredDocEntries;
-
-    return {
-      data: orderedDocEntries.slice(after, (after ?? 0) + first),
-      total: orderedDocEntries.length,
-    };
   }
 
   /**

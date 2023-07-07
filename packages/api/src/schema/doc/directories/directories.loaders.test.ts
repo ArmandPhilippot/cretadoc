@@ -56,11 +56,10 @@ describe('init-doc-directory-loaders', () => {
     const repository = new DocRepository(DOC_FIXTURES_DIR);
     const loaders = initDocDirectoryLoaders(repository);
 
-    const directories = await loaders.directory.list({ first: 10 });
+    const directories = await loaders.directory.list();
 
-    expect(directories.data).toStrictEqual([]);
-    expect(directories.total).toBe(0);
+    expect(directories).toStrictEqual([]);
 
-    expect.assertions(2);
+    expect.assertions(1);
   });
 });

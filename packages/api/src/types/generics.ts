@@ -25,7 +25,7 @@ export type OrderBy<T> = {
 
 export type Pagination<T, C extends string | undefined = undefined> = {
   after?: C;
-  first: number;
+  first?: number;
   offset?: C extends string ? never : number;
   orderBy?: OrderBy<T>;
 };
@@ -36,16 +36,12 @@ export type ConnectionInput<
   W = ResolveWhereFields<T>
 > = Pagination<O> & Where<W>;
 
-export type ListInput<T> = Omit<ConnectionInput<T>, 'after' | 'offset'> & {
-  after?: number;
-};
+export type ListInput<T> = Omit<
+  ConnectionInput<T>,
+  'after' | 'first' | 'offset'
+>;
 
-export type ListReturn<T> = {
-  data: T;
-  total: number;
-};
-
-export type ListLoader<T> = (params: ListInput<T>) => Promise<ListReturn<T[]>>;
+export type ListLoader<T> = (params?: ListInput<T>) => Promise<T[]>;
 
 export type Errors<T> = {
   [K in keyof T]-?: Nullable<string[]>;

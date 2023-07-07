@@ -63,12 +63,11 @@ describe('init-page-loaders', () => {
     const loaders = initPageLoaders(repository);
 
     if (loaders.page) {
-      const pages = await loaders.page.list({ first: 10 });
+      const pages = await loaders.page.list();
 
-      expect(pages.data).toStrictEqual([]);
-      expect(pages.total).toBe(0);
+      expect(pages).toStrictEqual([]);
     }
 
-    expect.assertions(2);
+    expect.assertions(1);
   });
 });

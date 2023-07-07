@@ -55,7 +55,7 @@ export const initDocEntryLoaders = (
       bySlug: new DataLoader<DocEntryInput['slug'], Maybe<DocEntry>>(
         async (slugs) => use(repository).getEntriesBy('slug', slugs)
       ),
-      list: async (params: ListInput<DocEntry>) => repository.find(params),
+      list: async (params?: ListInput<DocEntry>) => repository.find(params),
     },
   };
 };

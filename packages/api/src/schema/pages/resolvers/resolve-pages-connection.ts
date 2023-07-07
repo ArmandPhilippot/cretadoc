@@ -15,7 +15,7 @@ export const resolvePagesConnection: GraphQLFieldResolver<
   ConnectionInput<Page>
 > = async (
   _,
-  { after: afterCursor, offset, ...args },
+  { after: afterCursor, first, offset, ...input },
   context
 ): Promise<Connection<Page>> => {
   if (!context.loaders?.page)
@@ -26,12 +26,7 @@ export const resolvePagesConnection: GraphQLFieldResolver<
     });
 
   const after = offset ?? decodeCursor(afterCursor);
-  const foundPages = await context.loaders.page.list({ ...args, after });
+  const data = await context.loaders.page.list(input);
 
-  return getConnection({
-    after,
-    data: foundPages.data,
-    first: args.first,
-    total: foundPages.total,
-  });
+  return getConnection({ after, data, first });
 };

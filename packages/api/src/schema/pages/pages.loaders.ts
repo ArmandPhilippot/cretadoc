@@ -46,7 +46,7 @@ export const initPageLoaders = (repository: PagesRepository): PageLoaders => {
       bySlug: new DataLoader<PageInput['slug'], Maybe<Page>>(async (slugs) =>
         use(repository).getPagesBy('slug', slugs)
       ),
-      list: async (params: ListInput<Page>) => repository.find(params),
+      list: async (params?: ListInput<Page>) => repository.find(params),
     },
   };
 };

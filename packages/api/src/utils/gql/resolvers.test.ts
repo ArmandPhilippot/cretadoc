@@ -23,7 +23,6 @@ describe('get-connection', () => {
       after: offset,
       data,
       first,
-      total,
     });
 
     expect(connection.edges.length).toBe(data.length);

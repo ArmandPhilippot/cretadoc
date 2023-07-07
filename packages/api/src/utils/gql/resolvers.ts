@@ -1,5 +1,6 @@
 import type { Maybe } from '@cretadoc/utils';
 import type { Connection, Edge } from '../../types';
+import { DEFAULT_EDGES_NUMBER } from '../constants';
 import { generateCursor } from '../helpers';
 
 /**
@@ -21,9 +22,8 @@ export const getEdges = <T>(data: T[], offset: number): Array<Edge<T>> =>
 
 type GetConnectionProps<T> = {
   data: Maybe<T[]>;
-  first: number;
-  after: number;
-  total?: number;
+  first?: number;
+  after?: number;
 };
 
 /**
@@ -33,16 +33,14 @@ type GetConnectionProps<T> = {
  * @param props.after - The number of items before.
  * @param props.data - An array of items.
  * @param props.first - The number of items per page.
- * @param props.total - The total number of items.
  * @returns {Connection<T>} The connection.
  */
 export const getConnection = <T>({
-  after,
-  data,
-  first,
-  total = 0,
+  after = 0,
+  data = [],
+  first = DEFAULT_EDGES_NUMBER,
 }: GetConnectionProps<T>): Connection<T> => {
-  const edges = data ? getEdges(data, after) : [];
+  const edges = getEdges(data.slice(after, first), after);
   const lastEdge = edges[edges.length - 1];
   const endCursor = edges.length && lastEdge ? lastEdge.cursor : null;
   const startCursor = edges.length && edges[0] ? edges[0].cursor : null;
@@ -51,10 +49,10 @@ export const getConnection = <T>({
     edges,
     pageInfo: {
       endCursor,
-      hasNextPage: edges.length === first,
+      hasNextPage: data.length - after > first,
       hasPreviousPage: after > 0,
       startCursor,
-      total,
+      total: data.length,
     },
   };
 };

@@ -11,7 +11,7 @@ import {
 import { DOC_FIXTURES_DIR } from '../../tests/utils/constants';
 import { createFixtures, deleteFixturesIn } from '../../tests/utils/helpers';
 import type { DocDirectory, Meta } from '../types';
-import { DEFAULT_EDGES_NUMBER, MARKDOWN_EXTENSION } from '../utils/constants';
+import { MARKDOWN_EXTENSION } from '../utils/constants';
 import { generateBase64String } from '../utils/helpers';
 import { DocRepository } from './doc.repository';
 
@@ -106,15 +106,11 @@ describe('DocRepository', () => {
 
   it('can find a list of documentation entries', async () => {
     const repo = new DocRepository(DOC_FIXTURES_DIR);
-    const edges = await repo.find({ first: DEFAULT_EDGES_NUMBER });
+    const edges = await repo.find();
 
-    expect(edges.data.length).toBe(rootDocEntries.length);
-    expect(edges.total).toBe(
-      rootDocEntries.length > DEFAULT_EDGES_NUMBER
-        ? DEFAULT_EDGES_NUMBER
-        : rootDocEntries.length
-    );
-    expect.assertions(2);
+    expect(edges.length).toBe(rootDocEntries.length);
+
+    expect.assertions(1);
   });
 
   it('can find a list of documentation entries in the given path', async () => {
@@ -125,59 +121,45 @@ describe('DocRepository', () => {
       (page) => page.parent?.path === parentPath
     );
     const edges = await repo.find({
-      first: DEFAULT_EDGES_NUMBER,
       where: { path: parentPath },
     });
 
-    expect(edges.data.length).toBe(
-      requestedFixtures.length > DEFAULT_EDGES_NUMBER
-        ? DEFAULT_EDGES_NUMBER
-        : requestedFixtures.length
-    );
-    expect(edges.total).toBe(requestedFixtures.length);
-    expect.assertions(2);
+    expect(edges.length).toBe(requestedFixtures.length);
+
+    expect.assertions(1);
   });
 
   it('can find a list of documentation entries ordered by path', async () => {
     const repo = new DocRepository(DOC_FIXTURES_DIR);
     const edges = await repo.find({
-      first: DEFAULT_EDGES_NUMBER,
       orderBy: { direction: 'DESC', field: 'path' },
     });
     const reversedRootDocEntriesPaths = rootDocEntries
-      .slice(0, DEFAULT_EDGES_NUMBER)
       .map((page) => page.path)
       .reverse();
-    const receivedPaths = edges.data.map((edge) => edge.path);
+    const receivedPaths = edges.map((edge) => edge.path);
 
     expect(receivedPaths).toStrictEqual(reversedRootDocEntriesPaths);
+
     expect.assertions(1);
   });
 
   it('can find a list of documentation files', async () => {
     const repo = new DocRepository(DOC_FIXTURES_DIR);
-    const edges = await repo.find({ first: DEFAULT_EDGES_NUMBER }, 'file');
+    const edges = await repo.find(undefined, 'file');
 
-    expect(edges.data.length).toBe(rootDocFiles.length);
-    expect(edges.total).toBe(
-      rootDocFiles.length > DEFAULT_EDGES_NUMBER
-        ? DEFAULT_EDGES_NUMBER
-        : rootDocFiles.length
-    );
-    expect.assertions(2);
+    expect(edges.length).toBe(rootDocFiles.length);
+
+    expect.assertions(1);
   });
 
   it('can find a list of documentation directories', async () => {
     const repo = new DocRepository(DOC_FIXTURES_DIR);
-    const edges = await repo.find({ first: DEFAULT_EDGES_NUMBER }, 'directory');
+    const edges = await repo.find(undefined, 'directory');
 
-    expect(edges.data.length).toBe(rootDocDirectories.length);
-    expect(edges.total).toBe(
-      rootDocDirectories.length > DEFAULT_EDGES_NUMBER
-        ? DEFAULT_EDGES_NUMBER
-        : rootDocDirectories.length
-    );
-    expect.assertions(2);
+    expect(edges.length).toBe(rootDocDirectories.length);
+
+    expect.assertions(1);
   });
 
   it('can remove a file by path', async () => {

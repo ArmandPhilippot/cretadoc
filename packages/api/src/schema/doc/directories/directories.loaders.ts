@@ -59,7 +59,7 @@ export const initDocDirectoryLoaders = (
       bySlug: new DataLoader<DocDirectoryInput['slug'], Maybe<DocDirectory>>(
         async (slugs) => use(repository).getDirectoriesBy('slug', slugs)
       ),
-      list: async (params: ListInput<DocDirectory>) =>
+      list: async (params?: ListInput<DocDirectory>) =>
         repository.find(params, 'directory'),
     },
   };

@@ -55,7 +55,7 @@ export const initDocFileLoaders = (
       bySlug: new DataLoader<DocFileInput['slug'], Maybe<DocFile>>(
         async (slugs) => use(repository).getFilesBy('slug', slugs)
       ),
-      list: async (params: ListInput<DocFile>) =>
+      list: async (params?: ListInput<DocFile>) =>
         repository.find(params, 'file'),
     },
   };

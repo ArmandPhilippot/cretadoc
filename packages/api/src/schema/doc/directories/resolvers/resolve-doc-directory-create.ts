@@ -62,11 +62,10 @@ export const resolveDocDirectoryCreate: GraphQLFieldResolver<
   );
   const { name, parentPath } = input;
   const existentDocDirectories = await context.loaders.doc.directory.list({
-    first: 1,
     where: { name, path: parentPath },
   });
 
-  if (existentDocDirectories.total === 1)
+  if (existentDocDirectories.length)
     validationErrors.name.push(
       `Directory name must be unique, ${name} already exist`
     );

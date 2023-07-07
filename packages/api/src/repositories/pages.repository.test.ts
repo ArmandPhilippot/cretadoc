@@ -5,7 +5,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { pages, pagesFixtures } from '../../tests/fixtures/pages';
 import { PAGES_FIXTURES_DIR } from '../../tests/utils/constants';
 import { createFixtures, deleteFixturesIn } from '../../tests/utils/helpers';
-import { DEFAULT_EDGES_NUMBER, MARKDOWN_EXTENSION } from '../utils/constants';
+import { MARKDOWN_EXTENSION } from '../utils/constants';
 import { byNameProp, generateBase64String } from '../utils/helpers';
 import { PagesRepository } from './pages.repository';
 
@@ -74,91 +74,66 @@ describe('PagesRepository', () => {
 
   it('can find a list of pages', async () => {
     const repo = new PagesRepository(PAGES_FIXTURES_DIR);
-    const edges = await repo.find({ first: DEFAULT_EDGES_NUMBER });
+    const edges = await repo.find();
 
-    expect(edges.data.length).toBe(rootPages.length);
-    expect(edges.total).toBe(
-      rootPages.length > DEFAULT_EDGES_NUMBER
-        ? DEFAULT_EDGES_NUMBER
-        : rootPages.length
-    );
-    expect.assertions(2);
+    expect(edges.length).toBe(rootPages.length);
+
+    expect.assertions(1);
   });
 
   it('can find a list of pages ordered by creation date', async () => {
     const repo = new PagesRepository(PAGES_FIXTURES_DIR);
     const edges = await repo.find({
-      first: DEFAULT_EDGES_NUMBER,
       orderBy: { direction: 'ASC', field: 'createdAt' },
     });
 
-    expect(edges.data.length).toBe(rootPages.length);
-    expect(edges.total).toBe(
-      rootPages.length > DEFAULT_EDGES_NUMBER
-        ? DEFAULT_EDGES_NUMBER
-        : rootPages.length
-    );
-    expect.assertions(2);
+    expect(edges.length).toBe(rootPages.length);
+
+    expect.assertions(1);
   });
 
   it('can find a list of pages ordered by name', async () => {
     const repo = new PagesRepository(PAGES_FIXTURES_DIR);
     const edges = await repo.find({
-      first: DEFAULT_EDGES_NUMBER,
       orderBy: { direction: 'ASC', field: 'name' },
     });
 
-    expect(edges.data.length).toBe(rootPages.length);
-    expect(edges.total).toBe(
-      rootPages.length > DEFAULT_EDGES_NUMBER
-        ? DEFAULT_EDGES_NUMBER
-        : rootPages.length
-    );
-    expect.assertions(2);
+    expect(edges.length).toBe(rootPages.length);
+
+    expect.assertions(1);
   });
 
   it('can find a list of pages ordered by slug', async () => {
     const repo = new PagesRepository(PAGES_FIXTURES_DIR);
     const edges = await repo.find({
-      first: DEFAULT_EDGES_NUMBER,
       orderBy: { direction: 'ASC', field: 'slug' },
     });
 
-    expect(edges.data.length).toBe(rootPages.length);
-    expect(edges.total).toBe(
-      rootPages.length > DEFAULT_EDGES_NUMBER
-        ? DEFAULT_EDGES_NUMBER
-        : rootPages.length
-    );
-    expect.assertions(2);
+    expect(edges.length).toBe(rootPages.length);
+
+    expect.assertions(1);
   });
 
   it('can find a list of pages ordered by update', async () => {
     const repo = new PagesRepository(PAGES_FIXTURES_DIR);
     const edges = await repo.find({
-      first: DEFAULT_EDGES_NUMBER,
       orderBy: { direction: 'ASC', field: 'updatedAt' },
     });
 
-    expect(edges.data.length).toBe(rootPages.length);
-    expect(edges.total).toBe(
-      rootPages.length > DEFAULT_EDGES_NUMBER
-        ? DEFAULT_EDGES_NUMBER
-        : rootPages.length
-    );
-    expect.assertions(2);
+    expect(edges.length).toBe(rootPages.length);
+
+    expect.assertions(1);
   });
 
   it('can find a list of pages filtered by name', async () => {
     const wantedFilename = 'na';
     const repo = new PagesRepository(PAGES_FIXTURES_DIR);
     const edges = await repo.find({
-      first: DEFAULT_EDGES_NUMBER,
       where: { name: wantedFilename },
     });
 
-    expect(edges.data.length).toBeTruthy();
-    expect(edges.data.every((page) => page.name.includes(wantedFilename)));
+    expect(edges.length).toBeTruthy();
+    expect(edges.every((page) => page.name.includes(wantedFilename)));
     expect.assertions(2);
   });
 
@@ -167,12 +142,11 @@ describe('PagesRepository', () => {
     const wantedDate = stats.birthtime.toISOString();
     const repo = new PagesRepository(PAGES_FIXTURES_DIR);
     const edges = await repo.find({
-      first: DEFAULT_EDGES_NUMBER,
       where: { createdAt: wantedDate },
     });
 
-    expect(edges.data.length).toBeTruthy();
-    expect(edges.data.every((page) => page.createdAt.includes(wantedDate)));
+    expect(edges.length).toBeTruthy();
+    expect(edges.every((page) => page.createdAt.includes(wantedDate)));
     expect.assertions(2);
   });
 
@@ -181,12 +155,11 @@ describe('PagesRepository', () => {
     const wantedDate = stats.mtime.toISOString();
     const repo = new PagesRepository(PAGES_FIXTURES_DIR);
     const edges = await repo.find({
-      first: DEFAULT_EDGES_NUMBER,
       where: { updatedAt: wantedDate },
     });
 
-    expect(edges.data.length).toBeTruthy();
-    expect(edges.data.every((page) => page.updatedAt.includes(wantedDate)));
+    expect(edges.length).toBeTruthy();
+    expect(edges.every((page) => page.updatedAt.includes(wantedDate)));
     expect.assertions(2);
   });
 
