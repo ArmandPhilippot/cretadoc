@@ -449,6 +449,27 @@ export class DocRepository extends FileSystemRepository {
   }
 
   /**
+   * Update the meta of a directory.
+   *
+   * @param {string} dirPath - The relative directory path.
+   * @param {Meta} meta - The meta
+   */
+  async #updateDirectoryMeta(dirPath: string, meta: Meta) {
+    const metaAbsolutePath = this.getAbsolutePathFrom(
+      join(dirPath, getFilenameWithExt(DIRECTORY_META_FILENAME))
+    );
+
+    if (existsSync(metaAbsolutePath))
+      await this.update(metaAbsolutePath, { meta });
+    else
+      await this.createMarkdownFile({
+        name: DIRECTORY_META_FILENAME,
+        meta,
+        parentPath: dirPath,
+      });
+  }
+
+  /**
    * Update an existing documentation directory.
    *
    * @param {DocDirectoryUpdate} data - The data to update.
@@ -468,12 +489,7 @@ export class DocRepository extends FileSystemRepository {
     });
     const newRelativePath = this.getRelativePathFrom(newAbsolutePath);
 
-    if (meta) {
-      const metaFilePath = this.getAbsolutePathFrom(
-        join(newRelativePath, getFilenameWithExt(DIRECTORY_META_FILENAME))
-      );
-      await this.update(metaFilePath, { meta });
-    }
+    if (meta) await this.#updateDirectoryMeta(newRelativePath, meta);
 
     return this.get('path', newRelativePath, 'directory');
   }

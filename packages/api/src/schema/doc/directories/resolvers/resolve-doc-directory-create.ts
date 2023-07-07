@@ -16,6 +16,7 @@ import {
 } from '../../../../utils/helpers';
 import {
   validateFilename,
+  validateFrontMatterMeta,
   validateParentPath,
 } from '../../../../utils/helpers/validators';
 import { clearDocDirectoryLoaders } from '../directories.loaders';
@@ -34,9 +35,11 @@ export const validateDocDirectoryCreateInput = async <
   loader: DocDirectoryByPathLoader
 ): Promise<ValidationErrors<T>> => {
   const validationErrors = initValidationErrors(input);
-  const { name, parentPath } = input;
+  const { meta, name, parentPath } = input;
 
   validationErrors.name.push(...validateFilename(name));
+
+  if (meta) validationErrors.meta.push(...validateFrontMatterMeta(meta));
 
   if (parentPath)
     validationErrors.parentPath.push(
@@ -60,7 +63,7 @@ export const resolveDocDirectoryCreate: GraphQLFieldResolver<
     input,
     context.loaders.doc.directory.byPath
   );
-  const { name, parentPath } = input;
+  const { meta, name, parentPath } = input;
   const existentDocDirectories = await context.loaders.doc.directory.list({
     where: { name, path: parentPath },
   });
@@ -76,6 +79,7 @@ export const resolveDocDirectoryCreate: GraphQLFieldResolver<
     };
 
   const docDirectory = await context.mutators.doc.directory.create({
+    meta,
     name,
     parentPath,
   });
