@@ -5,7 +5,7 @@ import {
   createFixtures,
   deleteFixturesIn,
 } from './tests/utils/helpers/fixtures';
-import { createAPIServer } from './tests/utils/helpers/server';
+import { initServer } from './tests/utils/helpers/server';
 
 const deleteFixturesOnExit = async () => {
   try {
@@ -20,7 +20,7 @@ const deleteFixturesOnExit = async () => {
 
 await createFixtures(docFixtures);
 await createFixtures(pagesFixtures);
-await createAPIServer({
+await initServer({
   data: {
     doc: DOC_FIXTURES_DIR,
     pages: PAGES_FIXTURES_DIR,
@@ -29,7 +29,7 @@ await createAPIServer({
   hostname: 'localhost',
   port: 4000,
 })
-  .then((server) => {
+  .then(({ server }) => {
     server.start();
 
     [
