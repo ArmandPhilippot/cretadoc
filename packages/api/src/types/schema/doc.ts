@@ -1,5 +1,5 @@
 import type { Directory, RegularFile } from '@cretadoc/read-dir';
-import type { Meta } from '../data';
+import type { Meta, Slug } from '../data';
 import type { Payload } from '../generics';
 import type { QueryResult } from '../gql';
 import type {
@@ -34,7 +34,7 @@ export type DocEntryParent = Pick<
   'id' | 'name' | 'path'
 > & {
   meta?: Meta;
-  slug: `/${string}`;
+  slug: Slug;
 };
 
 /*

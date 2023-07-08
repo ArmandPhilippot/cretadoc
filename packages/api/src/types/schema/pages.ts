@@ -1,7 +1,7 @@
 import type { RegularFile } from '@cretadoc/read-dir';
 import type { Maybe, NullableOptionalKeysOf } from '@cretadoc/utils';
 import type DataLoader from 'dataloader';
-import type { Meta } from '../data';
+import type { Meta, Slug } from '../data';
 import type {
   ErrorsFrom,
   InputFrom,
@@ -14,7 +14,7 @@ import type { Connection, QueryResult } from '../gql';
 
 export type Page = Omit<RegularFile, 'extension' | 'type'> & {
   meta?: Meta;
-  slug: `/${string}`;
+  slug: Slug;
 };
 
 /*

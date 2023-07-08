@@ -1,5 +1,6 @@
 import { sep } from 'path';
 import { isUndefined, slugify, type Maybe } from '@cretadoc/utils';
+import type { Slug } from '../../types';
 import { MARKDOWN_EXTENSION } from '../constants';
 
 /**
@@ -87,7 +88,7 @@ export const getFilenameWithExt = (filename: string): string => {
  * @param {string} relativePath - A relative path.
  * @returns {string} The slug
  */
-export const getSlugFrom = (relativePath: string): `/${string}` => {
+export const getSlugFrom = (relativePath: string): Slug => {
   const pathParts = relativePath.split(sep);
   const slugParts = pathParts.map((pathPart, index) => {
     const slugPart =
@@ -98,5 +99,5 @@ export const getSlugFrom = (relativePath: string): `/${string}` => {
     return slugify(slugPart);
   });
 
-  return slugParts.join('/') as `/${string}`;
+  return slugParts.join('/') as Slug;
 };

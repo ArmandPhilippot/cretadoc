@@ -28,3 +28,5 @@ export type Meta = {
    */
   updatedAt?: string;
 };
+
+export type Slug = `/${string}`;
