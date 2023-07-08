@@ -56,7 +56,7 @@ export const initDocFileLoaders = (
         async (slugs) => use(repository).getFilesBy('slug', slugs)
       ),
       list: async (params?: ListInput<DocFile>) =>
-        repository.find(params, 'file'),
+        repository.find({ ...params, kind: 'file' }),
     },
   };
 };

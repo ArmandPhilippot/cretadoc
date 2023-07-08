@@ -54,6 +54,11 @@ type ResolveReturnTypeFrom<Kind extends Maybe<DocEntryKind>> =
     ? DocFile
     : DocEntry;
 
+type FindParams<
+  T extends DocEntry,
+  K extends Maybe<DocEntryKind> = undefined
+> = ListInput<T> & { kind?: K };
+
 /**
  * Check if the given value is a DocEntry.
  *
@@ -403,25 +408,23 @@ export class DocRepository extends FileSystemRepository {
   /**
    * Find the documentation entries matching the given parameters.
    *
-   * @param {ListInput<T>} params - The parameters.
-   * @param {K} [kind] - The expected entries kind.
+   * @param {FindParams<T, K>} params - The parameters.
    * @returns {Promise<T[]>} The matching documentation entries.
    */
   public async find<
     K extends DocEntryKind,
     T extends DocDirectory | DocEntry | DocFile = ResolveReturnTypeFrom<K>
-  >(params?: ListInput<T>, kind?: K): Promise<T[]> {
-    const { orderBy, where } = params ?? {};
+  >(params?: FindParams<T, K>): Promise<T[]> {
+    const { orderBy, where, kind } = params ?? {};
     const path = where?.path
       ? join(this.getRootDir(), where.path)
       : this.getRootDir();
-    const entries = (await this.#findEntriesIn<K>(path, kind)) as T[];
+    const entries = where
+      ? ((await this.#getEntriesIn(path)) as T[])
+      : ((await this.#findEntriesIn<K>(path, kind)) as T[]);
+    const filteredDocEntries = this.filter(entries, where, kind);
 
-    const filteredDocEntries = where ? this.filter<T>(entries, where) : entries;
-
-    return orderBy
-      ? this.order<T>(filteredDocEntries, orderBy)
-      : filteredDocEntries;
+    return this.order(filteredDocEntries, orderBy);
   }
 
   /**

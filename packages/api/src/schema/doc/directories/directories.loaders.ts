@@ -60,7 +60,7 @@ export const initDocDirectoryLoaders = (
         async (slugs) => use(repository).getDirectoriesBy('slug', slugs)
       ),
       list: async (params?: ListInput<DocDirectory>) =>
-        repository.find(params, 'directory'),
+        repository.find({ ...params, kind: 'directory' }),
     },
   };
 };

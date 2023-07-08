@@ -1,11 +1,15 @@
 import { readFile, rename, rm, writeFile } from 'fs/promises';
 import { isAbsolute, join, parse } from 'path';
 import { type DirectoryContents, readDir } from '@cretadoc/read-dir';
-import { type Maybe, isObjKeyExist, isString } from '@cretadoc/utils';
+import { type Maybe, isObjKeyExist, isObject } from '@cretadoc/utils';
 import type {
   APIDataConfig,
+  DocDirectory,
   DocEntry,
+  DocEntryKind,
+  DocFile,
   Meta,
+  NonOptionalKeysOf,
   OrderBy,
   Page,
   ResolveOrderFields,
@@ -48,8 +52,89 @@ export type FileSystemData = {
   parentPath?: string;
 };
 
-const isDocEntry = (entry: DocEntry | Page): entry is DocEntry =>
-  isObjKeyExist(entry, 'parent');
+/**
+ * Check if the given value is a DocEntry.
+ *
+ * @param {unknown} value - A value to compare.
+ * @returns {boolean} True if value is a DocEntry object.
+ */
+const isDocEntry = <
+  K extends Maybe<DocEntryKind> = undefined,
+  T extends DocEntry = K extends 'directory'
+    ? DocDirectory
+    : K extends 'file'
+    ? DocFile
+    : DocEntry
+>(
+  value: unknown,
+  kind: K
+): value is T => {
+  if (!value) return false;
+  if (!isObject(value)) return false;
+
+  const mandatoryKeys: Array<NonOptionalKeysOf<DocEntry>> = [
+    'contents',
+    'createdAt',
+    'id',
+    'name',
+    'parent',
+    'path',
+    'slug',
+    'type',
+    'updatedAt',
+  ];
+
+  for (const key of mandatoryKeys) if (!isObjKeyExist(value, key)) return false;
+
+  return kind ? value['type'] === kind : true;
+};
+
+/**
+ * Check if the given value is a Page.
+ *
+ * @param {unknown} value - A value to compare.
+ * @returns {boolean} True if value is a Page object.
+ */
+const isPage = (value: unknown): value is Page => {
+  if (!value) return false;
+  if (!isObject(value)) return false;
+
+  const mandatoryKeys: Array<NonOptionalKeysOf<Page>> = [
+    'createdAt',
+    'id',
+    'name',
+    'path',
+    'slug',
+    'updatedAt',
+  ];
+
+  for (const key of mandatoryKeys) if (!isObjKeyExist(value, key)) return false;
+
+  return true;
+};
+
+/**
+ * Check if the given value is a DocEntry or a Page.
+ *
+ * @param {unknown} value - A value to compare.
+ * @param {Maybe<DocEntryKind>} kind - The entry kind.
+ * @returns {boolean} True if value is a DocEntry or a Page object.
+ */
+const isValidEntry = <
+  K extends Maybe<DocEntryKind> = undefined,
+  T extends DocEntry | Page = K extends 'directory'
+    ? DocDirectory
+    : K extends 'file'
+    ? DocFile
+    : Page
+>(
+  value: unknown,
+  kind: Maybe<DocEntryKind>
+): value is T => {
+  if (kind) return isDocEntry(value, kind);
+
+  return isDocEntry(value, kind) || isPage(value);
+};
 
 export class FileSystemRepository {
   #context: string;
@@ -142,53 +227,80 @@ export class FileSystemRepository {
   }
 
   /**
+   * Compare the entry with the given filters.
+   *
+   * @param {T} entry - The entry to check.
+   * @param {I} filters - The filters.
+   * @returns {boolean} True if the entry matches the filters.
+   */
+  #isEntryMatchingFilters<
+    T extends DocEntry | Page,
+    I extends ResolveWhereFields<T> = ResolveWhereFields<T>,
+    K extends Maybe<DocEntryKind> = undefined
+  >(entry: T, filters: Partial<I>, kind?: K): boolean {
+    const filtersEntries = Object.entries(filters) as Array<
+      [
+        keyof Omit<DocEntry & Page, 'contents' | 'meta' | 'parent' | 'type'>,
+        Maybe<string>
+      ]
+    >;
+
+    return filtersEntries.every(([key, value]) => {
+      if (value === undefined) return true;
+
+      if (key === 'path' || key === 'slug')
+        return (
+          isDocEntry(entry, kind) && entry.parent && entry.parent[key] === value
+        );
+
+      return entry[key].includes(value);
+    });
+  }
+
+  /**
    * Filter the entries.
    *
-   * @param {Page[]} entries - The entries.
-   * @param {PageWhereFields} where - The filter parameters.
-   * @returns {Page[]} The filtered entries.
+   * @param {T[]} entries - The entries.
+   * @param {Maybe<I>} where - The filter parameters.
+   * @param {K} [kind] - The entry kind.
+   * @returns {T[]} The filtered entries.
    */
   protected filter<
     T extends DocEntry | Page,
-    I extends ResolveWhereFields<T> = ResolveWhereFields<T>
-  >(entries: T[], { createdAt, name, updatedAt, ...input }: I): T[] {
-    const path = 'path' in input ? input.path : undefined;
-    let filteredEntries = [...entries];
+    I extends ResolveWhereFields<T> = ResolveWhereFields<T>,
+    K extends Maybe<DocEntryKind> = undefined
+  >(entries: T[], where: Maybe<I>, kind?: K): T[] {
+    if (!where) return entries;
 
-    if (createdAt)
-      filteredEntries = filteredEntries.filter(
-        (entry) => entry.createdAt === createdAt
-      );
+    const filteredEntries: T[] = [];
 
-    if (name)
-      filteredEntries = filteredEntries.filter((entry) =>
-        entry.name.includes(name)
-      );
+    JSON.stringify(entries, (_, entry: unknown) => {
+      if (
+        isValidEntry(entry, kind) &&
+        this.#isEntryMatchingFilters(entry, where)
+      )
+        filteredEntries.push(entry as T);
 
-    if (entries.every(isDocEntry) && isString(path))
-      filteredEntries = filteredEntries.filter((entry) =>
-        entry.path.includes(path)
-      );
-
-    if (updatedAt)
-      filteredEntries = filteredEntries.filter(
-        (entry) => entry.updatedAt === updatedAt
-      );
+      return entry;
+    });
 
     return filteredEntries;
   }
 
   /**
-   * Order the given pages.
+   * Order the given entries.
    *
-   * @param {Page[]} entries - The entries.
-   * @param {OrderBy<PageOrderFields>} orderBy - The order by instructions.
-   * @returns {Page[]} The ordered entries.
+   * @param {T[]} entries - The entries.
+   * @param {Maybe<I>} orderBy - The order by instructions.
+   * @returns {T[]} The ordered entries.
    */
   protected order<
     T extends DocEntry | Page,
     I extends OrderBy<ResolveOrderFields<T>> = OrderBy<ResolveOrderFields<T>>
-  >(entries: T[], { direction, field }: I): T[] {
+  >(entries: T[], orderBy: Maybe<I>): T[] {
+    if (!orderBy) return entries;
+
+    const { direction, field } = orderBy;
     let orderedEntries = [...entries];
 
     switch (field) {

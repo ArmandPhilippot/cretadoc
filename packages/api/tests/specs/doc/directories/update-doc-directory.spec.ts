@@ -123,8 +123,6 @@ describe('update-doc-directory', () => {
       },
     });
 
-    console.log(response.data);
-
     if (isDocDirectoryPayload(response.data.docDirectoryUpdate)) {
       expect(response.data.docDirectoryUpdate.directory).toBeDocDirectory({
         id: docDirectoryId,

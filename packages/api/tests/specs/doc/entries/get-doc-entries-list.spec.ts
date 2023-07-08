@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, beforeEach, describe, it } from 'vitest';
 import { DEFAULT_EDGES_NUMBER } from '../../../../src/utils/constants';
 import { generateCursor } from '../../../../src/utils/helpers';
-import { docFixtures, rootDocEntries } from '../../../fixtures/doc';
+import { docEntries, docFixtures, rootDocEntries } from '../../../fixtures/doc';
 import { expect } from '../../../utils';
 import { DOC_FIXTURES_DIR } from '../../../utils/constants';
 import {
@@ -77,8 +77,8 @@ describe('get-doc-entries-list', () => {
     server,
   }) => {
     const requestedName = 'a';
-    const requestedFixtures = rootDocEntries.filter((file) =>
-      file.name.includes(requestedName)
+    const requestedFixtures = docEntries.filter((entry) =>
+      entry.name.includes(requestedName)
     );
     const hasNextPage = requestedFixtures.length > DEFAULT_EDGES_NUMBER;
     const requestedFixturesCount = hasNextPage
@@ -88,6 +88,39 @@ describe('get-doc-entries-list', () => {
       query: getDocEntriesListQuery,
       variables: {
         where: { name: requestedName },
+      },
+    });
+
+    expect(response.data.doc?.entries?.edges.length).toBe(
+      requestedFixturesCount
+    );
+    expect(response.data.doc?.entries?.pageInfo).toBePageInfo({
+      endCursor: generateCursor(requestedFixturesCount),
+      hasNextPage,
+      hasPreviousPage: false,
+      startCursor: generateCursor(1),
+      total: requestedFixtures.length,
+    });
+
+    expect.assertions(2);
+  });
+
+  it<GetDocEntriesListContext>('can return the doc entries filtered by parent slug', async ({
+    server,
+  }) => {
+    // An existing directory.
+    const requestedSlug = '/excepturi';
+    const requestedFixtures = docEntries.filter(
+      (entry) => entry.parent?.slug === requestedSlug
+    );
+    const hasNextPage = requestedFixtures.length > DEFAULT_EDGES_NUMBER;
+    const requestedFixturesCount = hasNextPage
+      ? DEFAULT_EDGES_NUMBER
+      : requestedFixtures.length;
+    const response = await server.sendQuery({
+      query: getDocEntriesListQuery,
+      variables: {
+        where: { slug: requestedSlug },
       },
     });
 

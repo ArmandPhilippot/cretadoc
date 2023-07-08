@@ -129,6 +129,22 @@ describe('DocRepository', () => {
     expect.assertions(1);
   });
 
+  it('can find a list of documentation entries by slug', async () => {
+    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    // An existing slug.
+    const slug = '/excepturi';
+    const requestedFixtures = docEntries.filter(
+      (entry) => entry.parent?.slug === slug
+    );
+    const edges = await repo.find({
+      where: { slug },
+    });
+
+    expect(edges.length).toBe(requestedFixtures.length);
+
+    expect.assertions(1);
+  });
+
   it('can find a list of documentation entries ordered by path', async () => {
     const repo = new DocRepository(DOC_FIXTURES_DIR);
     const edges = await repo.find({
@@ -146,7 +162,7 @@ describe('DocRepository', () => {
 
   it('can find a list of documentation files', async () => {
     const repo = new DocRepository(DOC_FIXTURES_DIR);
-    const edges = await repo.find(undefined, 'file');
+    const edges = await repo.find({ kind: 'file' });
 
     expect(edges.length).toBe(rootDocFiles.length);
 
@@ -155,7 +171,7 @@ describe('DocRepository', () => {
 
   it('can find a list of documentation directories', async () => {
     const repo = new DocRepository(DOC_FIXTURES_DIR);
-    const edges = await repo.find(undefined, 'directory');
+    const edges = await repo.find({ kind: 'directory' });
 
     expect(edges.length).toBe(rootDocDirectories.length);
 

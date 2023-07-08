@@ -104,10 +104,9 @@ export class PagesRepository extends FileSystemRepository {
   public async find(params?: ListInput<Page>): Promise<Page[]> {
     const { orderBy, where } = params ?? {};
     const pages = (await this.#getPages()) ?? [];
+    const filteredPages = this.filter(pages, where);
 
-    const filteredPages = where ? this.filter(pages, where) : pages;
-
-    return orderBy ? this.order(filteredPages, orderBy) : filteredPages;
+    return this.order(filteredPages, orderBy);
   }
 
   /**

@@ -46,7 +46,7 @@ export type DocDirectoryPayload = Payload<
  */
 
 export type DocDirectoryWhereFields = Partial<
-  Pick<DocDirectory, 'createdAt' | 'name' | 'path' | 'updatedAt'>
+  Pick<DocDirectory, 'createdAt' | 'name' | 'path' | 'slug' | 'updatedAt'>
 >;
 
 export type DocDirectoryOrderFields = Pick<

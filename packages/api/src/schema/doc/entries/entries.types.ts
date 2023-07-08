@@ -72,6 +72,10 @@ export const DocEntryWhereInputType = new GraphQLInputObjectType({
       description: 'The parent path.',
       type: GraphQLString,
     },
+    slug: {
+      description: 'The parent slug.',
+      type: GraphQLString,
+    },
     updatedAt: {
       description: 'A substring of the last update date of the entry.',
       type: GraphQLString,

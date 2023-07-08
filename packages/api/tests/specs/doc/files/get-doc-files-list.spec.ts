@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, beforeEach, describe, it } from 'vitest';
 import { DEFAULT_EDGES_NUMBER } from '../../../../src/utils/constants';
 import { generateCursor } from '../../../../src/utils/helpers';
-import { docFixtures, rootDocFiles } from '../../../fixtures/doc';
+import { docFiles, docFixtures, rootDocFiles } from '../../../fixtures/doc';
 import { expect } from '../../../utils';
 import { DOC_FIXTURES_DIR } from '../../../utils/constants';
 import {
@@ -77,7 +77,7 @@ describe('get-doc-files-list', () => {
     server,
   }) => {
     const requestedName = 'a';
-    const requestedFixtures = rootDocFiles.filter((file) =>
+    const requestedFixtures = docFiles.filter((file) =>
       file.name.includes(requestedName)
     );
     const hasNextPage = requestedFixtures.length > DEFAULT_EDGES_NUMBER;
@@ -88,6 +88,37 @@ describe('get-doc-files-list', () => {
       query: getDocFilesListQuery,
       variables: {
         where: { name: requestedName },
+      },
+    });
+
+    expect(response.data.doc?.files?.edges.length).toBe(requestedFixturesCount);
+    expect(response.data.doc?.files?.pageInfo).toBePageInfo({
+      endCursor: generateCursor(requestedFixturesCount),
+      hasNextPage,
+      hasPreviousPage: false,
+      startCursor: generateCursor(1),
+      total: requestedFixtures.length,
+    });
+
+    expect.assertions(2);
+  });
+
+  it<GetDocFilesListContext>('can return the doc files filtered by parent slug', async ({
+    server,
+  }) => {
+    // An existing directory slug.
+    const requestedSlug = '/excepturi';
+    const requestedFixtures = docFiles.filter(
+      (file) => file.parent?.slug === requestedSlug
+    );
+    const hasNextPage = requestedFixtures.length > DEFAULT_EDGES_NUMBER;
+    const requestedFixturesCount = hasNextPage
+      ? DEFAULT_EDGES_NUMBER
+      : requestedFixtures.length;
+    const response = await server.sendQuery({
+      query: getDocFilesListQuery,
+      variables: {
+        where: { slug: requestedSlug },
       },
     });
 
