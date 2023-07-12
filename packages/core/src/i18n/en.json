@@ -3,6 +3,10 @@
     "defaultMessage": "Loading navigation items...",
     "description": "MainNav: loading text"
   },
+  "5RnjVF": {
+    "defaultMessage": "On this page",
+    "description": "TableOfContents: heading"
+  },
   "ApbCEQ": {
     "defaultMessage": "Sorry, an unexpected error has occurred.",
     "description": "ErrorPage: 500 page body"
@@ -67,9 +71,17 @@
     "defaultMessage": "Dark theme",
     "description": "ThemeSwitcher: dark theme label"
   },
+  "y+utOz": {
+    "defaultMessage": "Home",
+    "description": "Breadcrumbs: homepage label"
+  },
   "z+4ywp": {
     "defaultMessage": "Go back to homepage",
     "description": "ErrorPage: back to homepage anchor"
+  },
+  "zLpBew": {
+    "defaultMessage": "Error",
+    "description": "Breadcrumbs: error label"
   },
   "zysx+O": {
     "defaultMessage": "Light theme",

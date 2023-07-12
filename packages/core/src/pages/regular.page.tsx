@@ -4,7 +4,7 @@ import { type FC, useCallback, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useLoaderData, useParams } from 'react-router-dom';
 import { MarkdownContents, Page } from '../components';
-import type { pagesLoader } from '../routes/pages';
+import type { pagesLoader } from '../routes/loaders';
 import { useConfig, usePage } from '../utils/hooks';
 
 /* eslint-disable max-statements */

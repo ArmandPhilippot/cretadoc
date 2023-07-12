@@ -1,25 +1,28 @@
 import {
   Breadcrumbs as BaseBreadcrumbs,
-  type BreadcrumbsItem,
   type BreadcrumbsProps as BaseBreadcrumbsProps,
 } from '@cretadoc/ui';
 import { isObjKeyExist, isObject } from '@cretadoc/utils';
 import type { FC } from 'react';
 import { useIntl } from 'react-intl';
-import { type Params, useMatches } from 'react-router-dom';
+import { useMatches } from 'react-router-dom';
+import type { getBreadcrumbItem } from '../../routes/handlers';
 
-export type RouteMatch = {
-  id: string;
-  pathname: string;
-  params: Params;
-  data: unknown;
-  handle: unknown;
-};
+type ArrayElement<ArrayType extends readonly unknown[]> =
+  ArrayType extends ReadonlyArray<infer ElementType> ? ElementType : never;
+
+export type RouteMatch = ArrayElement<ReturnType<typeof useMatches>>;
 
 export type ValidRouteMatch = Omit<RouteMatch, 'handle'> & {
   handle: {
-    getBreadcrumbItem: (data: unknown) => BreadcrumbsItem;
+    getBreadcrumbItem: typeof getBreadcrumbItem;
   };
+};
+
+const isValidRouteMatch = (match: RouteMatch): match is ValidRouteMatch => {
+  if (!isObject(match.handle)) return false;
+  if (!isObjKeyExist(match.handle, 'getBreadcrumbItem')) return false;
+  return true;
 };
 
 export type BreadcrumbsProps = Omit<
@@ -36,14 +39,25 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = (props) => {
     description: 'Breadcrumbs: aria label',
   });
 
+  const homeLabel = intl.formatMessage({
+    defaultMessage: 'Home',
+    id: 'y+utOz',
+    description: 'Breadcrumbs: homepage label',
+  });
+
+  const errorLabel = intl.formatMessage({
+    defaultMessage: 'Error',
+    id: 'zLpBew',
+    description: 'Breadcrumbs: error label',
+  });
+
   const matches: RouteMatch[] = useMatches();
-  const items = matches
-    .filter((match): match is ValidRouteMatch => {
-      if (!isObject(match.handle)) return false;
-      if (!isObjKeyExist(match.handle, 'getBreadcrumbItem')) return false;
-      return true;
+  const items = matches.filter(isValidRouteMatch).map((match) =>
+    match.handle.getBreadcrumbItem(match.data, match.pathname, {
+      error: errorLabel,
+      home: homeLabel,
     })
-    .map((match) => match.handle.getBreadcrumbItem(match.data));
+  );
 
   return <BaseBreadcrumbs {...props} aria-label={ariaLabel} items={items} />;
 };
