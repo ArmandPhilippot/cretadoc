@@ -11,6 +11,7 @@ export const createCretadocApp = async () => {
   const config = await loadServerConfig(CONFIG_FILE_NAME, currentDir);
   const api = await createAPI({
     data: {
+      doc: config.paths.doc ?? undefined,
       pages: config.paths.pages ?? undefined,
     },
     endpoint: ROUTES.API,

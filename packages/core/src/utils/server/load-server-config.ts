@@ -28,6 +28,10 @@ const getServerConfig = <T extends ServerConfigShape>(
   return {
     ...DEFAULT_SERVER_CONFIG,
     ...config,
+    paths: {
+      ...DEFAULT_SERVER_CONFIG.paths,
+      ...config.paths,
+    },
   };
 };
 

@@ -50,6 +50,7 @@ describe('load-server-config', () => {
   it('throws an error if the configuration is invalid', async () => {
     const config: Partial<ReplaceTypesIn<CretadocServerConfig, number>> = {
       paths: {
+        doc: 24,
         pages: 42,
       },
     };

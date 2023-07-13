@@ -5,5 +5,11 @@ lang
 cretadoc.config.js
 
 # fixtures
-tests/fixtures
+!tests/fixtures
+tests/fixtures/*
+!tests/fixtures/doc/
+tests/fixtures/doc/*
+!tests/fixtures/doc/.keep
+!tests/fixtures/pages/
+tests/fixtures/pages/*
 !tests/fixtures/pages/.keep

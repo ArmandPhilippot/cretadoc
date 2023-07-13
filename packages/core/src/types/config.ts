@@ -22,6 +22,10 @@ export type CretadocPages = {
 
 export type CretadocPaths = {
   /**
+   * The path of the directory that contains the documentation entries.
+   */
+  doc: Nullable<string>;
+  /**
    * The path of the directory that contains the pages.
    */
   pages: Nullable<string>;

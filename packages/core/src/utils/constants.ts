@@ -40,6 +40,7 @@ export const CORE_ERROR_CODE = {
 
 export const ROUTES = {
   API: '/api',
+  DOC: '/doc',
   HOMEPAGE: '/',
   NOT_FOUND: '/404',
 } as const;
@@ -62,6 +63,7 @@ export const DEFAULT_CLIENT_CONFIG = {
 
 export const DEFAULT_SERVER_CONFIG = {
   paths: {
+    doc: null,
     pages: null,
   },
 } as const satisfies CretadocServerConfig;

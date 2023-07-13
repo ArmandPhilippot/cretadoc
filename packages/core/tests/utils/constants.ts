@@ -6,6 +6,11 @@ export const ROOT_CONFIG_PATH = new URL(
 export const FIXTURES_DIR_PATH = new URL('../fixtures/', import.meta.url)
   .pathname;
 
+export const DOC_FIXTURES_DIR_PATH = new URL(
+  '../fixtures/doc/',
+  import.meta.url
+).pathname;
+
 export const PAGES_FIXTURES_DIR_PATH = new URL(
   '../fixtures/pages/',
   import.meta.url

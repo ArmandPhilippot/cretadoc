@@ -6,6 +6,7 @@ import { validatePathsProp } from './validate-paths-prop';
 describe('validate-paths-prop', () => {
   it('returns an empty array if the paths properties are valid', () => {
     const paths: CretadocPaths = {
+      doc: null,
       pages: new URL('.', import.meta.url).pathname,
     };
     expect(validatePathsProp(paths)).toStrictEqual([]);
@@ -28,6 +29,7 @@ describe('validate-paths-prop', () => {
 
   it('returns an array of errors if the pages prop is missing', () => {
     const paths = {
+      doc: null,
       foo: 'bar',
     };
     const result = validatePathsProp(paths);
@@ -36,8 +38,8 @@ describe('validate-paths-prop', () => {
 
     const expectedError: ValidationError = {
       key: 'paths',
-      reason: 'pages property expected',
-      received: Object.keys(paths).join(', '),
+      reason: 'unknown key',
+      received: 'foo',
     };
 
     expect(result).toContainEqual(expectedError);
@@ -45,6 +47,7 @@ describe('validate-paths-prop', () => {
 
   it('returns an array of errors if the pages prop type is invalid', () => {
     const paths = {
+      doc: null,
       pages: 42,
     };
     const result = validatePathsProp(paths);
@@ -62,6 +65,7 @@ describe('validate-paths-prop', () => {
 
   it('returns an array of errors if the pages prop is not a directory', () => {
     const paths: CretadocPaths = {
+      doc: null,
       pages: 'a-path',
     };
     const result = validatePathsProp(paths);

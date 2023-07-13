@@ -1,5 +1,5 @@
 import { writeFileSync } from 'fs';
-import { access, rm } from 'fs/promises';
+import { access, mkdir, rm } from 'fs/promises';
 import { join } from 'path';
 import { MARKDOWN_EXT } from '../../../src/utils/constants';
 
@@ -12,6 +12,10 @@ export type Fixture = {
    * The file name without extension.
    */
   name: string;
+  /**
+   * A relative path to the parent directory.
+   */
+  parentPath?: string;
 };
 
 type DebugOptions = {
@@ -44,6 +48,22 @@ const log = (message: string, options?: DebugOptions) => {
 };
 
 /**
+ * Create a new directory if it does not exist.
+ *
+ * @param {string} path - The directory path.
+ * @param {DebugOptions} options - Some debug options.
+ */
+const createParent = async (path: string, options?: DebugOptions) => {
+  const isParentExist = await isPathExists(path);
+
+  if (isParentExist) log(`${path} already exists, skipping.`, options);
+  else {
+    await mkdir(path, { recursive: true });
+    log(`${path} created`, options);
+  }
+};
+
+/**
  * Add a new fixture.
  *
  * @param {Fixture} fixture - The fixture to add.
@@ -56,7 +76,16 @@ const add = async (
   dirPath: string,
   options?: DebugOptions
 ): Promise<void> => {
-  const fixturePath = join(dirPath, `${fixture.name}${MARKDOWN_EXT}`);
+  const fixtureParentPath = fixture.parentPath
+    ? join(dirPath, fixture.parentPath)
+    : undefined;
+
+  if (fixtureParentPath) await createParent(fixtureParentPath);
+
+  const fixturePath = join(
+    fixtureParentPath ?? dirPath,
+    `${fixture.name}${MARKDOWN_EXT}`
+  );
   const isFileExist = await isPathExists(fixturePath);
 
   if (isFileExist) {
@@ -97,11 +126,21 @@ const remove = async (
   dirPath: string,
   options?: DebugOptions
 ): Promise<void> => {
-  const fixturePath = join(dirPath, `${fixture.name}${MARKDOWN_EXT}`);
+  const fixtureParentPath = fixture.parentPath
+    ? join(dirPath, fixture.parentPath)
+    : undefined;
+  const fixturePath = join(
+    fixtureParentPath ?? dirPath,
+    `${fixture.name}${MARKDOWN_EXT}`
+  );
 
-  await rm(fixturePath, { recursive: true, force: true });
-
-  log(`${fixture.name} removed from ${dirPath}`, options);
+  if (fixtureParentPath) {
+    await rm(fixtureParentPath, { recursive: true, force: true });
+    log(`${fixtureParentPath} and its contents removed`, options);
+  } else {
+    await rm(fixturePath, { recursive: true, force: true });
+    log(`${fixture.name} removed from ${dirPath}`, options);
+  }
 };
 
 /**

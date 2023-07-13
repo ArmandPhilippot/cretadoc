@@ -12,16 +12,18 @@ describe('validate-server-config', () => {
   it('returns an array of errors if the config is invalid', () => {
     const config: ReplaceTypesIn<CretadocServerConfig, number> = {
       paths: {
+        doc: 24,
         pages: 42,
       },
     };
 
-    expect(validateServerConfig(config)).toHaveLength(1);
+    expect(validateServerConfig(config)).toHaveLength(2);
   });
 
   it('throws an error if the config has invalid keys', () => {
     const config = {
       paths: {
+        doc: null,
         pages: 'a-path',
       },
       foo: 'bar',

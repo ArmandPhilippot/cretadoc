@@ -1,5 +1,5 @@
 import { existsSync } from 'node:fs';
-import { isNull, isObjKeyExist, isObject, isString } from '@cretadoc/utils';
+import { isNull, isObject, isString } from '@cretadoc/utils';
 import type { CretadocPaths } from '../../../types/config';
 import type { ValidationError } from '../../../types/internals';
 
@@ -14,12 +14,12 @@ const isDirectory = (path: string): boolean => existsSync(path);
 /**
  * Validate the a key/value pair in paths property.
  *
- * @param {keyof CretadocPaths} key - The key to validate.
+ * @param {string} key - The key to validate.
  * @param {unknown} value - The value to validate.
  * @returns {ValidationError[]} An array of errors or an empty array.
  */
 const validatePathsKeyValue = (
-  key: keyof CretadocPaths,
+  key: string,
   value: unknown
 ): ValidationError[] => {
   if (isNull(value)) return [];
@@ -51,24 +51,30 @@ const validatePathsKeyValue = (
  * @param {unknown} value - The value to validate.
  * @returns {ValidationError[]} An array of errors or an empty array.
  */
-export const validatePathsProp = (value: unknown): ValidationError[] => {
-  if (!isObject(value))
+export const validatePathsProp = (config: unknown): ValidationError[] => {
+  if (!isObject(config))
     return [
       {
         key: 'paths',
         reason: 'object expected',
-        received: typeof value,
+        received: typeof config,
       },
     ];
 
-  if (!isObjKeyExist(value, 'pages'))
-    return [
-      {
+  const errors: ValidationError[] = [];
+  const validKeys: string[] = ['doc', 'pages'] satisfies Array<
+    keyof CretadocPaths
+  >;
+
+  for (const [key, value] of Object.entries(config))
+    if (validKeys.includes(key))
+      errors.push(...validatePathsKeyValue(key, value));
+    else
+      errors.push({
         key: 'paths',
-        reason: 'pages property expected',
-        received: Object.keys(value).join(', '),
-      },
-    ];
+        reason: 'unknown key',
+        received: key,
+      });
 
-  return [...validatePathsKeyValue('pages', value.pages)];
+  return errors;
 };
