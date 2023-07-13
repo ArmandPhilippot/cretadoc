@@ -1,4 +1,8 @@
 {
+  "11hovo": {
+    "defaultMessage": "Explore<a11y> {title}</a11y>",
+    "description": "DocEntriesList: open dir link anchor"
+  },
   "44f+HY": {
     "defaultMessage": "Loading navigation items...",
     "description": "MainNav: loading text"
@@ -26,6 +30,10 @@
   "RYaguF": {
     "defaultMessage": "Sorry, an authorization is required to access this page.",
     "description": "ErrorPage: 401 page body"
+  },
+  "V5bcyj": {
+    "defaultMessage": "Pagination of the documentation",
+    "description": "DocEntriesList: pagination accessible name"
   },
   "XMShu1": {
     "defaultMessage": "Close the main navigation",
@@ -74,6 +82,10 @@
   "y+utOz": {
     "defaultMessage": "Home",
     "description": "Breadcrumbs: homepage label"
+  },
+  "ynkRza": {
+    "defaultMessage": "Read more<a11y> about {title}</a11y>",
+    "description": "DocEntriesList: read more link anchor"
   },
   "z+4ywp": {
     "defaultMessage": "Go back to homepage",
