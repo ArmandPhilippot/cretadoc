@@ -41,6 +41,7 @@ export const getDocEntriesListQuery = `query DocEntries($after: String, $first: 
             updatedAt
           }
           ... on DocDirectory {
+            contents
             createdAt
             entries {
               edges {

@@ -1,6 +1,7 @@
 export const getDocDirectoryQuery = `query DocDirectory($id: String, $path: String, $slug: String, $after: String, $first: Int, $offset: Int, $orderBy: DocOrderByInput, $where: DocWhereInput) {
   doc {
     directory(id: $id, path: $path, slug: $slug) {
+      contents
       createdAt
       entries(
         after: $after

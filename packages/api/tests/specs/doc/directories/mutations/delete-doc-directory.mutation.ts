@@ -3,6 +3,7 @@ export const deleteDocDirectoryMutation = `mutation DeleteDocDirectory($input: D
     ... on DocDirectoryPayload {
       __typename
       directory {
+        contents
         createdAt
         entries(
           after: $after

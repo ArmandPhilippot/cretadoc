@@ -181,6 +181,11 @@ export const DocDirectoryType: GraphQLObjectType<DocDirectory, APIContext> =
     description: 'A single documentation directory.',
     fields: () => {
       return {
+        contents: {
+          description: 'The text content of the directory.',
+          type: GraphQLString,
+          resolve: ({ contents }) => contents,
+        },
         createdAt: {
           description: 'The creation date of the directory.',
           type: new GraphQLNonNull(GraphQLString),

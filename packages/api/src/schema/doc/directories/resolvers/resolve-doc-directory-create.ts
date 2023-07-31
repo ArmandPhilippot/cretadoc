@@ -15,6 +15,7 @@ import {
   validateContext,
 } from '../../../../utils/helpers';
 import {
+  validateFileContents,
   validateFilename,
   validateFrontMatterMeta,
   validateParentPath,
@@ -35,9 +36,12 @@ export const validateDocDirectoryCreateInput = async <
   loader: DocDirectoryByPathLoader
 ): Promise<ValidationErrors<T>> => {
   const validationErrors = initValidationErrors(input);
-  const { meta, name, parentPath } = input;
+  const { contents, meta, name, parentPath } = input;
 
   validationErrors.name.push(...validateFilename(name));
+
+  if (contents)
+    validationErrors.contents.push(...validateFileContents(contents));
 
   if (meta) validationErrors.meta.push(...validateFrontMatterMeta(meta));
 

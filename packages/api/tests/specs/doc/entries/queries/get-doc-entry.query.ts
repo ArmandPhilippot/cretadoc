@@ -33,6 +33,7 @@ export const getDocEntryQuery = `query DocEntry($id: String, $path: String, $slu
         updatedAt
       }
       ... on DocDirectory {
+        contents
         createdAt
         entries(
           after: $after

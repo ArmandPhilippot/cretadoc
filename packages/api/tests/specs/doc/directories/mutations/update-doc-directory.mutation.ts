@@ -3,6 +3,7 @@ export const updateDocDirectoryMutation = `mutation UpdateDocDirectory($after: S
     ... on DocDirectoryPayload {
       __typename
       directory {
+        contents
         createdAt
         entries(
           after: $after

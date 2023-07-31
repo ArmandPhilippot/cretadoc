@@ -152,8 +152,8 @@ const getMetaFrom = (rawMeta: string): Meta => {
   throw new CretadocAPIError('Invalid meta', errors);
 };
 
-type MarkdownParts = {
-  content: string;
+export type MarkdownData = {
+  contents: string;
   meta?: Meta;
 };
 
@@ -161,13 +161,13 @@ type MarkdownParts = {
  * Retrieve the content and maybe some meta from a Markdown string.
  *
  * @param {string} content - A Markdown string.
- * @returns {MarkdownParts} The markdown parts.
+ * @returns {MarkdownData} The markdown parts.
  */
-export const parseMarkdown = (content: string): MarkdownParts => {
+export const parseMarkdown = (content: string): MarkdownData => {
   const data = getMarkdownGroups(content);
 
   return {
-    content: data?.content ?? '',
+    contents: data?.content ?? '',
     meta: data?.rawMeta ? getMetaFrom(data.rawMeta) : undefined,
   };
 };

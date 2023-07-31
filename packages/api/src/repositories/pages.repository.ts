@@ -36,10 +36,10 @@ export class PagesRepository extends FileSystemRepository {
     contents,
   }: RegularFile): Page {
     const relativePath = this.getRelativePathFrom(path);
-    const { content, meta } = parseMarkdown(contents ?? '');
+    const { contents: mdContents, meta } = parseMarkdown(contents ?? '');
 
     return {
-      contents: content,
+      contents: mdContents,
       createdAt,
       id: generateBase64String(relativePath),
       meta,

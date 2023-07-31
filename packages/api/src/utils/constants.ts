@@ -8,7 +8,7 @@ export const DEFAULT_CONFIG = {
 
 export const DEFAULT_EDGES_NUMBER = 10;
 
-export const DIRECTORY_META_FILENAME = '_meta';
+export const DIRECTORY_INDEX_FILENAME = 'index';
 
 export const DIRECTION = {
   ASC: 'ASC',

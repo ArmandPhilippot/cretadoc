@@ -76,7 +76,7 @@ describe('parse-markdown', () => {
     const markdown = `${frontMatter}\n\n${regularContents}`;
 
     expect(parseMarkdown(markdown)).toStrictEqual({
-      content: regularContents,
+      contents: regularContents,
       meta,
     });
   });
@@ -85,7 +85,7 @@ describe('parse-markdown', () => {
     const markdown = '# Title\n\nSome contents.\n';
 
     expect(parseMarkdown(markdown)).toStrictEqual({
-      content: markdown,
+      contents: markdown,
       meta: undefined,
     });
   });

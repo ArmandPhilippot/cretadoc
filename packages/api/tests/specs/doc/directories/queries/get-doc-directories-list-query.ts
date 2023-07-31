@@ -10,6 +10,7 @@ export const getDocDirectoriesListQuery = `query DocDirectories($after: String, 
       edges {
         cursor
         node {
+          contents
           createdAt
           entries(
             after: $entriesAfter

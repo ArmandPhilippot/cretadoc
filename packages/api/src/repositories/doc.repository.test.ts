@@ -240,6 +240,45 @@ describe('DocRepository', () => {
     expect.assertions(3);
   });
 
+  it('can create a directory with text contents', async () => {
+    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    const dirName = 'molestiae';
+    const contents = 'repellat incidunt eum';
+
+    const dir = await repo.createDirectory({ name: dirName, contents });
+
+    expect(dir).not.toBeUndefined();
+    expect(dir?.name).toBe(dirName);
+    expect(dir?.contents).toBe(contents);
+
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    expect.assertions(3);
+  });
+
+  it('can update the text contents of a directory', async () => {
+    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    const dirName = 'suscipit';
+    const contents = 'exercitationem sed nihil';
+
+    const dir = await repo.createDirectory({ name: dirName, contents });
+    const newContents = 'facere nihil tempora';
+    let updatedDir: Maybe<DocDirectory> = undefined;
+
+    if (dir?.id)
+      updatedDir = await repo.updateDirectory({
+        id: dir.id,
+        contents: newContents,
+      });
+
+    expect(updatedDir).not.toBeUndefined();
+    expect(updatedDir?.id).toBe(dir?.id);
+    expect(updatedDir?.contents).not.toContain(contents);
+    expect(updatedDir?.contents).toContain(newContents);
+
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    expect.assertions(4);
+  });
+
   it('can create a directory with meta', async () => {
     const repo = new DocRepository(DOC_FIXTURES_DIR);
     const dirName = 'veritatis';

@@ -160,10 +160,14 @@ This is the main content of the page.
 
 #### Documentation directories
 
-You can also define the metadata of a directory by providing a **`_meta.md`** file:
+Sometimes it can be useful to add text before listing the entries inside a directory. You can do that thanks to a special file: `index.md`.
 
-- if you use the API to create the directory, it will be automatically created,
-- this file won't be listed in the directory's files and only the front matter part will be used.
+In that file, you can add metadata using front matter, like pages and documentation files, and you can also add custom contents below.
+
+Note:
+
+- if you use the API to create the directory, the file will be automatically created,
+- this file won't be listed in the directory's files.
 
 ## License
 

@@ -38,6 +38,10 @@ export const DocDirectoryCreateInputType = new GraphQLInputObjectType({
   name: 'DocDirectoryCreateInput',
   description: 'The input to create a new documentation directory.',
   fields: {
+    contents: {
+      description: 'The directory text contents.',
+      type: GraphQLString,
+    },
     meta: {
       description: 'The directory metadata.',
       type: FrontMatterInputType,
@@ -59,6 +63,11 @@ const DocDirectoryCreateValidationErrorsType = new GraphQLObjectType<
   name: 'DocDirectoryCreateValidationErrors',
   description: 'The validation errors for each argument.',
   fields: {
+    contents: {
+      description: 'The validation errors on contents argument.',
+      type: new GraphQLList(GraphQLString),
+      resolve: ({ contents }) => contents,
+    },
     meta: {
       description: 'The validation errors on meta argument.',
       type: new GraphQLList(GraphQLString),
@@ -175,6 +184,10 @@ export const DocDirectoryUpdateInputType = new GraphQLInputObjectType({
   name: 'DocDirectoryUpdateInput',
   description: 'The input to update an existing documentation directory.',
   fields: {
+    contents: {
+      description: 'The directory text contents.',
+      type: GraphQLString,
+    },
     id: {
       description: 'The id of the directory to update.',
       type: new GraphQLNonNull(GraphQLString),
@@ -200,6 +213,11 @@ const DocDirectoryUpdateValidationErrorsType = new GraphQLObjectType<
   name: 'DocDirectoryUpdateValidationErrors',
   description: 'The validation errors for each argument.',
   fields: {
+    contents: {
+      description: 'The validation errors on contents argument.',
+      type: new GraphQLList(GraphQLString),
+      resolve: ({ contents }) => contents,
+    },
     id: {
       description: 'The validation errors on id argument.',
       type: new GraphQLList(GraphQLString),
