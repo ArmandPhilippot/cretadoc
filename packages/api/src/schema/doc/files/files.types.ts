@@ -1,5 +1,4 @@
 import {
-  GraphQLEnumType,
   GraphQLInputObjectType,
   GraphQLList,
   GraphQLNonNull,
@@ -17,11 +16,7 @@ import type {
   DocFileUpdateErrors,
   DocFileUpdatePayload,
 } from '../../../types';
-import {
-  FrontMatterInputType,
-  createConnectionType,
-  createOrderByType,
-} from '../../../utils/gql';
+import { FrontMatterInputType } from '../../../utils/gql';
 import { DocFileType } from '../doc.types';
 
 export const DocFilePayloadType = new GraphQLObjectType<
@@ -34,67 +29,6 @@ export const DocFilePayloadType = new GraphQLObjectType<
     file: {
       description: 'The requested documentation file.',
       type: DocFileType,
-    },
-  },
-});
-
-export const DocFileConnectionType = createConnectionType(DocFileType);
-
-const DocFileOrderFieldType = new GraphQLEnumType({
-  name: `DocFileOrderField`,
-  description: 'The ordering field.',
-  values: {
-    createdAt: {
-      value: 'createdAt',
-      description: 'Order documentation files by creation date.',
-    },
-    name: {
-      value: 'name',
-      description: 'Order documentations files by name.',
-    },
-    path: {
-      value: 'path',
-      description: 'Order documentation files by path.',
-    },
-    slug: {
-      value: 'slug',
-      description: 'Order documentation files by slug.',
-    },
-    updatedAt: {
-      value: 'updatedAt',
-      description: 'Order documentation files by last modification date.',
-    },
-  },
-});
-
-export const DocFileOrderByInputType = createOrderByType(
-  DocFileType.name,
-  DocFileOrderFieldType
-);
-
-export const DocFileWhereInputType = new GraphQLInputObjectType({
-  name: 'DocFileWhereInput',
-  description: 'The arguments for filtering the files.',
-  fields: {
-    createdAt: {
-      description: 'A substring of the creation date of the file.',
-      type: GraphQLString,
-    },
-    name: {
-      description: 'A substring of the file name.',
-      type: GraphQLString,
-    },
-    path: {
-      description: 'The parent path.',
-      type: GraphQLString,
-    },
-    slug: {
-      description: 'The parent slug.',
-      type: GraphQLString,
-    },
-    updatedAt: {
-      description: 'A substring of the last update date of the file.',
-      type: GraphQLString,
     },
   },
 });

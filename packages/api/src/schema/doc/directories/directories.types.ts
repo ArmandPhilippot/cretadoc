@@ -1,6 +1,5 @@
 import {
   GraphQLBoolean,
-  GraphQLEnumType,
   GraphQLInputObjectType,
   GraphQLList,
   GraphQLNonNull,
@@ -18,11 +17,7 @@ import type {
   DocDirectoryUpdatePayload,
   DocDirectoryUpdateErrors,
 } from '../../../types';
-import {
-  FrontMatterInputType,
-  createConnectionType,
-  createOrderByType,
-} from '../../../utils/gql';
+import { FrontMatterInputType } from '../../../utils/gql';
 import { DocDirectoryType } from '../doc.types';
 
 export const DocDirectoryPayloadType = new GraphQLObjectType<
@@ -35,68 +30,6 @@ export const DocDirectoryPayloadType = new GraphQLObjectType<
     directory: {
       description: 'The requested documentation directory.',
       type: DocDirectoryType,
-    },
-  },
-});
-
-export const DocDirectoryConnectionType =
-  createConnectionType(DocDirectoryType);
-
-const DocDirectoryOrderFieldType = new GraphQLEnumType({
-  name: `DocDirectoryOrderField`,
-  description: 'The ordering field.',
-  values: {
-    createdAt: {
-      value: 'createdAt',
-      description: 'Order documentation directories by creation date.',
-    },
-    name: {
-      value: 'name',
-      description: 'Order documentation directories by name.',
-    },
-    path: {
-      value: 'path',
-      description: 'Order documentation directories by path.',
-    },
-    slug: {
-      value: 'slug',
-      description: 'Order documentation directories by slug.',
-    },
-    updatedAt: {
-      value: 'updatedAt',
-      description: 'Order documentation directories by last modification date.',
-    },
-  },
-});
-
-export const DocDirectoryOrderByInputType = createOrderByType(
-  DocDirectoryType.name,
-  DocDirectoryOrderFieldType
-);
-
-export const DocDirectoryWhereInputType = new GraphQLInputObjectType({
-  name: 'DocDirectoryWhereInput',
-  description: 'The arguments for filtering the directories.',
-  fields: {
-    createdAt: {
-      description: 'A substring of the creation date of the directory.',
-      type: GraphQLString,
-    },
-    name: {
-      description: 'A substring of the directory name.',
-      type: GraphQLString,
-    },
-    path: {
-      description: 'The parent path.',
-      type: GraphQLString,
-    },
-    slug: {
-      description: 'The parent slug.',
-      type: GraphQLString,
-    },
-    updatedAt: {
-      description: 'A substring of the last update date of the directory.',
-      type: GraphQLString,
     },
   },
 });

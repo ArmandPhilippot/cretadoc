@@ -6,12 +6,12 @@ import type {
   QueryInput,
 } from '../../../types';
 import { getConnectionArgs } from '../../../utils/gql';
-import { DocDirectoryType } from '../doc.types';
 import {
   DocDirectoryConnectionType,
-  DocDirectoryOrderByInputType,
-  DocDirectoryWhereInputType,
-} from './directories.types';
+  DocDirectoryType,
+  DocOrderByInputType,
+  DocWhereInputType,
+} from '../doc.types';
 import {
   resolveDocDirectoriesConnection,
   resolveDocDirectory,
@@ -25,12 +25,15 @@ const directory: GraphQLFieldConfig<
   type: DocDirectoryType,
   args: {
     id: {
+      description: 'Retrieve a documentation directory by id.',
       type: GraphQLString,
     },
     path: {
+      description: 'Retrieve a documentation directory by path.',
       type: GraphQLString,
     },
     slug: {
+      description: 'Retrieve a documentation directory by slug.',
       type: GraphQLString,
     },
   },
@@ -44,8 +47,8 @@ const directories: GraphQLFieldConfig<
 > = {
   type: DocDirectoryConnectionType,
   args: getConnectionArgs({
-    orderBy: DocDirectoryOrderByInputType,
-    where: DocDirectoryWhereInputType,
+    orderBy: DocOrderByInputType,
+    where: DocWhereInputType,
   }),
   resolve: resolveDocDirectoriesConnection,
 };

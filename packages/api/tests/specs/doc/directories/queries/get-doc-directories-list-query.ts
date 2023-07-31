@@ -1,4 +1,4 @@
-export const getDocDirectoriesListQuery = `query DocDirectories($after: String, $first: Int, $offset: Int, $orderBy: DocDirectoryOrder, $where: DocDirectoryWhereInput) {
+export const getDocDirectoriesListQuery = `query DocDirectories($after: String, $first: Int, $offset: Int, $orderBy: DocOrderByInput, $where: DocWhereInput, $entriesAfter: String, $entriesFirst: Int, $entriesOffset: Int, $entriesOrderBy: DocOrderByInput, $entriesWhere: DocWhereInput) {
   doc {
     directories(
       after: $after
@@ -10,60 +10,78 @@ export const getDocDirectoriesListQuery = `query DocDirectories($after: String, 
       edges {
         cursor
         node {
-          contents {
-            directories {
-              createdAt
-              id
-              meta {
-                createdAt
-                status
-                title
-                updatedAt
-              }
-              name
-              parent {
-                id
-                meta {
+          contents(
+            after: $entriesAfter
+            first: $entriesFirst
+            offset: $entriesOffset
+            orderBy: $entriesOrderBy
+            where: $entriesWhere
+          ) {
+            edges {
+              cursor
+              node {
+                ... on DocFile {
+                  id
+                  name
                   createdAt
-                  status
-                  title
+                  meta {
+                    createdAt
+                    status
+                    title
+                    updatedAt
+                  }
+                  parent {
+                    id
+                    meta {
+                      createdAt
+                      status
+                      title
+                      updatedAt
+                    }
+                    name
+                    path
+                    slug
+                  }
+                  path
+                  slug
+                  type
                   updatedAt
                 }
-                name
-                path
-                slug
+                ... on DocDirectory {
+                  id
+                  name
+                  createdAt
+                  meta {
+                    createdAt
+                    status
+                    title
+                    updatedAt
+                  }
+                  parent {
+                    id
+                    meta {
+                      createdAt
+                      status
+                      title
+                      updatedAt
+                    }
+                    name
+                    path
+                    slug
+                  }
+                  path
+                  slug
+                  updatedAt
+                  type
+                }
               }
-              path
-              slug
-              type
-              updatedAt
             }
-            files {
-              createdAt
-              id
-              meta {
-                createdAt
-                status
-                title
-                updatedAt
-              }
-              name
-              parent {
-                id
-                meta {
-                  createdAt
-                  status
-                  title
-                  updatedAt
-                }
-                name
-                path
-                slug
-              }
-              path
-              slug
-              type
-              updatedAt
+            pageInfo {
+              endCursor
+              hasNextPage
+              hasPreviousPage
+              startCursor
+              total
             }
           }
           createdAt

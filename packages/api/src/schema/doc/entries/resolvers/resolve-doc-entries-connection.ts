@@ -12,12 +12,9 @@ import { decodeCursor } from '../../../../utils/helpers';
 export const resolveDocEntriesConnection: GraphQLFieldResolver<
   null,
   APIContext,
-  ConnectionInput<DocEntry>
-> = async (
-  _,
-  { after: afterCursor, first, offset, ...input },
-  context
-): Promise<Connection<DocEntry>> => {
+  ConnectionInput<DocEntry>,
+  Promise<Connection<DocEntry>>
+> = async (_, { after: afterCursor, first, offset, ...input }, context) => {
   if (!context.loaders?.doc)
     throw new CretadocAPIError('Cannot get entries connection', {
       errorKind: 'reference',

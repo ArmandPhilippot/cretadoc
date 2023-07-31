@@ -6,24 +6,27 @@ import type {
   QueryInput,
 } from '../../../types';
 import { getConnectionArgs } from '../../../utils/gql';
-import { DocEntryType } from '../doc.types';
 import {
   DocEntryConnectionType,
-  DocEntryOrderByInputType,
-  DocEntryWhereInputType,
-} from './entries.types';
+  DocEntryType,
+  DocOrderByInputType,
+  DocWhereInputType,
+} from '../doc.types';
 import { resolveDocEntriesConnection, resolveDocEntry } from './resolvers';
 
 const entry: GraphQLFieldConfig<null, APIContext, QueryInput<DocEntry>> = {
   type: DocEntryType,
   args: {
     id: {
+      description: 'Retrieve a documentation entry by id.',
       type: GraphQLString,
     },
     path: {
+      description: 'Retrieve a documentation entry by path.',
       type: GraphQLString,
     },
     slug: {
+      description: 'Retrieve a documentation entry by slug.',
       type: GraphQLString,
     },
   },
@@ -37,8 +40,8 @@ const entries: GraphQLFieldConfig<
 > = {
   type: DocEntryConnectionType,
   args: getConnectionArgs({
-    orderBy: DocEntryOrderByInputType,
-    where: DocEntryWhereInputType,
+    orderBy: DocOrderByInputType,
+    where: DocWhereInputType,
   }),
   resolve: resolveDocEntriesConnection,
 };

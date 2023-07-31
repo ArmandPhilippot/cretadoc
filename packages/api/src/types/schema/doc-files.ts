@@ -39,7 +39,7 @@ export type DocFilePayload = Payload<
  */
 
 export type DocFileWhereFields = Partial<
-  Pick<DocFile, 'createdAt' | 'name' | 'path' | 'slug' | 'updatedAt'>
+  Pick<DocFile, 'createdAt' | 'name' | 'path' | 'type' | 'slug' | 'updatedAt'>
 >;
 
 export type DocFileOrderFields = Pick<

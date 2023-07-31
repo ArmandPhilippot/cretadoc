@@ -122,6 +122,7 @@ describe('delete-doc-directory', () => {
           "id": [
             "The directory must be empty",
           ],
+          "onlyEmpty": [],
           "path": null,
         }
       `);
@@ -180,6 +181,7 @@ describe('delete-doc-directory', () => {
             "Invalid id",
             "The requested directory does not exist",
           ],
+          "onlyEmpty": [],
           "path": null,
         }
       `);
@@ -203,6 +205,7 @@ describe('delete-doc-directory', () => {
       expect(response.data.docDirectoryDelete.errors).toMatchInlineSnapshot(`
         {
           "id": null,
+          "onlyEmpty": [],
           "path": [
             "The requested directory does not exist",
           ],

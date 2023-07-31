@@ -14,7 +14,6 @@ import {
 } from '@cretadoc/utils';
 import type {
   DocDirectory,
-  DocDirectoryContents,
   DocDirectoryCreate,
   DocDirectoryDeleteInput,
   DocDirectoryInput,
@@ -30,8 +29,10 @@ import type {
   DocFileUpdate,
   ListInput,
   Meta,
+  NonOptionalKeysOf,
 } from '../types';
 import { DIRECTORY_META_FILENAME } from '../utils/constants';
+import { getConnection } from '../utils/gql';
 import {
   decodeBase64String,
   generateBase64String,
@@ -69,8 +70,7 @@ const isDocEntry = (value: unknown): value is DocEntry => {
   if (!value) return false;
   if (!isObject(value)) return false;
 
-  const mandatoryKeys: Array<keyof DocEntry> = [
-    'contents',
+  const mandatoryKeys: Array<NonOptionalKeysOf<DocEntry>> = [
     'createdAt',
     'id',
     'name',
@@ -127,12 +127,12 @@ export class DocRepository extends FileSystemRepository {
    * Convert the directory contents.
    *
    * @param {Maybe<DirectoryContents>} contents - An object.
-   * @returns {Promise<DocDirectoryContents>} The converted contents.
+   * @returns {Promise<DocEntry[]>} The converted contents.
    */
   async #convertDirectoryContents(
     contents: Maybe<DirectoryContents>
-  ): Promise<DocDirectoryContents> {
-    if (!contents) return { directories: [], files: [] };
+  ): Promise<DocEntry[]> {
+    if (!contents) return [];
 
     const dirPromises = contents.directories.map(async (dir) =>
       this.#convert(dir)
@@ -140,23 +140,20 @@ export class DocRepository extends FileSystemRepository {
     const filesPromises = contents.files
       .filter((file) => file.name !== DIRECTORY_META_FILENAME)
       .map(async (file) => this.#convert(file));
+    const directories = await Promise.all(dirPromises);
+    const files = await Promise.all(filesPromises);
 
-    return {
-      directories: await Promise.all(dirPromises),
-      files: await Promise.all(filesPromises),
-    };
+    return [...directories, ...files];
   }
 
   /**
    * Retrieve the contents of a directory.
    *
    * @param {string} dir - A directory path.
-   * @returns {Promise<DocDirectoryContents>} The directory contents.
+   * @returns {Promise<DocEntry[]>} The directory contents.
    */
-  protected override async getContentsOf(
-    dir: string
-  ): Promise<DocDirectoryContents> {
-    const dirContents = await super.getContentsOf(dir);
+  protected async getDirContents(dir: string): Promise<DocEntry[]> {
+    const dirContents = await this.getContentsOf(dir);
 
     return this.#convertDirectoryContents(dirContents);
   }
@@ -224,7 +221,7 @@ export class DocRepository extends FileSystemRepository {
     if (type === 'directory')
       return {
         ...commonData,
-        contents: await this.#convertDirectoryContents(contents),
+        contents: getConnection({ data: await this.getDirContents(path) }),
         meta: this.getDirectoryMetaFrom(contents),
         type: 'directory',
       };
@@ -246,9 +243,11 @@ export class DocRepository extends FileSystemRepository {
    * @returns {Promise<DocDirectory[]>} The documentation directories.
    */
   async #getDirectoriesIn(path: string): Promise<DocDirectory[]> {
-    const dirContents = await this.getContentsOf(path);
+    const dirContents = await this.getDirContents(path);
 
-    return dirContents.directories;
+    return dirContents.filter(
+      (entry): entry is DocDirectory => entry.type === 'directory'
+    );
   }
 
   /**
@@ -258,21 +257,11 @@ export class DocRepository extends FileSystemRepository {
    * @returns {Promise<DocFile[]>} The documentation files.
    */
   async #getFilesIn(path: string): Promise<DocFile[]> {
-    const dirContents = await this.getContentsOf(path);
+    const dirContents = await this.getDirContents(path);
 
-    return dirContents.files;
-  }
-
-  /**
-   * Retrieve the documentation entries in the given path.
-   *
-   * @param {string} path - A directory path.
-   * @returns {Promise<DocEntry[]>} The doc entries.
-   */
-  async #getEntriesIn(path: string): Promise<DocEntry[]> {
-    const { directories, files } = await this.getContentsOf(path);
-
-    return [...directories, ...files];
+    return dirContents.filter(
+      (entry): entry is DocFile => entry.type === 'file'
+    );
   }
 
   /**
@@ -304,7 +293,7 @@ export class DocRepository extends FileSystemRepository {
   ): Promise<DocDirectory[] | DocFile[] | DocEntry[]> {
     if (kind === 'directory') return this.#getDirectoriesIn(path);
     if (kind === 'file') return this.#getFilesIn(path);
-    return this.#getEntriesIn(path);
+    return this.getDirContents(path);
   }
 
   /**
@@ -335,7 +324,7 @@ export class DocRepository extends FileSystemRepository {
     K extends Maybe<DocEntryKind>,
     P extends keyof DocInput = keyof DocInput
   >(prop: P, value: DocInput[P], kind?: K): Promise<Maybe<DocEntry>> {
-    const dirContents = await this.getContentsOf(this.getRootDir());
+    const dirContents = await this.getDirContents(this.getRootDir());
     let entry: Maybe<DocEntry> = undefined;
 
     JSON.stringify(dirContents, (_, currentValue: unknown) => {
@@ -388,7 +377,7 @@ export class DocRepository extends FileSystemRepository {
     values: ReadonlyArray<DocInput[P]>,
     kind?: K
   ): Promise<Maybe<DocEntry[]>> {
-    const dirContents = await this.getContentsOf(this.getRootDir());
+    const dirContents = await this.getDirContents(this.getRootDir());
     const entries: DocEntry[] = [];
 
     JSON.stringify(dirContents, (_, value: unknown) => {
@@ -420,7 +409,7 @@ export class DocRepository extends FileSystemRepository {
       ? join(this.getRootDir(), where.path)
       : this.getRootDir();
     const entries = where
-      ? ((await this.#getEntriesIn(path)) as T[])
+      ? ((await this.getDirContents(path)) as T[])
       : ((await this.#findEntriesIn<K>(path, kind)) as T[]);
     const filteredDocEntries = this.filter(entries, where, kind);
 

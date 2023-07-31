@@ -1,4 +1,4 @@
-export const getDocFilesListQuery = `query DocFiles($after: String, $first: Int, $offset: Int, $orderBy: DocFileOrder, $where: DocFileWhereInput) {
+export const getDocFilesListQuery = `query DocFiles($after: String, $first: Int, $offset: Int, $orderBy: DocOrderByInput, $where: DocWhereInput) {
   doc {
     files(
       after: $after

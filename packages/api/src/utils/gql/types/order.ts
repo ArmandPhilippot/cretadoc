@@ -44,7 +44,7 @@ export const createOrderByType = (
   const orderDirectionType = createOrderDirectionType(typeName);
 
   return new GraphQLInputObjectType({
-    name: `${typeName}Order`,
+    name: `${typeName}OrderByInput`,
     description: 'The ordering.',
     fields: {
       field: {

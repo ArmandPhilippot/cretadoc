@@ -1,70 +1,85 @@
-export const deleteDocDirectoryMutation = `mutation DeleteDocDirectory($input: DocDirectoryDeleteInput!) {
+export const deleteDocDirectoryMutation = `mutation DeleteDocDirectory($input: DocDirectoryDeleteInput!, $after: String, $first: Int, $offset: Int, $orderBy: DocOrderByInput, $where: DocWhereInput) {
   docDirectoryDelete(input: $input) {
     ... on DocDirectoryPayload {
       __typename
       directory {
-        contents {
-          directories {
-            createdAt
-            id
-            name
-            meta {
-              createdAt
-              status
-              title
-              updatedAt
-            }
-            parent {
-              id
-              meta {
-                createdAt
-                status
-                title
+        contents(
+          after: $after
+          first: $first
+          offset: $offset
+          orderBy: $orderBy
+          where: $where
+        ) {
+          edges {
+            cursor
+            node {
+              ... on DocFile {
+                id
+                name
+                meta {
+                  createdAt
+                  status
+                  title
+                  updatedAt
+                }
+                parent {
+                  id
+                  meta {
+                    createdAt
+                    status
+                    title
+                    updatedAt
+                  }
+                  name
+                  path
+                  slug
+                }
+                path
+                slug
+                type
                 updatedAt
               }
-              name
-              path
-              slug
+              ... on DocDirectory {
+                id
+                name
+                createdAt
+                meta {
+                  createdAt
+                  status
+                  title
+                  updatedAt
+                }
+                parent {
+                  id
+                  meta {
+                    createdAt
+                    status
+                    title
+                    updatedAt
+                  }
+                  name
+                  path
+                  slug
+                }
+                path
+                slug
+                type
+                updatedAt
+              }
             }
-            path
-            slug
-            type
-            updatedAt
           }
-          files {
-            createdAt
-            id
-            meta {
-              createdAt
-              status
-              title
-              updatedAt
-            }
-            name
-            parent {
-              id
-              meta {
-                createdAt
-                status
-                title
-                updatedAt
-              }
-              name
-              path
-              slug
-            }
-            path
-            slug
-            type
-            updatedAt
+          pageInfo {
+            endCursor
+            hasNextPage
+            hasPreviousPage
+            startCursor
+            total
           }
         }
         createdAt
         id
         meta {
           createdAt
-          seoDescription
-          seoTitle
           status
           title
           updatedAt
@@ -92,6 +107,7 @@ export const deleteDocDirectoryMutation = `mutation DeleteDocDirectory($input: D
       __typename
       errors {
         id
+        onlyEmpty
         path
       }
     }

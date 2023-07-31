@@ -73,7 +73,6 @@ const isDocEntry = <
   if (!isObject(value)) return false;
 
   const mandatoryKeys: Array<NonOptionalKeysOf<DocEntry>> = [
-    'contents',
     'createdAt',
     'id',
     'name',

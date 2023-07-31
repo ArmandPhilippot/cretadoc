@@ -1,62 +1,80 @@
-export const createDocDirectoryMutation = `mutation CreateDocDirectory($input: DocDirectoryCreateInput!) {
+export const createDocDirectoryMutation = `mutation CreateDocDirectory($input: DocDirectoryCreateInput!, $after: String, $first: Int, $offset: Int, $orderBy: DocOrderByInput, $where: DocWhereInput) {
   docDirectoryCreate(input: $input) {
     ... on DocDirectoryPayload {
       __typename
       directory {
-        contents {
-          directories {
-            createdAt
-            id
-            name
-            meta {
-              createdAt
-              status
-              title
-              updatedAt
-            }
-            parent {
-              id
-              meta {
+        contents(
+          after: $after
+          first: $first
+          offset: $offset
+          orderBy: $orderBy
+          where: $where
+        ) {
+          edges {
+            cursor
+            node {
+              ... on DocFile {
+                id
+                name
                 createdAt
-                status
-                title
+                meta {
+                  createdAt
+                  status
+                  title
+                  updatedAt
+                }
+                parent {
+                  id
+                  meta {
+                    createdAt
+                    status
+                    title
+                    updatedAt
+                  }
+                  name
+                  path
+                  slug
+                }
+                path
+                slug
+                type
                 updatedAt
               }
-              name
-              path
-              slug
+              ... on DocDirectory {
+                id
+                name
+                createdAt
+                meta {
+                  createdAt
+                  status
+                  title
+                  updatedAt
+                }
+                parent {
+                  id
+                  meta {
+                    createdAt
+                    status
+                    title
+                    updatedAt
+                  }
+                  name
+                  path
+                  slug
+                }
+                path
+                slug
+                type
+                updatedAt
+              }
             }
-            path
-            slug
-            type
-            updatedAt
           }
-          files {
-            createdAt
-            id
-            meta {
-              createdAt
-              status
-              title
-              updatedAt
-            }
-            name
-            parent {
-              id
-              meta {
-                createdAt
-                status
-                title
-                updatedAt
-              }
-              name
-              path
-              slug
-            }
-            path
-            slug
-            type
-            updatedAt
+          pageInfo {
+            endCursor
+            hasNextPage
+            hasPreviousPage
+            startCursor
+            total
           }
         }
         createdAt

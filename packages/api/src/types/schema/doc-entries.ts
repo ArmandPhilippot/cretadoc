@@ -27,7 +27,7 @@ export type DocEntryPayload = Payload<
  */
 
 export type DocEntryWhereFields = Partial<
-  Pick<DocEntry, 'createdAt' | 'name' | 'path' | 'slug' | 'updatedAt'>
+  Pick<DocEntry, 'createdAt' | 'name' | 'path' | 'type' | 'slug' | 'updatedAt'>
 >;
 
 export type DocEntryOrderFields = Pick<

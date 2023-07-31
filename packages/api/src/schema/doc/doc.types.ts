@@ -1,5 +1,6 @@
 import {
-  GraphQLList,
+  GraphQLEnumType,
+  GraphQLInputObjectType,
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLString,
@@ -8,12 +9,76 @@ import {
 import type {
   APIContext,
   DocDirectory,
-  DocDirectoryContents,
   DocEntry,
   DocEntryParent,
   DocFile,
 } from '../../types';
-import { FrontMatterMetaType } from '../../utils/gql';
+import {
+  FrontMatterMetaType,
+  createConnectionType,
+  createOrderByType,
+  getConnectionArgs,
+} from '../../utils/gql';
+
+const DocOrderFieldType = new GraphQLEnumType({
+  name: `DocOrderField`,
+  description: 'The field to order the documentation entries.',
+  values: {
+    createdAt: {
+      value: 'createdAt',
+      description: 'Order documentation entries by creation date.',
+    },
+    name: {
+      value: 'name',
+      description: 'Order documentation entries by name.',
+    },
+    path: {
+      value: 'path',
+      description: 'Order documentation entries by path.',
+    },
+    slug: {
+      value: 'slug',
+      description: 'Order documentation entries by slug.',
+    },
+    updatedAt: {
+      value: 'updatedAt',
+      description: 'Order documentation entries by last modification date.',
+    },
+  },
+});
+
+export const DocOrderByInputType = createOrderByType('Doc', DocOrderFieldType);
+
+export const DocWhereInputType = new GraphQLInputObjectType({
+  name: 'DocWhereInput',
+  description: 'The arguments for filtering the documentation entries.',
+  fields: {
+    createdAt: {
+      description: 'A substring of the creation date of the entry.',
+      type: GraphQLString,
+    },
+    name: {
+      description: 'A substring of the entry name.',
+      type: GraphQLString,
+    },
+    path: {
+      description: 'The parent path.',
+      type: GraphQLString,
+    },
+    type: {
+      description: 'The entry type.',
+      type: GraphQLString,
+    },
+    slug: {
+      description: 'The parent slug.',
+      type: GraphQLString,
+    },
+    updatedAt: {
+      description: 'A substring of the last update date of the entry.',
+      type: GraphQLString,
+    },
+  },
+});
 
 export const DocEntryParentType = new GraphQLObjectType<DocEntryParent>({
   name: 'DocEntryParent',
@@ -108,28 +173,7 @@ export const DocFileType = new GraphQLObjectType<DocFile, APIContext>({
   },
 });
 
-export const DocDirectoryContentType: GraphQLObjectType<
-  DocDirectoryContents,
-  APIContext
-> = new GraphQLObjectType<DocDirectoryContents, APIContext>({
-  name: 'DocDirectoryContent',
-  description: 'The contents of a documentation directory.',
-  fields: () => {
-    return {
-      directories: {
-        description: 'The subdirectories inside the directory.',
-        // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        type: new GraphQLList(DocDirectoryType),
-        resolve: ({ directories }) => directories,
-      },
-      files: {
-        description: 'The files inside the directory.',
-        type: new GraphQLList(DocFileType),
-        resolve: ({ files }) => files,
-      },
-    };
-  },
-});
+export const DocFileConnectionType = createConnectionType(DocFileType);
 
 export const DocDirectoryType: GraphQLObjectType<DocDirectory, APIContext> =
   new GraphQLObjectType<DocDirectory, APIContext>({
@@ -139,7 +183,12 @@ export const DocDirectoryType: GraphQLObjectType<DocDirectory, APIContext> =
       return {
         contents: {
           description: 'The contents of the directory.',
-          type: DocDirectoryContentType,
+          // eslint-disable-next-line @typescript-eslint/no-use-before-define
+          type: DocEntryConnectionType,
+          args: getConnectionArgs({
+            orderBy: DocOrderByInputType,
+            where: DocWhereInputType,
+          }),
           resolve: ({ contents }) => contents,
         },
         createdAt: {
@@ -191,6 +240,9 @@ export const DocDirectoryType: GraphQLObjectType<DocDirectory, APIContext> =
     },
   });
 
+export const DocDirectoryConnectionType =
+  createConnectionType(DocDirectoryType);
+
 export const DocEntryType = new GraphQLUnionType({
   name: 'DocEntry',
   description: 'A documentation entry: either a regular file or a directory.',
@@ -200,3 +252,5 @@ export const DocEntryType = new GraphQLUnionType({
     return 'DocDirectory';
   },
 });
+
+export const DocEntryConnectionType = createConnectionType(DocEntryType);

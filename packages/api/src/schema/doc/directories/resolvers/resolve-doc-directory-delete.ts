@@ -23,19 +23,6 @@ import {
 } from '../../../../utils/helpers/validators';
 import { clearDocDirectoryLoaders } from '../directories.loaders';
 
-/**
- * Check if a documentation directory is empty.
- *
- * @param {DocDirectory} dir - A documentation directory.
- * @returns {boolean} True if it is empty.
- */
-const isDirectoryEmpty = (dir: DocDirectory): boolean => {
-  const hasSubDir = !!dir.contents.directories.length;
-  const hasFiles = !!dir.contents.files.length;
-
-  return !hasFiles && !hasSubDir;
-};
-
 type ValidateDocDirectoryDeleteConfig<
   L extends DocDirectoryByIdLoader | DocDirectoryByPathLoader,
   V = L extends DocDirectoryByIdLoader
@@ -77,12 +64,11 @@ const validateDocDirectoryToDelete = async <
   const errors: string[] = [];
   errors.push(...validator(value));
 
-  const maybeDocDirectory = await loader.load(value);
+  const docDirectory = await loader.load(value);
 
-  if (maybeDocDirectory && mustBeEmpty && !isDirectoryEmpty(maybeDocDirectory))
+  if (!docDirectory) errors.push('The requested directory does not exist');
+  else if (mustBeEmpty && !!docDirectory.contents?.edges.length)
     errors.push('The directory must be empty');
-  else if (!maybeDocDirectory)
-    errors.push('The requested directory does not exist');
 
   return errors;
 };

@@ -1,4 +1,4 @@
-export const getDocEntryQuery = `query DocEntry($id: String, $path: String, $slug: String) {
+export const getDocEntryQuery = `query DocEntry($id: String, $path: String, $slug: String, $after: String, $first: Int, $offset: Int, $orderBy: DocOrderByInput, $where: DocWhereInput) {
   doc {
     entry(id: $id, path: $path, slug: $slug) {
       __typename
@@ -43,60 +43,78 @@ export const getDocEntryQuery = `query DocEntry($id: String, $path: String, $slu
           updatedAt
         }
         name
-        contents {
-          directories {
-            createdAt
-            id
-            meta {
-              createdAt
-              status
-              title
-              updatedAt
-            }
-            name
-            parent {
-              id
-              meta {
+        contents(
+          after: $after
+          first: $first
+          offset: $offset
+          orderBy: $orderBy
+          where: $where
+        ) {
+          edges {
+            cursor
+            node {
+              ... on DocDirectory {
                 createdAt
-                status
-                title
+                id
+                meta {
+                  createdAt
+                  status
+                  title
+                  updatedAt
+                }
+                name
+                parent {
+                  id
+                  meta {
+                    createdAt
+                    status
+                    title
+                    updatedAt
+                  }
+                  name
+                  path
+                  slug
+                }
+                path
+                slug
+                type
                 updatedAt
               }
-              name
-              path
-              slug
+              ... on DocFile {
+                createdAt
+                id
+                meta {
+                  createdAt
+                  status
+                  title
+                  updatedAt
+                }
+                name
+                parent {
+                  id
+                  meta {
+                    createdAt
+                    status
+                    title
+                    updatedAt
+                  }
+                  name
+                  path
+                  slug
+                }
+                path
+                slug
+                type
+                updatedAt
+              }
             }
-            path
-            slug
-            type
-            updatedAt
           }
-          files {
-            createdAt
-            id
-            meta {
-              createdAt
-              status
-              title
-              updatedAt
-            }
-            name
-            parent {
-              id
-              meta {
-                createdAt
-                status
-                title
-                updatedAt
-              }
-              name
-              path
-              slug
-            }
-            path
-            slug
-            type
-            updatedAt
+          pageInfo {
+            endCursor
+            hasNextPage
+            hasPreviousPage
+            startCursor
+            total
           }
         }
         createdAt

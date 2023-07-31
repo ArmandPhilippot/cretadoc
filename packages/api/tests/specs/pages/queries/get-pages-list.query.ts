@@ -1,4 +1,4 @@
-export const getPagesListQuery = `query Pages($after: String, $first: Int, $offset: Int, $orderBy: PageOrder, $where: PageWhereInput) {
+export const getPagesListQuery = `query Pages($after: String, $first: Int, $offset: Int, $orderBy: PageOrderByInput, $where: PageWhereInput) {
   pages(
     after: $after
     first: $first
