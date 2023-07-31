@@ -3,7 +3,8 @@ export const updateDocDirectoryMutation = `mutation UpdateDocDirectory($after: S
     ... on DocDirectoryPayload {
       __typename
       directory {
-        contents(
+        createdAt
+        entries(
           after: $after
           first: $first
           offset: $offset
@@ -77,7 +78,6 @@ export const updateDocDirectoryMutation = `mutation UpdateDocDirectory($after: S
             total
           }
         }
-        createdAt
         id
         meta {
           createdAt

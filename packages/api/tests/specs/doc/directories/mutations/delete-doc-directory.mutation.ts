@@ -3,7 +3,8 @@ export const deleteDocDirectoryMutation = `mutation DeleteDocDirectory($input: D
     ... on DocDirectoryPayload {
       __typename
       directory {
-        contents(
+        createdAt
+        entries(
           after: $after
           first: $first
           offset: $offset
@@ -76,7 +77,6 @@ export const deleteDocDirectoryMutation = `mutation DeleteDocDirectory($input: D
             total
           }
         }
-        createdAt
         id
         meta {
           createdAt

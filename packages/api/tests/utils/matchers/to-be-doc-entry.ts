@@ -3,24 +3,16 @@ import type { ExpectStatic } from 'vitest';
 import type { DocDirectory, DocFile } from '../../../src/types';
 import type { MatcherResult } from '../../types';
 
-type DirectoryEntry = Omit<DocDirectory, 'contents'> & {
-  dirContents?: DocDirectory['contents'];
-};
-
-type FileEntry = Omit<DocFile, 'contents'> & {
-  fileContents?: DocFile['contents'];
-};
-
 export type ToBeDocEntry = {
   toBeDocEntry: (
-    expected: Partial<Nullable<DirectoryEntry | FileEntry>>
+    expected: Partial<Nullable<DocDirectory | DocFile>>
   ) => MatcherResult;
 };
 
 export function toBeDocEntry(
   this: ReturnType<ExpectStatic['getState']>,
-  entry: Nullable<DirectoryEntry | FileEntry>,
-  expected: Partial<Nullable<DirectoryEntry | FileEntry>>
+  entry: Nullable<DocDirectory | DocFile>,
+  expected: Partial<Nullable<DocDirectory | DocFile>>
 ): MatcherResult {
   const match = this.isNot ? 'does not match' : 'matches';
   const message = () => `DocEntry ${match}.`;

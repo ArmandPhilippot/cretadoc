@@ -2,33 +2,7 @@ export const getDocDirectoryQuery = `query DocDirectory($id: String, $path: Stri
   doc {
     directory(id: $id, path: $path, slug: $slug) {
       createdAt
-      id
-      meta {
-        createdAt
-        seoDescription
-        seoTitle
-        status
-        title
-        updatedAt
-      }
-      name
-      parent {
-        id
-        meta {
-          createdAt
-          status
-          title
-          updatedAt
-        }
-        name
-        path
-        slug
-      }
-      path
-      slug
-      type
-      updatedAt
-      contents(
+      entries(
         after: $after
         first: $first
         offset: $offset
@@ -102,6 +76,32 @@ export const getDocDirectoryQuery = `query DocDirectory($id: String, $path: Stri
           total
         }
       }
+      id
+      meta {
+        createdAt
+        seoDescription
+        seoTitle
+        status
+        title
+        updatedAt
+      }
+      name
+      parent {
+        id
+        meta {
+          createdAt
+          status
+          title
+          updatedAt
+        }
+        name
+        path
+        slug
+      }
+      path
+      slug
+      type
+      updatedAt
     }
   }
 }`;

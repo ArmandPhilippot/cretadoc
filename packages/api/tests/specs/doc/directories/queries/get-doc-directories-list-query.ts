@@ -10,7 +10,8 @@ export const getDocDirectoriesListQuery = `query DocDirectories($after: String, 
       edges {
         cursor
         node {
-          contents(
+          createdAt
+          entries(
             after: $entriesAfter
             first: $entriesFirst
             offset: $entriesOffset
@@ -84,7 +85,6 @@ export const getDocDirectoriesListQuery = `query DocDirectories($after: String, 
               total
             }
           }
-          createdAt
           id
           meta {
             createdAt

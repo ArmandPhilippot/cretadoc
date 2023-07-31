@@ -3,6 +3,8 @@ export const getDocEntryQuery = `query DocEntry($id: String, $path: String, $slu
     entry(id: $id, path: $path, slug: $slug) {
       __typename
       ... on DocFile {
+        contents
+        createdAt
         id
         meta {
           createdAt
@@ -13,8 +15,6 @@ export const getDocEntryQuery = `query DocEntry($id: String, $path: String, $slu
           updatedAt
         }
         name
-        fileContents: contents
-        createdAt
         parent {
           id
           meta {
@@ -33,17 +33,8 @@ export const getDocEntryQuery = `query DocEntry($id: String, $path: String, $slu
         updatedAt
       }
       ... on DocDirectory {
-        id
-        meta {
-          createdAt
-          seoDescription
-          seoTitle
-          status
-          title
-          updatedAt
-        }
-        name
-        contents(
+        createdAt
+        entries(
           after: $after
           first: $first
           offset: $offset
@@ -117,7 +108,16 @@ export const getDocEntryQuery = `query DocEntry($id: String, $path: String, $slu
             total
           }
         }
-        createdAt
+        id
+        meta {
+          createdAt
+          seoDescription
+          seoTitle
+          status
+          title
+          updatedAt
+        }
+        name
         parent {
           id
           meta {

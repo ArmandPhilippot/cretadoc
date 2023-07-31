@@ -10,10 +10,13 @@ import {
 } from '../../tests/fixtures/doc';
 import { DOC_FIXTURES_DIR } from '../../tests/utils/constants';
 import { createFixtures, deleteFixturesIn } from '../../tests/utils/helpers';
-import type { DocDirectory, Meta } from '../types';
+import type { DocDirectory, DocEntry, DocFile, Meta } from '../types';
 import { MARKDOWN_EXTENSION } from '../utils/constants';
 import { generateBase64String } from '../utils/helpers';
 import { DocRepository } from './doc.repository';
+
+const isDocFile = (entry: Maybe<DocEntry>): entry is DocFile =>
+  entry?.type === 'file';
 
 /* eslint-disable max-statements */
 describe('DocRepository', () => {
@@ -35,9 +38,12 @@ describe('DocRepository', () => {
     const relativePath = docFilePath.replace(DOC_FIXTURES_DIR, './');
     const docFile = await repo.get('path', relativePath);
 
-    expect(docFile?.name).toBe(docFileName);
-    expect(docFile?.contents).toBe(docFileFixture?.contents);
-    expect(docFile?.path).toBe(relativePath);
+    if (isDocFile(docFile)) {
+      expect(docFile.name).toBe(docFileName);
+      expect(docFile.contents).toBe(docFileFixture?.contents);
+      expect(docFile.path).toBe(relativePath);
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     expect.assertions(3);
   });
@@ -52,9 +58,12 @@ describe('DocRepository', () => {
     const docFileId = generateBase64String(relativePath);
     const docFile = await repo.get('id', docFileId);
 
-    expect(docFile?.path).toBe(relativePath);
-    expect(docFile?.contents).toBe(docFileFixture?.contents);
-    expect(docFile?.id).toBe(docFileId);
+    if (isDocFile(docFile)) {
+      expect(docFile.path).toBe(relativePath);
+      expect(docFile.contents).toBe(docFileFixture?.contents);
+      expect(docFile.id).toBe(docFileId);
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     expect.assertions(3);
   });

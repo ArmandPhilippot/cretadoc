@@ -181,20 +181,20 @@ export const DocDirectoryType: GraphQLObjectType<DocDirectory, APIContext> =
     description: 'A single documentation directory.',
     fields: () => {
       return {
-        contents: {
-          description: 'The contents of the directory.',
+        createdAt: {
+          description: 'The creation date of the directory.',
+          type: new GraphQLNonNull(GraphQLString),
+          resolve: ({ createdAt }) => createdAt,
+        },
+        entries: {
+          description: 'The entries inside the directory.',
           // eslint-disable-next-line @typescript-eslint/no-use-before-define
           type: DocEntryConnectionType,
           args: getConnectionArgs({
             orderBy: DocOrderByInputType,
             where: DocWhereInputType,
           }),
-          resolve: ({ contents }) => contents,
-        },
-        createdAt: {
-          description: 'The creation date of the directory.',
-          type: new GraphQLNonNull(GraphQLString),
-          resolve: ({ createdAt }) => createdAt,
+          resolve: ({ entries }) => entries,
         },
         id: {
           description: 'The id of the directory.',

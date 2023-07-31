@@ -15,7 +15,7 @@ import type { DocEntryParent } from './doc';
 import type { DocEntry } from './doc-entries';
 
 export type DocDirectory = Omit<Directory, 'contents' | 'extension'> & {
-  contents?: Connection<DocEntry>;
+  entries?: Connection<DocEntry>;
   meta?: Meta;
   parent: Nullable<DocEntryParent>;
   slug: Slug;

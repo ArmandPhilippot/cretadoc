@@ -11,6 +11,8 @@ export const getDocEntriesListQuery = `query DocEntries($after: String, $first: 
         cursor
         node {
           ... on DocFile {
+            contents
+            createdAt
             id
             meta {
               createdAt
@@ -21,8 +23,6 @@ export const getDocEntriesListQuery = `query DocEntries($after: String, $first: 
               updatedAt
             }
             name
-            fileContents: contents
-            createdAt
             parent {
               id
               meta {
@@ -41,17 +41,8 @@ export const getDocEntriesListQuery = `query DocEntries($after: String, $first: 
             updatedAt
           }
           ... on DocDirectory {
-            id
-            meta {
-              createdAt
-              seoDescription
-              seoTitle
-              status
-              title
-              updatedAt
-            }
-            name
-            contents {
+            createdAt
+            entries {
               edges {
                 cursor
                 node {
@@ -120,7 +111,16 @@ export const getDocEntriesListQuery = `query DocEntries($after: String, $first: 
                 total
               }
             }
-            createdAt
+            id
+            meta {
+              createdAt
+              seoDescription
+              seoTitle
+              status
+              title
+              updatedAt
+            }
+            name
             parent {
               id
               meta {

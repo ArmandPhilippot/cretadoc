@@ -221,7 +221,7 @@ export class DocRepository extends FileSystemRepository {
     if (type === 'directory')
       return {
         ...commonData,
-        contents: getConnection({ data: await this.getDirContents(path) }),
+        entries: getConnection({ data: await this.getDirContents(path) }),
         meta: this.getDirectoryMetaFrom(contents),
         type: 'directory',
       };
