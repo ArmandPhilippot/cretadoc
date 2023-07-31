@@ -20,12 +20,14 @@ import type {
   DocFilePayload,
 } from './doc-files';
 
-export type Doc = DocDirectoryPayload &
-  DocDirectoryConnectionPayload &
-  DocEntryPayload &
-  DocEntryConnectionPayload &
-  DocFilePayload &
-  DocFileConnectionPayload;
+export type Doc = Partial<
+  DocDirectoryPayload &
+    DocDirectoryConnectionPayload &
+    DocEntryPayload &
+    DocEntryConnectionPayload &
+    DocFilePayload &
+    DocFileConnectionPayload
+>;
 
 export type DocEntryKind = Directory['type'] | RegularFile['type'];
 
@@ -43,9 +45,9 @@ export type DocEntryParent = Pick<
  * ===========================================================================
  */
 
-export type DocPayload = Payload<'doc', Doc>;
+export type DocPayload<T extends Doc = Doc> = Payload<'doc', Partial<T>>;
 
-export type DocResult = QueryResult<DocPayload>;
+export type DocResult<T extends Doc = Doc> = QueryResult<DocPayload<T>>;
 
 /*
  * ===========================================================================

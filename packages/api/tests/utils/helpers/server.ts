@@ -33,6 +33,12 @@ import {
   type DocDirectoryDeleteResult,
   type DocDirectoryUpdateResult,
   type DocEntry,
+  type DocEntryPayload,
+  type DocDirectoryPayload,
+  type DocDirectoryConnectionPayload,
+  type DocEntryConnectionPayload,
+  type DocFilePayload,
+  type DocFileConnectionPayload,
 } from '../../../src';
 import {
   createDocDirectoryMutation,
@@ -165,15 +171,15 @@ export type Variables = {
 };
 
 export type Result = {
-  [getDocDirectoryQuery]: DocPayload;
-  [getDocDirectoriesListQuery]: DocPayload;
+  [getDocDirectoryQuery]: DocPayload<DocDirectoryPayload>;
+  [getDocDirectoriesListQuery]: DocPayload<DocDirectoryConnectionPayload>;
   [createDocDirectoryMutation]: DocDirectoryCreateResult;
   [deleteDocDirectoryMutation]: DocDirectoryDeleteResult;
   [updateDocDirectoryMutation]: DocDirectoryUpdateResult;
-  [getDocEntryQuery]: DocPayload;
-  [getDocEntriesListQuery]: DocPayload;
-  [getDocFileQuery]: DocPayload;
-  [getDocFilesListQuery]: DocPayload;
+  [getDocEntryQuery]: DocPayload<DocEntryPayload>;
+  [getDocEntriesListQuery]: DocPayload<DocEntryConnectionPayload>;
+  [getDocFileQuery]: DocPayload<DocFilePayload>;
+  [getDocFilesListQuery]: DocPayload<DocFileConnectionPayload>;
   [createDocFileMutation]: DocFileCreateResult;
   [deleteDocFileMutation]: DocFileDeleteResult;
   [updateDocFileMutation]: DocFileUpdateResult;
