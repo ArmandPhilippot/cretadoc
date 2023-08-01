@@ -11,12 +11,14 @@ import {
 import { type FC, useCallback, type ReactNode } from 'react';
 import { useIntl } from 'react-intl';
 import { removeTrailingSlashes } from '../../utils/client';
-import { PAGINATED_SLUG_PREFIX } from '../../utils/constants';
+import { PAGINATED_SLUG_PREFIX, ROUTES } from '../../utils/constants';
 import * as styles from './doc-entries-list.css';
 
 export type DocEntriesListProps = {
   /**
-   * The base url for the links.
+   * The base slug to use in pagination links.
+   *
+   * @default ROUTES.DOC
    */
   baseUrl: string;
   /**
@@ -34,12 +36,12 @@ export type DocEntriesListProps = {
 };
 
 export const DocEntriesList: FC<DocEntriesListProps> = ({
-  baseUrl,
+  baseUrl = ROUTES.DOC,
   currentPage,
   entries,
   totalPages,
 }) => {
-  const slugBase = removeTrailingSlashes(baseUrl);
+  const baseSlug = removeTrailingSlashes(baseUrl);
   const intl = useIntl();
   const paginationLabel = intl.formatMessage({
     defaultMessage: 'Pagination of the documentation',
@@ -84,13 +86,13 @@ export const DocEntriesList: FC<DocEntriesListProps> = ({
   );
 
   const renderPaginationLink = useCallback(
-    (page: number) => `${slugBase}${PAGINATED_SLUG_PREFIX}/${page}`,
-    [slugBase]
+    (page: number) => `${baseSlug}${PAGINATED_SLUG_PREFIX}/${page}`,
+    [baseSlug]
   );
 
   const getCardItems = (): CardItem[] =>
     entries.map((entry) => {
-      const cardLink = `${slugBase}${entry.slug}`;
+      const cardLink = `${ROUTES.DOC}${entry.slug}`;
       const callToAction =
         entry.type === 'directory'
           ? explore(entry.meta?.title ?? entry.name)

@@ -1,4 +1,4 @@
-export const pagesQuery = `query Pages($after: String, $first: Int, $offset: Int, $orderBy: PageOrder, $where: PageWhereInput) {
+export const pagesQuery = `query Pages($after: String, $first: Int, $offset: Int, $orderBy: PageOrderByInput, $where: PageWhereInput) {
   pages(
     after: $after
     first: $first
@@ -11,6 +11,7 @@ export const pagesQuery = `query Pages($after: String, $first: Int, $offset: Int
       node {
         contents
         createdAt
+        excerpt
         id
         meta {
           createdAt

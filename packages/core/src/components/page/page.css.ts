@@ -11,12 +11,14 @@ export const page = recipe({
     display: 'grid',
     rowGap: contract.spacing.md,
     gridAutoRows: 'minmax(0, max-content)',
-    gridTemplateColumns: contentsWidth,
   },
   variants: {
     hasSidebar: {
-      false: {},
+      false: {
+        gridTemplateColumns: `minmax(0, calc(${contentsWidth} + ${sidebarWidth}))`,
+      },
       true: {
+        gridTemplateColumns: contentsWidth,
         '@media': {
           [`(min-width: ${BREAKPOINT.MD}px)`]: {
             gridTemplateColumns: `${contentsWidth} minmax(0, ${sidebarWidth})`,
@@ -58,10 +60,6 @@ export const toc = style({
       top: contract.spacing.md,
     },
   },
-});
-
-globalStyle(`${contents} > *`, {
-  marginBlock: contract.spacing.md,
 });
 
 globalStyle(`${contents} > *:first-child`, {

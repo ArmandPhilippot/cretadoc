@@ -7,7 +7,8 @@ import {
 } from '@cretadoc/ui';
 import type { FC } from 'react';
 import { useIntl } from 'react-intl';
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { ROUTES } from '../../utils/constants';
 import { useConfig, usePagesList } from '../../utils/hooks';
 
 export type MainNavProps = Omit<
@@ -20,7 +21,7 @@ export const MainNav: FC<MainNavProps> = (props) => {
   const { isLoading, pages } = usePagesList({
     exclude: { names: config.legalNotice ? [config.legalNotice] : [] },
   });
-  const { slug } = useParams();
+  const { pathname } = useLocation();
   const intl = useIntl();
 
   const openBtnLabel = intl.formatMessage({
@@ -41,10 +42,10 @@ export const MainNav: FC<MainNavProps> = (props) => {
     id: '44f+HY',
   });
 
-  const noPagesFound = intl.formatMessage({
-    defaultMessage: 'No pages found.',
-    description: 'MainNav: no pages found',
-    id: 'hUSHbO',
+  const docLabel = intl.formatMessage({
+    defaultMessage: 'Documentation',
+    description: 'MainNav: documentation link anchor',
+    id: 'OdcBgG',
   });
 
   const getPages = () => {
@@ -52,22 +53,18 @@ export const MainNav: FC<MainNavProps> = (props) => {
     if (isLoading) return <Spinner position="top">{loadingTxt}</Spinner>;
 
     if (pages?.length)
-      return (
-        <NavList spacing={null}>
-          {pages.map((page) => (
-            <NavItem
-              isSelected={slug === page.slug}
-              key={page.id}
-              label={page.meta?.title ?? page.name}
-              to={page.slug}
-              // eslint-disable-next-line react/jsx-no-literals
-              variant="block"
-            />
-          ))}
-        </NavList>
-      );
+      return pages.map((page) => (
+        <NavItem
+          isSelected={pathname === page.slug}
+          key={page.id}
+          label={page.meta?.title ?? page.name}
+          to={page.slug}
+          // eslint-disable-next-line react/jsx-no-literals
+          variant="block"
+        />
+      ));
 
-    return noPagesFound;
+    return [];
   };
 
   return (
@@ -77,7 +74,20 @@ export const MainNav: FC<MainNavProps> = (props) => {
       closeBtnLabel={closeBtnLabel}
       hasCloseBtn
     >
-      {getPages()}
+      <NavList spacing={null}>
+        <>
+          {getPages()}
+          <NavItem
+            isSelected={pathname.startsWith(ROUTES.DOC)}
+            // eslint-disable-next-line react/jsx-no-literals
+            key="documentation-index"
+            label={docLabel}
+            to={ROUTES.DOC}
+            // eslint-disable-next-line react/jsx-no-literals
+            variant="block"
+          />
+        </>
+      </NavList>
     </MainNavBase>
   );
 };

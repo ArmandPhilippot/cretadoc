@@ -1,5 +1,6 @@
 import {
   Breadcrumbs as BaseBreadcrumbs,
+  type BreadcrumbsItem,
   type BreadcrumbsProps as BaseBreadcrumbsProps,
 } from '@cretadoc/ui';
 import { isObjKeyExist, isObject } from '@cretadoc/utils';
@@ -7,6 +8,7 @@ import type { FC } from 'react';
 import { useIntl } from 'react-intl';
 import { useMatches } from 'react-router-dom';
 import type { getBreadcrumbItem } from '../../routes/handlers';
+import { ROUTES } from '../../utils/constants';
 
 type ArrayElement<ArrayType extends readonly unknown[]> =
   ArrayType extends ReadonlyArray<infer ElementType> ? ElementType : never;
@@ -35,29 +37,64 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = (props) => {
 
   const ariaLabel = intl.formatMessage({
     defaultMessage: 'Breadcrumbs',
-    id: 'Xid/53',
     description: 'Breadcrumbs: aria label',
+    id: 'Xid/53',
   });
 
-  const homeLabel = intl.formatMessage({
-    defaultMessage: 'Home',
-    id: 'y+utOz',
-    description: 'Breadcrumbs: homepage label',
-  });
-
-  const errorLabel = intl.formatMessage({
-    defaultMessage: 'Error',
-    id: 'zLpBew',
-    description: 'Breadcrumbs: error label',
-  });
+  const homeItem: BreadcrumbsItem = {
+    id: 'homepage',
+    label: intl.formatMessage({
+      defaultMessage: 'Home',
+      description: 'Breadcrumbs: homepage label',
+      id: 'y+utOz',
+    }),
+    url: ROUTES.HOMEPAGE,
+  };
+  const docItem: BreadcrumbsItem = {
+    id: 'doc-page',
+    label: intl.formatMessage({
+      defaultMessage: 'Documentation',
+      description: 'Breadcrumbs: documentation label',
+      id: 'MLtCgG',
+    }),
+    url: ROUTES.DOC,
+  };
+  const errorItem: BreadcrumbsItem = {
+    id: 'error-page',
+    label: intl.formatMessage({
+      defaultMessage: 'Error',
+      description: 'Breadcrumbs: error label',
+      id: 'zLpBew',
+    }),
+    url: ROUTES.NOT_FOUND,
+  };
 
   const matches: RouteMatch[] = useMatches();
   const items = matches.filter(isValidRouteMatch).map((match) =>
     match.handle.getBreadcrumbItem(match.data, match.pathname, {
-      error: errorLabel,
-      home: homeLabel,
+      docItem,
+      errorItem,
+      homeItem,
+      getPageNumberItem: (page) => {
+        return {
+          id: `page-${page}`,
+          label: intl.formatMessage(
+            {
+              defaultMessage: 'Page {page}',
+              description: 'Breadcrumbs: page number label',
+              id: 'l6eNYV',
+            },
+            {
+              page,
+            }
+          ),
+          url: match.pathname,
+        };
+      },
     })
   );
 
-  return <BaseBreadcrumbs {...props} aria-label={ariaLabel} items={items} />;
+  return (
+    <BaseBreadcrumbs {...props} aria-label={ariaLabel} items={items.flat()} />
+  );
 };

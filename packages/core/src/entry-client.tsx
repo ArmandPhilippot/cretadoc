@@ -6,7 +6,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { RouterLink } from './components';
 import { createRoutes } from './routes';
 import type { CretadocClientConfig } from './types/config';
-import { DEFAULT_CONFIG } from './utils/constants';
+import { DEFAULT_CLIENT_CONFIG } from './utils/constants';
 import { ConfigProvider } from './utils/contexts';
 
 type WindowWithInitialState = typeof window & {
@@ -23,7 +23,7 @@ delete (window as WindowWithInitialState).__INITIAL_STATE__;
 
 const initialState: InitialState = serializedInitialState
   ? (JSON.parse(serializedInitialState) as InitialState)
-  : { config: DEFAULT_CONFIG };
+  : { config: DEFAULT_CLIENT_CONFIG };
 
 const router = createBrowserRouter(createRoutes(initialState.config));
 

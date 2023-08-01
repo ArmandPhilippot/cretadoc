@@ -12,6 +12,12 @@ export const BREAKPOINT = {
 
 export const MARKDOWN_EXT = '.md';
 
+export const PER_PAGE = 9;
+
+export const PAGINATED_SLUG_PREFIX = '/page';
+
+export const PAGINATION_REGEX = new RegExp(`${PAGINATED_SLUG_PREFIX}/\\d+$`);
+
 export const CONFIG_FILE_NAME = 'cretadoc.config.js';
 
 export const CRETADOC_REPOSITORY = {

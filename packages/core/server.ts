@@ -19,19 +19,69 @@ const docFixtures: Fixture[] = [
     contents: '---\ntitle: Introduction\n---\n\nWelcome to documentation.',
   },
   {
+    name: 'index',
+    parentPath: './dir1',
+    contents: '---\ntitle: First directory\n---\n',
+  },
+  {
     name: 'file 1',
     parentPath: './dir1',
     contents: 'This is the first documentation file.',
   },
   {
-    name: '_meta',
-    parentPath: './dir1',
-    contents: '---\ntitle: First directory\n---\n',
-  },
-  {
     name: 'file 2',
     parentPath: './dir1',
     contents: 'This is the second documentation file.',
+  },
+  {
+    name: 'file 3',
+    parentPath: './dir1',
+    contents: 'This is the third documentation file.',
+  },
+  {
+    name: 'file 4',
+    parentPath: './dir1',
+    contents: 'This is another documentation file.',
+  },
+  {
+    name: 'file 5',
+    parentPath: './dir1',
+    contents: 'This is another documentation file.',
+  },
+  {
+    name: 'file 6',
+    parentPath: './dir1',
+    contents: 'This is another documentation file.',
+  },
+  {
+    name: 'file 7',
+    parentPath: './dir1',
+    contents: 'This is another documentation file.',
+  },
+  {
+    name: 'file 8',
+    parentPath: './dir1',
+    contents: 'This is another documentation file.',
+  },
+  {
+    name: 'file 9',
+    parentPath: './dir1',
+    contents: 'This is another documentation file.',
+  },
+  {
+    name: 'file 10',
+    parentPath: './dir1',
+    contents: 'This is another documentation file.',
+  },
+  {
+    name: 'file 11',
+    parentPath: './dir1',
+    contents: 'This is another documentation file.',
+  },
+  {
+    name: 'nested file 1',
+    parentPath: './dir1/nested-dir/',
+    contents: 'This is a nested documentation file.',
   },
   {
     name: 'adipisci aut rem',

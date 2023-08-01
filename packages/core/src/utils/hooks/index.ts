@@ -1,4 +1,6 @@
 export * from './use-config';
+export * from './use-doc-entries';
+export * from './use-doc-entry';
 export * from './use-local-storage';
 export * from './use-on-route-change';
 export * from './use-page';

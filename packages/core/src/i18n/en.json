@@ -19,6 +19,18 @@
     "defaultMessage": "Page not found",
     "description": "ErrorPage: 404 page title"
   },
+  "MLtCgG": {
+    "defaultMessage": "Documentation",
+    "description": "Breadcrumbs: documentation label"
+  },
+  "MkRy8U": {
+    "defaultMessage": "Documentation",
+    "description": "DocPage: page title"
+  },
+  "OdcBgG": {
+    "defaultMessage": "Documentation",
+    "description": "MainNav: documentation link anchor"
+  },
   "OqHQ1o": {
     "defaultMessage": "Built with {link}",
     "description": "Colophon: generator information"
@@ -67,9 +79,9 @@
     "defaultMessage": "Open the main navigation",
     "description": "MainNav: open button label"
   },
-  "hUSHbO": {
-    "defaultMessage": "No pages found.",
-    "description": "MainNav: no pages found"
+  "l6eNYV": {
+    "defaultMessage": "Page {page}",
+    "description": "Breadcrumbs: page number label"
   },
   "sOBeiY": {
     "defaultMessage": "Unauthenticated",
