@@ -8,7 +8,10 @@ import type {
   DocFileUpdatePayload,
 } from '../../../../src';
 import type { Meta } from '../../../../src/types';
-import { MARKDOWN_EXTENSION } from '../../../../src/utils/constants';
+import {
+  EXCERPT_SEPARATOR,
+  MARKDOWN_EXTENSION,
+} from '../../../../src/utils/constants';
 import { generateBase64String } from '../../../../src/utils/helpers';
 import { expect } from '../../../utils';
 import { DOC_FIXTURES_DIR } from '../../../utils/constants';
@@ -44,34 +47,30 @@ describe('update-doc-file', () => {
   it<UpdateDocFileContext>('can update a doc file without changes', async ({
     server,
   }) => {
-    const docFileName = 'quae';
-    const docFileContents = 'cupiditate magni accusantium';
-    const relativeDocFilePath = `./${docFileName}${MARKDOWN_EXTENSION}`;
-    const docFileId = generateBase64String(relativeDocFilePath);
+    const name = 'quae';
+    const contents = 'cupiditate magni accusantium';
+    const relativePath = `./${name}${MARKDOWN_EXTENSION}`;
+    const id = generateBase64String(relativePath);
 
-    await writeFile(
-      join(DOC_FIXTURES_DIR, relativeDocFilePath),
-      docFileContents,
-      {
-        encoding: 'utf8',
-      }
-    );
+    await writeFile(join(DOC_FIXTURES_DIR, relativePath), contents, {
+      encoding: 'utf8',
+    });
 
     const response = await server.sendQuery({
       query: updateDocFileMutation,
       variables: {
         input: {
-          id: docFileId,
+          id,
         },
       },
     });
 
     if (isDocFilePayload(response.data.docFileUpdate))
       expect(response.data.docFileUpdate.file).toBeDocFile({
-        contents: docFileContents,
-        id: docFileId,
-        name: docFileName,
-        path: relativeDocFilePath,
+        contents,
+        id,
+        name,
+        path: relativePath,
       });
 
     expect.assertions(1);
@@ -80,36 +79,32 @@ describe('update-doc-file', () => {
   it<UpdateDocFileContext>('can update the name of a doc file', async ({
     server,
   }) => {
-    const docFileName = 'sed';
-    const docFileContents = 'est minus deleniti';
-    const relativeDocFilePath = `./${docFileName}${MARKDOWN_EXTENSION}`;
-    const docFileId = generateBase64String(relativeDocFilePath);
+    const name = 'sed';
+    const contents = 'est minus deleniti';
+    const relativePath = `./${name}${MARKDOWN_EXTENSION}`;
+    const id = generateBase64String(relativePath);
 
-    await writeFile(
-      join(DOC_FIXTURES_DIR, relativeDocFilePath),
-      docFileContents,
-      {
-        encoding: 'utf8',
-      }
-    );
+    await writeFile(join(DOC_FIXTURES_DIR, relativePath), contents, {
+      encoding: 'utf8',
+    });
 
-    const newDocFileName = 'voluptatem';
+    const newName = 'voluptatem';
     const response = await server.sendQuery({
       query: updateDocFileMutation,
       variables: {
         input: {
-          id: docFileId,
-          name: newDocFileName,
+          id,
+          name: newName,
         },
       },
     });
 
     if (isDocFilePayload(response.data.docFileUpdate)) {
       expect(response.data.docFileUpdate.file).toBeDocFile({
-        contents: docFileContents,
-        name: newDocFileName,
+        contents,
+        name: newName,
       });
-      expect(response.data.docFileUpdate.file?.id).not.toBe(docFileId);
+      expect(response.data.docFileUpdate.file?.id).not.toBe(id);
     }
 
     expect.assertions(2);
@@ -118,36 +113,70 @@ describe('update-doc-file', () => {
   it<UpdateDocFileContext>('can update the contents of a doc file', async ({
     server,
   }) => {
-    const docFileName = 'minima';
-    const docFileContents = 'in dolorem eaque';
-    const relativeDocFilePath = `./${docFileName}${MARKDOWN_EXTENSION}`;
-    const docFileId = generateBase64String(relativeDocFilePath);
+    const name = 'minima';
+    const contents = 'in dolorem eaque';
+    const relativePath = `./${name}${MARKDOWN_EXTENSION}`;
+    const id = generateBase64String(relativePath);
 
-    await writeFile(
-      join(DOC_FIXTURES_DIR, relativeDocFilePath),
-      docFileContents,
-      {
-        encoding: 'utf8',
-      }
-    );
+    await writeFile(join(DOC_FIXTURES_DIR, relativePath), contents, {
+      encoding: 'utf8',
+    });
 
-    const newDocFileContents = 'sed debitis sint';
+    const newContents = 'sed debitis sint';
     const response = await server.sendQuery({
       query: updateDocFileMutation,
       variables: {
         input: {
-          id: docFileId,
-          contents: newDocFileContents,
+          id,
+          contents: newContents,
         },
       },
     });
 
     if (isDocFilePayload(response.data.docFileUpdate))
       expect(response.data.docFileUpdate.file).toBeDocFile({
-        contents: newDocFileContents,
-        id: docFileId,
-        name: docFileName,
-        path: relativeDocFilePath,
+        contents: newContents,
+        id,
+        name,
+        path: relativePath,
+      });
+
+    expect.assertions(1);
+  });
+
+  it<UpdateDocFileContext>('can update the excerpt of a doc file', async ({
+    server,
+  }) => {
+    const name = 'aut';
+    const excerpt = 'voluptas quo autem';
+    const relativePath = `./${name}${MARKDOWN_EXTENSION}`;
+    const id = generateBase64String(relativePath);
+
+    await writeFile(
+      join(DOC_FIXTURES_DIR, relativePath),
+      `${excerpt}${EXCERPT_SEPARATOR}`,
+      {
+        encoding: 'utf8',
+      }
+    );
+
+    const newExcerpt = 'voluptatem accusantium eaque';
+    const response = await server.sendQuery({
+      query: updateDocFileMutation,
+      variables: {
+        input: {
+          id,
+          excerpt: newExcerpt,
+        },
+      },
+    });
+
+    if (isDocFilePayload(response.data.docFileUpdate))
+      expect(response.data.docFileUpdate.file).toBeDocFile({
+        excerpt: newExcerpt,
+        id,
+        name,
+        path: relativePath,
       });
 
     expect.assertions(1);
@@ -156,20 +185,16 @@ describe('update-doc-file', () => {
   it<UpdateDocFileContext>('can update the meta of a doc file', async ({
     server,
   }) => {
-    const docFileName = 'dolorem';
-    const docFileContents = 'voluptate ut quibusdam';
-    const relativeDocFilePath = `./${docFileName}${MARKDOWN_EXTENSION}`;
-    const docFileId = generateBase64String(relativeDocFilePath);
+    const name = 'dolorem';
+    const contents = 'voluptate ut quibusdam';
+    const relativePath = `./${name}${MARKDOWN_EXTENSION}`;
+    const id = generateBase64String(relativePath);
 
-    await writeFile(
-      join(DOC_FIXTURES_DIR, relativeDocFilePath),
-      docFileContents,
-      {
-        encoding: 'utf8',
-      }
-    );
+    await writeFile(join(DOC_FIXTURES_DIR, relativePath), contents, {
+      encoding: 'utf8',
+    });
 
-    const newDocFileMeta: Meta = {
+    const newMeta: Meta = {
       status: 'published',
       title: 'nobis similique doloremque',
     };
@@ -177,20 +202,20 @@ describe('update-doc-file', () => {
       query: updateDocFileMutation,
       variables: {
         input: {
-          id: docFileId,
-          meta: newDocFileMeta,
+          id,
+          meta: newMeta,
         },
       },
     });
 
     if (isDocFilePayload(response.data.docFileUpdate)) {
       expect(response.data.docFileUpdate.file).toBeDocFile({
-        contents: docFileContents,
-        id: docFileId,
-        name: docFileName,
-        path: relativeDocFilePath,
+        contents,
+        id,
+        name,
+        path: relativePath,
       });
-      expect(response.data.docFileUpdate.file?.meta).toContain(newDocFileMeta);
+      expect(response.data.docFileUpdate.file?.meta).toContain(newMeta);
     }
 
     expect.assertions(2);
@@ -199,41 +224,37 @@ describe('update-doc-file', () => {
   it<UpdateDocFileContext>('can update the path of a doc file', async ({
     server,
   }) => {
-    const docFileName = 'animi';
-    const docFileContents = 'dicta tempore dolor';
-    const relativeDocFilePath = `./${docFileName}${MARKDOWN_EXTENSION}`;
-    const docFileId = generateBase64String(relativeDocFilePath);
+    const name = 'animi';
+    const contents = 'dicta tempore dolor';
+    const relativePath = `./${name}${MARKDOWN_EXTENSION}`;
+    const id = generateBase64String(relativePath);
 
-    await writeFile(
-      join(DOC_FIXTURES_DIR, relativeDocFilePath),
-      docFileContents,
-      {
-        encoding: 'utf8',
-      }
-    );
+    await writeFile(join(DOC_FIXTURES_DIR, relativePath), contents, {
+      encoding: 'utf8',
+    });
 
-    const docDirName = 'labore';
-    const docDirPath = `./${docDirName}`;
+    const dirName = 'labore';
+    const dirPath = `./${dirName}`;
 
-    await mkdir(join(DOC_FIXTURES_DIR, docDirPath), { recursive: true });
+    await mkdir(join(DOC_FIXTURES_DIR, dirPath), { recursive: true });
 
     const response = await server.sendQuery({
       query: updateDocFileMutation,
       variables: {
         input: {
-          id: docFileId,
-          parentPath: docDirPath,
+          id,
+          parentPath: dirPath,
         },
       },
     });
 
     if (isDocFilePayload(response.data.docFileUpdate)) {
       expect(response.data.docFileUpdate.file).toBeDocFile({
-        contents: docFileContents,
-        name: docFileName,
-        path: `${docDirPath}/${docFileName}${MARKDOWN_EXTENSION}`,
+        contents,
+        name,
+        path: `${dirPath}/${name}${MARKDOWN_EXTENSION}`,
       });
-      expect(response.data.docFileUpdate.file?.id).not.toBe(docFileId);
+      expect(response.data.docFileUpdate.file?.id).not.toBe(id);
     }
 
     expect.assertions(2);
@@ -255,6 +276,7 @@ describe('update-doc-file', () => {
       expect(response.data.docFileUpdate.errors).toMatchInlineSnapshot(`
         {
           "contents": null,
+          "excerpt": null,
           "id": [
             "Invalid id",
             "The requested doc file id does not exist",
@@ -270,11 +292,10 @@ describe('update-doc-file', () => {
   it<UpdateDocFileContext>('returns validation errors when the doc file name is invalid', async ({
     server,
   }) => {
-    const docFileName = 'expedita';
-    const relativeDocFilePath = `./${docFileName}${MARKDOWN_EXTENSION}`;
-    const docFileId = generateBase64String(relativeDocFilePath);
+    const name = 'expedita';
+    const relativePath = `./${name}${MARKDOWN_EXTENSION}`;
 
-    await writeFile(join(DOC_FIXTURES_DIR, relativeDocFilePath), '', {
+    await writeFile(join(DOC_FIXTURES_DIR, relativePath), '', {
       encoding: 'utf8',
     });
 
@@ -282,7 +303,7 @@ describe('update-doc-file', () => {
       query: updateDocFileMutation,
       variables: {
         input: {
-          id: docFileId,
+          id: generateBase64String(relativePath),
           name: '<',
         },
       },
@@ -292,6 +313,7 @@ describe('update-doc-file', () => {
       expect(response.data.docFileUpdate.errors).toMatchInlineSnapshot(`
         {
           "contents": null,
+          "excerpt": null,
           "id": [],
           "name": [
             "Invalid characters",

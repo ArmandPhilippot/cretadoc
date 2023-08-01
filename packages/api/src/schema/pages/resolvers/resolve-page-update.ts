@@ -32,12 +32,14 @@ const validatePageUpdateInput = <T extends PageUpdate>(
   input: T
 ): ValidationErrors<T> => {
   const validationErrors = initValidationErrors(input);
-  const { id, contents, meta, name } = input;
+  const { id, contents, excerpt, meta, name } = input;
 
   validationErrors.id.push(...validateFileId(id));
 
   if (contents)
     validationErrors.contents.push(...validateFileContents(contents));
+
+  if (excerpt) validationErrors.excerpt.push(...validateFileContents(excerpt));
 
   if (meta) validationErrors.meta.push(...validateFrontMatterMeta(meta));
 
@@ -58,7 +60,7 @@ export const resolvePageUpdate: GraphQLFieldResolver<
 
   const validationErrors = validatePageUpdateInput(input);
 
-  const { contents, id, meta, name } = input;
+  const { contents, excerpt, id, meta, name } = input;
 
   const maybeExistentPage = await context.loaders.page.byId.load(id);
 
@@ -70,6 +72,7 @@ export const resolvePageUpdate: GraphQLFieldResolver<
 
   const page = await context.mutators.page.update({
     contents: contents ? sanitizeString(contents) : undefined,
+    excerpt: excerpt ? sanitizeString(excerpt) : undefined,
     id,
     meta,
     name,

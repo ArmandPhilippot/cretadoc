@@ -132,9 +132,7 @@ server.listen(6000, () => {
 
 ### Metadata
 
-#### Pages and documentation files
-
-Each pages and documentation files can contain metadata through front matter.
+Each pages and documentation entries can contain metadata through front matter.
 
 However, you can't use any key. Only the following ones are accepted:
 
@@ -158,11 +156,19 @@ This is the main content of the page.
 
 **Note:** If you use an empty string (`''`) when using a mutation to update a file/directory, if the key is already set, it will be removed.
 
-#### Documentation directories
+### Excerpt
 
-Sometimes it can be useful to add text before listing the entries inside a directory. You can do that thanks to a special file: `index.md`.
+You can also define an excerpt by using a separator: `<!-- excerpt -->`.
 
-In that file, you can add metadata using front matter, like pages and documentation files, and you can also add custom contents below.
+**Example:**
+
+```md
+This is an excerpt.<!-- excerpt -->This is the main content of the page.
+```
+
+### Documentation directories
+
+The directories can also handle metadata, excerpt and text contents. All you need to do is to create a special file named `index.md`.
 
 Note:
 

@@ -17,6 +17,7 @@ import type { DocEntry } from './doc-entries';
 export type DocDirectory = Omit<Directory, 'contents' | 'extension'> & {
   contents?: string;
   entries?: Connection<DocEntry>;
+  excerpt?: string;
   meta?: Meta;
   parent: Nullable<DocEntryParent>;
   slug: Slug;
@@ -69,7 +70,7 @@ export type DocDirectoryConnectionResult =
 
 export type DocDirectoryCreate = Pick<
   DocDirectory,
-  'contents' | 'meta' | 'name'
+  'contents' | 'excerpt' | 'meta' | 'name'
 > & {
   parentPath?: string;
 };

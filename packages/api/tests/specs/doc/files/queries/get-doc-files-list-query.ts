@@ -12,6 +12,7 @@ export const getDocFilesListQuery = `query DocFiles($after: String, $first: Int,
         node {
           contents
           createdAt
+          excerpt
           id
           meta {
             createdAt

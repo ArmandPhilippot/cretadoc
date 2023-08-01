@@ -8,7 +8,10 @@ import type {
   PageUpdatePayload,
 } from '../../../src';
 import type { Meta } from '../../../src/types';
-import { MARKDOWN_EXTENSION } from '../../../src/utils/constants';
+import {
+  EXCERPT_SEPARATOR,
+  MARKDOWN_EXTENSION,
+} from '../../../src/utils/constants';
 import { generateBase64String } from '../../../src/utils/helpers';
 import { expect } from '../../utils';
 import { PAGES_FIXTURES_DIR } from '../../utils/constants';
@@ -44,12 +47,12 @@ describe('update-page', () => {
   it<UpdatePageContext>('can update a page without changes', async ({
     server,
   }) => {
-    const pageName = 'quae';
-    const pageContents = 'cupiditate magni accusantium';
-    const relativePagePath = `./${pageName}${MARKDOWN_EXTENSION}`;
-    const pageId = generateBase64String(relativePagePath);
+    const name = 'quae';
+    const contents = 'cupiditate magni accusantium';
+    const relativePath = `./${name}${MARKDOWN_EXTENSION}`;
+    const id = generateBase64String(relativePath);
 
-    await writeFile(join(PAGES_FIXTURES_DIR, relativePagePath), pageContents, {
+    await writeFile(join(PAGES_FIXTURES_DIR, relativePath), contents, {
       encoding: 'utf8',
     });
 
@@ -57,49 +60,49 @@ describe('update-page', () => {
       query: updatePageMutation,
       variables: {
         input: {
-          id: pageId,
+          id,
         },
       },
     });
 
     if (isPagePayload(response.data.pageUpdate))
       expect(response.data.pageUpdate.page).toBePage({
-        contents: pageContents,
-        id: pageId,
-        name: pageName,
-        path: relativePagePath,
+        contents,
+        id,
+        name,
+        path: relativePath,
       });
 
     expect.assertions(1);
   });
 
   it<UpdatePageContext>('can update the name of a page', async ({ server }) => {
-    const pageName = 'sed';
-    const pageContents = 'est minus deleniti';
-    const relativePagePath = `./${pageName}${MARKDOWN_EXTENSION}`;
-    const pageId = generateBase64String(relativePagePath);
+    const name = 'sed';
+    const contents = 'est minus deleniti';
+    const relativePath = `./${name}${MARKDOWN_EXTENSION}`;
+    const id = generateBase64String(relativePath);
 
-    await writeFile(join(PAGES_FIXTURES_DIR, relativePagePath), pageContents, {
+    await writeFile(join(PAGES_FIXTURES_DIR, relativePath), contents, {
       encoding: 'utf8',
     });
 
-    const newPageName = 'voluptatem';
+    const newName = 'voluptatem';
     const response = await server.sendQuery({
       query: updatePageMutation,
       variables: {
         input: {
-          id: pageId,
-          name: newPageName,
+          id,
+          name: newName,
         },
       },
     });
 
     if (isPagePayload(response.data.pageUpdate)) {
       expect(response.data.pageUpdate.page).toBePage({
-        contents: pageContents,
-        name: newPageName,
+        contents,
+        name: newName,
       });
-      expect(response.data.pageUpdate.page?.id).not.toBe(pageId);
+      expect(response.data.pageUpdate.page?.id).not.toBe(id);
     }
 
     expect.assertions(2);
@@ -108,31 +111,69 @@ describe('update-page', () => {
   it<UpdatePageContext>('can update the contents of a page', async ({
     server,
   }) => {
-    const pageName = 'minima';
-    const pageContents = 'in dolorem eaque';
-    const relativePagePath = `./${pageName}${MARKDOWN_EXTENSION}`;
-    const pageId = generateBase64String(relativePagePath);
+    const name = 'minima';
+    const contents = 'in dolorem eaque';
+    const relativePath = `./${name}${MARKDOWN_EXTENSION}`;
+    const id = generateBase64String(relativePath);
 
-    await writeFile(join(PAGES_FIXTURES_DIR, relativePagePath), pageContents, {
+    await writeFile(join(PAGES_FIXTURES_DIR, relativePath), contents, {
       encoding: 'utf8',
     });
 
-    const newPageContents = 'sed debitis sint';
+    const newContents = 'sed debitis sint';
     const response = await server.sendQuery({
       query: updatePageMutation,
       variables: {
         input: {
-          id: pageId,
-          contents: newPageContents,
+          id,
+          contents: newContents,
         },
       },
     });
 
     if (isPagePayload(response.data.pageUpdate))
       expect(response.data.pageUpdate.page).toBePage({
-        contents: newPageContents,
-        id: pageId,
-        name: pageName,
+        contents: newContents,
+        id,
+        name,
+        path: relativePath,
+      });
+
+    expect.assertions(1);
+  });
+
+  it<UpdatePageContext>('can update the excerpt of a page', async ({
+    server,
+  }) => {
+    const name = 'officia';
+    const excerpt = 'aut dignissimos ut';
+    const relativePagePath = `./${name}${MARKDOWN_EXTENSION}`;
+    const id = generateBase64String(relativePagePath);
+
+    await writeFile(
+      join(PAGES_FIXTURES_DIR, relativePagePath),
+      `${excerpt}${EXCERPT_SEPARATOR}`,
+      {
+        encoding: 'utf8',
+      }
+    );
+
+    const newExcerpt = 'voluptas aut cupiditate';
+    const response = await server.sendQuery({
+      query: updatePageMutation,
+      variables: {
+        input: {
+          id,
+          excerpt: newExcerpt,
+        },
+      },
+    });
+
+    if (isPagePayload(response.data.pageUpdate))
+      expect(response.data.pageUpdate.page).toBePage({
+        excerpt: newExcerpt,
+        id,
+        name,
         path: relativePagePath,
       });
 
@@ -140,16 +181,16 @@ describe('update-page', () => {
   });
 
   it<UpdatePageContext>('can update the meta of a page', async ({ server }) => {
-    const pageName = 'dolorem';
-    const pageContents = 'voluptate ut quibusdam';
-    const relativePagePath = `./${pageName}${MARKDOWN_EXTENSION}`;
-    const pageId = generateBase64String(relativePagePath);
+    const name = 'dolorem';
+    const contents = 'voluptate ut quibusdam';
+    const relativePath = `./${name}${MARKDOWN_EXTENSION}`;
+    const id = generateBase64String(relativePath);
 
-    await writeFile(join(PAGES_FIXTURES_DIR, relativePagePath), pageContents, {
+    await writeFile(join(PAGES_FIXTURES_DIR, relativePath), contents, {
       encoding: 'utf8',
     });
 
-    const newPageMeta: Meta = {
+    const newMeta: Meta = {
       status: 'published',
       title: 'nobis similique doloremque',
     };
@@ -157,20 +198,20 @@ describe('update-page', () => {
       query: updatePageMutation,
       variables: {
         input: {
-          id: pageId,
-          meta: newPageMeta,
+          id,
+          meta: newMeta,
         },
       },
     });
 
     if (isPagePayload(response.data.pageUpdate)) {
       expect(response.data.pageUpdate.page).toBePage({
-        contents: pageContents,
-        id: pageId,
-        name: pageName,
-        path: relativePagePath,
+        contents,
+        id,
+        name,
+        path: relativePath,
       });
-      expect(response.data.pageUpdate.page?.meta).toContain(newPageMeta);
+      expect(response.data.pageUpdate.page?.meta).toContain(newMeta);
     }
 
     expect.assertions(2);
@@ -192,6 +233,7 @@ describe('update-page', () => {
       expect(response.data.pageUpdate.errors).toMatchInlineSnapshot(`
         {
           "contents": null,
+          "excerpt": null,
           "id": [
             "Invalid id",
             "The requested page id does not exist",
@@ -206,11 +248,10 @@ describe('update-page', () => {
   it<UpdatePageContext>('returns validation errors when the page name is invalid', async ({
     server,
   }) => {
-    const pageName = 'expedita';
-    const relativePagePath = `./${pageName}${MARKDOWN_EXTENSION}`;
-    const pageId = generateBase64String(relativePagePath);
+    const name = 'expedita';
+    const relativePath = `./${name}${MARKDOWN_EXTENSION}`;
 
-    await writeFile(join(PAGES_FIXTURES_DIR, relativePagePath), '', {
+    await writeFile(join(PAGES_FIXTURES_DIR, relativePath), '', {
       encoding: 'utf8',
     });
 
@@ -218,7 +259,7 @@ describe('update-page', () => {
       query: updatePageMutation,
       variables: {
         input: {
-          id: pageId,
+          id: generateBase64String(relativePath),
           name: '<',
         },
       },
@@ -228,6 +269,7 @@ describe('update-page', () => {
       expect(response.data.pageUpdate.errors).toMatchInlineSnapshot(`
         {
           "contents": null,
+          "excerpt": null,
           "id": [],
           "name": [
             "Invalid characters",

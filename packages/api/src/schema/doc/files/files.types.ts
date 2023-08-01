@@ -41,6 +41,10 @@ export const DocFileCreateInputType = new GraphQLInputObjectType({
       description: 'The file contents.',
       type: GraphQLString,
     },
+    excerpt: {
+      description: 'The file excerpt.',
+      type: GraphQLString,
+    },
     meta: {
       description: 'The file metadata.',
       type: FrontMatterInputType,
@@ -66,6 +70,11 @@ const DocFileCreationValidationErrorsType = new GraphQLObjectType<
       description: 'The validation errors on contents argument.',
       type: new GraphQLList(GraphQLString),
       resolve: ({ contents }) => contents,
+    },
+    excerpt: {
+      description: 'The validation errors on excerpt argument.',
+      type: new GraphQLList(GraphQLString),
+      resolve: ({ excerpt }) => excerpt,
     },
     meta: {
       description: 'The validation errors on meta argument.',
@@ -177,6 +186,10 @@ export const DocFileUpdateInputType = new GraphQLInputObjectType({
       description: 'The file contents.',
       type: GraphQLString,
     },
+    excerpt: {
+      description: 'The file excerpt.',
+      type: GraphQLString,
+    },
     id: {
       description: 'The file id.',
       type: new GraphQLNonNull(GraphQLString),
@@ -206,6 +219,11 @@ const DocFileUpdateValidationErrorsType = new GraphQLObjectType<
       description: 'The validation errors on contents argument.',
       type: new GraphQLList(GraphQLString),
       resolve: ({ contents }) => contents,
+    },
+    excerpt: {
+      description: 'The validation errors on excerpt argument.',
+      type: new GraphQLList(GraphQLString),
+      resolve: ({ excerpt }) => excerpt,
     },
     id: {
       description: 'The validation errors on id argument.',

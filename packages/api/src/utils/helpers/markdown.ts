@@ -1,5 +1,6 @@
 import type { Maybe } from '@cretadoc/utils';
 import type { ErrorDetails, Meta } from '../../types';
+import { EXCERPT_SEPARATOR } from '../constants';
 import { CretadocAPIError } from '../exceptions';
 import { validateMetaKeyValue } from './validators';
 
@@ -13,13 +14,15 @@ const createMarkdownContentsRegex = (): RegExp => {
   const newlines = '\r\n|\n|\r';
   const rawMetaGroup = `(?<rawMeta>(?:.+(?:${newlines})){0,})`;
   const frontMatter = `(?:(?:${yamlDelimiter}\n)${rawMetaGroup}(?:${yamlDelimiter})(?:${newlines}){0,})`;
+  const excerptGroup = `(?:(?<excerpt>(?:.|${newlines})+)(?:${EXCERPT_SEPARATOR}))`;
   const contentGroup = `(?<content>(?:.|${newlines})*)`;
 
-  return new RegExp(`${frontMatter}?${contentGroup}?`, 'g');
+  return new RegExp(`${frontMatter}?${excerptGroup}?${contentGroup}?`, 'g');
 };
 
 type MarkdownGroups = {
   content?: string;
+  excerpt?: string;
   rawMeta?: string;
 };
 
@@ -154,6 +157,7 @@ const getMetaFrom = (rawMeta: string): Meta => {
 
 export type MarkdownData = {
   contents: string;
+  excerpt?: string;
   meta?: Meta;
 };
 
@@ -168,6 +172,7 @@ export const parseMarkdown = (content: string): MarkdownData => {
 
   return {
     contents: data?.content ?? '',
+    excerpt: data?.excerpt,
     meta: data?.rawMeta ? getMetaFrom(data.rawMeta) : undefined,
   };
 };

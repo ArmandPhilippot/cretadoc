@@ -5,6 +5,7 @@ export const deleteDocFileMutation = `mutation DeleteDocFile($input: DocFileDele
       file {
         contents
         createdAt
+        excerpt
         id
         meta {
           createdAt

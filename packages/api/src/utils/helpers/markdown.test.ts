@@ -1,24 +1,37 @@
 import { describe, expect, it } from 'vitest';
 import type { Meta } from '../../types';
-import { getMarkdownGroups, parseMarkdown } from './markdown';
+import { EXCERPT_SEPARATOR } from '../constants';
+import { convertMetaToStr, getMarkdownGroups, parseMarkdown } from './markdown';
 
 describe('get-markdown-groups', () => {
-  it('can retrieve contents without meta', () => {
+  it('can retrieve contents without meta and excerpt', () => {
     const markdown = '#Some title\n\nWith contents...';
     const groups = getMarkdownGroups(markdown);
 
     expect(groups).not.toBeUndefined();
     expect(groups?.content).toBe(markdown);
+    expect(groups?.excerpt).toBeUndefined();
     expect(groups?.rawMeta).toBeUndefined();
   });
 
-  it('can retrieve meta without contents', () => {
+  it('can retrieve excerpt without meta and contents', () => {
+    const markdown = `Any excerpt${EXCERPT_SEPARATOR}`;
+    const groups = getMarkdownGroups(markdown);
+
+    expect(groups).not.toBeUndefined();
+    expect(groups?.content).toBeUndefined();
+    expect(groups?.excerpt).toBe(markdown.replace(EXCERPT_SEPARATOR, ''));
+    expect(groups?.rawMeta).toBeUndefined();
+  });
+
+  it('can retrieve meta without contents and excerpt', () => {
     const metaStr = 'foo: bar\nbar: bar\n';
     const markdown = `---\n${metaStr}---`;
     const groups = getMarkdownGroups(markdown);
 
     expect(groups).not.toBeUndefined();
     expect(groups?.content).toBeUndefined();
+    expect(groups?.excerpt).toBeUndefined();
     expect(groups?.rawMeta).toBe(metaStr);
   });
 
@@ -30,6 +43,7 @@ describe('get-markdown-groups', () => {
 
     expect(groups).not.toBeUndefined();
     expect(groups?.content).toBe(contents);
+    expect(groups?.excerpt).toBeUndefined();
     expect(groups?.rawMeta).toBe(metaStr);
   });
 
@@ -41,6 +55,7 @@ describe('get-markdown-groups', () => {
 
     expect(groups).not.toBeUndefined();
     expect(groups?.content).toBe(contents);
+    expect(groups?.excerpt).toBeUndefined();
     expect(groups?.rawMeta).toBe(metaStr);
   });
 
@@ -53,6 +68,44 @@ describe('get-markdown-groups', () => {
 
     expect(groups).not.toBeUndefined();
     expect(groups?.content).toBe(contents);
+    expect(groups?.excerpt).toBeUndefined();
+    expect(groups?.rawMeta).toBe(metaStr);
+  });
+
+  it('can retrieve excerpt with meta without empty line', () => {
+    const metaStr = 'foo: bar\n';
+    const excerpt = 'Any excerpt';
+    const markdown = `---\n${metaStr}---\n${excerpt}${EXCERPT_SEPARATOR}`;
+    const groups = getMarkdownGroups(markdown);
+
+    expect(groups).not.toBeUndefined();
+    expect(groups?.content).toBeUndefined();
+    expect(groups?.excerpt).toBe(excerpt);
+    expect(groups?.rawMeta).toBe(metaStr);
+  });
+
+  it('can retrieve excerpt with meta separated by an empty line', () => {
+    const metaStr = 'foo: bar\n';
+    const excerpt = 'Any excerpt';
+    const markdown = `---\n${metaStr}---\n\n${excerpt}${EXCERPT_SEPARATOR}`;
+    const groups = getMarkdownGroups(markdown);
+
+    expect(groups).not.toBeUndefined();
+    expect(groups?.content).toBeUndefined();
+    expect(groups?.excerpt).toBe(excerpt);
+    expect(groups?.rawMeta).toBe(metaStr);
+  });
+
+  it('can retrieve the meta, excerpt and contents', () => {
+    const metaStr = 'foo: bar\n';
+    const contents = '#Some title\n\nWith contents...';
+    const excerpt = 'Any excerpt';
+    const markdown = `---\n${metaStr}---\n\n${excerpt}${EXCERPT_SEPARATOR}${contents}`;
+    const groups = getMarkdownGroups(markdown);
+
+    expect(groups).not.toBeUndefined();
+    expect(groups?.content).toBe(contents);
+    expect(groups?.excerpt).toBe(excerpt);
     expect(groups?.rawMeta).toBe(metaStr);
   });
 });
@@ -68,24 +121,33 @@ describe('parse-markdown', () => {
       title: 'foo',
       updatedAt: '2023-06-23',
     } satisfies Meta;
-    const metaStr = Object.entries(meta)
-      .map(([key, value]) => `${key}: ${value}`)
-      .join('\n');
-    const frontMatter = `---\n${metaStr}\n---`;
+    const frontMatter = `---\n${convertMetaToStr(meta)}\n---`;
     const regularContents = '# Title\n\nSome contents.\n';
     const markdown = `${frontMatter}\n\n${regularContents}`;
 
     expect(parseMarkdown(markdown)).toStrictEqual({
       contents: regularContents,
+      excerpt: undefined,
       meta,
     });
   });
 
-  it('return only the content when meta are missing', () => {
+  it('return only the content when meta and excerpt are missing', () => {
     const markdown = '# Title\n\nSome contents.\n';
 
     expect(parseMarkdown(markdown)).toStrictEqual({
       contents: markdown,
+      excerpt: undefined,
+      meta: undefined,
+    });
+  });
+
+  it('return only the excerpt when meta and contents are missing', () => {
+    const markdown = `Some excerpt${EXCERPT_SEPARATOR}`;
+
+    expect(parseMarkdown(markdown)).toStrictEqual({
+      contents: '',
+      excerpt: markdown.replace(EXCERPT_SEPARATOR, ''),
       meta: undefined,
     });
   });

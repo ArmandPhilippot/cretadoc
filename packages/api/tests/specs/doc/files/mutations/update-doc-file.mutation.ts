@@ -5,6 +5,7 @@ export const updateDocFileMutation = `mutation UpdateDocFile($input: DocFileUpda
       file {
         contents
         createdAt
+        excerpt
         id
         meta {
           createdAt
@@ -31,6 +32,7 @@ export const updateDocFileMutation = `mutation UpdateDocFile($input: DocFileUpda
       __typename
       errors {
         contents
+        excerpt
         id
         name
         parentPath

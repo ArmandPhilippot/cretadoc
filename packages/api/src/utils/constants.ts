@@ -15,6 +15,8 @@ export const DIRECTION = {
   DESC: 'DESC',
 } as const;
 
+export const EXCERPT_SEPARATOR = '<!-- excerpt -->';
+
 export const MARKDOWN_EXTENSION = '.md' as const;
 
 export const ALLOWED_STATUS = {

@@ -28,6 +28,7 @@ type CreateDocFileContext = {
   server: Awaited<ReturnType<typeof createAPIServer>>;
 };
 
+/* eslint-disable max-statements */
 describe('create-doc-file', () => {
   beforeEach<CreateDocFileContext>(async (context) => {
     context.server = await createAPIServer({
@@ -42,12 +43,12 @@ describe('create-doc-file', () => {
   it<CreateDocFileContext>('can create a new empty doc file', async ({
     server,
   }) => {
-    const docFileName = 'molestias';
+    const name = 'molestias';
     const response = await server.sendQuery({
       query: createDocFileMutation,
       variables: {
         input: {
-          name: docFileName,
+          name,
         },
       },
     });
@@ -55,7 +56,7 @@ describe('create-doc-file', () => {
     if (isDocFilePayload(response.data.docFileCreate))
       expect(response.data.docFileCreate.file).toBeDocFile({
         contents: '',
-        name: docFileName,
+        name,
       });
 
     expect.assertions(1);
@@ -64,23 +65,20 @@ describe('create-doc-file', () => {
   it<CreateDocFileContext>('can create a new doc file with contents', async ({
     server,
   }) => {
-    const docFileName = 'omnis';
-    const docFileContents = 'corrupti dolores nesciunt';
+    const name = 'omnis';
+    const contents = 'corrupti dolores nesciunt';
     const response = await server.sendQuery({
       query: createDocFileMutation,
       variables: {
         input: {
-          contents: docFileContents,
-          name: docFileName,
+          contents,
+          name,
         },
       },
     });
 
     if (isDocFilePayload(response.data.docFileCreate)) {
-      expect(response.data.docFileCreate.file).toBeDocFile({
-        contents: docFileContents,
-        name: docFileName,
-      });
+      expect(response.data.docFileCreate.file).toBeDocFile({ contents, name });
       expect(
         response.data.docFileCreate.file?.meta?.createdAt
       ).not.toBeUndefined();
@@ -89,11 +87,32 @@ describe('create-doc-file', () => {
     expect.assertions(2);
   });
 
+  it<CreateDocFileContext>('can create a new doc file with excerpt', async ({
+    server,
+  }) => {
+    const name = 'sed';
+    const excerpt = 'ab deserunt iusto';
+    const response = await server.sendQuery({
+      query: createDocFileMutation,
+      variables: {
+        input: {
+          excerpt,
+          name,
+        },
+      },
+    });
+
+    if (isDocFilePayload(response.data.docFileCreate))
+      expect(response.data.docFileCreate.file).toBeDocFile({ excerpt, name });
+
+    expect.assertions(1);
+  });
+
   it<CreateDocFileContext>('can create a new doc file with meta', async ({
     server,
   }) => {
-    const docFileName = 'aliquid';
-    const docFileMeta: Meta = {
+    const name = 'aliquid';
+    const meta: Meta = {
       status: 'draft',
       title: 'earum',
     };
@@ -101,15 +120,49 @@ describe('create-doc-file', () => {
       query: createDocFileMutation,
       variables: {
         input: {
-          meta: docFileMeta,
-          name: docFileName,
+          meta,
+          name,
         },
       },
     });
 
     if (isDocFilePayload(response.data.docFileCreate)) {
-      expect(response.data.docFileCreate.file?.name).toBe(docFileName);
-      expect(response.data.docFileCreate.file?.meta).toContain(docFileMeta);
+      expect(response.data.docFileCreate.file?.name).toBe(name);
+      expect(response.data.docFileCreate.file?.meta).toContain(meta);
+    }
+
+    expect.assertions(2);
+  });
+
+  it<CreateDocFileContext>('can create a new doc file with meta, excerpt and content', async ({
+    server,
+  }) => {
+    const name = 'nisi';
+    const contents = 'libero facilis adipisci';
+    const excerpt = 'similique ut sint';
+    const meta: Meta = {
+      seoTitle: 'quia qui aut',
+      title: 'sed',
+    };
+    const response = await server.sendQuery({
+      query: createDocFileMutation,
+      variables: {
+        input: {
+          contents,
+          excerpt,
+          meta,
+          name,
+        },
+      },
+    });
+
+    if (isDocFilePayload(response.data.docFileCreate)) {
+      expect(response.data.docFileCreate.file).toBeDocFile({
+        contents,
+        excerpt,
+        name,
+      });
+      expect(response.data.docFileCreate.file?.meta).toContain(meta);
     }
 
     expect.assertions(2);
@@ -118,18 +171,18 @@ describe('create-doc-file', () => {
   it<CreateDocFileContext>('can create a doc file in a subdirectory', async ({
     server,
   }) => {
-    const docDirName = 'quos';
-    const docDirPath = `./${docDirName}`;
+    const dirName = 'quos';
+    const dirPath = `./${dirName}`;
 
-    await mkdir(join(DOC_FIXTURES_DIR, docDirPath), { recursive: true });
+    await mkdir(join(DOC_FIXTURES_DIR, dirPath), { recursive: true });
 
-    const docFileName = 'ipsam';
+    const name = 'ipsam';
     const response = await server.sendQuery({
       query: createDocFileMutation,
       variables: {
         input: {
-          name: docFileName,
-          parentPath: docDirPath,
+          name,
+          parentPath: dirPath,
         },
       },
     });
@@ -137,10 +190,10 @@ describe('create-doc-file', () => {
     if (isDocFilePayload(response.data.docFileCreate)) {
       expect(response.data.docFileCreate.file).toBeDocFile({
         contents: '',
-        name: docFileName,
-        path: `${docDirPath}/${docFileName}${MARKDOWN_EXTENSION}`,
+        name,
+        path: `${dirPath}/${name}${MARKDOWN_EXTENSION}`,
       });
-      expect(response.data.docFileCreate.file?.parent?.name).toBe(docDirName);
+      expect(response.data.docFileCreate.file?.parent?.name).toBe(dirName);
     }
 
     expect.assertions(2);
@@ -176,12 +229,12 @@ describe('create-doc-file', () => {
   it<CreateDocFileContext>('returns validation errors when doc file name exists', async ({
     server,
   }) => {
-    const docFileName = 'esse';
+    const name = 'esse';
     await server.sendQuery({
       query: createDocFileMutation,
       variables: {
         input: {
-          name: docFileName,
+          name,
         },
       },
     });
@@ -189,7 +242,7 @@ describe('create-doc-file', () => {
       query: createDocFileMutation,
       variables: {
         input: {
-          name: docFileName,
+          name,
         },
       },
     });
@@ -237,3 +290,4 @@ describe('create-doc-file', () => {
     expect.assertions(2);
   });
 });
+/* eslint-enable max-statements */

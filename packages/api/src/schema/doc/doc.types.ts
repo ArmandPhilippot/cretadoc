@@ -129,6 +129,11 @@ export const DocFileType = new GraphQLObjectType<DocFile, APIContext>({
         type: new GraphQLNonNull(GraphQLString),
         resolve: ({ createdAt }) => createdAt,
       },
+      excerpt: {
+        description: 'The excerpt of the file.',
+        type: GraphQLString,
+        resolve: ({ excerpt }) => excerpt,
+      },
       id: {
         description: 'The id of the file.',
         type: new GraphQLNonNull(GraphQLString),
@@ -200,6 +205,11 @@ export const DocDirectoryType: GraphQLObjectType<DocDirectory, APIContext> =
             where: DocWhereInputType,
           }),
           resolve: ({ entries }) => entries,
+        },
+        excerpt: {
+          description: 'The excerpt of the directory.',
+          type: GraphQLString,
+          resolve: ({ excerpt }) => excerpt,
         },
         id: {
           description: 'The id of the directory.',

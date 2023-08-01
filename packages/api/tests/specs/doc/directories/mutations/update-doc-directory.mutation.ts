@@ -16,15 +16,15 @@ export const updateDocDirectoryMutation = `mutation UpdateDocDirectory($after: S
             cursor
             node {
               ... on DocFile {
-                id
-                name
                 createdAt
+                id
                 meta {
                   createdAt
                   status
                   title
                   updatedAt
                 }
+                name
                 parent {
                   id
                   meta {
@@ -43,15 +43,15 @@ export const updateDocDirectoryMutation = `mutation UpdateDocDirectory($after: S
                 updatedAt
               }
               ... on DocDirectory {
-                id
-                name
                 createdAt
+                id
                 meta {
                   createdAt
                   status
                   title
                   updatedAt
                 }
+                name
                 parent {
                   id
                   meta {
@@ -79,6 +79,7 @@ export const updateDocDirectoryMutation = `mutation UpdateDocDirectory($after: S
             total
           }
         }
+        excerpt
         id
         meta {
           createdAt
@@ -110,6 +111,8 @@ export const updateDocDirectoryMutation = `mutation UpdateDocDirectory($after: S
     ... on DocDirectoryUpdateErrors {
       __typename
       errors {
+        contents
+        excerpt
         id
         meta
         name

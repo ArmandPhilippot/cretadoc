@@ -5,6 +5,7 @@ export const updatePageMutation = `mutation UpdatePage($input: PageUpdateInput!)
       page {
         contents
         createdAt
+        excerpt
         id
         meta {
           createdAt
@@ -24,6 +25,7 @@ export const updatePageMutation = `mutation UpdatePage($input: PageUpdateInput!)
       __typename
       errors {
         contents
+        excerpt
         id
         name
       }

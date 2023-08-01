@@ -40,6 +40,11 @@ export const PageType = new GraphQLObjectType<Page, APIContext>({
         type: new GraphQLNonNull(GraphQLString),
         resolve: ({ createdAt }) => createdAt,
       },
+      excerpt: {
+        description: 'The excerpt of the page.',
+        type: GraphQLString,
+        resolve: ({ excerpt }) => excerpt,
+      },
       id: {
         description: 'The id of the page.',
         type: new GraphQLNonNull(GraphQLString),
@@ -142,6 +147,10 @@ export const PageCreateInputType = new GraphQLInputObjectType({
       description: 'The page contents.',
       type: GraphQLString,
     },
+    excerpt: {
+      description: 'The page excerpt.',
+      type: GraphQLString,
+    },
     meta: {
       description: 'The page metadata.',
       type: FrontMatterInputType,
@@ -163,6 +172,11 @@ const PageCreateValidationErrorsType = new GraphQLObjectType<
       description: 'The validation errors on contents argument.',
       type: new GraphQLList(GraphQLString),
       resolve: ({ contents }) => contents,
+    },
+    excerpt: {
+      description: 'The validation errors on excerpt argument.',
+      type: new GraphQLList(GraphQLString),
+      resolve: ({ excerpt }) => excerpt,
     },
     meta: {
       description: 'The validation errors on meta argument.',
@@ -269,6 +283,10 @@ export const PageUpdateInputType = new GraphQLInputObjectType({
       description: 'The page contents.',
       type: GraphQLString,
     },
+    excerpt: {
+      description: 'The page excerpt.',
+      type: GraphQLString,
+    },
     id: {
       description: 'The page id.',
       type: new GraphQLNonNull(GraphQLString),
@@ -294,6 +312,11 @@ const PageUpdateValidationErrorsType = new GraphQLObjectType<
       description: 'The validation errors on contents argument.',
       type: new GraphQLList(GraphQLString),
       resolve: ({ contents }) => contents,
+    },
+    excerpt: {
+      description: 'The validation errors on excerpt argument.',
+      type: new GraphQLList(GraphQLString),
+      resolve: ({ excerpt }) => excerpt,
     },
     id: {
       description: 'The validation errors on id argument.',

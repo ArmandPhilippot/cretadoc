@@ -41,19 +41,71 @@ describe('create-doc-directory', () => {
   it<CreateDocDirectoryContext>('can create a new doc directory', async ({
     server,
   }) => {
-    const docDirectoryName = 'molestias';
+    const name = 'molestias';
     const response = await server.sendQuery({
       query: createDocDirectoryMutation,
       variables: {
         input: {
-          name: docDirectoryName,
+          name,
         },
       },
     });
 
     if (isDocDirectoryPayload(response.data.docDirectoryCreate))
       expect(response.data.docDirectoryCreate.directory).toBeDocDirectory({
-        name: docDirectoryName,
+        name,
+      });
+
+    expect.assertions(1);
+  });
+
+  it<CreateDocDirectoryContext>('can create a new doc directory with contents', async ({
+    server,
+  }) => {
+    const name = 'quasi';
+    const contents = 'numquam qui totam';
+    const response = await server.sendQuery({
+      query: createDocDirectoryMutation,
+      variables: {
+        input: {
+          contents,
+          name,
+        },
+      },
+    });
+
+    if (isDocDirectoryPayload(response.data.docDirectoryCreate)) {
+      expect(response.data.docDirectoryCreate.directory).toBeDocDirectory({
+        contents,
+        name,
+      });
+      expect(
+        response.data.docDirectoryCreate.directory?.meta?.createdAt
+      ).not.toBeUndefined();
+    }
+
+    expect.assertions(2);
+  });
+
+  it<CreateDocDirectoryContext>('can create a new doc directory with excerpt', async ({
+    server,
+  }) => {
+    const name = 'sint';
+    const excerpt = 'voluptatum molestiae quo';
+    const response = await server.sendQuery({
+      query: createDocDirectoryMutation,
+      variables: {
+        input: {
+          excerpt,
+          name,
+        },
+      },
+    });
+
+    if (isDocDirectoryPayload(response.data.docDirectoryCreate))
+      expect(response.data.docDirectoryCreate.directory).toBeDocDirectory({
+        excerpt,
+        name,
       });
 
     expect.assertions(1);
@@ -62,8 +114,8 @@ describe('create-doc-directory', () => {
   it<CreateDocDirectoryContext>('can create a new doc directory with meta', async ({
     server,
   }) => {
-    const docDirectoryName = 'aliquid';
-    const docDirectoryMeta: Meta = {
+    const name = 'aliquid';
+    const meta: Meta = {
       status: 'draft',
       title: 'earum',
     };
@@ -71,19 +123,15 @@ describe('create-doc-directory', () => {
       query: createDocDirectoryMutation,
       variables: {
         input: {
-          meta: docDirectoryMeta,
-          name: docDirectoryName,
+          meta,
+          name,
         },
       },
     });
 
     if (isDocDirectoryPayload(response.data.docDirectoryCreate)) {
-      expect(response.data.docDirectoryCreate.directory?.name).toBe(
-        docDirectoryName
-      );
-      expect(response.data.docDirectoryCreate.directory?.meta).toContain(
-        docDirectoryMeta
-      );
+      expect(response.data.docDirectoryCreate.directory?.name).toBe(name);
+      expect(response.data.docDirectoryCreate.directory?.meta).toContain(meta);
     }
 
     expect.assertions(2);
@@ -97,12 +145,12 @@ describe('create-doc-directory', () => {
 
     await mkdir(join(DOC_FIXTURES_DIR, parentPath), { recursive: true });
 
-    const docDirectoryName = 'ipsam';
+    const name = 'ipsam';
     const response = await server.sendQuery({
       query: createDocDirectoryMutation,
       variables: {
         input: {
-          name: docDirectoryName,
+          name,
           parentPath,
         },
       },
@@ -110,8 +158,8 @@ describe('create-doc-directory', () => {
 
     if (isDocDirectoryPayload(response.data.docDirectoryCreate)) {
       expect(response.data.docDirectoryCreate.directory).toBeDocDirectory({
-        name: docDirectoryName,
-        path: `${parentPath}/${docDirectoryName}`,
+        name,
+        path: `${parentPath}/${name}`,
       });
       expect(response.data.docDirectoryCreate.directory?.parent?.name).toBe(
         parentName
@@ -151,12 +199,12 @@ describe('create-doc-directory', () => {
   it<CreateDocDirectoryContext>('returns validation errors when doc directory name exists', async ({
     server,
   }) => {
-    const docDirectoryName = 'esse';
+    const name = 'esse';
     await server.sendQuery({
       query: createDocDirectoryMutation,
       variables: {
         input: {
-          name: docDirectoryName,
+          name,
         },
       },
     });
@@ -164,7 +212,7 @@ describe('create-doc-directory', () => {
       query: createDocDirectoryMutation,
       variables: {
         input: {
-          name: docDirectoryName,
+          name,
         },
       },
     });

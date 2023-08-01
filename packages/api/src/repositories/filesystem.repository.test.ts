@@ -11,7 +11,7 @@ import {
 } from '../../tests/utils/constants';
 import { createFixtures, deleteFixturesIn } from '../../tests/utils/helpers';
 import type { APIDataConfig, ErrorDetails, Meta } from '../types';
-import { MARKDOWN_EXTENSION } from '../utils/constants';
+import { EXCERPT_SEPARATOR, MARKDOWN_EXTENSION } from '../utils/constants';
 import { CretadocAPIError } from '../utils/exceptions';
 import { getDatetimeFormat } from '../utils/helpers';
 import {
@@ -202,6 +202,31 @@ describe('FileSystemRepository', () => {
 
     expect(newPath).toBe(filePath);
     expect(updatedFileContents).toContain(newContents);
+    expect(updatedFileContents).toContain(date);
+
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    expect.assertions(3);
+  });
+
+  it('can update a markdown file excerpt', async () => {
+    const repo = new FileSystemRepositoryChild(PAGES_FIXTURES_DIR, 'pages');
+    const contents = 'maiores non voluptatum';
+    const filePath = await repo.createMarkdownFile({
+      contents,
+      excerpt: 'impedit aut sit',
+      name: 'quis',
+      parentPath: './',
+    });
+    const newExcerpt = 'est et natus';
+    const updateDateTime = getDatetimeFormat(new Date());
+    const [date, _time] = updateDateTime.split(' ');
+    const newPath = await repo.update(filePath, { excerpt: newExcerpt });
+    const updatedFileContents = await readFile(filePath, { encoding: 'utf8' });
+
+    expect(newPath).toBe(filePath);
+    expect(updatedFileContents).toContain(
+      `${newExcerpt}${EXCERPT_SEPARATOR}${contents}`
+    );
     expect(updatedFileContents).toContain(date);
 
     // eslint-disable-next-line @typescript-eslint/no-magic-numbers

@@ -2,6 +2,7 @@ export const getPageQuery = `query Page($id: String, $name: String, $slug: Strin
   page(id: $id, name: $name, slug: $slug) {
     contents
     createdAt
+    excerpt
     id
     meta {
       createdAt

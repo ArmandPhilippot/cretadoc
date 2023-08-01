@@ -11,6 +11,7 @@ export const getPagesListQuery = `query Pages($after: String, $first: Int, $offs
       node {
         contents
         createdAt
+        excerpt
         id
         meta {
           createdAt

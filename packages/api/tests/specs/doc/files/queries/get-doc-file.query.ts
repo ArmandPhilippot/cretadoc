@@ -3,6 +3,7 @@ export const getDocFileQuery = `query DocFile($id: String, $path: String, $slug:
     file(id: $id, path: $path, slug: $slug) {
       contents
       createdAt
+      excerpt
       id
       meta {
         createdAt

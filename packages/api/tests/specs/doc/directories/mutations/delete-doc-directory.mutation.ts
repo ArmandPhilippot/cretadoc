@@ -78,6 +78,7 @@ export const deleteDocDirectoryMutation = `mutation DeleteDocDirectory($input: D
             total
           }
         }
+        excerpt
         id
         meta {
           createdAt

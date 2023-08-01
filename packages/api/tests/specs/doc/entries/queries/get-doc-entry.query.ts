@@ -5,6 +5,7 @@ export const getDocEntryQuery = `query DocEntry($id: String, $path: String, $slu
       ... on DocFile {
         contents
         createdAt
+        excerpt
         id
         meta {
           createdAt
@@ -109,6 +110,7 @@ export const getDocEntryQuery = `query DocEntry($id: String, $path: String, $slu
             total
           }
         }
+        excerpt
         id
         meta {
           createdAt

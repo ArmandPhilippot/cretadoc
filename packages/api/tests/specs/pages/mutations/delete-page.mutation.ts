@@ -5,6 +5,7 @@ export const deletePageMutation = `mutation DeletePage($input: PageDeleteInput!)
       page {
         contents
         createdAt
+        excerpt
         id
         meta {
           createdAt

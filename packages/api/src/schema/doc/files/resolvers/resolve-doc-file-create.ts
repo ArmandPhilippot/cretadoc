@@ -35,12 +35,14 @@ const validateDocFileCreateInput = async <T extends DocFileCreate>(
   loader: DocDirectoryByPathLoader
 ): Promise<ValidationErrors<T>> => {
   const validationErrors = initValidationErrors(input);
-  const { contents, meta, name, parentPath } = input;
+  const { contents, excerpt, meta, name, parentPath } = input;
 
   validationErrors.name.push(...validateFilename(name));
 
   if (contents)
     validationErrors.contents.push(...validateFileContents(contents));
+
+  if (excerpt) validationErrors.excerpt.push(...validateFileContents(excerpt));
 
   if (meta) validationErrors.meta.push(...validateFrontMatterMeta(meta));
 
@@ -74,7 +76,7 @@ export const resolveDocFileCreate: GraphQLFieldResolver<
     input,
     context.loaders.doc.directory.byPath
   );
-  const { contents, meta, name, parentPath } = input;
+  const { contents, excerpt, meta, name, parentPath } = input;
   const existentDocFiles = await context.loaders.doc.file.list({
     where: { name, path: parentPath },
   });
@@ -89,6 +91,7 @@ export const resolveDocFileCreate: GraphQLFieldResolver<
 
   const docFile = await context.mutators.doc.file.create({
     contents: contents ? sanitizeString(contents) : undefined,
+    excerpt: excerpt ? sanitizeString(excerpt) : undefined,
     meta,
     name,
     parentPath,

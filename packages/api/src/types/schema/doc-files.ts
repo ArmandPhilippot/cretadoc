@@ -14,6 +14,7 @@ import type { Connection, QueryResult } from '../gql';
 import type { DocEntryParent } from './doc';
 
 export type DocFile = Omit<RegularFile, 'extension'> & {
+  excerpt?: string;
   meta?: Meta;
   parent: Nullable<DocEntryParent>;
   slug: Slug;
@@ -60,7 +61,10 @@ export type DocFileConnectionResult = QueryResult<DocFileConnectionPayload>;
  * ===========================================================================
  */
 
-export type DocFileCreate = Pick<DocFile, 'contents' | 'meta' | 'name'> & {
+export type DocFileCreate = Pick<
+  DocFile,
+  'contents' | 'excerpt' | 'meta' | 'name'
+> & {
   parentPath?: string;
 };
 

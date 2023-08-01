@@ -36,12 +36,14 @@ const validateDocFileUpdateInput = async <T extends DocFileUpdate>(
   loader: DocDirectoryByPathLoader
 ): Promise<ValidationErrors<T>> => {
   const validationErrors = initValidationErrors(input);
-  const { id, contents, meta, name, parentPath } = input;
+  const { id, contents, excerpt, meta, name, parentPath } = input;
 
   validationErrors.id.push(...validateFileId(id));
 
   if (contents)
     validationErrors.contents.push(...validateFileContents(contents));
+
+  if (excerpt) validationErrors.excerpt.push(...validateFileContents(excerpt));
 
   if (name) validationErrors.name.push(...validateFilename(name));
 
@@ -78,7 +80,7 @@ export const resolveDocFileUpdate: GraphQLFieldResolver<
     context.loaders.doc.directory.byPath
   );
 
-  const { contents, id, meta, name, parentPath } = input;
+  const { contents, excerpt, id, meta, name, parentPath } = input;
 
   const maybeExistentDocFile = await context.loaders.doc.file.byId.load(id);
 
@@ -90,6 +92,7 @@ export const resolveDocFileUpdate: GraphQLFieldResolver<
 
   const file = await context.mutators.doc.file.update({
     contents: contents ? sanitizeString(contents) : undefined,
+    excerpt: excerpt ? sanitizeString(excerpt) : undefined,
     id,
     meta,
     name,

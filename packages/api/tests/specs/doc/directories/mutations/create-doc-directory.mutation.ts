@@ -79,6 +79,7 @@ export const createDocDirectoryMutation = `mutation CreateDocDirectory($input: D
             total
           }
         }
+        excerpt
         id
         meta {
           createdAt
@@ -110,6 +111,8 @@ export const createDocDirectoryMutation = `mutation CreateDocDirectory($input: D
     ... on DocDirectoryCreateErrors {
       __typename
       errors {
+        contents
+        excerpt
         meta
         name
         parentPath

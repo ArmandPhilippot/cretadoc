@@ -15,7 +15,7 @@ import type {
   ResolveOrderFields,
   ResolveWhereFields,
 } from '../types';
-import { MARKDOWN_EXTENSION } from '../utils/constants';
+import { EXCERPT_SEPARATOR, MARKDOWN_EXTENSION } from '../utils/constants';
 import { CretadocAPIError } from '../utils/exceptions';
 import {
   byCreatedAtProp,
@@ -39,6 +39,10 @@ export type FileSystemData = {
    * The file contents if it is a Markdown file.
    */
   contents?: string;
+  /**
+   * The file excerpt.
+   */
+  excerpt?: string;
   /**
    * The file metadata.
    */
@@ -204,7 +208,10 @@ export class FileSystemRepository {
   >(entry: T, filters: Partial<I>, kind?: K): boolean {
     const filtersEntries = Object.entries(filters) as Array<
       [
-        keyof Omit<DocEntry & Page, 'contents' | 'meta' | 'parent' | 'type'>,
+        keyof Omit<
+          DocEntry & Page,
+          'contents' | 'excerpt' | 'meta' | 'parent' | 'type'
+        >,
         Maybe<string>
       ]
     >;
@@ -299,6 +306,7 @@ export class FileSystemRepository {
     meta,
     name,
     contents = '',
+    excerpt,
     parentPath = '',
   }: FileSystemData): Promise<string> {
     const filename = getFilenameWithExt(name);
@@ -311,7 +319,8 @@ export class FileSystemRepository {
       updatedAt: meta?.updatedAt ?? creationDate,
     };
     const frontMatter = convertMetaToFrontMatter(allMeta);
-    const mdContents = `${frontMatter}${contents}`;
+    const excerptWithSep = excerpt ? `${excerpt}${EXCERPT_SEPARATOR}` : '';
+    const mdContents = `${frontMatter}${excerptWithSep}${contents}`;
 
     await writeFile(absolutePath, mdContents, { encoding: 'utf8' });
 
@@ -379,7 +388,11 @@ export class FileSystemRepository {
    */
   async #updateFileContents(
     path: string,
-    { contents, meta }: Pick<FileSystemData, 'contents' | 'meta'>
+    {
+      contents,
+      excerpt,
+      meta,
+    }: Pick<FileSystemData, 'contents' | 'excerpt' | 'meta'>
   ) {
     if (!isMarkdownFile(path))
       throw new CretadocAPIError('Cannot update contents', {
@@ -388,11 +401,18 @@ export class FileSystemRepository {
         received: path,
       });
 
-    const { contents: currentContent, meta: currentMeta } =
-      await this.#getCurrentFileContents(path);
+    const {
+      contents: currentContent,
+      excerpt: currentExcerpt,
+      meta: currentMeta,
+    } = await this.#getCurrentFileContents(path);
     const frontMatter = this.#getUpdatedFrontMatter(currentMeta, meta);
     const regularContents = contents ?? currentContent;
-    const mdContents = `${frontMatter}${regularContents}`;
+    const fileExcerpt = excerpt ?? currentExcerpt;
+    const excerptWithSep = fileExcerpt
+      ? `${fileExcerpt}${EXCERPT_SEPARATOR}`
+      : '';
+    const mdContents = `${frontMatter}${excerptWithSep}${regularContents}`;
 
     await writeFile(path, mdContents, { encoding: 'utf8' });
   }
@@ -406,7 +426,7 @@ export class FileSystemRepository {
    */
   protected async update(
     path: string,
-    { contents, meta, name, parentPath }: Partial<FileSystemData>
+    { contents, excerpt, meta, name, parentPath }: Partial<FileSystemData>
   ): Promise<string> {
     const currentPath = parse(path);
     const newName =
@@ -416,8 +436,8 @@ export class FileSystemRepository {
     const basePath = parentPath ?? this.getRelativePathFrom(currentPath.dir);
     const newPath = this.getAbsolutePathFrom(join(basePath, newName));
 
-    if (!!contents || !!meta)
-      await this.#updateFileContents(path, { contents, meta });
+    if (!!contents || !!excerpt || !!meta)
+      await this.#updateFileContents(path, { contents, excerpt, meta });
 
     if (newPath !== path) await rename(path, newPath);
 

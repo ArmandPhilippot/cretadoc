@@ -36,11 +36,16 @@ export class PagesRepository extends FileSystemRepository {
     contents,
   }: RegularFile): Page {
     const relativePath = this.getRelativePathFrom(path);
-    const { contents: mdContents, meta } = parseMarkdown(contents ?? '');
+    const {
+      contents: mdContents,
+      excerpt,
+      meta,
+    } = parseMarkdown(contents ?? '');
 
     return {
       contents: mdContents,
       createdAt,
+      excerpt,
       id: generateBase64String(relativePath),
       meta,
       name,
@@ -117,10 +122,11 @@ export class PagesRepository extends FileSystemRepository {
    */
   public async create({
     contents,
+    excerpt,
     meta,
     name,
   }: PageCreate): Promise<Maybe<Page>> {
-    await this.createMarkdownFile({ contents, meta, name });
+    await this.createMarkdownFile({ contents, excerpt, meta, name });
 
     return this.get('name', name);
   }
@@ -133,6 +139,7 @@ export class PagesRepository extends FileSystemRepository {
    */
   public async updatePage({
     contents,
+    excerpt,
     id,
     meta,
     name,
@@ -141,6 +148,7 @@ export class PagesRepository extends FileSystemRepository {
     const absolutePath = this.getAbsolutePathFrom(relativePath);
     const newAbsolutePath = await this.update(absolutePath, {
       contents,
+      excerpt,
       meta,
       name,
     });

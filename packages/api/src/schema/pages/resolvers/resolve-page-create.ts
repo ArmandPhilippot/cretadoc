@@ -31,10 +31,12 @@ const validatePageCreateInput = <T extends PageCreate>(
   input: T
 ): ValidationErrors<T> => {
   const validationErrors = initValidationErrors(input);
-  const { contents, meta, name } = input;
+  const { contents, excerpt, meta, name } = input;
 
   if (contents)
     validationErrors.contents.push(...validateFileContents(contents));
+
+  if (excerpt) validationErrors.excerpt.push(...validateFileContents(excerpt));
 
   if (meta) validationErrors.meta.push(...validateFrontMatterMeta(meta));
 
@@ -54,7 +56,7 @@ export const resolvePageCreate: GraphQLFieldResolver<
     throw new CretadocAPIError('Cannot create page', errors);
 
   const validationErrors = validatePageCreateInput(input);
-  const { contents, meta, name } = input;
+  const { contents, excerpt, meta, name } = input;
   const maybeExistentPage = await context.loaders.page.byName.load(name);
 
   if (maybeExistentPage !== undefined)
@@ -67,6 +69,7 @@ export const resolvePageCreate: GraphQLFieldResolver<
 
   const page = await context.mutators.page.create({
     contents: contents ? sanitizeString(contents) : undefined,
+    excerpt: excerpt ? sanitizeString(excerpt) : undefined,
     meta,
     name,
   });

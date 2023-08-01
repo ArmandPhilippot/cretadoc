@@ -42,6 +42,10 @@ export const DocDirectoryCreateInputType = new GraphQLInputObjectType({
       description: 'The directory text contents.',
       type: GraphQLString,
     },
+    excerpt: {
+      description: 'The directory excerpt.',
+      type: GraphQLString,
+    },
     meta: {
       description: 'The directory metadata.',
       type: FrontMatterInputType,
@@ -67,6 +71,11 @@ const DocDirectoryCreateValidationErrorsType = new GraphQLObjectType<
       description: 'The validation errors on contents argument.',
       type: new GraphQLList(GraphQLString),
       resolve: ({ contents }) => contents,
+    },
+    excerpt: {
+      description: 'The validation errors on excerpt argument.',
+      type: new GraphQLList(GraphQLString),
+      resolve: ({ excerpt }) => excerpt,
     },
     meta: {
       description: 'The validation errors on meta argument.',
@@ -188,6 +197,10 @@ export const DocDirectoryUpdateInputType = new GraphQLInputObjectType({
       description: 'The directory text contents.',
       type: GraphQLString,
     },
+    excerpt: {
+      description: 'The directory excerpt.',
+      type: GraphQLString,
+    },
     id: {
       description: 'The id of the directory to update.',
       type: new GraphQLNonNull(GraphQLString),
@@ -217,6 +230,11 @@ const DocDirectoryUpdateValidationErrorsType = new GraphQLObjectType<
       description: 'The validation errors on contents argument.',
       type: new GraphQLList(GraphQLString),
       resolve: ({ contents }) => contents,
+    },
+    excerpt: {
+      description: 'The validation errors on excerpt argument.',
+      type: new GraphQLList(GraphQLString),
+      resolve: ({ excerpt }) => excerpt,
     },
     id: {
       description: 'The validation errors on id argument.',

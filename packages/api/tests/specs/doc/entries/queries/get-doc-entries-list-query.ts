@@ -1,4 +1,4 @@
-export const getDocEntriesListQuery = `query DocEntries($after: String, $first: Int, $offset: Int, $orderBy: DocOrderByInput, $where: DocWhereInput) {
+export const getDocEntriesListQuery = `query DocEntries($after: String, $first: Int, $offset: Int, $orderBy: DocOrderByInput, $where: DocWhereInput, $entriesAfter: String, $entriesFirst: Int, $entriesOffset: Int, $entriesOrderBy: DocOrderByInput, $entriesWhere: DocWhereInput) {
   doc {
     entries(
       after: $after
@@ -13,6 +13,7 @@ export const getDocEntriesListQuery = `query DocEntries($after: String, $first: 
           ... on DocFile {
             contents
             createdAt
+            excerpt
             id
             meta {
               createdAt
@@ -43,11 +44,16 @@ export const getDocEntriesListQuery = `query DocEntries($after: String, $first: 
           ... on DocDirectory {
             contents
             createdAt
-            entries {
+            entries(
+              after: $entriesAfter
+              first: $entriesFirst
+              offset: $entriesOffset
+              orderBy: $entriesOrderBy
+              where: $entriesWhere
+            ) {
               edges {
                 cursor
                 node {
-                  __typename
                   ... on DocFile {
                     id
                     name
@@ -99,8 +105,8 @@ export const getDocEntriesListQuery = `query DocEntries($after: String, $first: 
                     }
                     path
                     slug
-                    type
                     updatedAt
+                    type
                   }
                 }
               }
@@ -112,6 +118,7 @@ export const getDocEntriesListQuery = `query DocEntries($after: String, $first: 
                 total
               }
             }
+            excerpt
             id
             meta {
               createdAt

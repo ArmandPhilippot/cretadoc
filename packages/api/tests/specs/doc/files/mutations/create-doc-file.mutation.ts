@@ -5,6 +5,7 @@ export const createDocFileMutation = `mutation CreateDocFile($input: DocFileCrea
       file {
         contents
         createdAt
+        excerpt
         id
         meta {
           createdAt
@@ -31,6 +32,7 @@ export const createDocFileMutation = `mutation CreateDocFile($input: DocFileCrea
       __typename
       errors {
         contents
+        excerpt
         meta
         name
         parentPath

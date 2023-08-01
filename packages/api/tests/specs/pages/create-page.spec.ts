@@ -37,12 +37,12 @@ describe('create-page', () => {
   });
 
   it<CreatePageContext>('can create a new empty page', async ({ server }) => {
-    const pageName = 'molestias';
+    const name = 'molestias';
     const response = await server.sendQuery({
       query: createPageMutation,
       variables: {
         input: {
-          name: pageName,
+          name,
         },
       },
     });
@@ -50,7 +50,7 @@ describe('create-page', () => {
     if (isPagePayload(response.data.pageCreate))
       expect(response.data.pageCreate.page).toBePage({
         contents: '',
-        name: pageName,
+        name,
       });
 
     expect.assertions(1);
@@ -59,23 +59,20 @@ describe('create-page', () => {
   it<CreatePageContext>('can create a new page with contents', async ({
     server,
   }) => {
-    const pageName = 'omnis';
-    const pageContents = 'corrupti dolores nesciunt';
+    const name = 'omnis';
+    const contents = 'corrupti dolores nesciunt';
     const response = await server.sendQuery({
       query: createPageMutation,
       variables: {
         input: {
-          contents: pageContents,
-          name: pageName,
+          contents,
+          name,
         },
       },
     });
 
     if (isPagePayload(response.data.pageCreate)) {
-      expect(response.data.pageCreate.page).toBePage({
-        contents: pageContents,
-        name: pageName,
-      });
+      expect(response.data.pageCreate.page).toBePage({ contents, name });
       expect(
         response.data.pageCreate.page?.meta?.createdAt
       ).not.toBeUndefined();
@@ -84,11 +81,32 @@ describe('create-page', () => {
     expect.assertions(2);
   });
 
+  it<CreatePageContext>('can create a new page with excerpt', async ({
+    server,
+  }) => {
+    const name = 'fugiat';
+    const excerpt = 'omnis voluptates commodi';
+    const response = await server.sendQuery({
+      query: createPageMutation,
+      variables: {
+        input: {
+          excerpt,
+          name,
+        },
+      },
+    });
+
+    if (isPagePayload(response.data.pageCreate))
+      expect(response.data.pageCreate.page).toBePage({ excerpt, name });
+
+    expect.assertions(1);
+  });
+
   it<CreatePageContext>('can create a new page with meta', async ({
     server,
   }) => {
-    const pageName = 'aliquid';
-    const pageMeta: Meta = {
+    const name = 'aliquid';
+    const meta: Meta = {
       status: 'draft',
       title: 'earum',
     };
@@ -96,15 +114,49 @@ describe('create-page', () => {
       query: createPageMutation,
       variables: {
         input: {
-          meta: pageMeta,
-          name: pageName,
+          meta,
+          name,
         },
       },
     });
 
     if (isPagePayload(response.data.pageCreate)) {
-      expect(response.data.pageCreate.page?.name).toBe(pageName);
-      expect(response.data.pageCreate.page?.meta).toContain(pageMeta);
+      expect(response.data.pageCreate.page?.name).toBe(name);
+      expect(response.data.pageCreate.page?.meta).toContain(meta);
+    }
+
+    expect.assertions(2);
+  });
+
+  it<CreatePageContext>('can create a new page with meta, excerpt and content', async ({
+    server,
+  }) => {
+    const name = 'nisi';
+    const contents = 'libero facilis adipisci';
+    const excerpt = 'similique ut sint';
+    const meta: Meta = {
+      seoTitle: 'quia qui aut',
+      title: 'sed',
+    };
+    const response = await server.sendQuery({
+      query: createPageMutation,
+      variables: {
+        input: {
+          contents,
+          excerpt,
+          meta,
+          name,
+        },
+      },
+    });
+
+    if (isPagePayload(response.data.pageCreate)) {
+      expect(response.data.pageCreate.page).toBePage({
+        contents,
+        excerpt,
+        name,
+      });
+      expect(response.data.pageCreate.page?.meta).toContain(meta);
     }
 
     expect.assertions(2);
@@ -139,12 +191,12 @@ describe('create-page', () => {
   it<CreatePageContext>('returns validation errors when page name exists', async ({
     server,
   }) => {
-    const pageName = 'esse';
+    const name = 'esse';
     await server.sendQuery({
       query: createPageMutation,
       variables: {
         input: {
-          name: pageName,
+          name,
         },
       },
     });
@@ -152,7 +204,7 @@ describe('create-page', () => {
       query: createPageMutation,
       variables: {
         input: {
-          name: pageName,
+          name,
         },
       },
     });

@@ -86,6 +86,7 @@ export const getDocDirectoriesListQuery = `query DocDirectories($after: String, 
               total
             }
           }
+          excerpt
           id
           meta {
             createdAt

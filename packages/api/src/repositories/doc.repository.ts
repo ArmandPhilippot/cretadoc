@@ -362,17 +362,18 @@ export class DocRepository extends FileSystemRepository {
    */
   async #updateDirectoryIndexFile(
     dirPath: string,
-    { contents, meta }: Partial<MarkdownData>
+    { contents, excerpt, meta }: Partial<MarkdownData>
   ) {
     const metaAbsolutePath = this.getAbsolutePathFrom(
       join(dirPath, getFilenameWithExt(DIRECTORY_INDEX_FILENAME))
     );
 
     if (existsSync(metaAbsolutePath))
-      await this.update(metaAbsolutePath, { contents, meta });
+      await this.update(metaAbsolutePath, { contents, excerpt, meta });
     else
       await this.createMarkdownFile({
         contents,
+        excerpt,
         name: DIRECTORY_INDEX_FILENAME,
         meta,
         parentPath: dirPath,
@@ -387,6 +388,7 @@ export class DocRepository extends FileSystemRepository {
    */
   public async createDirectory({
     contents,
+    excerpt,
     meta,
     name,
     parentPath,
@@ -396,7 +398,11 @@ export class DocRepository extends FileSystemRepository {
     const relativePath = this.getRelativePathFrom(dirPath);
 
     await mkdir(dirPath, { recursive: true });
-    await this.#updateDirectoryIndexFile(relativePath, { contents, meta });
+    await this.#updateDirectoryIndexFile(relativePath, {
+      contents,
+      excerpt,
+      meta,
+    });
 
     return this.get('path', relativePath, 'directory');
   }
@@ -409,12 +415,14 @@ export class DocRepository extends FileSystemRepository {
    */
   public async createFile({
     contents,
+    excerpt,
     meta,
     name,
     parentPath,
   }: DocFileCreate): Promise<Maybe<DocFile>> {
     const filePath = await this.createMarkdownFile({
       contents,
+      excerpt,
       meta,
       name,
       parentPath,
@@ -468,6 +476,7 @@ export class DocRepository extends FileSystemRepository {
    */
   public async updateDirectory({
     contents,
+    excerpt,
     id,
     name,
     meta,
@@ -481,8 +490,12 @@ export class DocRepository extends FileSystemRepository {
     });
     const newRelativePath = this.getRelativePathFrom(newAbsolutePath);
 
-    if (contents || meta)
-      await this.#updateDirectoryIndexFile(newRelativePath, { contents, meta });
+    if (contents || excerpt || meta)
+      await this.#updateDirectoryIndexFile(newRelativePath, {
+        contents,
+        excerpt,
+        meta,
+      });
 
     return this.get('path', newRelativePath, 'directory');
   }
@@ -495,6 +508,7 @@ export class DocRepository extends FileSystemRepository {
    */
   public async updateFile({
     contents,
+    excerpt,
     id,
     meta,
     name,
@@ -504,6 +518,7 @@ export class DocRepository extends FileSystemRepository {
     const absolutePath = this.getAbsolutePathFrom(relativePath);
     const newAbsolutePath = await this.update(absolutePath, {
       contents,
+      excerpt,
       meta,
       name,
       parentPath,

@@ -1,4 +1,4 @@
-import { mkdir } from 'fs/promises';
+import { mkdir, writeFile } from 'fs/promises';
 import { join } from 'path';
 import { type Nullable, isObjKeyExist, isObject } from '@cretadoc/utils';
 import { afterAll, beforeEach, describe, it } from 'vitest';
@@ -8,6 +8,11 @@ import type {
   DocDirectoryUpdatePayload,
 } from '../../../../src';
 import type { Meta } from '../../../../src/types';
+import {
+  DIRECTORY_INDEX_FILENAME,
+  EXCERPT_SEPARATOR,
+  MARKDOWN_EXTENSION,
+} from '../../../../src/utils/constants';
 import { generateBase64String } from '../../../../src/utils/helpers';
 import { expect } from '../../../utils';
 import { DOC_FIXTURES_DIR } from '../../../utils/constants';
@@ -43,26 +48,26 @@ describe('update-doc-directory', () => {
   it<UpdateDocDirectoryContext>('can update a doc directory without changes', async ({
     server,
   }) => {
-    const docDirectoryName = 'quae';
-    const docDirectoryPath = `./${docDirectoryName}`;
-    const docDirectoryId = generateBase64String(docDirectoryPath);
+    const name = 'quae';
+    const relativePath = `./${name}`;
+    const id = generateBase64String(relativePath);
 
-    await mkdir(join(DOC_FIXTURES_DIR, docDirectoryPath), { recursive: true });
+    await mkdir(join(DOC_FIXTURES_DIR, relativePath), { recursive: true });
 
     const response = await server.sendQuery({
       query: updateDocDirectoryMutation,
       variables: {
         input: {
-          id: docDirectoryId,
+          id,
         },
       },
     });
 
     if (isDocDirectoryPayload(response.data.docDirectoryUpdate))
       expect(response.data.docDirectoryUpdate.directory).toBeDocDirectory({
-        id: docDirectoryId,
-        name: docDirectoryName,
-        path: docDirectoryPath,
+        id,
+        name,
+        path: relativePath,
       });
 
     expect.assertions(1);
@@ -71,45 +76,129 @@ describe('update-doc-directory', () => {
   it<UpdateDocDirectoryContext>('can update the name of a doc directory', async ({
     server,
   }) => {
-    const docDirectoryName = 'sed';
-    const docDirectoryPath = `./${docDirectoryName}`;
-    const docDirectoryId = generateBase64String(docDirectoryPath);
+    const name = 'sed';
+    const relativePath = `./${name}`;
+    const id = generateBase64String(relativePath);
 
-    await mkdir(join(DOC_FIXTURES_DIR, docDirectoryPath), { recursive: true });
+    await mkdir(join(DOC_FIXTURES_DIR, relativePath), { recursive: true });
 
-    const newDocDirectoryName = 'voluptatem';
+    const newName = 'voluptatem';
     const response = await server.sendQuery({
       query: updateDocDirectoryMutation,
       variables: {
         input: {
-          id: docDirectoryId,
-          name: newDocDirectoryName,
+          id,
+          name: newName,
         },
       },
     });
 
     if (isDocDirectoryPayload(response.data.docDirectoryUpdate)) {
       expect(response.data.docDirectoryUpdate.directory).toBeDocDirectory({
-        name: newDocDirectoryName,
+        name: newName,
       });
-      expect(response.data.docDirectoryUpdate.directory?.id).not.toBe(
-        docDirectoryId
-      );
+      expect(response.data.docDirectoryUpdate.directory?.id).not.toBe(id);
     }
 
     expect.assertions(2);
   });
 
+  it<UpdateDocDirectoryContext>('can update the contents of a doc directory', async ({
+    server,
+  }) => {
+    const name = 'odit';
+    const contents = 'voluptatem aut ex';
+    const relativePath = `./${name}`;
+    const id = generateBase64String(relativePath);
+
+    await mkdir(join(DOC_FIXTURES_DIR, relativePath), { recursive: true });
+    await writeFile(
+      join(
+        DOC_FIXTURES_DIR,
+        relativePath,
+        `${DIRECTORY_INDEX_FILENAME}${MARKDOWN_EXTENSION}`
+      ),
+      contents,
+      {
+        encoding: 'utf8',
+      }
+    );
+
+    const newContents = 'repellat quo quibusdam';
+    const response = await server.sendQuery({
+      query: updateDocDirectoryMutation,
+      variables: {
+        input: {
+          id,
+          contents: newContents,
+        },
+      },
+    });
+
+    if (isDocDirectoryPayload(response.data.docDirectoryUpdate))
+      expect(response.data.docDirectoryUpdate.directory).toBeDocDirectory({
+        contents: newContents,
+        id,
+        name,
+        path: relativePath,
+      });
+
+    expect.assertions(1);
+  });
+
+  it<UpdateDocDirectoryContext>('can update the excerpt of a doc directory', async ({
+    server,
+  }) => {
+    const name = 'non';
+    const excerpt = 'tempore facilis sed';
+    const relativePath = `./${name}`;
+    const id = generateBase64String(relativePath);
+
+    await mkdir(join(DOC_FIXTURES_DIR, relativePath), { recursive: true });
+    await writeFile(
+      join(
+        DOC_FIXTURES_DIR,
+        relativePath,
+        `${DIRECTORY_INDEX_FILENAME}${MARKDOWN_EXTENSION}`
+      ),
+      `${excerpt}${EXCERPT_SEPARATOR}`,
+      {
+        encoding: 'utf8',
+      }
+    );
+
+    const newExcerpt = 'et ut aliquid';
+    const response = await server.sendQuery({
+      query: updateDocDirectoryMutation,
+      variables: {
+        input: {
+          id,
+          excerpt: newExcerpt,
+        },
+      },
+    });
+
+    if (isDocDirectoryPayload(response.data.docDirectoryUpdate))
+      expect(response.data.docDirectoryUpdate.directory).toBeDocDirectory({
+        excerpt: newExcerpt,
+        id,
+        name,
+        path: relativePath,
+      });
+
+    expect.assertions(1);
+  });
+
   it<UpdateDocDirectoryContext>('can update the meta of a doc directory', async ({
     server,
   }) => {
-    const docDirectoryName = 'dolorem';
-    const docDirectoryPath = `./${docDirectoryName}`;
-    const docDirectoryId = generateBase64String(docDirectoryPath);
+    const name = 'dolorem';
+    const relativePath = `./${name}`;
+    const id = generateBase64String(relativePath);
 
-    await mkdir(join(DOC_FIXTURES_DIR, docDirectoryPath), { recursive: true });
+    await mkdir(join(DOC_FIXTURES_DIR, relativePath), { recursive: true });
 
-    const newDocDirectoryMeta: Meta = {
+    const newMeta: Meta = {
       status: 'published',
       title: 'nobis similique doloremque',
     };
@@ -117,20 +206,20 @@ describe('update-doc-directory', () => {
       query: updateDocDirectoryMutation,
       variables: {
         input: {
-          id: docDirectoryId,
-          meta: newDocDirectoryMeta,
+          id,
+          meta: newMeta,
         },
       },
     });
 
     if (isDocDirectoryPayload(response.data.docDirectoryUpdate)) {
       expect(response.data.docDirectoryUpdate.directory).toBeDocDirectory({
-        id: docDirectoryId,
-        name: docDirectoryName,
-        path: docDirectoryPath,
+        id,
+        name,
+        path: relativePath,
       });
       expect(response.data.docDirectoryUpdate.directory?.meta).toContain(
-        newDocDirectoryMeta
+        newMeta
       );
     }
 
@@ -140,35 +229,33 @@ describe('update-doc-directory', () => {
   it<UpdateDocDirectoryContext>('can update the path of a doc directory', async ({
     server,
   }) => {
-    const docDirectoryName = 'animi';
-    const docDirectoryPath = `./${docDirectoryName}`;
-    const docDirectoryId = generateBase64String(docDirectoryPath);
+    const name = 'animi';
+    const relativePath = `./${name}`;
+    const id = generateBase64String(relativePath);
 
-    await mkdir(join(DOC_FIXTURES_DIR, docDirectoryPath), { recursive: true });
+    await mkdir(join(DOC_FIXTURES_DIR, relativePath), { recursive: true });
 
-    const newDocDirName = 'labore';
-    const newDocDirPath = `./${newDocDirName}`;
+    const newName = 'labore';
+    const newPath = `./${newName}`;
 
-    await mkdir(join(DOC_FIXTURES_DIR, newDocDirPath), { recursive: true });
+    await mkdir(join(DOC_FIXTURES_DIR, newPath), { recursive: true });
 
     const response = await server.sendQuery({
       query: updateDocDirectoryMutation,
       variables: {
         input: {
-          id: docDirectoryId,
-          parentPath: newDocDirPath,
+          id,
+          parentPath: newPath,
         },
       },
     });
 
     if (isDocDirectoryPayload(response.data.docDirectoryUpdate)) {
       expect(response.data.docDirectoryUpdate.directory).toBeDocDirectory({
-        name: docDirectoryName,
-        path: `${newDocDirPath}/${docDirectoryName}`,
+        name,
+        path: `${newPath}/${name}`,
       });
-      expect(response.data.docDirectoryUpdate.directory?.id).not.toBe(
-        docDirectoryId
-      );
+      expect(response.data.docDirectoryUpdate.directory?.id).not.toBe(id);
     }
 
     expect.assertions(2);
@@ -189,6 +276,8 @@ describe('update-doc-directory', () => {
     if (isDocDirectoryValidationErrors(response.data.docDirectoryUpdate))
       expect(response.data.docDirectoryUpdate.errors).toMatchInlineSnapshot(`
         {
+          "contents": null,
+          "excerpt": null,
           "id": [
             "Invalid id",
             "The requested directory does not exist",
@@ -205,17 +294,16 @@ describe('update-doc-directory', () => {
   it<UpdateDocDirectoryContext>('returns validation errors when the doc directory name is invalid', async ({
     server,
   }) => {
-    const docDirectoryName = 'expedita';
-    const docDirectoryPath = `./${docDirectoryName}`;
-    const docDirectoryId = generateBase64String(docDirectoryPath);
+    const name = 'expedita';
+    const relativePath = `./${name}`;
 
-    await mkdir(join(DOC_FIXTURES_DIR, docDirectoryPath), { recursive: true });
+    await mkdir(join(DOC_FIXTURES_DIR, relativePath), { recursive: true });
 
     const response = await server.sendQuery({
       query: updateDocDirectoryMutation,
       variables: {
         input: {
-          id: docDirectoryId,
+          id: generateBase64String(relativePath),
           name: '<',
         },
       },
@@ -224,6 +312,8 @@ describe('update-doc-directory', () => {
     if (isDocDirectoryValidationErrors(response.data.docDirectoryUpdate))
       expect(response.data.docDirectoryUpdate.errors).toMatchInlineSnapshot(`
         {
+          "contents": null,
+          "excerpt": null,
           "id": [],
           "meta": null,
           "name": [

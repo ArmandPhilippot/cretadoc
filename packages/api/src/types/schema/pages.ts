@@ -13,6 +13,7 @@ import type {
 import type { Connection, QueryResult } from '../gql';
 
 export type Page = Omit<RegularFile, 'extension' | 'type'> & {
+  excerpt?: string;
   meta?: Meta;
   slug: Slug;
 };
@@ -55,7 +56,7 @@ export type PageConnectionResult = QueryResult<PageConnectionPayload>;
  * ===========================================================================
  */
 
-export type PageCreate = Pick<Page, 'contents' | 'meta' | 'name'>;
+export type PageCreate = Pick<Page, 'contents' | 'excerpt' | 'meta' | 'name'>;
 
 export type PageCreateInput = InputFrom<PageCreate>;
 
