@@ -1,4 +1,4 @@
-export const getDocEntryQuery = `query DocEntry($id: String, $path: String, $slug: String, $after: String, $first: Int, $offset: Int, $orderBy: DocOrderByInput, $where: DocWhereInput) {
+export const getDocEntryQuery = `query DocEntry($id: String, $path: String, $slug: String) {
   doc {
     entry(id: $id, path: $path, slug: $slug) {
       __typename
@@ -36,81 +36,62 @@ export const getDocEntryQuery = `query DocEntry($id: String, $path: String, $slu
       ... on DocDirectory {
         contents
         createdAt
-        entries(
-          after: $after
-          first: $first
-          offset: $offset
-          orderBy: $orderBy
-          where: $where
-        ) {
-          edges {
-            cursor
-            node {
-              ... on DocDirectory {
-                createdAt
-                id
-                meta {
-                  createdAt
-                  status
-                  title
-                  updatedAt
-                }
-                name
-                parent {
-                  id
-                  meta {
-                    createdAt
-                    status
-                    title
-                    updatedAt
-                  }
-                  name
-                  path
-                  slug
-                }
-                path
-                slug
-                type
-                updatedAt
-              }
-              ... on DocFile {
-                createdAt
-                id
-                meta {
-                  createdAt
-                  status
-                  title
-                  updatedAt
-                }
-                name
-                parent {
-                  id
-                  meta {
-                    createdAt
-                    status
-                    title
-                    updatedAt
-                  }
-                  name
-                  path
-                  slug
-                }
-                path
-                slug
-                type
-                updatedAt
-              }
+        entries {
+          ... on DocDirectory {
+            createdAt
+            id
+            meta {
+              createdAt
+              status
+              title
+              updatedAt
             }
+            name
+            parent {
+              id
+              meta {
+                createdAt
+                status
+                title
+                updatedAt
+              }
+              name
+              path
+              slug
+            }
+            path
+            slug
+            type
+            updatedAt
           }
-          pageInfo {
-            endCursor
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            total
+          ... on DocFile {
+            createdAt
+            id
+            meta {
+              createdAt
+              status
+              title
+              updatedAt
+            }
+            name
+            parent {
+              id
+              meta {
+                createdAt
+                status
+                title
+                updatedAt
+              }
+              name
+              path
+              slug
+            }
+            path
+            slug
+            type
+            updatedAt
           }
         }
-        excerpt
         id
         meta {
           createdAt

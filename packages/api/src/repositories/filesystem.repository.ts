@@ -1,7 +1,7 @@
 import { readFile, rename, rm, writeFile } from 'fs/promises';
 import { isAbsolute, join, parse } from 'path';
 import { type DirectoryContents, readDir } from '@cretadoc/read-dir';
-import { type Maybe, isObjKeyExist, isObject } from '@cretadoc/utils';
+import type { Maybe } from '@cretadoc/utils';
 import type {
   APIDataConfig,
   DocDirectory,
@@ -9,7 +9,6 @@ import type {
   DocEntryKind,
   DocFile,
   Meta,
-  NonOptionalKeysOf,
   OrderBy,
   Page,
   ResolveOrderFields,
@@ -29,6 +28,7 @@ import {
   getRelativePath,
   isDocEntry,
   isMarkdownFile,
+  isPage,
   isPathInRoot,
   normalizePath,
   parseMarkdown,
@@ -58,30 +58,6 @@ export type FileSystemData = {
 };
 
 /**
- * Check if the given value is a Page.
- *
- * @param {unknown} value - A value to compare.
- * @returns {boolean} True if value is a Page object.
- */
-const isPage = (value: unknown): value is Page => {
-  if (!value) return false;
-  if (!isObject(value)) return false;
-
-  const mandatoryKeys: Array<NonOptionalKeysOf<Page>> = [
-    'createdAt',
-    'id',
-    'name',
-    'path',
-    'slug',
-    'updatedAt',
-  ];
-
-  for (const key of mandatoryKeys) if (!isObjKeyExist(value, key)) return false;
-
-  return true;
-};
-
-/**
  * Check if the given value is a DocEntry or a Page.
  *
  * @param {unknown} value - A value to compare.
@@ -94,14 +70,14 @@ const isValidEntry = <
     ? DocDirectory
     : K extends 'file'
     ? DocFile
-    : Page
+    : DocEntry | Page
 >(
   value: unknown,
   kind: Maybe<DocEntryKind>
 ): value is T => {
   if (kind) return isDocEntry(value, kind);
 
-  return isDocEntry(value, kind) || isPage(value);
+  return isDocEntry(value) || isPage(value);
 };
 
 export class FileSystemRepository {
@@ -206,7 +182,7 @@ export class FileSystemRepository {
     I extends ResolveWhereFields<T> = ResolveWhereFields<T>,
     K extends Maybe<DocEntryKind> = undefined
   >(entry: T, filters: Partial<I>, kind?: K): boolean {
-    const filtersEntries = Object.entries(filters) as Array<
+    const allFilters = Object.entries(filters) as Array<
       [
         keyof Omit<
           DocEntry & Page,
@@ -216,12 +192,14 @@ export class FileSystemRepository {
       ]
     >;
 
-    return filtersEntries.every(([key, value]) => {
+    return allFilters.every(([key, value]) => {
       if (value === undefined) return true;
 
       if (key === 'path' || key === 'slug')
         return (
-          isDocEntry(entry, kind) && entry.parent && entry.parent[key] === value
+          isDocEntry(entry, kind) &&
+          !!entry.parent &&
+          entry.parent[key] === value
         );
 
       return entry[key].includes(value);

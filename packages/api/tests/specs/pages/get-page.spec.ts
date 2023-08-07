@@ -89,7 +89,7 @@ describe('get-page', () => {
           "extensions": {
             "cretadoc": {
               "code": "BAD_USER_INPUT",
-              "expected": "Either an id, a name or a slug.",
+              "expected": "Either an id, a name or a slug",
             },
           },
           "locations": [
@@ -98,7 +98,7 @@ describe('get-page', () => {
               "line": 2,
             },
           ],
-          "message": "An argument is required",
+          "message": "Not enough arguments",
           "path": [
             "page",
           ],
@@ -124,7 +124,7 @@ describe('get-page', () => {
           "extensions": {
             "cretadoc": {
               "code": "BAD_USER_INPUT",
-              "expected": "Either an id, a name or a slug.",
+              "expected": "Either an id, a name or a slug",
             },
           },
           "locations": [

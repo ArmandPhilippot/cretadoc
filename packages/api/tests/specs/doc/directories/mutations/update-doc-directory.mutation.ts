@@ -1,30 +1,21 @@
-export const updateDocDirectoryMutation = `mutation UpdateDocDirectory($after: String, $first: Int, $offset: Int, $orderBy: DocOrderByInput, $where: DocWhereInput, $input: DocDirectoryUpdateInput!) {
+export const updateDocDirectoryMutation = `mutation UpdateDocDirectory($input: DocDirectoryUpdateInput!) {
   docDirectoryUpdate(input: $input) {
     ... on DocDirectoryPayload {
       __typename
       directory {
         contents
         createdAt
-        entries(
-          after: $after
-          first: $first
-          offset: $offset
-          orderBy: $orderBy
-          where: $where
-        ) {
-          edges {
-            cursor
-            node {
+        entries {
               ... on DocFile {
-                createdAt
                 id
+                name
+                createdAt
                 meta {
                   createdAt
                   status
                   title
                   updatedAt
                 }
-                name
                 parent {
                   id
                   meta {
@@ -43,15 +34,15 @@ export const updateDocDirectoryMutation = `mutation UpdateDocDirectory($after: S
                 updatedAt
               }
               ... on DocDirectory {
-                createdAt
                 id
+                name
+                createdAt
                 meta {
                   createdAt
                   status
                   title
                   updatedAt
                 }
-                name
                 parent {
                   id
                   meta {
@@ -70,15 +61,6 @@ export const updateDocDirectoryMutation = `mutation UpdateDocDirectory($after: S
                 updatedAt
               }
             }
-          }
-          pageInfo {
-            endCursor
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            total
-          }
-        }
         excerpt
         id
         meta {

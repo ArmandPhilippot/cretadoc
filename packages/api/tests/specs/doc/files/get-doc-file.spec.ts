@@ -101,7 +101,7 @@ describe('get-doc-file', () => {
               "line": 3,
             },
           ],
-          "message": "An argument is required",
+          "message": "Not enough arguments",
           "path": [
             "doc",
             "file",

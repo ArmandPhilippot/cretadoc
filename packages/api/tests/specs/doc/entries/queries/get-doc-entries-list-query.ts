@@ -1,4 +1,4 @@
-export const getDocEntriesListQuery = `query DocEntries($after: String, $first: Int, $offset: Int, $orderBy: DocOrderByInput, $where: DocWhereInput, $entriesAfter: String, $entriesFirst: Int, $entriesOffset: Int, $entriesOrderBy: DocOrderByInput, $entriesWhere: DocWhereInput) {
+export const getDocEntriesListQuery = `query DocEntries($after: String, $first: Int, $offset: Int, $orderBy: DocOrderByInput, $where: DocWhereInput) {
   doc {
     entries(
       after: $after
@@ -11,7 +11,6 @@ export const getDocEntriesListQuery = `query DocEntries($after: String, $first: 
         cursor
         node {
           ... on DocFile {
-            contents
             createdAt
             excerpt
             id
@@ -42,82 +41,7 @@ export const getDocEntriesListQuery = `query DocEntries($after: String, $first: 
             updatedAt
           }
           ... on DocDirectory {
-            contents
             createdAt
-            entries(
-              after: $entriesAfter
-              first: $entriesFirst
-              offset: $entriesOffset
-              orderBy: $entriesOrderBy
-              where: $entriesWhere
-            ) {
-              edges {
-                cursor
-                node {
-                  ... on DocFile {
-                    id
-                    name
-                    createdAt
-                    meta {
-                      createdAt
-                      status
-                      title
-                      updatedAt
-                    }
-                    parent {
-                      id
-                      meta {
-                        createdAt
-                        status
-                        title
-                        updatedAt
-                      }
-                      name
-                      path
-                      slug
-                    }
-                    path
-                    slug
-                    type
-                    updatedAt
-                  }
-                  ... on DocDirectory {
-                    id
-                    name
-                    createdAt
-                    meta {
-                      createdAt
-                      status
-                      title
-                      updatedAt
-                    }
-                    parent {
-                      id
-                      meta {
-                        createdAt
-                        status
-                        title
-                        updatedAt
-                      }
-                      name
-                      path
-                      slug
-                    }
-                    path
-                    slug
-                    updatedAt
-                    type
-                  }
-                }
-              }
-              pageInfo {
-                endCursor
-                hasNextPage
-                hasPreviousPage
-                startCursor
-                total
-              }
-            }
             excerpt
             id
             meta {

@@ -25,7 +25,6 @@ import type {
   ListInput,
 } from '../types';
 import { DIRECTORY_INDEX_FILENAME } from '../utils/constants';
-import { getConnection } from '../utils/gql';
 import {
   type MarkdownData,
   generateBase64String,
@@ -170,7 +169,7 @@ export class DocRepository extends FileSystemRepository {
       return {
         ...commonData,
         ...indexData,
-        entries: getConnection({ data: entries }),
+        entries,
         type: 'directory',
       };
     }

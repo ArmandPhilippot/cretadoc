@@ -67,7 +67,7 @@ const validateDocDirectoryToDelete = async <
   const docDirectory = await loader.load(value);
 
   if (!docDirectory) errors.push('The requested directory does not exist');
-  else if (mustBeEmpty && !!docDirectory.entries?.edges.length)
+  else if (mustBeEmpty && !!docDirectory.entries?.length)
     errors.push('The directory must be empty');
 
   return errors;

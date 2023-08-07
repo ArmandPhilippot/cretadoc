@@ -38,3 +38,8 @@ export const API_ERROR_CODE = {
    */
   INTERNAL_ERROR: 'INTERNAL_ERROR',
 } as const;
+
+export const MESSAGES = {
+  NOT_ENOUGH_ARGS: 'Not enough arguments',
+  TOO_MANY_ARGS: 'Too many arguments',
+} as const;

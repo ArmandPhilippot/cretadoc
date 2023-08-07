@@ -1,6 +1,7 @@
 import {
   GraphQLEnumType,
   GraphQLInputObjectType,
+  GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLString,
@@ -17,7 +18,6 @@ import {
   FrontMatterMetaType,
   createConnectionType,
   createOrderByType,
-  getConnectionArgs,
 } from '../../utils/gql';
 
 const DocOrderFieldType = new GraphQLEnumType({
@@ -199,11 +199,7 @@ export const DocDirectoryType: GraphQLObjectType<DocDirectory, APIContext> =
         entries: {
           description: 'The entries inside the directory.',
           // eslint-disable-next-line @typescript-eslint/no-use-before-define
-          type: DocEntryConnectionType,
-          args: getConnectionArgs({
-            orderBy: DocOrderByInputType,
-            where: DocWhereInputType,
-          }),
+          type: new GraphQLList(DocEntryType),
           resolve: ({ entries }) => entries,
         },
         excerpt: {

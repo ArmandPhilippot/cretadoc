@@ -2,12 +2,13 @@ import type { GraphQLFieldResolver } from 'graphql';
 import type { Maybe } from 'graphql-yoga';
 import type { APIContext, Page, PageInput } from '../../../types';
 import { CretadocAPIError, UserInputError } from '../../../utils/exceptions';
+import { validateArgsLength } from '../../../utils/helpers/validators';
 
 export const resolvePage: GraphQLFieldResolver<
   null,
   APIContext,
   Partial<PageInput>
-> = async (_, { id, name, slug }, context): Promise<Maybe<Page>> => {
+> = async (_, input, context): Promise<Maybe<Page>> => {
   if (!context.loaders?.page)
     throw new CretadocAPIError('Cannot get page', {
       errorKind: 'reference',
@@ -15,18 +16,19 @@ export const resolvePage: GraphQLFieldResolver<
       received: typeof context.loaders?.doc,
     });
 
-  if (!id && !name && !slug)
-    throw new UserInputError('An argument is required', {
-      expected: 'Either an id, a name or a slug.',
+  const inputError = validateArgsLength(input, 1);
+
+  if (inputError)
+    throw new UserInputError(inputError, {
+      expected: 'Either an id, a name or a slug',
     });
 
-  if ((id && name) || (id && slug) || (name && slug))
-    throw new UserInputError('Too many arguments', {
-      expected: 'Either an id, a name or a slug.',
-    });
+  const { id, name, slug } = input;
+  let page: Maybe<Page> = undefined;
 
-  if (name) return context.loaders.page.byName.load(name);
-  if (id) return context.loaders.page.byId.load(id);
-  if (slug) return context.loaders.page.bySlug.load(slug);
-  return undefined;
+  if (name) page = await context.loaders.page.byName.load(name);
+  else if (id) page = await context.loaders.page.byId.load(id);
+  else if (slug) page = await context.loaders.page.bySlug.load(slug);
+
+  return page;
 };

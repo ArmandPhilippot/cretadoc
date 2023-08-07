@@ -16,7 +16,7 @@ import type { DocEntry } from './doc-entries';
 
 export type DocDirectory = Omit<Directory, 'contents' | 'extension'> & {
   contents?: string;
-  entries?: Connection<DocEntry>;
+  entries?: DocEntry[];
   excerpt?: string;
   meta?: Meta;
   parent: Nullable<DocEntryParent>;

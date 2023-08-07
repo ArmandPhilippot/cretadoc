@@ -5,6 +5,7 @@ import type {
   DocEntryKind,
   DocFile,
   NonOptionalKeysOf,
+  Page,
 } from '../../types';
 
 /**
@@ -41,4 +42,28 @@ export const isDocEntry = <
   for (const key of mandatoryKeys) if (!isObjKeyExist(value, key)) return false;
 
   return kind ? value['type'] === kind : true;
+};
+
+/**
+ * Check if the given value is a Page.
+ *
+ * @param {unknown} value - A value to compare.
+ * @returns {boolean} True if value is a Page object.
+ */
+export const isPage = (value: unknown): value is Page => {
+  if (!value) return false;
+  if (!isObject(value)) return false;
+
+  const mandatoryKeys: Array<NonOptionalKeysOf<Page>> = [
+    'createdAt',
+    'id',
+    'name',
+    'path',
+    'slug',
+    'updatedAt',
+  ];
+
+  for (const key of mandatoryKeys) if (!isObjKeyExist(value, key)) return false;
+
+  return true;
 };

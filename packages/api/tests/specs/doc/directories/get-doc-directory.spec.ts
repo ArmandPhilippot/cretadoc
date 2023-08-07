@@ -107,7 +107,7 @@ describe('get-doc-directory', () => {
               "line": 3,
             },
           ],
-          "message": "An argument is required",
+          "message": "Not enough arguments",
           "path": [
             "doc",
             "directory",
