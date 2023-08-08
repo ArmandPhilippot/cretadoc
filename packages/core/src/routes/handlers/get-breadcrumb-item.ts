@@ -92,10 +92,10 @@ export const getBreadcrumbItem = (
   const items: BreadcrumbsItem[] = [];
   const { pageNumber, slug } = getSlugInfoFrom(pathname);
 
-  if (pathname === ROUTES.DOC) items.push(docItem);
+  if (pathname === docItem.url) items.push(docItem);
   else if (pathname === ROUTES.HOMEPAGE) items.push(homeItem);
   else if (pathname === ROUTES.NOT_FOUND) items.push(errorItem);
-  else if (slug !== ROUTES.DOC)
+  else if (slug !== docItem.url)
     items.push(...getItemsFromNestedRoutes(response, errorItem));
 
   if (pageNumber) items.push(getPageNumberItem(pageNumber));

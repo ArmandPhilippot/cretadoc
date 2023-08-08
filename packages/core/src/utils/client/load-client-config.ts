@@ -1,3 +1,4 @@
+import type { NonOptionalKeysOf } from '@cretadoc/api';
 import { extractKeysFromObj } from '@cretadoc/utils';
 import type {
   ClientConfigShape,
@@ -30,6 +31,10 @@ const getClientConfig = <T extends ClientConfigShape>(
   return {
     ...DEFAULT_CLIENT_CONFIG,
     ...config,
+    doc: {
+      ...DEFAULT_CLIENT_CONFIG.doc,
+      ...config.doc,
+    },
     pages: sanitizePagesProp({
       ...DEFAULT_CLIENT_CONFIG.pages,
       ...(config.pages as Partial<CretadocPages>),
@@ -49,14 +54,8 @@ export const loadClientConfig = async (
   cwd: string
 ): Promise<CretadocClientConfig> => {
   const config = await loadConfigFile(filename, cwd);
-  const validClientConfigKeys: Array<keyof CretadocClientConfig> = [
-    'copyright',
-    'hideGenerator',
-    'locale',
-    'name',
-    'pages',
-    'theme',
-  ];
+  const validClientConfigKeys: Array<NonOptionalKeysOf<CretadocClientConfig>> =
+    ['copyright', 'doc', 'hideGenerator', 'locale', 'name', 'pages', 'theme'];
 
   if (!isConfigShapeValid<ConfigShape>(config))
     throw new ConfigError(

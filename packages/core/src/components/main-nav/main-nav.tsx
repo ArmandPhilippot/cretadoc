@@ -8,7 +8,6 @@ import {
 import type { FC } from 'react';
 import { useIntl } from 'react-intl';
 import { useLocation } from 'react-router-dom';
-import { ROUTES } from '../../utils/constants';
 import { useConfig, usePagesList } from '../../utils/hooks';
 
 export type MainNavProps = Omit<
@@ -17,9 +16,11 @@ export type MainNavProps = Omit<
 >;
 
 export const MainNav: FC<MainNavProps> = (props) => {
-  const { pages: config } = useConfig();
+  const { doc, pages: pagesConfig } = useConfig();
   const { isLoading, pages } = usePagesList({
-    exclude: { names: config.legalNotice ? [config.legalNotice] : [] },
+    exclude: {
+      names: pagesConfig.legalNotice ? [pagesConfig.legalNotice] : [],
+    },
   });
   const { pathname } = useLocation();
   const intl = useIntl();
@@ -40,12 +41,6 @@ export const MainNav: FC<MainNavProps> = (props) => {
     defaultMessage: 'Loading navigation items...',
     description: 'MainNav: loading text',
     id: '44f+HY',
-  });
-
-  const docLabel = intl.formatMessage({
-    defaultMessage: 'Documentation',
-    description: 'MainNav: documentation link anchor',
-    id: 'OdcBgG',
   });
 
   const getPages = () => {
@@ -78,11 +73,11 @@ export const MainNav: FC<MainNavProps> = (props) => {
         <>
           {getPages()}
           <NavItem
-            isSelected={pathname.startsWith(ROUTES.DOC)}
+            isSelected={pathname.startsWith(doc.slug)}
             // eslint-disable-next-line react/jsx-no-literals
             key="documentation-index"
-            label={docLabel}
-            to={ROUTES.DOC}
+            label={doc.label}
+            to={doc.slug}
             // eslint-disable-next-line react/jsx-no-literals
             variant="block"
           />

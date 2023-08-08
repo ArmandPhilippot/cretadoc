@@ -11,14 +11,13 @@ import {
 import { type FC, useCallback, type ReactNode } from 'react';
 import { useIntl } from 'react-intl';
 import { removeTrailingSlashes } from '../../utils/client';
-import { PAGINATED_SLUG_PREFIX, ROUTES } from '../../utils/constants';
+import { PAGINATED_SLUG_PREFIX } from '../../utils/constants';
+import { useConfig } from '../../utils/hooks';
 import * as styles from './doc-entries-list.css';
 
 export type DocEntriesListProps = {
   /**
    * The base slug to use in pagination links.
-   *
-   * @default ROUTES.DOC
    */
   baseUrl: string;
   /**
@@ -36,11 +35,12 @@ export type DocEntriesListProps = {
 };
 
 export const DocEntriesList: FC<DocEntriesListProps> = ({
-  baseUrl = ROUTES.DOC,
+  baseUrl,
   currentPage,
   entries,
   totalPages,
 }) => {
+  const { doc } = useConfig();
   const baseSlug = removeTrailingSlashes(baseUrl);
   const intl = useIntl();
   const paginationLabel = intl.formatMessage({
@@ -92,7 +92,7 @@ export const DocEntriesList: FC<DocEntriesListProps> = ({
 
   const getCardItems = (): CardItem[] =>
     entries.map((entry) => {
-      const cardLink = `${ROUTES.DOC}${entry.slug}`;
+      const cardLink = `${doc.slug}${entry.slug}`;
       const callToAction =
         entry.type === 'directory'
           ? explore(entry.meta?.title ?? entry.name)

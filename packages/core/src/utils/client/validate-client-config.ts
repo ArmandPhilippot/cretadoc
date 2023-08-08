@@ -7,6 +7,7 @@ import type {
 import { ConfigError } from '../exceptions';
 import {
   validateCopyrightProp,
+  validateDocProp,
   validateHideGeneratorProp,
   validateLocaleProp,
   validateNameProp,
@@ -28,6 +29,8 @@ const validateClientConfigProp = (
   switch (key) {
     case 'copyright':
       return validateCopyrightProp(value);
+    case 'doc':
+      return validateDocProp(value);
     case 'hideGenerator':
       return validateHideGeneratorProp(value);
     case 'locale':

@@ -34,6 +34,13 @@ const data: PageConnectionPayload = {
         },
       },
     ],
+    pageInfo: {
+      endCursor: 'magni',
+      hasNextPage: false,
+      hasPreviousPage: false,
+      startCursor: 'voluptatum',
+      total: 2,
+    },
   },
 };
 
@@ -62,7 +69,7 @@ describe('use-pages', () => {
   });
 
   it('returns the sorted pages with homepage first', () => {
-    const pages = data.pages?.edges?.map((page) => page.node) ?? [];
+    const pages = data.pages?.edges.map((page) => page.node) ?? [];
     const expectedPages = pages
       .map((page) => {
         return {

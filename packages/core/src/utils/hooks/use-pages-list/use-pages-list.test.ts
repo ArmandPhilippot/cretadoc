@@ -1,5 +1,5 @@
 import type { PageConnectionPayload } from '@cretadoc/api';
-import { renderHook } from '@testing-library/react';
+import { renderHook, waitFor } from '@testing-library/react';
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import createFetchMock from 'vitest-fetch-mock';
 import { usePagesList } from './use-pages-list';
@@ -33,8 +33,17 @@ const data: PageConnectionPayload = {
         },
       },
     ],
+    pageInfo: {
+      endCursor: 'magni',
+      hasNextPage: false,
+      hasPreviousPage: false,
+      startCursor: 'voluptatum',
+      total: 2,
+    },
   },
 };
+
+const pagesWithSlug = data.pages?.edges.map((page) => page.node) ?? [];
 
 describe('use-pages-list', () => {
   beforeEach(() => {
@@ -59,15 +68,15 @@ describe('use-pages-list', () => {
     expect(result.current.pages).toBeUndefined();
   });
 
-  it('returns all the pages', () => {
-    const pagesWithSlug = data.pages?.edges?.map((page) => page.node) ?? [];
+  it('returns all the pages', async () => {
     const { result } = renderHook(() => usePagesList());
 
-    expect(result.current.pages).toStrictEqual(pagesWithSlug);
+    await waitFor(() =>
+      expect(result.current.pages).toStrictEqual(pagesWithSlug)
+    );
   });
 
   it('can exclude pages by names', () => {
-    const pagesWithSlug = data.pages?.edges?.map((page) => page.node) ?? [];
     const excludedName = 'Page 1';
     const expectedPages = pagesWithSlug.filter(
       (page) => page.name !== excludedName
@@ -80,7 +89,6 @@ describe('use-pages-list', () => {
   });
 
   it('can exclude pages by slug', () => {
-    const pagesWithSlug = data.pages?.edges?.map((page) => page.node) ?? [];
     const excludedSlug = '/page-2';
     const expectedPages = pagesWithSlug.filter(
       (page) => page.slug !== excludedSlug

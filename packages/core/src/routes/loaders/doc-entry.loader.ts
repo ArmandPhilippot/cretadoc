@@ -7,9 +7,13 @@ import { HTTP_STATUS_CODE, type Maybe } from '@cretadoc/utils';
 import { type LoaderFunctionArgs, redirect } from 'react-router-dom';
 import { docEntriesQuery, docEntryQuery, fetchAPI } from '../../services';
 import { getSlugInfoFrom, isSlug } from '../../utils/client';
-import { PER_PAGE, ROUTES } from '../../utils/constants';
+import { PER_PAGE } from '../../utils/constants';
 
 type ErrorMessage = { message: string };
+
+type DocEntryLoaderProps = LoaderFunctionArgs & {
+  docSlug: string;
+};
 
 type DocEntryLoaderReturn = {
   data: DocPayload<DocEntryPayload & DocEntryConnectionPayload>;
@@ -20,8 +24,9 @@ type DocEntryLoaderReturn = {
 };
 
 export const docEntryLoader = async ({
+  docSlug,
   request,
-}: LoaderFunctionArgs): Promise<DocEntryLoaderReturn> => {
+}: DocEntryLoaderProps): Promise<DocEntryLoaderReturn> => {
   const url = new URL(request.url);
   const { slug: fullSlug, pageNumber } = getSlugInfoFrom(url.pathname);
 
@@ -29,7 +34,7 @@ export const docEntryLoader = async ({
     // eslint-disable-next-line @typescript-eslint/no-throw-literal
     throw redirect(fullSlug);
 
-  const slug = fullSlug.replace(ROUTES.DOC, '');
+  const slug = fullSlug.replace(docSlug, '');
   const loadedDocEntry = await fetchAPI(
     {
       query: docEntryQuery,

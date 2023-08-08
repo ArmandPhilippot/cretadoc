@@ -3,10 +3,11 @@ import { useLoaderData, useParams } from 'react-router-dom';
 import { DocEntriesList, MarkdownContents, Page } from '../components';
 import type { docEntryLoader } from '../routes/loaders';
 import { getSlugInfoFrom, isSlug } from '../utils/client';
-import { PER_PAGE, ROUTES } from '../utils/constants';
-import { useDocEntries, useDocEntry } from '../utils/hooks';
+import { PER_PAGE } from '../utils/constants';
+import { useConfig, useDocEntries, useDocEntry } from '../utils/hooks';
 
 export const DocEntryPage: FC = () => {
+  const { doc } = useConfig();
   const { '*': splat } = useParams();
   const { slug, pageNumber } = getSlugInfoFrom(splat ?? '/');
   const currentPage = pageNumber ? Number(pageNumber) : 1;
@@ -49,7 +50,7 @@ export const DocEntryPage: FC = () => {
       errors: loadedErrors.onEntries,
     }
   );
-  const baseUrl = `${ROUTES.DOC}${slug}`;
+  const baseUrl = `${doc.slug}${slug}`;
   const isLoading =
     isEntriesLoading ||
     isEntriesValidating ||

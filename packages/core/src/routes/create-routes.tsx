@@ -23,6 +23,7 @@ const handle = {
  * @returns {RouteObject[]} The routes.
  */
 export const createRoutes = ({
+  doc,
   name,
   pages,
   theme,
@@ -40,7 +41,7 @@ export const createRoutes = ({
             loader: async (args) => pagesLoader({ ...args, pages }),
           },
           {
-            path: ROUTES.DOC,
+            path: doc.slug,
             element: <DocPage />,
             handle,
             children: [
@@ -50,19 +51,20 @@ export const createRoutes = ({
                 index: true,
               },
               {
-                path: `${ROUTES.DOC}${PAGINATED_SLUG_PREFIX}/1`,
-                loader: () => redirect(ROUTES.DOC),
+                path: `${doc.slug}${PAGINATED_SLUG_PREFIX}/1`,
+                loader: () => redirect(doc.slug),
               },
               {
-                path: `${ROUTES.DOC}${PAGINATED_SLUG_PREFIX}/:page`,
+                path: `${doc.slug}${PAGINATED_SLUG_PREFIX}/:page`,
                 element: <DocIndexPage />,
                 loader: docEntriesLoader,
                 handle,
               },
               {
-                path: `${ROUTES.DOC}/*`,
+                path: `${doc.slug}/*`,
                 element: <DocEntryPage />,
-                loader: docEntryLoader,
+                loader: async (args) =>
+                  docEntryLoader({ ...args, docSlug: doc.slug }),
                 handle,
               },
             ],

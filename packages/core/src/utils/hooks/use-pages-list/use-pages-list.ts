@@ -1,4 +1,4 @@
-import { usePages } from '../use-pages/use-pages';
+import { usePages } from '../use-pages';
 
 export type UsePagesListOptions = {
   /**

@@ -9,6 +9,7 @@ import { useIntl } from 'react-intl';
 import { useMatches } from 'react-router-dom';
 import type { getBreadcrumbItem } from '../../routes/handlers';
 import { ROUTES } from '../../utils/constants';
+import { useConfig } from '../../utils/hooks';
 
 type ArrayElement<ArrayType extends readonly unknown[]> =
   ArrayType extends ReadonlyArray<infer ElementType> ? ElementType : never;
@@ -33,6 +34,7 @@ export type BreadcrumbsProps = Omit<
 >;
 
 export const Breadcrumbs: FC<BreadcrumbsProps> = (props) => {
+  const { doc } = useConfig();
   const intl = useIntl();
 
   const ariaLabel = intl.formatMessage({
@@ -52,12 +54,8 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = (props) => {
   };
   const docItem: BreadcrumbsItem = {
     id: 'doc-page',
-    label: intl.formatMessage({
-      defaultMessage: 'Documentation',
-      description: 'Breadcrumbs: documentation label',
-      id: 'MLtCgG',
-    }),
-    url: ROUTES.DOC,
+    label: doc.label,
+    url: doc.slug,
   };
   const errorItem: BreadcrumbsItem = {
     id: 'error-page',

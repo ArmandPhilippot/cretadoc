@@ -46,7 +46,6 @@ export const CORE_ERROR_CODE = {
 
 export const ROUTES = {
   API: '/api',
-  DOC: '/doc',
   HOMEPAGE: '/',
   NOT_FOUND: '/404',
 } as const;
@@ -57,6 +56,10 @@ export const DEFAULT_LOCALE = 'en' as const satisfies CretadocLocale;
 
 export const DEFAULT_CLIENT_CONFIG = {
   copyright: null,
+  doc: {
+    label: 'Documentation',
+    slug: '/doc',
+  },
   hideGenerator: false,
   locale: DEFAULT_LOCALE,
   name: 'Cretadoc',

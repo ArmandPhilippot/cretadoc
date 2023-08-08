@@ -1,7 +1,19 @@
+import type { Slug } from '@cretadoc/api';
 import type { CretadocTheme } from '@cretadoc/ui';
 import type { Nullable } from '@cretadoc/utils';
 import type { SUPPORTED_LOCALES } from '../utils/constants';
 import type { Expand } from './utils';
+
+export type CretadocDocConfig = {
+  /**
+   * The name used as title and link anchors to designate documentation index.
+   */
+  label: string;
+  /**
+   * The documentation slug. It is also used as slug prefix for all doc entries.
+   */
+  slug: Slug;
+};
 
 export type CretadocLocale = (typeof SUPPORTED_LOCALES)[number];
 
@@ -49,6 +61,10 @@ export type CretadocClientConfig = {
    * @default null
    */
   copyright: Nullable<string>;
+  /**
+   * Configure the documentation labels & slugs.
+   */
+  doc: CretadocDocConfig;
   /**
    * Should we hide the "Built with" message in website footer?
    *
