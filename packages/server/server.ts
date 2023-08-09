@@ -1,7 +1,7 @@
 import { createAPI } from '@cretadoc/api';
 import { createServer as createCretadocServer } from './src';
 
-const api = createAPI();
+const api = await createAPI();
 
 const createServer = async () => {
   const contentPlaceholder = '<!-- ssr-outlet -->';

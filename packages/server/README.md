@@ -182,7 +182,7 @@ export const render = ({ res }) => {
 import { createAPI } from '@cretadoc/api';
 import { createServer } from '@cretadoc/server';
 
-const api = createAPI();
+const api = await createAPI();
 const app = await createServer({
   api: { instance: api, route: '/graphql' },
 });
