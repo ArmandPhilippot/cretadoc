@@ -114,12 +114,11 @@ export const deleteFixturesIn = async (
   options?: DebugOptions
 ) => {
   const dirContents = await readdir(path, {
-    recursive: true,
     withFileTypes: true,
   });
   const promises = dirContents.map(async (contents) => {
     if (contents.isFile() && contents.name === '.keep') return undefined;
-    return remove(join(contents.path, contents.name), options);
+    return remove(join(path, contents.name), options);
   });
 
   await Promise.all(promises);
