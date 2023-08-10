@@ -93,7 +93,7 @@ export class DocRepository extends FileSystemRepository {
   async #getParentOf(path: string): Promise<Nullable<DocEntryParent>> {
     const parent = parse(path);
 
-    if (parent.dir === '.') return null;
+    if (parent.dir === '.' || path === './') return null;
 
     const parentDir: Omit<DocEntryParent, 'meta'> = {
       id: generateBase64String(parent.dir),
@@ -194,6 +194,17 @@ export class DocRepository extends FileSystemRepository {
   }
 
   /**
+   * Retrieve the data of the doc directory index.
+   *
+   * @returns {Promise<DocDirectory>} The root directory.
+   */
+  async #getRootDirData(): Promise<DocDirectory> {
+    const dirIndex = await this.getDataOf(this.getRootDir());
+
+    return this.#convert(dirIndex);
+  }
+
+  /**
    * Retrieve a documentation entry by looking for a value in a prop.
    *
    * @param {P} prop - The prop name.
@@ -221,10 +232,10 @@ export class DocRepository extends FileSystemRepository {
     K extends Maybe<DocEntryKind>,
     P extends keyof DocInput = keyof DocInput
   >(prop: P, value: DocInput[P], kind?: K): Promise<Maybe<DocEntry>> {
-    const dirContents = await this.#getDirContents(this.getRootDir());
+    const rootDir = await this.#getRootDirData();
     let entry: Maybe<DocEntry> = undefined;
 
-    JSON.stringify(dirContents, (_, currentValue: unknown) => {
+    JSON.stringify(rootDir, (_, currentValue: unknown) => {
       if (
         isDocEntry(currentValue) &&
         (!kind || currentValue.type === kind) &&
@@ -274,10 +285,10 @@ export class DocRepository extends FileSystemRepository {
     values: ReadonlyArray<DocInput[P]>,
     kind?: K
   ): Promise<Maybe<DocEntry[]>> {
-    const dirContents = await this.#getDirContents(this.getRootDir());
+    const rootDir = await this.#getRootDirData();
     const entries: DocEntry[] = [];
 
-    JSON.stringify(dirContents, (_, value: unknown) => {
+    JSON.stringify(rootDir, (_, value: unknown) => {
       if (
         isDocEntry(value) &&
         (!kind || value.type === kind) &&

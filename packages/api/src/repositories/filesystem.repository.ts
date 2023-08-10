@@ -1,6 +1,10 @@
 import { readFile, rename, rm, writeFile } from 'fs/promises';
 import { isAbsolute, join, parse } from 'path';
-import { type DirectoryContents, readDir } from '@cretadoc/read-dir';
+import {
+  readDir,
+  type Directory,
+  type DirectoryContents,
+} from '@cretadoc/read-dir';
 import type { Maybe } from '@cretadoc/utils';
 import type {
   APIDataConfig,
@@ -147,6 +151,26 @@ export class FileSystemRepository {
   }
 
   /**
+   * Retrieve the data of a directory.
+   *
+   * @param {string} dir - The absolute path of a directory.
+   * @returns {Promise<Directory>} The directory data.
+   */
+  protected async getDataOf(dir: string): Promise<Directory> {
+    if (!this.#isInRootDir(dir))
+      throw new CretadocAPIError('Cannot get the directory contents', {
+        errorKind: 'syntax',
+        reason: `The given dir must be inside the ${this.#context} directory`,
+        received: dir,
+      });
+
+    return readDir(dir, {
+      extensions: [MARKDOWN_EXTENSION],
+      includeFileContents: true,
+    });
+  }
+
+  /**
    * Retrieve the contents of a directory.
    *
    * @param {string} dir - The absolute path of a directory.
@@ -155,19 +179,9 @@ export class FileSystemRepository {
   protected async getContentsOf(
     dir: string
   ): Promise<Maybe<DirectoryContents>> {
-    if (!this.#isInRootDir(dir))
-      throw new CretadocAPIError('Cannot get the directory contents', {
-        errorKind: 'syntax',
-        reason: `The given dir must be inside the ${this.#context} directory`,
-        received: dir,
-      });
+    const { contents } = await this.getDataOf(dir);
 
-    const requestedDir = await readDir(dir, {
-      extensions: [MARKDOWN_EXTENSION],
-      includeFileContents: true,
-    });
-
-    return requestedDir.contents;
+    return contents;
   }
 
   /**
