@@ -24,14 +24,7 @@ export const createCretadocApp = async () => {
       entrypoint: isProd
         ? new URL('../dist/server/entry-server.js', import.meta.url).pathname
         : new URL('./entry-server.tsx', import.meta.url).pathname,
-      placeholders: {
-        content: '<!--ssr-outlet-->',
-        initialState: '<!--ssr-initial-state-->',
-      },
       route: '/*',
-      template: isProd
-        ? new URL('../dist/client/index.html', import.meta.url).pathname
-        : new URL('../index.html', import.meta.url).pathname,
     },
     staticDir: isProd
       ? {
