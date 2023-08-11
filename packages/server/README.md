@@ -108,18 +108,10 @@ By default, Cretadoc uses the port `3000`. You can use a different value if need
 
 ### SSR configuration
 
-The `ssr` key accepts an object as value:
+The `ssr` key accepts an object as value with the following keys:
 
 - `entrypoint`: A path to the server entrypoint that exports a render function.
-- `placeholders`: An object to configure the placeholders defined in the template.
 - `route`: The route used for serve-side rendering (default is: `/`).
-- `template`: A path to a HTML template file.
-
-The Cretadoc server can use three different placeholders to render your contents. The `placeholders` key accepts an object with the following keys:
-
-- `content` (mandatory): The placeholder for main content (inside `<body>`),
-- `initialState` (optional): This placeholder is used to share a state between the server and the client. You need to provide an object to use it.
-- `preloadedLinks` (optional): An array of URL (e.g., `/assets/your-file.css`), we can add them as `href` in different HTML `link` elements with `rel="preload"` attribute. It is useful if you want to preload some fonts or scripts for example.
 
 ### Static directory configuration
 
@@ -158,15 +150,11 @@ const server = await createServer({
   port: 6000,
   ssr: {
     entrypoint: '/home/username/sites/project/entry-server.tsx',
-    placeholders: {
-      content: '<!-- rendered-content -->',
-    },
-    template: '/home/username/sites/project/index.html',
   },
 });
 ```
 
-The `entry-server.tsx` file must export a function that accepts an url as parameter and that returns a string.
+The `entry-server.tsx` file must export a `render` function containing the logic to render your HTML contents.
 
 Example:
 
@@ -175,43 +163,17 @@ import { StrictMode } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { App } from './app';
 
-export const render = (url: string) => {
-  return ReactDOMServer.renderToString(
+export const render = ({ res }) => {
+  const htmlTemplate = readFileSync('template.html', 'utf8');
+  const body = ReactDOMServer.renderToString(
     <StrictMode>
       <App />
     </StrictMode>
   );
+  const html = htmlTemplate.replace('<!-- your-placeholder -->', body);
+
+  res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
 };
-```
-
-In the `entry-server.tsx` file, you can also export two other variables: `initialState` and `preloadedLinks`.
-
-Example:
-
-```tsx
-export const initialState = {
-  foo: 'bar',
-};
-
-export const preloadedLinks = [
-  '/an-important-script.js',
-  '/your-stylesheet.css',
-];
-```
-
-If you choose to export an initial state and/or some preloaded links, you need to modify the server configuration to add the matching placeholders:
-
-```ts
-const app = await createServer({
-  ...yourPreviousConfig,
-  ssr: {
-    placeholders: {
-      content: '<!-- rendered-content -->',
-      initialState: '<!-- initial-state -->',
-      preloadedLinks: '<!-- preloaded-links -->',
-    },
-  },
-});
 ```
 
 ### Use the API route

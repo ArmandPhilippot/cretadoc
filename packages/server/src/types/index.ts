@@ -1,6 +1,10 @@
 import type { APIInstance } from '@cretadoc/api';
 import type { Maybe, ReadonlyDeep } from '@cretadoc/utils';
-import type { Request as ExpressRequest } from 'express';
+import type {
+  Request as ExpressRequest,
+  Response as ExpressResponse,
+} from 'express';
+import type { ViteDevServer } from 'vite';
 import type { ENVIRONMENT } from '../utils/constants';
 
 export type ServerMode = (typeof ENVIRONMENT)[keyof typeof ENVIRONMENT];
@@ -26,39 +30,16 @@ export type HMRConfig =
       port: Maybe<number>;
     };
 
-export type SSRPlaceholders = {
-  /**
-   * The placeholder for main content.
-   */
-  content: string;
-  /**
-   * The placeholder for state shared between server & client.
-   */
-  initialState: Maybe<string>;
-  /**
-   * The placeholder for preloaded links.
-   */
-  preloadedLinks: Maybe<string>;
-};
-
 export type SSRConfig = {
   /**
    * A path to the server entrypoint.
    */
   entrypoint: string;
   /**
-   * The HTML template placeholders.
-   */
-  placeholders: SSRPlaceholders;
-  /**
    * The route used for serve-side rendering.
    * @default '/'
    */
   route: string;
-  /**
-   * The path to a HTML file to use as template.
-   */
-  template: string;
 };
 
 export type StaticDirConfig = {
@@ -130,22 +111,19 @@ export type CretadocServer = {
   stop: () => void;
 };
 
-export type Render = {
+export type RenderContext = {
   /**
-   * The initial state to share between client and server.
+   * The HTTP request.
    */
-  initialState?: Record<string, unknown>;
+  req: ExpressRequest;
   /**
-   * The html contents.
+   * The HTTP response sent by Express.
    */
-  html: string;
+  res: ExpressResponse;
   /**
-   * The links to preload.
+   * The vite server, only used in development mode.
    */
-  preloadedLinks?: string[];
+  viteServer: Maybe<ViteDevServer>;
 };
 
-export type RenderFunction = (
-  url: string,
-  req: ExpressRequest
-) => Promise<Render>;
+export type RenderFn = (ctx: RenderContext) => void | Promise<void>;

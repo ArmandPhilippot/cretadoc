@@ -84,57 +84,29 @@ describe('merge-ssr-config', () => {
     );
   });
 
-  it('throws an error if the content placeholder is not provided', () => {
-    expect(() => mergeSSRConfig({ entrypoint: '/any-path' })).toThrow(
-      new ConfigError('In SSR mode, the content placeholder is mandatory.')
-    );
-  });
-
-  it('throws an error if the template path is not provided', () => {
-    expect(() =>
-      mergeSSRConfig({
-        entrypoint: '/any-path',
-        placeholders: { content: 'any-placeholder' },
-      })
-    ).toThrow(new ConfigError('In SSR mode, the template is mandatory.'));
-  });
-
   it('can merge the given config with the default config', () => {
     const entrypoint = new URL(
       '../../../tests/fixtures/ssr/entry-server.ts',
       import.meta.url
     ).pathname;
-    const template = new URL(
-      '../../../tests/fixtures/ssr/index.html',
-      import.meta.url
-    ).pathname;
-    const contentPlaceholder = 'any-placeholder';
     expect(
       mergeSSRConfig({
         entrypoint,
-        placeholders: { content: contentPlaceholder },
-        template,
       })
     ).toStrictEqual({
       entrypoint,
-      placeholders: {
-        content: contentPlaceholder,
-        initialState: undefined,
-        preloadedLinks: undefined,
-      },
       route: DEFAULT_SSR_ROUTE,
-      template,
     });
   });
 
   it('returns the given config when complete', () => {
-    const entrypoint = 'index.html';
-    const path = new URL('../../../tests/fixtures/static-dir', import.meta.url)
-      .pathname;
-    const route = '/static-endpoint';
-    expect(mergeStaticDirConfig({ entrypoint, path, route })).toStrictEqual({
+    const entrypoint = new URL(
+      '../../../tests/fixtures/ssr/entry-server.ts',
+      import.meta.url
+    ).pathname;
+    const route = '/ssr-endpoint';
+    expect(mergeSSRConfig({ entrypoint, route })).toStrictEqual({
       entrypoint,
-      path,
       route,
     });
   });

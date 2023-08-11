@@ -15,7 +15,7 @@ describe('load-api', () => {
   });
 
   it<LoadAPIContext>('can serve the given instance', async ({ app }) => {
-    const api = createAPI();
+    const api = await createAPI();
     app.use(api.graphqlEndpoint, loadAPI(api));
 
     const response = await request(app).get(api.graphqlEndpoint);

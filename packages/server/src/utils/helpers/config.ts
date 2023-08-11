@@ -77,21 +77,9 @@ export const mergeSSRConfig = (
   if (!userConfig.entrypoint)
     throw new ConfigError('In SSR mode, the server entrypoint is mandatory.');
 
-  if (!userConfig.placeholders?.content)
-    throw new ConfigError('In SSR mode, the content placeholder is mandatory.');
-
-  if (!userConfig.template)
-    throw new ConfigError('In SSR mode, the template is mandatory.');
-
   return {
     entrypoint: userConfig.entrypoint,
-    placeholders: {
-      content: userConfig.placeholders.content,
-      initialState: userConfig.placeholders.initialState,
-      preloadedLinks: userConfig.placeholders.preloadedLinks,
-    },
     route: userConfig.route ?? DEFAULT_SSR_ROUTE,
-    template: userConfig.template,
   };
 };
 

@@ -1,5 +1,3 @@
-import type { RenderFunction } from '.';
-
 export type LinkAsValue =
   | 'audio'
   | 'document'
@@ -47,10 +45,3 @@ export type LinkOtherAttributes = {
 export type LinkAttributes = LinkAsAttribute &
   LinkRelAttribute &
   LinkOtherAttributes;
-
-export type ValidRenderExport = {
-  /**
-   * The render method.
-   */
-  render: RenderFunction;
-};
