@@ -20,6 +20,8 @@ export const PAGINATION_REGEX = new RegExp(`${PAGINATED_SLUG_PREFIX}/\\d+$`);
 
 export const CONFIG_FILE_NAME = 'cretadoc.config.js';
 
+export const CRETADOC_ROOT = 'cretadoc-root';
+
 export const CRETADOC_REPOSITORY = {
   label: 'Cretadoc',
   link: 'https://github.com/ArmandPhilippot/cretadoc',

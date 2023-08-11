@@ -1,79 +1,25 @@
-import {
-  Branding,
-  Footer,
-  Header,
-  Layout,
-  Main,
-  useBoolean,
-} from '@cretadoc/ui';
-import { isString } from '@cretadoc/utils';
-import 'modern-normalize/modern-normalize.css';
-import { type FC, useId } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
-import {
-  BackToTop,
-  Breadcrumbs,
-  Colophon,
-  MainNav,
-  SkipToContent,
-  ThemeSwitcher,
-} from '../components';
-import type { CretadocConfig } from '../types/config';
-import { ROUTES } from '../utils/constants';
-import { useOnRouteChange, useTheme } from '../utils/hooks';
-import * as styles from './app.css';
+import { LinkProvider } from '@cretadoc/ui';
+import type { FC, ReactNode } from 'react';
+import { IntlProvider } from 'react-intl';
+import { RouterLink } from '../components';
+import type { CretadocClientConfig } from '../types';
+import { ConfigProvider } from '../utils/contexts';
 
-const isHomepage = (path: string) => path === ROUTES.HOMEPAGE;
-
-export type AppProps = Pick<CretadocConfig, 'name' | 'theme'>;
-
-export const App: FC<AppProps> = ({ name, theme }) => {
-  const mainId = useId();
-  const topId = useId();
-  const { pathname } = useLocation();
-  const footerAlignment = 'center';
-  const hasMultipleThemes = !isString(theme);
-  const themes = hasMultipleThemes ? theme : { dark: theme, light: theme };
-  const [currentTheme, toggleTheme] = useTheme(themes);
-  const {
-    deactivate: closeMainNav,
-    state: isMainNavOpen,
-    toggle: toggleMainNav,
-  } = useBoolean(false);
-
-  useOnRouteChange(closeMainNav);
-
-  return (
-    <Layout className={styles.layout} data-theme={currentTheme} id={topId}>
-      <SkipToContent targetId={mainId} />
-      <Header className={styles.header}>
-        <Branding brand={name} to={ROUTES.HOMEPAGE} />
-        <div className={styles.navbar}>
-          <MainNav
-            isOpen={isMainNavOpen}
-            onClickOutside={closeMainNav}
-            onClose={closeMainNav}
-            onToggle={toggleMainNav}
-          />
-          {hasMultipleThemes ? (
-            <ThemeSwitcher
-              currentTheme={currentTheme}
-              onSwitch={toggleTheme}
-              themes={themes}
-            />
-          ) : null}
-        </div>
-      </Header>
-      <Main className={styles.main} id={mainId}>
-        {isHomepage(pathname) ? null : (
-          <Breadcrumbs className={styles.breadcrumbs} />
-        )}
-        <Outlet />
-      </Main>
-      <Footer className={styles.footer}>
-        <Colophon alignment={footerAlignment} />
-        <BackToTop className={styles.backToTop} targetId={topId} />
-      </Footer>
-    </Layout>
-  );
+type AppProps = {
+  /**
+   * The client configuration.
+   */
+  config: CretadocClientConfig;
+  /**
+   * The router.
+   */
+  router: ReactNode;
 };
+
+export const App: FC<AppProps> = ({ config, router }) => (
+  <ConfigProvider config={config}>
+    <IntlProvider locale={config.locale}>
+      <LinkProvider value={RouterLink}>{router}</LinkProvider>
+    </IntlProvider>
+  </ConfigProvider>
+);

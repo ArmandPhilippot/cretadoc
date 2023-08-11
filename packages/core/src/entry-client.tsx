@@ -1,16 +1,13 @@
-import { LinkProvider } from '@cretadoc/ui';
 import { StrictMode } from 'react';
-import ReactDOM from 'react-dom/client';
-import { IntlProvider } from 'react-intl';
+import { hydrateRoot } from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { RouterLink } from './components';
+import { App } from './app';
 import { createRoutes } from './routes';
 import type { CretadocClientConfig } from './types/config';
-import { DEFAULT_CLIENT_CONFIG } from './utils/constants';
-import { ConfigProvider } from './utils/contexts';
+import { CRETADOC_ROOT, DEFAULT_CLIENT_CONFIG } from './utils/constants';
 
 type WindowWithInitialState = typeof window & {
-  __INITIAL_STATE__?: string;
+  __CRETADOC_DATA__?: string;
 };
 
 type InitialState = {
@@ -18,8 +15,9 @@ type InitialState = {
 };
 
 const serializedInitialState = (window as WindowWithInitialState)
-  .__INITIAL_STATE__;
-delete (window as WindowWithInitialState).__INITIAL_STATE__;
+  .__CRETADOC_DATA__;
+
+delete (window as WindowWithInitialState).__CRETADOC_DATA__;
 
 const initialState: InitialState = serializedInitialState
   ? (JSON.parse(serializedInitialState) as InitialState)
@@ -27,15 +25,12 @@ const initialState: InitialState = serializedInitialState
 
 const router = createBrowserRouter(createRoutes(initialState.config));
 
-ReactDOM.hydrateRoot(
-  document.getElementById('root') as HTMLElement,
+hydrateRoot(
+  document.getElementById(CRETADOC_ROOT) as HTMLElement,
   <StrictMode>
-    <ConfigProvider config={initialState.config}>
-      <IntlProvider locale={initialState.config.locale}>
-        <LinkProvider value={RouterLink}>
-          <RouterProvider router={router} />
-        </LinkProvider>
-      </IntlProvider>
-    </ConfigProvider>
+    <App
+      config={initialState.config}
+      router={<RouterProvider router={router} />}
+    />
   </StrictMode>
 );

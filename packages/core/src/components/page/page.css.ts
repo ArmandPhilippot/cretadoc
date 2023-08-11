@@ -1,8 +1,8 @@
 import { contract } from '@cretadoc/ui';
 import { globalStyle, style } from '@vanilla-extract/css';
 import { recipe } from '@vanilla-extract/recipes';
-import { contentsWidth, sidebarGap, sidebarWidth } from '../../app/app.css';
 import { BREAKPOINT } from '../../utils/constants';
+import { contentsWidth, sidebarGap, sidebarWidth } from '../layout/layout.css';
 
 export const page = recipe({
   base: {
@@ -68,4 +68,8 @@ globalStyle(`${contents} > *:first-child`, {
 
 globalStyle(`${contents} > *:last-child`, {
   marginBlockEnd: 0,
+});
+
+export const spinner = style({
+  marginInline: 'auto',
 });

@@ -1,6 +1,6 @@
 import { contract } from '@cretadoc/ui';
 import { createVar, style } from '@vanilla-extract/css';
-import { BREAKPOINT } from '../utils/constants';
+import { BREAKPOINT } from '../../utils/constants';
 
 const navbarHeight = createVar();
 export const contentsWidth = createVar();

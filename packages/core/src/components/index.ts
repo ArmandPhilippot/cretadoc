@@ -2,6 +2,8 @@ export * from './back-to-top';
 export * from './breadcrumbs';
 export * from './colophon';
 export * from './doc-entries-list';
+export * from './html';
+export * from './layout';
 export * from './main-nav';
 export * from './markdown-contents';
 export * from './page';

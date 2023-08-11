@@ -1,5 +1,5 @@
 import { redirect, type RouteObject } from 'react-router-dom';
-import { App } from '../app';
+import { Layout } from '../components';
 import {
   DocEntryPage,
   DocIndexPage,
@@ -24,12 +24,10 @@ const handle = {
  */
 export const createRoutes = ({
   doc,
-  name,
   pages,
-  theme,
 }: CretadocClientConfig): RouteObject[] => [
   {
-    element: <App name={name} theme={theme} />,
+    element: <Layout />,
     handle,
     children: [
       {

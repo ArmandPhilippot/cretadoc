@@ -62,7 +62,7 @@ export const Page: FC<PageProps> = ({
   if (isLoading)
     return (
       <Article {...props} className={pageClassName}>
-        <Spinner>{loadingPage}</Spinner>
+        <Spinner className={styles.spinner}>{loadingPage}</Spinner>
       </Article>
     );
 
