@@ -3,6 +3,10 @@
     "defaultMessage": "Explore<a11y> {title}</a11y>",
     "description": "DocEntriesList: open dir link anchor"
   },
+  "3ICgTm": {
+    "defaultMessage": "The requested page is loading...",
+    "description": "LoadingPage: loading page message"
+  },
   "44f+HY": {
     "defaultMessage": "Loading navigation items...",
     "description": "MainNav: loading text"
@@ -19,25 +23,9 @@
     "defaultMessage": "Page not found",
     "description": "ErrorPage: 404 page title"
   },
-  "MLtCgG": {
-    "defaultMessage": "Documentation",
-    "description": "Breadcrumbs: documentation label"
-  },
-  "MkRy8U": {
-    "defaultMessage": "Documentation",
-    "description": "DocPage: page title"
-  },
-  "OdcBgG": {
-    "defaultMessage": "Documentation",
-    "description": "MainNav: documentation link anchor"
-  },
   "OqHQ1o": {
     "defaultMessage": "Built with {link}",
     "description": "Colophon: generator information"
-  },
-  "R1rt/u": {
-    "defaultMessage": "The requested page is loading...",
-    "description": "Page: loading page message"
   },
   "RYaguF": {
     "defaultMessage": "Sorry, an authorization is required to access this page.",

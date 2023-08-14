@@ -83,3 +83,8 @@ export const backToTop = style({
     },
   },
 });
+
+export const loading = style({
+  gridColumn: 2,
+  gridRow: '1 / -1',
+});

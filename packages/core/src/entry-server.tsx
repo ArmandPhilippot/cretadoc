@@ -1,7 +1,6 @@
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import type { RenderFn } from '@cretadoc/server';
-import { Heading } from '@cretadoc/ui';
 import { HTTP_STATUS_CODE, isObjKeyExist, isObject } from '@cretadoc/utils';
 import type { Request as ExpressRequest } from 'express';
 import { StrictMode } from 'react';
@@ -13,7 +12,7 @@ import {
   createStaticRouter,
 } from 'react-router-dom/server';
 import { App } from './app';
-import { Html } from './components';
+import { AppError, Html } from './components';
 import { createRoutes } from './routes';
 import { loadClientConfig } from './utils/client';
 import { CONFIG_FILE_NAME } from './utils/constants';
@@ -95,18 +94,16 @@ export const render: RenderFn = async ({ req, res }) => {
         pipe(res);
       },
       onShellError(err) {
-        const errorMsg = 'Something went wrong';
         const html = renderToString(
           <Html config={config} urlOrigin={url.origin}>
-            <Heading level={1}>{errorMsg}</Heading>
-            {err instanceof Error ? <p>{err.stack}</p> : null}
+            <AppError error={err} />
           </Html>
         );
 
         res
           .status(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR)
           .setHeader('content-type', 'text/html');
-        res.send(html);
+        res.send(`<!DOCTYPE html>${html}`);
       },
       onError(error) {
         console.error(error);

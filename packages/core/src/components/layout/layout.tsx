@@ -8,7 +8,7 @@ import {
 } from '@cretadoc/ui';
 import { isString } from '@cretadoc/utils';
 import 'modern-normalize/modern-normalize.css';
-import type { FC } from 'react';
+import { Suspense, type FC } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { CRETADOC_ROOT, ROUTES } from '../../utils/constants';
 import { useConfig, useOnRouteChange, useTheme } from '../../utils/hooks';
@@ -16,15 +16,17 @@ import { BackToTop } from '../back-to-top';
 import { Breadcrumbs } from '../breadcrumbs';
 import { Colophon } from '../colophon';
 import { MainNav } from '../main-nav';
+import { LoadingPage } from '../page';
 import { SkipToContent } from '../skip-to-content';
 import { ThemeSwitcher } from '../theme-switcher';
 import * as styles from './layout.css';
 
 const isHomepage = (path: string) => path === ROUTES.HOMEPAGE;
 
+const CRETADOC_CONTENTS = 'cretadoc-contents';
+
 export const Layout: FC = () => {
   const { name, theme } = useConfig();
-  const mainId = 'cretadoc-contents';
   const { pathname } = useLocation();
   const footerAlignment = 'center';
   const themes = isString(theme) ? { dark: theme, light: theme } : theme;
@@ -39,7 +41,7 @@ export const Layout: FC = () => {
 
   return (
     <Container className={styles.layout} data-theme={currentTheme}>
-      <SkipToContent targetId={mainId} />
+      <SkipToContent targetId={CRETADOC_CONTENTS} />
       <Header className={styles.header}>
         <Branding brand={name} to={ROUTES.HOMEPAGE} />
         <div className={styles.navbar}>
@@ -58,11 +60,13 @@ export const Layout: FC = () => {
           )}
         </div>
       </Header>
-      <Main className={styles.main} id={mainId}>
+      <Main className={styles.main} id={CRETADOC_CONTENTS}>
         {isHomepage(pathname) ? null : (
           <Breadcrumbs className={styles.breadcrumbs} />
         )}
-        <Outlet />
+        <Suspense fallback={<LoadingPage />}>
+          <Outlet />
+        </Suspense>
       </Main>
       <Footer className={styles.footer}>
         <Colophon alignment={footerAlignment} />

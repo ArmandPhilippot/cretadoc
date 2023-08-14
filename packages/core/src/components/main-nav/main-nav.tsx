@@ -2,13 +2,13 @@ import {
   MainNav as MainNavBase,
   type MainNavProps as MainNavBaseProps,
   NavItem,
-  Spinner,
   NavList,
 } from '@cretadoc/ui';
-import type { FC } from 'react';
+import { Suspense, type FC } from 'react';
 import { useIntl } from 'react-intl';
 import { useLocation } from 'react-router-dom';
 import { useConfig, usePagesList } from '../../utils/hooks';
+import { Loading } from '../loading';
 
 export type MainNavProps = Omit<
   MainNavBaseProps,
@@ -37,15 +37,14 @@ export const MainNav: FC<MainNavProps> = (props) => {
     id: 'XMShu1',
   });
 
-  const loadingTxt = intl.formatMessage({
+  const loadingItems = intl.formatMessage({
     defaultMessage: 'Loading navigation items...',
     description: 'MainNav: loading text',
     id: '44f+HY',
   });
 
   const getPages = () => {
-    // eslint-disable-next-line react/jsx-no-literals
-    if (isLoading) return <Spinner position="top">{loadingTxt}</Spinner>;
+    if (isLoading) return <Loading msg={loadingItems} />;
 
     if (pages?.length)
       return pages.map((page) => (
@@ -70,7 +69,7 @@ export const MainNav: FC<MainNavProps> = (props) => {
       hasCloseBtn
     >
       <NavList spacing={null}>
-        <>
+        <Suspense fallback={<Loading msg={loadingItems} />}>
           {getPages()}
           <NavItem
             isSelected={pathname.startsWith(doc.slug)}
@@ -81,7 +80,7 @@ export const MainNav: FC<MainNavProps> = (props) => {
             // eslint-disable-next-line react/jsx-no-literals
             variant="block"
           />
-        </>
+        </Suspense>
       </NavList>
     </MainNavBase>
   );

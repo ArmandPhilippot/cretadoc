@@ -4,6 +4,15 @@ import { recipe } from '@vanilla-extract/recipes';
 import { BREAKPOINT } from '../../utils/constants';
 import { contentsWidth, sidebarGap, sidebarWidth } from '../layout/layout.css';
 
+export const loadingPage = style({
+  gridColumn: 2,
+  gridRow: 2,
+});
+
+export const spinner = style({
+  height: '80%',
+});
+
 export const page = recipe({
   base: {
     gridColumn: 2,
@@ -68,8 +77,4 @@ globalStyle(`${contents} > *:first-child`, {
 
 globalStyle(`${contents} > *:last-child`, {
   marginBlockEnd: 0,
-});
-
-export const spinner = style({
-  marginInline: 'auto',
 });

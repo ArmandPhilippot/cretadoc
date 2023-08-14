@@ -5,12 +5,11 @@ import {
   Heading,
   type HeadingsTreeNode,
   Header,
-  Spinner,
 } from '@cretadoc/ui';
 import type { Maybe } from '@cretadoc/utils';
 import type { FC, ReactNode, Ref } from 'react';
-import { useIntl } from 'react-intl';
 import { TableOfContents } from '../table-of-contents';
+import { LoadingPage } from './loading-page';
 import * as styles from './page.css';
 
 export type PageProps = Omit<ArticleProps, 'children'> & {
@@ -47,24 +46,12 @@ export const Page: FC<PageProps> = ({
   toc,
   ...props
 }) => {
-  const intl = useIntl();
   const hasSidebar = !!toc?.length;
   const pageClassName = `${styles.page({ hasSidebar })} ${className}`;
   const contentsClassName = `${styles.firstColumn} ${styles.contents}`;
   const sidebarClassName = `${styles.secondColumn} ${styles.sidebar}`;
 
-  const loadingPage = intl.formatMessage({
-    defaultMessage: 'The requested page is loading...',
-    description: 'Page: loading page message',
-    id: 'R1rt/u',
-  });
-
-  if (isLoading)
-    return (
-      <Article {...props} className={pageClassName}>
-        <Spinner className={styles.spinner}>{loadingPage}</Spinner>
-      </Article>
-    );
+  if (isLoading) return <LoadingPage />;
 
   return (
     <Article {...props} className={pageClassName}>

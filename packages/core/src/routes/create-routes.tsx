@@ -1,5 +1,6 @@
+import { ErrorBoundary } from 'react-error-boundary';
 import { redirect, type RouteObject } from 'react-router-dom';
-import { Layout } from '../components';
+import { Layout, RouterError } from '../components';
 import {
   DocEntryPage,
   DocIndexPage,
@@ -28,6 +29,7 @@ export const createRoutes = ({
 }: CretadocClientConfig): RouteObject[] => [
   {
     element: <Layout />,
+    errorElement: <ErrorBoundary FallbackComponent={RouterError} />,
     handle,
     children: [
       {
