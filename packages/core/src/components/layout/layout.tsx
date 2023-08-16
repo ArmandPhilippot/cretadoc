@@ -11,7 +11,12 @@ import 'modern-normalize/modern-normalize.css';
 import { Suspense, type FC } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { CRETADOC_ROOT, ROUTES } from '../../utils/constants';
-import { useConfig, useOnRouteChange, useTheme } from '../../utils/hooks';
+import {
+  useConfig,
+  useOnRouteChange,
+  useTheme,
+  useUpdateHeadTags,
+} from '../../utils/hooks';
 import { BackToTop } from '../back-to-top';
 import { Breadcrumbs } from '../breadcrumbs';
 import { Colophon } from '../colophon';
@@ -38,6 +43,7 @@ export const Layout: FC = () => {
   } = useBoolean(false);
 
   useOnRouteChange(closeMainNav);
+  useUpdateHeadTags();
 
   return (
     <Container className={styles.layout} data-theme={currentTheme}>

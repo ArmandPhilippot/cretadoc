@@ -7,3 +7,4 @@ export * from './use-page';
 export * from './use-pages';
 export * from './use-pages-list';
 export * from './use-theme';
+export * from './use-update-head-tags';

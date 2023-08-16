@@ -18,6 +18,7 @@ import { loadClientConfig } from './utils/client';
 import { CONFIG_FILE_NAME } from './utils/constants';
 import { CretadocCoreError, RouterError } from './utils/exceptions';
 import { createFetchRequest } from './utils/server';
+import { loadMetadata } from './utils/shared';
 
 const currentDir = dirname(fileURLToPath(import.meta.url));
 
@@ -77,11 +78,12 @@ export const render: RenderFn = async ({ req, res }) => {
   const handler = createStaticHandler(createRoutes(config));
   const context = await getContextFrom(handler, req, url.href);
   const router = createStaticRouter(handler.dataRoutes, context);
+  const meta = await loadMetadata(url.href, config);
 
   // cSpell:ignore-word pipeable
   const { pipe } = renderToPipeableStream(
     <StrictMode>
-      <Html config={config} urlOrigin={url.origin}>
+      <Html config={config} meta={meta} url={url}>
         <App
           config={config}
           router={<StaticRouterProvider context={context} router={router} />}
@@ -95,7 +97,7 @@ export const render: RenderFn = async ({ req, res }) => {
       },
       onShellError(err) {
         const html = renderToString(
-          <Html config={config} urlOrigin={url.origin}>
+          <Html config={config} meta={meta} url={url}>
             <AppError error={err} />
           </Html>
         );

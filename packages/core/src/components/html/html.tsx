@@ -1,6 +1,8 @@
+import type { PartialDeep } from '@cretadoc/utils';
 import type { FC, ReactNode } from 'react';
-import type { CretadocClientConfig } from '../../types';
+import type { CretadocClientConfig, WebpageMeta } from '../../types';
 import { CRETADOC_ROOT } from '../../utils/constants';
+import { getMetaElements } from '../../utils/shared';
 
 export type HtmlProps = {
   /**
@@ -12,31 +14,33 @@ export type HtmlProps = {
    */
   config: CretadocClientConfig;
   /**
-   * The url origin.
+   * The page metadata.
    */
-  urlOrigin: string;
+  meta: PartialDeep<WebpageMeta>;
+  /**
+   * The URL object.
+   */
+  url: URL;
 };
 
 /* eslint-disable react/jsx-no-literals */
-export const Html: FC<HtmlProps> = ({ children, config, urlOrigin }) => {
+export const Html: FC<HtmlProps> = ({ children, config, meta, url }) => {
   const initialState = `window.__CRETADOC_DATA__='${JSON.stringify({
     config,
   })}'`;
   const viteIntegration = `
-  import RefreshRuntime from '${urlOrigin}/@react-refresh'
+  import RefreshRuntime from '${url.origin}/@react-refresh'
   RefreshRuntime.injectIntoGlobalHook(window)
   window.$RefreshReg$ = () => {}
   window.$RefreshSig$ = () => (type) => type
   window.__vite_plugin_react_preamble_installed__ = true
 `;
+  const metaTags = getMetaElements(meta);
 
   return (
     <html lang={config.locale}>
       <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Vite + React + TS</title>
-        <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+        {metaTags}
         {import.meta.env.DEV ? (
           <>
             <script

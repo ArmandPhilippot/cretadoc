@@ -3,4 +3,5 @@ export * from './is-paginated';
 export * from './is-slug';
 export * from './load-client-config';
 export * from './remove-trailing-slashes';
+export * from './update-meta-tags';
 export * from './validate-client-config';
