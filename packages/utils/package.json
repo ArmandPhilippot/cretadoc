@@ -23,7 +23,7 @@
   "bugs": {
     "url": "https://github.com/ArmandPhilippot/cretadoc/issues"
   },
-  "packageManager": "pnpm@8.6.1",
+  "packageManager": "pnpm@8.6.12",
   "engines": {
     "node": ">=14.6.0"
   },
@@ -54,21 +54,21 @@
   "devDependencies": {
     "@cretadoc/eslint-config": "workspace:^1.0.0",
     "@cretadoc/prettier-config": "workspace:^1.0.0",
-    "@types/node": "^18.15.5",
-    "@typescript-eslint/eslint-plugin": "^5.56.0",
-    "@typescript-eslint/parser": "^5.56.0",
-    "@vitest/coverage-c8": "^0.29.7",
-    "commit-and-tag-version": "^11.2.0",
-    "eslint": "^8.36.0",
-    "eslint-plugin-import": "^2.27.5",
-    "rimraf": "^4.4.1",
-    "rollup": "^3.20.1",
-    "rollup-plugin-dts": "^5.3.0",
+    "@types/node": "^20.5.0",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "@typescript-eslint/parser": "^6.4.0",
+    "@vitest/coverage-v8": "^0.34.2",
+    "commit-and-tag-version": "^11.2.2",
+    "eslint": "^8.47.0",
+    "eslint-plugin-import": "^2.28.0",
+    "rimraf": "^5.0.1",
+    "rollup": "^3.28.0",
+    "rollup-plugin-dts": "^6.0.0",
     "rollup-plugin-esbuild": "^5.0.0",
-    "typescript": "^5.0.2",
-    "vitest": "^0.29.7"
+    "typescript": "^5.1.6",
+    "vitest": "^0.34.2"
   },
   "dependencies": {
-    "type-fest": "^3.7.0"
+    "type-fest": "^4.2.0"
   }
 }
