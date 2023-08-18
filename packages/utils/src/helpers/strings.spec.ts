@@ -1,5 +1,25 @@
 import { describe, expect, it } from 'vitest';
-import { slugify } from './strings';
+import { camelCaseToHyphenated, camelToSnakeCase, slugify } from './strings';
+
+describe('camel-case-to-hyphenated', () => {
+  it('convert a camel case string to a hyphenated string', () => {
+    const input = 'anyCamelCaseString';
+    const result = camelCaseToHyphenated(input);
+
+    expect(result.includes('-'));
+    expect(result.split('').every((c) => c === c.toLowerCase()));
+  });
+});
+
+describe('camel-case-to-snake-case', () => {
+  it('convert a camel case string to a snake case string', () => {
+    const input = 'anyCamelCaseString';
+    const result = camelToSnakeCase(input);
+
+    expect(result.includes('_'));
+    expect(result.split('').every((c) => c === c.toLowerCase()));
+  });
+});
 
 describe('slugify', () => {
   it('uses compatibility decomposition', () => {
