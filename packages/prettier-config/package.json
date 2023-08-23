@@ -22,7 +22,7 @@
   "bugs": {
     "url": "https://github.com/ArmandPhilippot/cretadoc/issues"
   },
-  "packageManager": "pnpm@8.6.1",
+  "packageManager": "pnpm@8.6.12",
   "engines": {
     "node": ">=14.6.0"
   },
@@ -34,7 +34,7 @@
     "prettier": "^2.8"
   },
   "devDependencies": {
-    "commit-and-tag-version": "^11.1.0",
-    "prettier": "^2.8.4"
+    "commit-and-tag-version": "^11.2.3",
+    "prettier": "^3.0.2"
   }
 }
