@@ -1,7 +1,0 @@
-{
-  "root": true,
-  "env": {
-    "browser": false
-  },
-  "extends": ["@cretadoc/eslint-config"]
-}

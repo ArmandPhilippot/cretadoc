@@ -11,5 +11,6 @@
     "declaration": false,
     "declarationMap": false,
     "outDir": "dist"
-  }
+  },
+  "include": ["./src/**/*"]
 }
