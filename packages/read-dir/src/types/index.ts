@@ -1,8 +1,7 @@
-export const FILE_TYPES = ['directory', 'file', 'unknown'] as const;
-export const VALID_FILE_TYPES = ['directory', 'file'] as const;
+import type { Maybe, Simplify } from '@cretadoc/utils';
 
-export type FileType = (typeof FILE_TYPES)[number];
-export type ValidFileType = (typeof VALID_FILE_TYPES)[number];
+export type FileType = 'directory' | 'file' | 'unknown';
+export type ValidFileType = 'directory' | 'file';
 export type Extension = `.${string}` | '';
 
 export type Dates = {
@@ -54,8 +53,8 @@ export type RegularFileOrDirectory<T extends ValidFileType> = Dates & {
   type: T;
 };
 
-export type Directory = RegularFileOrDirectory<'directory'>;
-export type RegularFile = RegularFileOrDirectory<'file'>;
+export type Directory = Simplify<RegularFileOrDirectory<'directory'>>;
+export type RegularFile = Simplify<RegularFileOrDirectory<'file'>>;
 
 export type ReadDirOptions = {
   /**
@@ -63,13 +62,13 @@ export type ReadDirOptions = {
    *
    * @default undefined
    */
-  depth: number | undefined;
+  depth: Maybe<number>;
   /**
    * Only include files with the given extensions.
    *
    * @default undefined
    */
-  extensions: Extension[] | undefined;
+  extensions: Maybe<Extension[]>;
   /**
    * Should we include the contents of the files?
    *

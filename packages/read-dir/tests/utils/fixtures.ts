@@ -1,23 +1,9 @@
 /* eslint-disable no-await-in-loop */
 import { writeFileSync } from 'fs';
-import { access, mkdir, symlink } from 'fs/promises';
+import { mkdir, symlink } from 'fs/promises';
 import { parse } from 'path';
+import { isValidPath } from '@cretadoc/utils';
 import type { ValidFileType } from '../../src/types';
-
-/**
- * Check if a path exists.
- *
- * @param path - A path.
- * @returns {Promise<Boolean>} True if the path exists.
- */
-const isPathExists = async (path: string): Promise<boolean> => {
-  try {
-    await access(path);
-    return true;
-  } catch {
-    return false;
-  }
-};
 
 export type Fixture<T extends ValidFileType> = {
   /**
@@ -39,18 +25,16 @@ export type Fixture<T extends ValidFileType> = {
 };
 
 const createDirectoryFixture = async (path: string) => {
-  const isExist = await isPathExists(path);
+  if (await isValidPath(path)) return;
 
-  if (!isExist) await mkdir(path, { recursive: true });
+  await mkdir(path, { recursive: true });
 };
 
 const createFileFixture = async (path: string, content: string | undefined) => {
-  const isFileExist = await isPathExists(path);
-
-  if (isFileExist) return;
+  if (await isValidPath(path)) return;
 
   const parentDir = parse(path).dir;
-  const isParentExist = await isPathExists(parentDir);
+  const isParentExist = await isValidPath(parentDir);
 
   if (!isParentExist) await createDirectoryFixture(parentDir);
 

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { ReadDirOptions } from '../src/types';
 import { DEFAULT_OPTIONS } from '../src/utils/constants';
-import { mergeOptionsWithDefault } from '../src/utils/helpers/config';
+import { mergeOptionsWithDefault } from '../src/utils/helpers';
 
 describe('merge-options-with-default', () => {
   it('merges partial options with the default ones', () => {

@@ -1,5 +1,5 @@
-import { readdir, readFile, stat } from 'fs/promises';
-import { basename, join, parse } from 'path';
+import { readdir, readFile, stat } from 'node:fs/promises';
+import { basename, join, parse } from 'node:path';
 import { type Maybe, removeUndefined } from '@cretadoc/utils';
 import type {
   Dates,
@@ -9,8 +9,7 @@ import type {
   ReadDirOptions,
   RegularFile,
 } from './types';
-import { mergeOptionsWithDefault } from './utils/helpers/config';
-import { generateIdFrom } from './utils/helpers/strings';
+import { generateIdFrom, mergeOptionsWithDefault } from './utils/helpers';
 
 /**
  * Retrieve the creation date and the update date of a path.
@@ -203,3 +202,11 @@ export const readDir = async (
 
   return getDirectory(path, mergedOptions);
 };
+
+export type {
+  Directory,
+  DirectoryContents,
+  Extension,
+  ReadDirOptions,
+  RegularFile,
+} from './types';

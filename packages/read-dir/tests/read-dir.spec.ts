@@ -5,7 +5,7 @@ import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { type Directory, readDir, type RegularFile } from '../src';
-import { generateIdFrom } from '../src/utils/helpers/strings';
+import { generateIdFrom } from '../src/utils/helpers';
 import { createFixtures, type Fixture } from './utils/fixtures';
 import { getRootFixturesFrom } from './utils/helpers';
 

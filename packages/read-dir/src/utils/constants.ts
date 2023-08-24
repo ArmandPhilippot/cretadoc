@@ -1,7 +1,7 @@
 import type { ReadDirOptions } from '../types';
 
-export const DEFAULT_OPTIONS: Readonly<ReadDirOptions> = {
+export const DEFAULT_OPTIONS = {
   depth: undefined,
   extensions: undefined,
   includeFileContents: false,
-} as const;
+} as const satisfies ReadDirOptions;

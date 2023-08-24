@@ -8,6 +8,5 @@ export const getRootFixturesFrom = <
   rootPath: string
 ) =>
   fixtures.filter(
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     (fixture) => fixture.path.replace(rootPath, '.').split(sep).length === 1
   );
