@@ -13,4 +13,5 @@ export * from './nullable';
 export * from './nullable-optional-keys-of';
 export * from './remove-never-keys-in';
 export * from './replace-types-in';
+export * from './required-keys-of';
 export * from './unique-keys-of';
