@@ -29,7 +29,7 @@ module.exports = {
       files: ['*.ts', '*.tsx', '.mts', '.cts'],
       extends: [
         'plugin:@typescript-eslint/recommended',
-        'plugin:@typescript-eslint/recommended-requiring-type-checking',
+        'plugin:@typescript-eslint/stylistic-type-checked',
         'plugin:import/typescript',
       ],
       plugins: ['@typescript-eslint'],

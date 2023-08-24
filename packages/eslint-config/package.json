@@ -33,9 +33,9 @@
     "release": "commit-and-tag-version -s --no-verify"
   },
   "peerDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.0.0",
-    "@typescript-eslint/parser": "^5.0.0",
-    "eslint": "^7.23.0 || ^8.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": ">=7.23.0 || >=8.0.0",
     "eslint-import-resolver-typescript": "^3.5.0",
     "eslint-plugin-import": "^2.27.0"
   },
