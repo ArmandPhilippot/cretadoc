@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.1.0](https://github.com/ArmandPhilippot/cretadoc/compare/@cretadoc/eslint-config@1.0.1...@cretadoc/eslint-config@1.1.0) (2023-08-24)
+
+
+### Features
+
+* **eslint-config:** use [@typescript-eslint](https://github.com/typescript-eslint) v6 ([4500385](https://github.com/ArmandPhilippot/cretadoc/commit/4500385395c66ca7931c8a68faaeed022d2cf09f))
+
 ## [1.0.1](https://github.com/ArmandPhilippot/cretadoc/compare/@cretadoc/eslint-config@1.0.0...@cretadoc/eslint-config@1.0.1) (2023-08-23)
 
 
