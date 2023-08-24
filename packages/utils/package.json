@@ -7,7 +7,7 @@
     "helpers",
     "types"
   ],
-  "version": "0.1.0",
+  "version": "1.0.0",
   "license": "MIT",
   "author": {
     "name": "Armand Philippot",
@@ -29,7 +29,8 @@
   },
   "type": "module",
   "files": [
-    "dist/**"
+    "dist/**",
+    "LICENSE-docs"
   ],
   "main": "dist/utils.cjs",
   "module": "dist/utils.mjs",
@@ -52,8 +53,8 @@
     "watch": "rollup --config rollup.config.ts --configPlugin rollup-plugin-esbuild --watch"
   },
   "devDependencies": {
-    "@cretadoc/eslint-config": "workspace:^1.0.0",
-    "@cretadoc/prettier-config": "workspace:^1.0.0",
+    "@cretadoc/eslint-config": "^1.1.0",
+    "@cretadoc/prettier-config": "^1.0.0",
     "@types/node": "^20.5.0",
     "@typescript-eslint/eslint-plugin": "^6.4.0",
     "@typescript-eslint/parser": "^6.4.0",
