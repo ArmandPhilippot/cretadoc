@@ -1,4 +1,5 @@
 export type { PartialDeep, ReadonlyDeep } from 'type-fest';
+export * from './common-keys-of';
 export * from './key-path-in';
 export * from './key-path-value-in';
 export * from './maybe';
