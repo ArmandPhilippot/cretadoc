@@ -4,10 +4,9 @@
   "keywords": [
     "cretadoc",
     "read-dir",
-    "walk-dir",
-    "read-dir"
+    "walk-dir"
   ],
-  "version": "0.1.0",
+  "version": "1.0.0",
   "license": "MIT",
   "author": {
     "name": "Armand Philippot",
@@ -23,7 +22,7 @@
   "bugs": {
     "url": "https://github.com/ArmandPhilippot/cretadoc/issues"
   },
-  "packageManager": "pnpm@8.6.1",
+  "packageManager": "pnpm@8.6.12",
   "engines": {
     "node": ">=14.6.0"
   },
@@ -70,6 +69,6 @@
     "vitest": "^0.34.2"
   },
   "dependencies": {
-    "@cretadoc/utils": "^1.0.0"
+    "@cretadoc/utils": "^1.0.1"
   }
 }
