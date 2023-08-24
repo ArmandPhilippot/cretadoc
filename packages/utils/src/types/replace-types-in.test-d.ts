@@ -21,7 +21,7 @@ describe('ReplaceTypesIn', () => {
       string: 'foo',
     };
 
-    expectTypeOf(updatedObject['boolean']).toEqualTypeOf<string>();
+    expectTypeOf(updatedObject.boolean).toEqualTypeOf<string>();
     expectTypeOf(updatedObject.number).toEqualTypeOf<string>();
     expectTypeOf(updatedObject.string).toEqualTypeOf<string>();
     expectTypeOf(updatedObject.nested.number).toEqualTypeOf<string>();
