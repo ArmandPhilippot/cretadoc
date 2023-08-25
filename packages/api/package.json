@@ -28,7 +28,8 @@
   },
   "type": "module",
   "files": [
-    "dist/**"
+    "dist/**",
+    "LICENSE-docs"
   ],
   "main": "dist/api.cjs",
   "module": "dist/api.mjs",
@@ -52,33 +53,33 @@
     "watch": "rollup --config rollup.config.ts --configPlugin rollup-plugin-esbuild --watch"
   },
   "dependencies": {
-    "@cretadoc/read-dir": "workspace:^0.1.0",
-    "@cretadoc/utils": "workspace:^0.1.0",
+    "@cretadoc/read-dir": "^1.0.0",
+    "@cretadoc/utils": "^1.0.1",
     "dataloader": "^2.2.2",
-    "graphql": "^16.7.1",
-    "graphql-yoga": "^4.0.3",
+    "graphql": "^16.8.0",
+    "graphql-yoga": "^4.0.4",
     "validator": "^13.11.0"
   },
   "devDependencies": {
-    "@cretadoc/eslint-config": "workspace:^1.0.0",
-    "@cretadoc/prettier-config": "workspace:^1.0.0",
-    "@types/node": "^20.4.9",
+    "@cretadoc/eslint-config": "^1.1.0",
+    "@cretadoc/prettier-config": "^1.0.0",
+    "@types/node": "^20.5.6",
     "@types/supertest": "^2.0.12",
     "@types/validator": "^13.11.1",
-    "@typescript-eslint/eslint-plugin": "^6.3.0",
-    "@typescript-eslint/parser": "^6.3.0",
-    "@vitest/coverage-v8": "^0.34.1",
-    "commit-and-tag-version": "^11.2.2",
-    "concurrently": "^8.2.0",
-    "eslint": "^8.46.0",
-    "eslint-plugin-import": "^2.28.0",
+    "@typescript-eslint/eslint-plugin": "^6.4.1",
+    "@typescript-eslint/parser": "^6.4.1",
+    "@vitest/coverage-v8": "^0.34.3",
+    "commit-and-tag-version": "^11.2.3",
+    "concurrently": "^8.2.1",
+    "eslint": "^8.47.0",
+    "eslint-plugin-import": "^2.28.1",
     "rimraf": "^5.0.1",
-    "rollup": "^3.28.0",
-    "rollup-plugin-dts": "^5.3.1",
+    "rollup": "^3.28.1",
+    "rollup-plugin-dts": "^6.0.0",
     "rollup-plugin-esbuild": "^5.0.0",
     "supertest": "^6.3.3",
     "ts-node": "^10.9.1",
-    "typescript": "^5.1.6",
-    "vitest": "^0.34.1"
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.3"
   }
 }
