@@ -1,10 +1,14 @@
-import { type Maybe, isObjKeyExist, isObject } from '@cretadoc/utils';
+import {
+  type Maybe,
+  isObjKeyExist,
+  isObject,
+  type RequiredKeysOf,
+} from '@cretadoc/utils';
 import type {
   DocDirectory,
   DocEntry,
   DocEntryKind,
   DocFile,
-  NonOptionalKeysOf,
   Page,
 } from '../../types';
 
@@ -28,7 +32,7 @@ export const isDocEntry = <
   if (!value) return false;
   if (!isObject(value)) return false;
 
-  const mandatoryKeys: Array<NonOptionalKeysOf<DocEntry>> = [
+  const mandatoryKeys: Array<keyof RequiredKeysOf<DocEntry>> = [
     'createdAt',
     'id',
     'name',
@@ -54,7 +58,7 @@ export const isPage = (value: unknown): value is Page => {
   if (!value) return false;
   if (!isObject(value)) return false;
 
-  const mandatoryKeys: Array<NonOptionalKeysOf<Page>> = [
+  const mandatoryKeys: Array<keyof RequiredKeysOf<Page>> = [
     'createdAt',
     'id',
     'name',

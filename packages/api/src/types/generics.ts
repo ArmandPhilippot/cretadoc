@@ -62,7 +62,3 @@ export type MutationResult<P extends string, T> = {
 };
 
 export type ValidationErrors<T> = Record<keyof T, string[]>;
-
-export type NonOptionalKeysOf<T> = {
-  [k in keyof T]-?: undefined extends T[k] ? never : k;
-}[keyof T];

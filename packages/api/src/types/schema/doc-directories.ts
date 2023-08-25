@@ -1,5 +1,10 @@
 import type { Directory } from '@cretadoc/read-dir';
-import type { Maybe, Nullable, NullableOptionalKeysOf } from '@cretadoc/utils';
+import type {
+  Maybe,
+  Nullable,
+  NullableOptionalKeysOf,
+  Simplify,
+} from '@cretadoc/utils';
 import type DataLoader from 'dataloader';
 import type { Meta, Slug } from '../data';
 import type {
@@ -14,14 +19,16 @@ import type { Connection, QueryResult } from '../gql';
 import type { DocEntryParent } from './doc';
 import type { DocEntry } from './doc-entries';
 
-export type DocDirectory = Omit<Directory, 'contents' | 'extension'> & {
-  contents?: string;
-  entries?: DocEntry[];
-  excerpt?: string;
-  meta?: Meta;
-  parent: Nullable<DocEntryParent>;
-  slug: Slug;
-};
+export type DocDirectory = Simplify<
+  Omit<Directory, 'contents' | 'extension'> & {
+    contents?: string;
+    entries?: DocEntry[];
+    excerpt?: string;
+    meta?: Meta;
+    parent: Nullable<DocEntryParent>;
+    slug: Slug;
+  }
+>;
 
 /*
  * ===========================================================================

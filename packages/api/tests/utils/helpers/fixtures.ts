@@ -1,24 +1,10 @@
 import { writeFileSync } from 'fs';
-import { access, mkdir, readdir, rm } from 'fs/promises';
+import { mkdir, readdir, rm } from 'fs/promises';
 import { join, parse } from 'path';
+import { isValidPath } from '@cretadoc/utils';
 
 type DebugOptions = {
   verbose?: boolean;
-};
-
-/**
- * Check if a path exists.
- *
- * @param path - A path.
- * @returns {Promise<Boolean>} True if the path exists.
- */
-const isPathExists = async (path: string): Promise<boolean> => {
-  try {
-    await access(path);
-    return true;
-  } catch {
-    return false;
-  }
 };
 
 export type Fixture = {
@@ -38,7 +24,7 @@ export type Fixture = {
  * @param {string} path - The directory path.
  */
 const createDirectory = async (path: string) => {
-  const isExist = await isPathExists(path);
+  const isExist = await isValidPath(path);
 
   if (!isExist) await mkdir(path, { recursive: true });
 };
@@ -65,9 +51,7 @@ const add = async (
   { path, contents }: Fixture,
   options?: DebugOptions
 ): Promise<void> => {
-  const isFileExist = await isPathExists(path);
-
-  if (isFileExist) {
+  if (await isValidPath(path)) {
     if (options?.verbose)
       console.log(`[fixtures]: ${path} already exists, skipping.`);
     return;

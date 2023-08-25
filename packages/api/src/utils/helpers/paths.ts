@@ -1,6 +1,6 @@
 import { stat } from 'fs/promises';
 import { isAbsolute, normalize, relative } from 'path';
-import type { ErrorDetails } from 'src/types';
+import type { ErrorDetails } from '../../types';
 import { CretadocAPIError } from '../exceptions';
 
 /**
