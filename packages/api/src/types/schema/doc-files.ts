@@ -1,10 +1,5 @@
 import type { RegularFile } from '@cretadoc/read-dir';
-import type {
-  Maybe,
-  Nullable,
-  NullableOptionalKeysOf,
-  Simplify,
-} from '@cretadoc/utils';
+import type { Maybe, Nullable, NullableOptionalKeysOf } from '@cretadoc/utils';
 import type DataLoader from 'dataloader';
 import type { Meta, Slug } from '../data';
 import type {
@@ -18,14 +13,12 @@ import type {
 import type { Connection, QueryResult } from '../gql';
 import type { DocEntryParent } from './doc';
 
-export type DocFile = Simplify<
-  Omit<RegularFile, 'extension'> & {
-    excerpt?: string;
-    meta?: Meta;
-    parent: Nullable<DocEntryParent>;
-    slug: Slug;
-  }
->;
+export type DocFile = Omit<RegularFile, 'extension'> & {
+  excerpt?: string;
+  meta?: Meta;
+  parent: Nullable<DocEntryParent>;
+  slug: Slug;
+};
 
 /*
  * ===========================================================================

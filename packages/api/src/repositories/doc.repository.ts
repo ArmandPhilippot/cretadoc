@@ -152,7 +152,7 @@ export class DocRepository extends FileSystemRepository {
     updatedAt,
   }: T): Promise<DocDirectory | DocFile> {
     const relativePath = this.getRelativePathFrom(path);
-    const commonData: EntryCommonData = {
+    const commonData = {
       createdAt,
       id: generateBase64String(relativePath),
       name,
@@ -160,7 +160,7 @@ export class DocRepository extends FileSystemRepository {
       path: relativePath,
       slug: getSlugFrom(relativePath),
       updatedAt,
-    };
+    } satisfies EntryCommonData;
 
     if (type === 'directory') {
       const entries = await this.#convertDirContents(contents);

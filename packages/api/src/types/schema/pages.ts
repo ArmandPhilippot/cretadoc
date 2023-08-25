@@ -1,5 +1,5 @@
 import type { RegularFile } from '@cretadoc/read-dir';
-import type { Maybe, NullableOptionalKeysOf, Simplify } from '@cretadoc/utils';
+import type { Maybe, NullableOptionalKeysOf } from '@cretadoc/utils';
 import type DataLoader from 'dataloader';
 import type { Meta, Slug } from '../data';
 import type {
@@ -12,13 +12,11 @@ import type {
 } from '../generics';
 import type { Connection, QueryResult } from '../gql';
 
-export type Page = Simplify<
-  Omit<RegularFile, 'extension' | 'type'> & {
-    excerpt?: string;
-    meta?: Meta;
-    slug: Slug;
-  }
->;
+export type Page = Omit<RegularFile, 'extension' | 'type'> & {
+  excerpt?: string;
+  meta?: Meta;
+  slug: Slug;
+};
 
 /*
  * ===========================================================================
