@@ -1,6 +1,6 @@
-import { existsSync } from 'fs';
-import { mkdir, readFile } from 'fs/promises';
-import { join } from 'path';
+import { existsSync } from 'node:fs';
+import { mkdir, readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import type { DirectoryContents } from '@cretadoc/read-dir';
 import type { Maybe } from '@cretadoc/utils';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
@@ -71,7 +71,7 @@ describe('FileSystemRepository', () => {
 
   it('can create a new repository', () => {
     const path = '/some/absolute/path';
-    const repository = new FileSystemRepositoryChild(path, 'pages');
+    const repository = new FileSystemRepositoryChild(path, '/pages/', 'pages');
 
     expect(repository.getRootDir()).toBe(path);
   });
@@ -85,7 +85,7 @@ describe('FileSystemRepository', () => {
       received: path,
     };
 
-    expect(() => new FileSystemRepository(path, context)).toThrow(
+    expect(() => new FileSystemRepository(path, '/doc/', context)).toThrow(
       new CretadocAPIError(
         'Cannot initialize FileSystemRepository',
         expectedError
@@ -94,7 +94,11 @@ describe('FileSystemRepository', () => {
   });
 
   it('can return the contents of a given directory', async () => {
-    const repo = new FileSystemRepositoryChild(PAGES_FIXTURES_DIR, 'pages');
+    const repo = new FileSystemRepositoryChild(
+      PAGES_FIXTURES_DIR,
+      '/pages/',
+      'pages'
+    );
     const repoContents = await repo.getContentsOf(PAGES_FIXTURES_DIR);
 
     expect(repoContents?.directories).not.toBeUndefined();
@@ -104,7 +108,11 @@ describe('FileSystemRepository', () => {
 
   it('throws an error when requesting contents of an invalid directory', async () => {
     const context = 'pages';
-    const repo = new FileSystemRepositoryChild(PAGES_FIXTURES_DIR, context);
+    const repo = new FileSystemRepositoryChild(
+      PAGES_FIXTURES_DIR,
+      '/pages/',
+      context
+    );
 
     await expect(async () =>
       repo.getContentsOf(DOC_FIXTURES_DIR)
@@ -119,7 +127,11 @@ describe('FileSystemRepository', () => {
   });
 
   it('can create a new file', async () => {
-    const repo = new FileSystemRepositoryChild(PAGES_FIXTURES_DIR, 'pages');
+    const repo = new FileSystemRepositoryChild(
+      PAGES_FIXTURES_DIR,
+      '/pages/',
+      'pages'
+    );
     const parentPath = './';
     const filename = 'natus';
     const contents = 'adipisci quod odio';
@@ -143,7 +155,11 @@ describe('FileSystemRepository', () => {
   });
 
   it('can create a new file with a full filename', async () => {
-    const repo = new FileSystemRepositoryChild(PAGES_FIXTURES_DIR, 'pages');
+    const repo = new FileSystemRepositoryChild(
+      PAGES_FIXTURES_DIR,
+      '/pages/',
+      'pages'
+    );
     const parentPath = './';
     const filename = 'soluta.md';
     const contents = 'sit quia libero';
@@ -165,7 +181,11 @@ describe('FileSystemRepository', () => {
   });
 
   it('can rename a file', async () => {
-    const repo = new FileSystemRepositoryChild(PAGES_FIXTURES_DIR, 'pages');
+    const repo = new FileSystemRepositoryChild(
+      PAGES_FIXTURES_DIR,
+      '/pages/',
+      'pages'
+    );
     const parentPath = './';
     const filename = 'fugiat';
     const contents = 'adipisci quod odio';
@@ -188,7 +208,11 @@ describe('FileSystemRepository', () => {
   });
 
   it('can update a markdown file contents', async () => {
-    const repo = new FileSystemRepositoryChild(PAGES_FIXTURES_DIR, 'pages');
+    const repo = new FileSystemRepositoryChild(
+      PAGES_FIXTURES_DIR,
+      '/pages/',
+      'pages'
+    );
     const filePath = await repo.createMarkdownFile({
       contents: 'adipisci quod odio',
       name: 'sit',
@@ -209,7 +233,11 @@ describe('FileSystemRepository', () => {
   });
 
   it('can update a markdown file excerpt', async () => {
-    const repo = new FileSystemRepositoryChild(PAGES_FIXTURES_DIR, 'pages');
+    const repo = new FileSystemRepositoryChild(
+      PAGES_FIXTURES_DIR,
+      '/pages/',
+      'pages'
+    );
     const contents = 'maiores non voluptatum';
     const filePath = await repo.createMarkdownFile({
       contents,
@@ -234,7 +262,11 @@ describe('FileSystemRepository', () => {
   });
 
   it('can update the frontmatter of a markdown file', async () => {
-    const repo = new FileSystemRepositoryChild(PAGES_FIXTURES_DIR, 'pages');
+    const repo = new FileSystemRepositoryChild(
+      PAGES_FIXTURES_DIR,
+      '/pages/',
+      'pages'
+    );
     const initialMeta: Meta = {
       title: 'et et nihil',
     };
@@ -261,7 +293,11 @@ describe('FileSystemRepository', () => {
   });
 
   it('can override a frontmatter meta in a markdown file', async () => {
-    const repo = new FileSystemRepositoryChild(PAGES_FIXTURES_DIR, 'pages');
+    const repo = new FileSystemRepositoryChild(
+      PAGES_FIXTURES_DIR,
+      '/pages/',
+      'pages'
+    );
     const initialMeta = {
       seoTitle: 'blanditiis quia porro',
       title: 'et et nihil',
@@ -290,7 +326,11 @@ describe('FileSystemRepository', () => {
   });
 
   it('throws an error when trying to update a non markdown file', async () => {
-    const repo = new FileSystemRepositoryChild(PAGES_FIXTURES_DIR, 'pages');
+    const repo = new FileSystemRepositoryChild(
+      PAGES_FIXTURES_DIR,
+      '/pages/',
+      'pages'
+    );
     const path = `${PAGES_FIXTURES_DIR}/any/path/without/extension`;
 
     await expect(async () =>
@@ -306,7 +346,11 @@ describe('FileSystemRepository', () => {
   });
 
   it('can move a file', async () => {
-    const repo = new FileSystemRepositoryChild(PAGES_FIXTURES_DIR, 'pages');
+    const repo = new FileSystemRepositoryChild(
+      PAGES_FIXTURES_DIR,
+      '/pages/',
+      'pages'
+    );
     const filename = 'laudantium';
     const filePath = await repo.createMarkdownFile({
       contents: 'adipisci quod odio',
@@ -332,7 +376,11 @@ describe('FileSystemRepository', () => {
   });
 
   it('can delete a file', async () => {
-    const repo = new FileSystemRepositoryChild(PAGES_FIXTURES_DIR, 'pages');
+    const repo = new FileSystemRepositoryChild(
+      PAGES_FIXTURES_DIR,
+      '/pages/',
+      'pages'
+    );
     const parentPath = './';
     const filename = 'minima';
     const filePath = await repo.createMarkdownFile({
@@ -347,7 +395,11 @@ describe('FileSystemRepository', () => {
   });
 
   it('throws an error when trying to convert an absolute path to an absolute path', () => {
-    const repo = new FileSystemRepositoryChild(PAGES_FIXTURES_DIR, 'pages');
+    const repo = new FileSystemRepositoryChild(
+      PAGES_FIXTURES_DIR,
+      '/pages/',
+      'pages'
+    );
     const path = '/an/absolute/path';
 
     expect(() => repo.getAbsolutePathFrom(path)).toThrowError(

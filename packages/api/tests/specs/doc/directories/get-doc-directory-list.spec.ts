@@ -23,7 +23,12 @@ type GetDocDirectoriesListContext = {
 describe('get-doc-directories-list', () => {
   beforeEach<GetDocDirectoriesListContext>(async (context) => {
     context.server = await createAPIServer({
-      data: { doc: DOC_FIXTURES_DIR },
+      data: {
+        doc: {
+          baseUrl: '/doc/',
+          path: DOC_FIXTURES_DIR,
+        },
+      },
     });
   });
 

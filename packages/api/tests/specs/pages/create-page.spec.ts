@@ -28,7 +28,12 @@ type CreatePageContext = {
 describe('create-page', () => {
   beforeEach<CreatePageContext>(async (context) => {
     context.server = await createAPIServer({
-      data: { pages: PAGES_FIXTURES_DIR },
+      data: {
+        pages: {
+          baseUrl: '/pages/',
+          path: PAGES_FIXTURES_DIR,
+        },
+      },
     });
   });
 

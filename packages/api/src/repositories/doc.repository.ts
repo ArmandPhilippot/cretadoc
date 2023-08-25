@@ -1,6 +1,6 @@
-import { existsSync } from 'fs';
-import { mkdir, readFile } from 'fs/promises';
-import { basename, join, parse } from 'path';
+import { existsSync } from 'node:fs';
+import { mkdir, readFile } from 'node:fs/promises';
+import { basename, dirname, join, parse } from 'node:path';
 import type {
   Directory,
   DirectoryContents,
@@ -60,8 +60,8 @@ type FindParams<
 > = ListInput<T> & { kind?: K };
 
 export class DocRepository extends FileSystemRepository {
-  constructor(dir: string) {
-    super(dir, 'doc');
+  constructor(dir: string, baseUrl: string) {
+    super(dir, baseUrl, 'doc');
   }
 
   /**
@@ -81,7 +81,10 @@ export class DocRepository extends FileSystemRepository {
       encoding: 'utf8',
     });
 
-    return parseMarkdown(indexFileContents);
+    return parseMarkdown(
+      indexFileContents,
+      join(this.baseUrl, getSlugFrom(dir))
+    );
   }
 
   /**
@@ -176,7 +179,10 @@ export class DocRepository extends FileSystemRepository {
 
     return {
       ...commonData,
-      ...parseMarkdown(contents ?? ''),
+      ...parseMarkdown(
+        contents ?? '',
+        join(this.baseUrl, dirname(commonData.slug))
+      ),
       type: 'file',
     };
   }

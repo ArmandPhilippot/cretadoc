@@ -22,8 +22,8 @@ await createFixtures(docFixtures);
 await createFixtures(pagesFixtures);
 await initServer({
   data: {
-    doc: DOC_FIXTURES_DIR,
-    pages: PAGES_FIXTURES_DIR,
+    doc: { baseUrl: '/doc', path: DOC_FIXTURES_DIR },
+    pages: { baseUrl: '/', path: PAGES_FIXTURES_DIR },
   },
   endpoint: '/graphql',
   hostname: 'localhost',

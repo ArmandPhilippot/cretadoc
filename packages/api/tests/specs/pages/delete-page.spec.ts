@@ -1,5 +1,5 @@
-import { writeFile } from 'fs/promises';
-import { join } from 'path';
+import { writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { type Nullable, isObjKeyExist, isObject } from '@cretadoc/utils';
 import { afterAll, beforeEach, describe, it } from 'vitest';
 import type {
@@ -31,7 +31,12 @@ type DeletePageContext = {
 describe('delete-page', () => {
   beforeEach<DeletePageContext>(async (context) => {
     context.server = await createAPIServer({
-      data: { pages: PAGES_FIXTURES_DIR },
+      data: {
+        pages: {
+          baseUrl: '/pages/',
+          path: PAGES_FIXTURES_DIR,
+        },
+      },
     });
   });
 

@@ -20,7 +20,12 @@ describe('get-doc-entry', () => {
   beforeEach<GetDocEntryContext>(async (context) => {
     context.requestedDocEntry = rootDocEntries[0];
     context.server = await createAPIServer({
-      data: { doc: DOC_FIXTURES_DIR },
+      data: {
+        doc: {
+          baseUrl: '/doc/',
+          path: DOC_FIXTURES_DIR,
+        },
+      },
     });
   });
 

@@ -2,20 +2,31 @@ import type { Maybe } from '@cretadoc/utils';
 import type { YogaServerInstance } from 'graphql-yoga';
 import type { APIContext, ServerContext } from './internals';
 
+export type DataDirectoryConfig = {
+  /**
+   * The base url used for relative assets and links in markdown files.
+   */
+  baseUrl: string;
+  /**
+   * The absolute path.
+   */
+  path: string;
+};
+
 /**
  * Configure the data sources.
  */
 export type APIDataConfig = {
   /**
-   * The path of the documentation directory.
+   * The documentation directory configuration.
    * @default undefined
    */
-  doc?: string;
+  doc?: DataDirectoryConfig;
   /**
-   * The path of the pages directory.
+   * The pages directory configuration.
    * @default undefined
    */
-  pages?: string;
+  pages?: DataDirectoryConfig;
 };
 
 export type APIConfig = {

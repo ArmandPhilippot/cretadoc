@@ -1,5 +1,5 @@
-import { stat } from 'fs/promises';
-import { join, parse, sep } from 'path';
+import { stat } from 'node:fs/promises';
+import { join, parse, sep } from 'node:path';
 import { slugify } from '@cretadoc/utils';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { pages, pagesFixtures } from '../../tests/fixtures/pages';
@@ -25,7 +25,7 @@ describe('PagesRepository', () => {
   });
 
   it('can get a page by name', async () => {
-    const repo = new PagesRepository(PAGES_FIXTURES_DIR);
+    const repo = new PagesRepository(PAGES_FIXTURES_DIR, '/page');
     const pagePath = pagesFixtures[0]?.path ?? '';
     const pageName = parse(pagePath).name;
     const page = await repo.get('name', pageName);
@@ -36,7 +36,7 @@ describe('PagesRepository', () => {
   });
 
   it('can get a page by id', async () => {
-    const repo = new PagesRepository(PAGES_FIXTURES_DIR);
+    const repo = new PagesRepository(PAGES_FIXTURES_DIR, '/page');
     const pagePath = pagesFixtures[0]?.path ?? '';
     const relativePath = pagePath.replace(PAGES_FIXTURES_DIR, './');
     const pageId = generateBase64String(relativePath);
@@ -48,7 +48,7 @@ describe('PagesRepository', () => {
   });
 
   it('can get a page by slug', async () => {
-    const repo = new PagesRepository(PAGES_FIXTURES_DIR);
+    const repo = new PagesRepository(PAGES_FIXTURES_DIR, '/page');
     const pagePath = pagesFixtures[0]?.path ?? '';
     const pageName = parse(pagePath).name;
     const slug = `/${slugify(pageName)}` as const;
@@ -62,7 +62,7 @@ describe('PagesRepository', () => {
   });
 
   it('can get many pages by name', async () => {
-    const repo = new PagesRepository(PAGES_FIXTURES_DIR);
+    const repo = new PagesRepository(PAGES_FIXTURES_DIR, '/page');
     const pagePath = pagesFixtures[0]?.path ?? '';
     const pageName = parse(pagePath).name;
     const requestedPages = await repo.getMany('name', [pageName]);
@@ -73,7 +73,7 @@ describe('PagesRepository', () => {
   });
 
   it('can find a list of pages', async () => {
-    const repo = new PagesRepository(PAGES_FIXTURES_DIR);
+    const repo = new PagesRepository(PAGES_FIXTURES_DIR, '/page');
     const edges = await repo.find();
 
     expect(edges.length).toBe(rootPages.length);
@@ -82,7 +82,7 @@ describe('PagesRepository', () => {
   });
 
   it('can find a list of pages ordered by creation date', async () => {
-    const repo = new PagesRepository(PAGES_FIXTURES_DIR);
+    const repo = new PagesRepository(PAGES_FIXTURES_DIR, '/page');
     const edges = await repo.find({
       orderBy: { direction: 'ASC', field: 'createdAt' },
     });
@@ -93,7 +93,7 @@ describe('PagesRepository', () => {
   });
 
   it('can find a list of pages ordered by name', async () => {
-    const repo = new PagesRepository(PAGES_FIXTURES_DIR);
+    const repo = new PagesRepository(PAGES_FIXTURES_DIR, '/page');
     const edges = await repo.find({
       orderBy: { direction: 'ASC', field: 'name' },
     });
@@ -104,7 +104,7 @@ describe('PagesRepository', () => {
   });
 
   it('can find a list of pages ordered by slug', async () => {
-    const repo = new PagesRepository(PAGES_FIXTURES_DIR);
+    const repo = new PagesRepository(PAGES_FIXTURES_DIR, '/page');
     const edges = await repo.find({
       orderBy: { direction: 'ASC', field: 'slug' },
     });
@@ -115,7 +115,7 @@ describe('PagesRepository', () => {
   });
 
   it('can find a list of pages ordered by update', async () => {
-    const repo = new PagesRepository(PAGES_FIXTURES_DIR);
+    const repo = new PagesRepository(PAGES_FIXTURES_DIR, '/page');
     const edges = await repo.find({
       orderBy: { direction: 'ASC', field: 'updatedAt' },
     });
@@ -127,7 +127,7 @@ describe('PagesRepository', () => {
 
   it('can find a list of pages filtered by name', async () => {
     const wantedFilename = 'na';
-    const repo = new PagesRepository(PAGES_FIXTURES_DIR);
+    const repo = new PagesRepository(PAGES_FIXTURES_DIR, '/page');
     const edges = await repo.find({
       where: { name: wantedFilename },
     });
@@ -140,7 +140,7 @@ describe('PagesRepository', () => {
   it('can find a list of pages filtered by creation date', async () => {
     const stats = await stat(join(PAGES_FIXTURES_DIR, pages[0]?.path ?? ''));
     const wantedDate = stats.birthtime.toISOString();
-    const repo = new PagesRepository(PAGES_FIXTURES_DIR);
+    const repo = new PagesRepository(PAGES_FIXTURES_DIR, '/page');
     const edges = await repo.find({
       where: { createdAt: wantedDate },
     });
@@ -153,7 +153,7 @@ describe('PagesRepository', () => {
   it('can find a list of pages filtered by update date', async () => {
     const stats = await stat(join(PAGES_FIXTURES_DIR, pages[0]?.path ?? ''));
     const wantedDate = stats.mtime.toISOString();
-    const repo = new PagesRepository(PAGES_FIXTURES_DIR);
+    const repo = new PagesRepository(PAGES_FIXTURES_DIR, '/page');
     const edges = await repo.find({
       where: { updatedAt: wantedDate },
     });
@@ -164,7 +164,7 @@ describe('PagesRepository', () => {
   });
 
   it('can create a new page', async () => {
-    const repo = new PagesRepository(PAGES_FIXTURES_DIR);
+    const repo = new PagesRepository(PAGES_FIXTURES_DIR, '/page');
     const pageName = 'numquam';
     const pageContents = 'a aliquid omnis';
     const page = await repo.create({ name: pageName, contents: pageContents });
@@ -177,7 +177,7 @@ describe('PagesRepository', () => {
   });
 
   it('can update a page', async () => {
-    const repo = new PagesRepository(PAGES_FIXTURES_DIR);
+    const repo = new PagesRepository(PAGES_FIXTURES_DIR, '/page');
     const pageName = 'nemo';
     const pageContents = 'a aliquid omnis';
     const createdPage = await repo.create({
@@ -198,7 +198,7 @@ describe('PagesRepository', () => {
   });
 
   it('can remove a page by name', async () => {
-    const repo = new PagesRepository(PAGES_FIXTURES_DIR);
+    const repo = new PagesRepository(PAGES_FIXTURES_DIR, '/page');
     const pageName = 'incidunt';
     const pageContents = 'a aliquid omnis';
     const page = await repo.create({
@@ -212,7 +212,7 @@ describe('PagesRepository', () => {
   });
 
   it('can remove a page by id', async () => {
-    const repo = new PagesRepository(PAGES_FIXTURES_DIR);
+    const repo = new PagesRepository(PAGES_FIXTURES_DIR, '/page');
     const pageName = 'commodi';
     const pageContents = 'cum eius enim';
     const page = await repo.create({
@@ -226,7 +226,7 @@ describe('PagesRepository', () => {
   });
 
   it('returns undefined if the page does not exist', async () => {
-    const repo = new PagesRepository(PAGES_FIXTURES_DIR);
+    const repo = new PagesRepository(PAGES_FIXTURES_DIR, '/page');
     const deletedPage = await repo.remove({ name: undefined });
 
     expect(deletedPage).toBeUndefined();

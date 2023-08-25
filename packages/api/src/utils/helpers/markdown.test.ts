@@ -1,7 +1,9 @@
-import { describe, expect, it } from 'vitest';
+import { resolve } from 'node:path';
+import { beforeEach, describe, expect, it } from 'vitest';
 import type { Meta } from '../../types';
 import { EXCERPT_SEPARATOR } from '../constants';
 import { convertMetaToStr, getMarkdownGroups, parseMarkdown } from './markdown';
+import { getSlugFrom } from './strings';
 
 describe('get-markdown-groups', () => {
   it('can retrieve contents without meta and excerpt', () => {
@@ -110,8 +112,18 @@ describe('get-markdown-groups', () => {
   });
 });
 
+type ParseMarkdownContext = {
+  basePath: string;
+};
+
 describe('parse-markdown', () => {
-  it('can retrieve the meta and the content from a markdown string', () => {
+  beforeEach<ParseMarkdownContext>((ctx) => {
+    ctx.basePath = '/some/base/path';
+  });
+
+  it<ParseMarkdownContext>('can retrieve the meta and the content from a markdown string', ({
+    basePath,
+  }) => {
     const meta = {
       createdAt: '2023-06-22',
       seoDescription:
@@ -125,40 +137,48 @@ describe('parse-markdown', () => {
     const regularContents = '# Title\n\nSome contents.\n';
     const markdown = `${frontMatter}\n\n${regularContents}`;
 
-    expect(parseMarkdown(markdown)).toStrictEqual({
+    expect(parseMarkdown(markdown, basePath)).toStrictEqual({
       contents: regularContents,
       excerpt: undefined,
       meta,
     });
   });
 
-  it('return only the content when meta and excerpt are missing', () => {
+  it<ParseMarkdownContext>('return only the content when meta and excerpt are missing', ({
+    basePath,
+  }) => {
     const markdown = '# Title\n\nSome contents.\n';
 
-    expect(parseMarkdown(markdown)).toStrictEqual({
+    expect(parseMarkdown(markdown, basePath)).toStrictEqual({
       contents: markdown,
       excerpt: undefined,
       meta: undefined,
     });
   });
 
-  it('return only the excerpt when meta and contents are missing', () => {
+  it<ParseMarkdownContext>('return only the excerpt when meta and contents are missing', ({
+    basePath,
+  }) => {
     const markdown = `Some excerpt${EXCERPT_SEPARATOR}`;
 
-    expect(parseMarkdown(markdown)).toStrictEqual({
+    expect(parseMarkdown(markdown, basePath)).toStrictEqual({
       contents: '',
       excerpt: markdown.replace(EXCERPT_SEPARATOR, ''),
       meta: undefined,
     });
   });
 
-  it('throws an error when the meta key/value pairs are unknown', () => {
+  it<ParseMarkdownContext>('throws an error when the meta key/value pairs are unknown', ({
+    basePath,
+  }) => {
     const markdown = `---\nfoo: bar\n---\n\n$# Title\n\nSome contents.\n`;
 
-    expect(() => parseMarkdown(markdown)).toThrowError();
+    expect(() => parseMarkdown(markdown, basePath)).toThrowError();
   });
 
-  it('throws an error if meta are invalid', () => {
+  it<ParseMarkdownContext>('throws an error if meta are invalid', ({
+    basePath,
+  }) => {
     const meta = {
       createdAt: '20230622',
       seoDescription: 42,
@@ -171,6 +191,42 @@ describe('parse-markdown', () => {
     const regularContents = '# Title\n\nSome contents.\n';
     const markdown = `${frontMatter}\n\n${regularContents}`;
 
-    expect(() => parseMarkdown(markdown)).toThrowError();
+    expect(() => parseMarkdown(markdown, basePath)).toThrowError();
+  });
+
+  it<ParseMarkdownContext>('can transform the relative img paths', ({
+    basePath,
+  }) => {
+    const absoluteUrl = 'https://anysite.com/img.jpg';
+    const relativeUrl = 'img.jpg';
+    const dotUrl = './relative-img.png';
+    const parentUrl = '../parent-img.gif';
+    const markdown = `# Heading\n\nSome text\n![](${absoluteUrl})\n\nSome other text\n\n![](${relativeUrl})\nSome text again\n\n![an alternative text](${dotUrl})\n\n![an alternative text](${parentUrl})`;
+    const result = parseMarkdown(markdown, basePath);
+
+    expect(result.contents).toContain(absoluteUrl);
+    expect(result.contents).toContain(resolve(basePath, relativeUrl));
+    expect(result.contents).toContain(resolve(basePath, dotUrl));
+    expect(result.contents).toContain(resolve(basePath, parentUrl));
+  });
+
+  it<ParseMarkdownContext>('can transform the relative links', ({
+    basePath,
+  }) => {
+    const absoluteUrl = 'https://anysite.com/';
+    const relativeUrl = 'another-page.md';
+    const dotUrl = './page.md';
+    const parentUrl = '../parent-page.md';
+    const markdown = `# Heading\n\nSome text with an [absolute url](${absoluteUrl})\n\nSome other text with a [relative url](${relativeUrl})\nSome text again with ![a dot url](${dotUrl})\n\n![a parent url](${parentUrl})`;
+    const result = parseMarkdown(markdown, basePath);
+
+    expect(result.contents).toContain(absoluteUrl);
+    expect(result.contents).toContain(
+      getSlugFrom(resolve(basePath, relativeUrl))
+    );
+    expect(result.contents).toContain(getSlugFrom(resolve(basePath, dotUrl)));
+    expect(result.contents).toContain(
+      getSlugFrom(resolve(basePath, parentUrl))
+    );
   });
 });

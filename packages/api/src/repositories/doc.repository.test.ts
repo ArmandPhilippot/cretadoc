@@ -1,4 +1,4 @@
-import { parse } from 'path';
+import { parse } from 'node:path';
 import { type Maybe, slugify } from '@cretadoc/utils';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
@@ -29,7 +29,7 @@ describe('DocRepository', () => {
   });
 
   it('can get a documentation file by path', async () => {
-    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    const repo = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     const docFileFixture = docFixtures.find((fixture) =>
       fixture.path.endsWith(MARKDOWN_EXTENSION)
     );
@@ -49,7 +49,7 @@ describe('DocRepository', () => {
   });
 
   it('can get a documentation file by id', async () => {
-    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    const repo = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     const docFileFixture = docFixtures.find((fixture) =>
       fixture.path.endsWith(MARKDOWN_EXTENSION)
     );
@@ -69,7 +69,7 @@ describe('DocRepository', () => {
   });
 
   it('can get a documentation file by slug', async () => {
-    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    const repo = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     const docFileFixture = docFixtures.find((fixture) =>
       fixture.path.endsWith(MARKDOWN_EXTENSION)
     );
@@ -86,7 +86,7 @@ describe('DocRepository', () => {
   });
 
   it('can get many documentation files by slug', async () => {
-    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    const repo = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     const docFileFixture = docFixtures.find((fixture) =>
       fixture.path.endsWith(MARKDOWN_EXTENSION)
     );
@@ -101,7 +101,7 @@ describe('DocRepository', () => {
   });
 
   it('can get many documentation entries by path', async () => {
-    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    const repo = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     // An existing directory.
     const path = './excepturi';
     const requestedDocEntries = await repo.getMany('path', [path]);
@@ -114,7 +114,7 @@ describe('DocRepository', () => {
   });
 
   it('can find a list of documentation entries', async () => {
-    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    const repo = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     const edges = await repo.find();
 
     expect(edges.length).toBe(rootDocEntries.length);
@@ -123,7 +123,7 @@ describe('DocRepository', () => {
   });
 
   it('can find a list of documentation entries in the given path', async () => {
-    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    const repo = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     // An existing directory.
     const parentPath = './excepturi';
     const requestedFixtures = docEntries.filter(
@@ -139,7 +139,7 @@ describe('DocRepository', () => {
   });
 
   it('can find a list of documentation entries by slug', async () => {
-    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    const repo = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     // An existing slug.
     const slug = '/excepturi';
     const requestedFixtures = docEntries.filter(
@@ -155,7 +155,7 @@ describe('DocRepository', () => {
   });
 
   it('can find a list of documentation entries ordered by path', async () => {
-    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    const repo = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     const edges = await repo.find({
       orderBy: { direction: 'DESC', field: 'path' },
     });
@@ -170,7 +170,7 @@ describe('DocRepository', () => {
   });
 
   it('can find a list of documentation files', async () => {
-    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    const repo = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     const edges = await repo.find({ kind: 'file' });
 
     expect(edges.length).toBe(rootDocFiles.length);
@@ -179,7 +179,7 @@ describe('DocRepository', () => {
   });
 
   it('can find a list of documentation directories', async () => {
-    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    const repo = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     const edges = await repo.find({ kind: 'directory' });
 
     expect(edges.length).toBe(rootDocDirectories.length);
@@ -188,7 +188,7 @@ describe('DocRepository', () => {
   });
 
   it('can remove a file by path', async () => {
-    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    const repo = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     const docFileName = 'incidunt';
     const docFileContents = 'a aliquid omnis';
     const docFile = await repo.createFile({
@@ -202,7 +202,7 @@ describe('DocRepository', () => {
   });
 
   it('can remove a file by id', async () => {
-    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    const repo = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     const docFileName = 'asperiores';
     const docFileContents = 'ut ut ut';
     const docFile = await repo.createFile({
@@ -216,7 +216,7 @@ describe('DocRepository', () => {
   });
 
   it('can update a file', async () => {
-    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    const repo = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     const docFileName = 'dolorem blanditiis ipsam';
     const docFileContents = 'delectus dolorem ut';
     const docFile = await repo.createFile({
@@ -241,7 +241,7 @@ describe('DocRepository', () => {
   });
 
   it('can create a directory with text contents', async () => {
-    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    const repo = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     const dirName = 'molestiae';
     const contents = 'repellat incidunt eum';
 
@@ -256,7 +256,7 @@ describe('DocRepository', () => {
   });
 
   it('can update the text contents of a directory', async () => {
-    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    const repo = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     const dirName = 'suscipit';
     const contents = 'exercitationem sed nihil';
 
@@ -280,7 +280,7 @@ describe('DocRepository', () => {
   });
 
   it('can create a directory with meta', async () => {
-    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    const repo = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     const dirName = 'veritatis';
     const meta = {
       status: 'published',
@@ -298,7 +298,7 @@ describe('DocRepository', () => {
   });
 
   it('can update the meta of a directory', async () => {
-    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    const repo = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     const dirName = 'provident';
     const meta = {
       status: 'draft',
@@ -325,7 +325,7 @@ describe('DocRepository', () => {
   });
 
   it('can retrieve the meta of a parent directory', async () => {
-    const repo = new DocRepository(DOC_FIXTURES_DIR);
+    const repo = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     const parentName = 'delectus';
     const parentMeta = {
       status: 'published',

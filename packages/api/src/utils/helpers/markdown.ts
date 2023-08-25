@@ -1,8 +1,47 @@
-import type { Maybe } from '@cretadoc/utils';
+import { resolve } from 'node:path';
+import { isString, type Maybe } from '@cretadoc/utils';
 import type { ErrorDetails, Meta } from '../../types';
-import { EXCERPT_SEPARATOR } from '../constants';
+import { EXCERPT_SEPARATOR, MARKDOWN_EXTENSION } from '../constants';
 import { CretadocAPIError } from '../exceptions';
+import { isAbsoluteUrl } from './paths';
+import { getSlugFrom } from './strings';
 import { validateMetaKeyValue } from './validators';
+
+/**
+ * Transform a markdown file path to a slug.
+ *
+ * @param {string} baseUrl - The base url.
+ * @param {string} path - The relative file path.
+ * @returns {string} The file link.
+ */
+const getFileLink = (baseUrl: string, path: string): string => {
+  const resolvedPath = resolve(baseUrl, path);
+
+  return getSlugFrom(
+    resolvedPath.replace(new RegExp(`${MARKDOWN_EXTENSION}$`), '')
+  );
+};
+
+/**
+ * Transform the relative paths in content using the base url.
+ *
+ * @param {string} content - The markdown content.
+ * @param {string} baseUrl - The base url for assets and links.
+ * @returns {string} The transformed content.
+ */
+const replaceRelativePaths = (content: string, baseUrl: string): string => {
+  const linksRegex = /\[(?:.*?)\]\((?<links>.+?)(?:\))/g;
+
+  return content.replace(linksRegex, (match, link, _args) => {
+    if (!isString(link) || isAbsoluteUrl(link)) return match;
+
+    const base = link.endsWith(MARKDOWN_EXTENSION)
+      ? getFileLink(baseUrl, link)
+      : resolve(baseUrl, link);
+
+    return match.replace(link, base);
+  });
+};
 
 /**
  * Create a RegExp to obtain two groups (content + rawMeta) from a MD string.
@@ -165,10 +204,15 @@ export type MarkdownData = {
  * Retrieve the content and maybe some meta from a Markdown string.
  *
  * @param {string} content - A Markdown string.
+ * @param {string} basePath - The base path for assets and links.
  * @returns {MarkdownData} The markdown parts.
  */
-export const parseMarkdown = (content: string): MarkdownData => {
-  const data = getMarkdownGroups(content);
+export const parseMarkdown = (
+  content: string,
+  basePath: string
+): MarkdownData => {
+  const contentWithCorrectPaths = replaceRelativePaths(content, basePath);
+  const data = getMarkdownGroups(contentWithCorrectPaths);
 
   return {
     contents: data?.content ?? '',

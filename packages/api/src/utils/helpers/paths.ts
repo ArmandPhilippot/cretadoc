@@ -87,3 +87,19 @@ export const isDirectory = async (path: string): Promise<boolean> => {
 
   return stats.isDirectory();
 };
+
+/**
+ * Check if the given path is an URL containing a protocol.
+ *
+ * @param {string} path - A path to test.
+ * @returns {boolean} True if the path is an URL.
+ */
+export const isAbsoluteUrl = (path: string): boolean => {
+  try {
+    // A path without a protocol should fail.
+    void new URL(path);
+    return true;
+  } catch (_err) {
+    return false;
+  }
+};

@@ -65,15 +65,33 @@ export type APIConfig = {
    */
   data?: {
     /**
-     * The path of the documentation directory.
+     * The documentation directory configuration.
      * @default undefined
      */
-    doc?: string;
+    doc?: {
+      /**
+       * The base url to use in file contents for assets and links.
+       */
+      baseUrl: string;
+      /**
+       * The path of the documentation directory.
+       */
+      path: string;
+    };
     /**
-     * The path of the pages directory.
+     * The pages directory configuration.
      * @default undefined
      */
-    pages?: string;
+    pages?: {
+      /**
+       * The base url to use in file contents for assets and links.
+       */
+      baseUrl: string;
+      /**
+       * The path of the pages directory.
+       */
+      path: string;
+    };
   };
   /**
    * The API endpoint.
@@ -94,11 +112,11 @@ The data object allows you to define where the API should look either for pages 
 
 #### Pages
 
-It allows you to retrieve **markdown** files without hierarchy. Typically, you can use the directory to provide contents for your homepage or a legal notice page. To use it, you need to pass **an absolute path to a directory**.
+It allows you to retrieve **markdown** files without hierarchy. Typically, you can use the directory to provide contents for your homepage or a legal notice page. To use it, you need to pass **an absolute path to a directory** and a base url. If your router is configured to serve the pages at `/` then you should use this value as baseUrl.
 
 #### Doc
 
-Unlike pages, you can organize your documentation hierarchically. You can provide an **absolute path to a directory** containing many subdirectories which themselves contain many subdirectories and **markdown** files.
+Unlike pages, you can organize your documentation hierarchically. You can provide an **absolute path to a directory** containing many subdirectories which themselves contain many subdirectories and **markdown** files. You also need to define the base url: if your router is configured to serve the documentation at `/doc` then you should use this value as baseUrl.
 
 ### Endpoint
 
@@ -116,8 +134,14 @@ import { createServer } from 'http';
 
 const api = await createAPI({
   data: {
-    doc: '/absolute/path/to/a/directory',
-    pages: '/absolute/path/to/another/directory',
+    doc: {
+      baseUrl: '/doc',
+      path: '/absolute/path/to/a/directory',
+    },
+    pages: {
+      baseUrl: '/',
+      path: '/absolute/path/to/another/directory',
+    },
   },
   endpoint: '/api',
   graphiql: false,

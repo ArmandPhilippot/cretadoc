@@ -19,7 +19,12 @@ type GetDocEntriesListContext = {
 describe('get-doc-entries-list', () => {
   beforeEach<GetDocEntriesListContext>(async (context) => {
     context.server = await createAPIServer({
-      data: { doc: DOC_FIXTURES_DIR },
+      data: {
+        doc: {
+          baseUrl: '/doc/',
+          path: DOC_FIXTURES_DIR,
+        },
+      },
     });
   });
 

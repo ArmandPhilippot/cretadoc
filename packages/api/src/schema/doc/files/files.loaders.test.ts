@@ -6,7 +6,7 @@ import { initDocFileLoaders } from './files.loaders';
 
 describe('init-doc-file-loaders', () => {
   it('returns the doc file loaders', () => {
-    const repository = new DocRepository(DOC_FIXTURES_DIR);
+    const repository = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     const loaders = initDocFileLoaders(repository);
 
     expect(loaders.file).not.toBeUndefined();
@@ -17,7 +17,7 @@ describe('init-doc-file-loaders', () => {
   });
 
   it('returns a method to load doc file by id', async () => {
-    const repository = new DocRepository(DOC_FIXTURES_DIR);
+    const repository = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     const loaders = initDocFileLoaders(repository);
 
     const id = generateBase64String('./eum');
@@ -29,7 +29,7 @@ describe('init-doc-file-loaders', () => {
   });
 
   it('returns a method to load doc file by path', async () => {
-    const repository = new DocRepository(DOC_FIXTURES_DIR);
+    const repository = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     const loaders = initDocFileLoaders(repository);
 
     const path = './unde';
@@ -41,7 +41,7 @@ describe('init-doc-file-loaders', () => {
   });
 
   it('returns a method to load doc file by slug', async () => {
-    const repository = new DocRepository(DOC_FIXTURES_DIR);
+    const repository = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     const loaders = initDocFileLoaders(repository);
 
     const slug = '/veniam';
@@ -53,7 +53,7 @@ describe('init-doc-file-loaders', () => {
   });
 
   it('returns a method to load a list of doc files', async () => {
-    const repository = new DocRepository(DOC_FIXTURES_DIR);
+    const repository = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     const loaders = initDocFileLoaders(repository);
 
     const files = await loaders.file.list();

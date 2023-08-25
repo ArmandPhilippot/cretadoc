@@ -6,7 +6,7 @@ import { initDocEntryLoaders } from './entries.loaders';
 
 describe('init-doc-entry-loaders', () => {
   it('returns the doc entry loaders', () => {
-    const repository = new DocRepository(DOC_FIXTURES_DIR);
+    const repository = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     const loaders = initDocEntryLoaders(repository);
 
     expect(loaders.entry).not.toBeUndefined();
@@ -17,7 +17,7 @@ describe('init-doc-entry-loaders', () => {
   });
 
   it('returns a method to load doc entry by id', async () => {
-    const repository = new DocRepository(DOC_FIXTURES_DIR);
+    const repository = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     const loaders = initDocEntryLoaders(repository);
 
     const id = generateBase64String('./eum');
@@ -29,7 +29,7 @@ describe('init-doc-entry-loaders', () => {
   });
 
   it('returns a method to load doc entry by path', async () => {
-    const repository = new DocRepository(DOC_FIXTURES_DIR);
+    const repository = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     const loaders = initDocEntryLoaders(repository);
 
     const path = './unde';
@@ -41,7 +41,7 @@ describe('init-doc-entry-loaders', () => {
   });
 
   it('returns a method to load doc entry by slug', async () => {
-    const repository = new DocRepository(DOC_FIXTURES_DIR);
+    const repository = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     const loaders = initDocEntryLoaders(repository);
 
     const slug = '/veniam';
@@ -53,7 +53,7 @@ describe('init-doc-entry-loaders', () => {
   });
 
   it('returns a method to load a list of doc entries', async () => {
-    const repository = new DocRepository(DOC_FIXTURES_DIR);
+    const repository = new DocRepository(DOC_FIXTURES_DIR, '/doc');
     const loaders = initDocEntryLoaders(repository);
 
     const entries = await loaders.entry.list();

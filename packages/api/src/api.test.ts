@@ -12,7 +12,10 @@ describe('create-api', () => {
 
   it('can create a new API instance with config', async () => {
     const api = await createAPI({
-      data: { doc: DOC_FIXTURES_DIR, pages: PAGES_FIXTURES_DIR },
+      data: {
+        doc: { baseUrl: '/doc', path: DOC_FIXTURES_DIR },
+        pages: { baseUrl: '/pages', path: PAGES_FIXTURES_DIR },
+      },
       endpoint: '/api',
     });
 

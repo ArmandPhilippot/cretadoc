@@ -1,5 +1,5 @@
-import { readFile, rename, rm, writeFile } from 'fs/promises';
-import { isAbsolute, join, parse } from 'path';
+import { readFile, rename, rm, writeFile } from 'node:fs/promises';
+import { dirname, isAbsolute, join, parse } from 'node:path';
 import {
   readDir,
   type Directory,
@@ -21,6 +21,7 @@ import type {
 import { EXCERPT_SEPARATOR, MARKDOWN_EXTENSION } from '../utils/constants';
 import { CretadocAPIError } from '../utils/exceptions';
 import {
+  type MarkdownData,
   byCreatedAtProp,
   byNameProp,
   byPathProp,
@@ -36,6 +37,7 @@ import {
   isPathInRoot,
   normalizePath,
   parseMarkdown,
+  getSlugFrom,
 } from '../utils/helpers';
 
 export type FileSystemData = {
@@ -87,8 +89,9 @@ const isValidEntry = <
 export class FileSystemRepository {
   #context: string;
   #rootDir: string;
+  protected baseUrl: string;
 
-  constructor(dir: string, context: keyof APIDataConfig) {
+  constructor(dir: string, baseUrl: string, context: keyof APIDataConfig) {
     if (!isAbsolute(dir))
       throw new CretadocAPIError('Cannot initialize FileSystemRepository', {
         errorKind: 'syntax',
@@ -96,6 +99,7 @@ export class FileSystemRepository {
         received: dir,
       });
 
+    this.baseUrl = baseUrl;
     this.#context = context;
     this.#rootDir = normalizePath(dir);
   }
@@ -319,9 +323,18 @@ export class FileSystemRepository {
     return absolutePath;
   }
 
-  async #getCurrentFileContents(path: string) {
+  /**
+   * Retrieve the current markdown file contents.
+   *
+   * @param {string} path - The absolute file path.
+   * @returns {Promise<MarkdownData>} The markdown contents.
+   */
+  async #getCurrentFileContents(path: string): Promise<MarkdownData> {
     const currentContents = await readFile(path, { encoding: 'utf8' });
-    const markdownContents = parseMarkdown(currentContents);
+    const markdownContents = parseMarkdown(
+      currentContents,
+      join(this.baseUrl, getSlugFrom(this.getRelativePathFrom(dirname(path))))
+    );
 
     return markdownContents;
   }

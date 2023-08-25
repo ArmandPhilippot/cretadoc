@@ -6,7 +6,7 @@ import { initPageLoaders } from './pages.loaders';
 
 describe('init-page-loaders', () => {
   it('returns the page loaders', () => {
-    const repository = new PagesRepository(PAGES_FIXTURES_DIR);
+    const repository = new PagesRepository(PAGES_FIXTURES_DIR, '/pages');
     const loaders = initPageLoaders(repository);
 
     expect(loaders.page).not.toBeUndefined();
@@ -17,7 +17,7 @@ describe('init-page-loaders', () => {
   });
 
   it('returns a method to load page by id', async () => {
-    const repository = new PagesRepository(PAGES_FIXTURES_DIR);
+    const repository = new PagesRepository(PAGES_FIXTURES_DIR, '/pages');
     const loaders = initPageLoaders(repository);
 
     if (loaders.page) {
@@ -31,7 +31,7 @@ describe('init-page-loaders', () => {
   });
 
   it('returns a method to load page by name', async () => {
-    const repository = new PagesRepository(PAGES_FIXTURES_DIR);
+    const repository = new PagesRepository(PAGES_FIXTURES_DIR, '/pages');
     const loaders = initPageLoaders(repository);
 
     if (loaders.page) {
@@ -45,7 +45,7 @@ describe('init-page-loaders', () => {
   });
 
   it('returns a method to load page by slug', async () => {
-    const repository = new PagesRepository(PAGES_FIXTURES_DIR);
+    const repository = new PagesRepository(PAGES_FIXTURES_DIR, '/pages');
     const loaders = initPageLoaders(repository);
 
     if (loaders.page) {
@@ -59,7 +59,7 @@ describe('init-page-loaders', () => {
   });
 
   it('returns a method to load a list of pages', async () => {
-    const repository = new PagesRepository(PAGES_FIXTURES_DIR);
+    const repository = new PagesRepository(PAGES_FIXTURES_DIR, '/pages');
     const loaders = initPageLoaders(repository);
 
     if (loaders.page) {

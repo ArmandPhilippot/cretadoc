@@ -1,4 +1,3 @@
-import type { PartialDeep } from '@cretadoc/utils';
 import { createYoga } from 'graphql-yoga';
 import { DocRepository, PagesRepository } from './repositories';
 import { schema } from './schema';
@@ -10,7 +9,7 @@ import type {
   APIDataConfig,
   APIInstance,
 } from './types';
-import { mergeDefaultConfigWith } from './utils/helpers';
+import { mergeConfig } from './utils/helpers';
 
 /**
  * Create the API context.
@@ -19,8 +18,12 @@ import { mergeDefaultConfigWith } from './utils/helpers';
  * @returns {APIContext} The GraphQL context.
  */
 const initContext = ({ doc, pages }: APIDataConfig): APIContext => {
-  const docRepository = doc ? new DocRepository(doc) : undefined;
-  const pagesRepository = pages ? new PagesRepository(pages) : undefined;
+  const docRepository = doc
+    ? new DocRepository(doc.path, doc.baseUrl)
+    : undefined;
+  const pagesRepository = pages
+    ? new PagesRepository(pages.path, pages.baseUrl)
+    : undefined;
 
   const loaders = initLoaders({
     doc: docRepository,
@@ -38,24 +41,24 @@ const initContext = ({ doc, pages }: APIDataConfig): APIContext => {
   };
 };
 
-type CreateAPI = (config?: PartialDeep<APIConfig>) => Promise<APIInstance>;
+type CreateAPI = (config?: Partial<APIConfig>) => Promise<APIInstance>;
 
 /**
  * Create an instance of the API.
  *
- * @param {PartialDeep<APIConfig>} [config] - An API configuration object.
+ * @param {Partial<APIConfig>} [config] - An API configuration object.
  * @returns {Promise<APIInstance>} The API instance.
  */
 export const createAPI: CreateAPI = async (
-  config?: PartialDeep<APIConfig>
+  config?: Partial<APIConfig>
 ): Promise<APIInstance> => {
-  const mergedConfig = await mergeDefaultConfigWith(config);
-  const context = initContext({ ...config?.data });
+  const { data, endpoint, graphiql } = await mergeConfig(config);
+  const context = initContext({ ...data });
 
   return createYoga({
     context,
-    graphiql: mergedConfig.graphiql,
-    graphqlEndpoint: mergedConfig.endpoint,
+    graphiql,
+    graphqlEndpoint: endpoint,
     schema,
   });
 };

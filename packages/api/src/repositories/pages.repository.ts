@@ -1,4 +1,4 @@
-import { parse } from 'path';
+import { parse } from 'node:path';
 import type { RegularFile } from '@cretadoc/read-dir';
 import { type Maybe, slugify } from '@cretadoc/utils';
 import type {
@@ -18,8 +18,8 @@ import {
 import { FileSystemRepository } from './filesystem.repository';
 
 export class PagesRepository extends FileSystemRepository {
-  constructor(dir: string) {
-    super(dir, 'pages');
+  constructor(dir: string, baseUrl: string) {
+    super(dir, baseUrl, 'pages');
   }
 
   /**
@@ -40,7 +40,7 @@ export class PagesRepository extends FileSystemRepository {
       contents: mdContents,
       excerpt,
       meta,
-    } = parseMarkdown(contents ?? '');
+    } = parseMarkdown(contents ?? '', this.baseUrl);
 
     return {
       contents: mdContents,

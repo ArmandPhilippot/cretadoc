@@ -1,5 +1,5 @@
-import { writeFile } from 'fs/promises';
-import { join } from 'path';
+import { writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { type Nullable, isObjKeyExist, isObject } from '@cretadoc/utils';
 import { afterAll, beforeEach, describe, it } from 'vitest';
 import type {
@@ -31,7 +31,12 @@ type DeleteDocFileContext = {
 describe('delete-doc-file', () => {
   beforeEach<DeleteDocFileContext>(async (context) => {
     context.server = await createAPIServer({
-      data: { doc: DOC_FIXTURES_DIR },
+      data: {
+        doc: {
+          baseUrl: '/doc/',
+          path: DOC_FIXTURES_DIR,
+        },
+      },
     });
   });
 

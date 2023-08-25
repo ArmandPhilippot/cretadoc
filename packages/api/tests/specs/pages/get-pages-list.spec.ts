@@ -19,7 +19,12 @@ type GetPagesListContext = {
 describe('get-pages-list', () => {
   beforeEach<GetPagesListContext>(async (context) => {
     context.server = await createAPIServer({
-      data: { pages: PAGES_FIXTURES_DIR },
+      data: {
+        pages: {
+          baseUrl: '/pages/',
+          path: PAGES_FIXTURES_DIR,
+        },
+      },
     });
   });
 
