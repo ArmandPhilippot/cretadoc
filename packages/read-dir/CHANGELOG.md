@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.1](https://github.com/ArmandPhilippot/cretadoc/compare/@cretadoc/read-dir@1.0.0...@cretadoc/read-dir@1.0.1) (2023-08-25)
+
+
+### Bug Fixes
+
+* **read-dir:** do not use Simplify on Directory and RegularFile types ([c999283](https://github.com/ArmandPhilippot/cretadoc/commit/c999283f820a12320369d007996347fd5c0f8dfd)), closes [#c8c3139](https://github.com/ArmandPhilippot/cretadoc/issues/c8c3139)
+
 ## 1.0.0 (2023-08-24)
 
 
