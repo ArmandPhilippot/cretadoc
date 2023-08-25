@@ -1,4 +1,4 @@
-import type { Maybe, Simplify } from '@cretadoc/utils';
+import type { Maybe } from '@cretadoc/utils';
 
 export type FileType = 'directory' | 'file' | 'unknown';
 export type ValidFileType = 'directory' | 'file';
@@ -53,8 +53,8 @@ export type RegularFileOrDirectory<T extends ValidFileType> = Dates & {
   type: T;
 };
 
-export type Directory = Simplify<RegularFileOrDirectory<'directory'>>;
-export type RegularFile = Simplify<RegularFileOrDirectory<'file'>>;
+export type Directory = RegularFileOrDirectory<'directory'>;
+export type RegularFile = RegularFileOrDirectory<'file'>;
 
 export type ReadDirOptions = {
   /**
