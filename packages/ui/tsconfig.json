@@ -3,6 +3,7 @@
   "compilerOptions": {
     /* Language and Environment */
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "types": ["@testing-library/jest-dom"],
 
     /* Projects */
     "tsBuildInfoFile": "./.tsbuildinfo",
