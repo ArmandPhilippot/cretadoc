@@ -5,6 +5,9 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   plugins: [react(), vanillaExtractPlugin()],
   test: {
+    coverage: {
+      exclude: ['src/**/*.vanilla.js'],
+    },
     environment: 'jsdom',
     globals: false,
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
