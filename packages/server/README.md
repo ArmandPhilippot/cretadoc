@@ -46,10 +46,10 @@ The configuration object looks like:
 ```ts
 export type ServerConfig = {
   /**
-   * A configuration object to serve an API instance.
+   * An API instance.
    * @default undefined
    */
-  api: APIConfig | undefined;
+  api: APIInstance | undefined;
   /**
    * The HMR configuration when using dev mode.
    * @default undefined
@@ -85,10 +85,7 @@ export type ServerConfig = {
 
 ### API configuration
 
-The Cretadoc server can be used to serve an API instance. The `api` key accepts a configuration object containing the following keys:
-
-- `instance`: an instance of Cretadoc API (or a GraphQLYogaServer instance since we use an alias),
-- `route`: the API route (default is: `/api`).
+The Cretadoc server can be used to serve an API instance. The `api` key accepts an instance of Cretadoc API (or a GraphQLYogaServer instance since we use an alias).
 
 ### HMR configuration
 
@@ -183,9 +180,7 @@ import { createAPI } from '@cretadoc/api';
 import { createServer } from '@cretadoc/server';
 
 const api = await createAPI();
-const app = await createServer({
-  api: { instance: api, route: '/graphql' },
-});
+const app = await createServer({ api });
 ```
 
 ## License

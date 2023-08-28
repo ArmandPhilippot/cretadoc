@@ -9,18 +9,6 @@ import type { ENVIRONMENT } from '../utils/constants';
 
 export type ServerMode = (typeof ENVIRONMENT)[keyof typeof ENVIRONMENT];
 
-export type APIConfig = {
-  /**
-   * An API instance.
-   */
-  instance: APIInstance;
-  /**
-   * The route used to serve the API.
-   * @default '/api'
-   */
-  route: string;
-};
-
 export type HMRConfig =
   | false
   | {
