@@ -4,7 +4,7 @@ import * as styles from './nav-link.css';
 
 export type NavLinkVariant = 'block' | 'regular';
 
-export type NavLinkProps = LinkProps & {
+export type NavLinkProps = Omit<LinkProps, 'to'> & {
   /**
    * Should the link be disabled?
    *
@@ -25,6 +25,10 @@ export type NavLinkProps = LinkProps & {
    * @default undefined
    */
   radiusOn?: 'left' | 'right' | 'both';
+  /**
+   * The link target.
+   */
+  to?: string;
   /**
    * The link variant.
    *
@@ -53,7 +57,7 @@ export const NavLink: FC<NavLinkProps> = ({
     variant,
   });
 
-  return isDisabled ? (
+  return isDisabled || typeof to === 'undefined' ? (
     <span className={`${linkClassName} ${className}`}>{children}</span>
   ) : (
     <Link

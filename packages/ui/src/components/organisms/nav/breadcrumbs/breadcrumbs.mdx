@@ -21,9 +21,17 @@ For design purposes and to avoid repeating the current page twice, you could hid
 
 <Canvas of={BreadcrumbsStories.LastItemHidden} />
 
+## Ellipsis
+
+An ellipsis will be shown if the number of items is greater than the maximum number of items allowed. You can control the number of items visible with the `maxItems` property.
+
+<Canvas of={BreadcrumbsStories.Ellipsis} />
+
 ## Accessibility
 
 Since breadcrumbs provide a navigation, you should add a meaningful label (such as "_Breadcrumbs_") using the `aria-label` attribute to describe the type of navigation provided in the nav element.
+
+You should also define the `ellipsisLabel` property used by the ellipsis button when the items are collapsed. By default its value is "_Show more items_".
 
 ## Props
 

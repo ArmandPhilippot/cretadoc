@@ -1,7 +1,8 @@
-import type { FC, ReactNode } from 'react';
+import { useCallback, type FC, type ReactNode } from 'react';
+import { useToggle } from '../../../../hooks';
 import { Nav, type NavProps, VisuallyHidden } from '../../../atoms';
-import { NavItem } from '../../../molecules/nav';
-import { NavList } from '../../../molecules/nav/nav-list';
+import { NavItem, NavList } from '../../../molecules';
+import { EllipsisItem } from './ellipsis-item';
 
 export type BreadcrumbsItem = {
   /**
@@ -15,20 +16,40 @@ export type BreadcrumbsItem = {
   /**
    * The item url.
    */
-  url: string;
+  url?: string;
 };
 
 export type BreadcrumbsProps = Omit<NavProps, 'children'> & {
+  /**
+   * An accessible name for the ellipsis button.
+   */
+  ellipsisLabel?: string;
+  /**
+   * Should all the items be visible by default?
+   *
+   * @default false
+   */
+  isExpanded?: boolean;
+  /**
+   * Should we visually hide the last item for design purposes?
+   *
+   * @default false
+   */
+  isLastItemHidden?: boolean;
   /**
    * The breadcrumbs items.
    */
   items: BreadcrumbsItem[];
   /**
-   * Should we visually hide the last item for design purposes?
+   * Set the maximum number of items to display.
+   *
+   * @default 4
    */
-  isLastItemHidden?: boolean;
+  maxItems?: number;
   /**
    * The separator used between items.
+   *
+   * @default '/'
    */
   sep?: string;
 };
@@ -37,33 +58,60 @@ export type BreadcrumbsProps = Omit<NavProps, 'children'> & {
  * Breadcrumbs component.
  */
 export const Breadcrumbs: FC<BreadcrumbsProps> = ({
-  isLastItemHidden,
+  ellipsisLabel = 'Show more items',
+  isExpanded = false,
+  isLastItemHidden = false,
   items,
+  maxItems = 4,
   sep = '/',
   ...props
-}) => (
-  <Nav {...props}>
-    <NavList isInline isOrdered spacing="xxs">
-      {items.map((item, index) => {
-        const isLastItem = index === items.length - 1;
+}) => {
+  const [showAllItems, toggle] = useToggle(isExpanded);
 
-        return (
-          <NavItem
-            aria-current={isLastItem ? 'page' : undefined}
-            isDisabled={isLastItem}
-            key={item.id}
-            label={
-              isLastItem && isLastItemHidden ? (
-                <VisuallyHidden>{item.label}</VisuallyHidden>
-              ) : (
-                item.label
-              )
-            }
-            sep={isLastItem ? undefined : sep}
-            to={item.url}
-          />
-        );
-      })}
-    </NavList>
-  </Nav>
-);
+  const allItems = items.map((item, index) => {
+    const isLastItem = index === items.length - 1;
+
+    return (
+      <NavItem
+        aria-current={isLastItem ? 'page' : undefined}
+        isDisabled={isLastItem}
+        key={item.id}
+        label={
+          isLastItem && isLastItemHidden ? (
+            <VisuallyHidden>{item.label}</VisuallyHidden>
+          ) : (
+            item.label
+          )
+        }
+        sep={isLastItem ? undefined : sep}
+        to={item.url}
+      />
+    );
+  });
+
+  const getItemsWithEllipsis = useCallback(() => {
+    const firstItem = allItems.slice(0, 1);
+    const lastItems = allItems.slice(allItems.length - 2, allItems.length);
+
+    return [
+      ...firstItem,
+      <EllipsisItem
+        key="ellipsis"
+        label={ellipsisLabel}
+        onExpand={toggle}
+        sep={sep}
+      />,
+      ...lastItems,
+    ];
+  }, [allItems, ellipsisLabel, sep, toggle]);
+
+  return (
+    <Nav {...props}>
+      <NavList isInline isOrdered spacing="xxs">
+        {allItems.length <= maxItems || showAllItems
+          ? allItems
+          : getItemsWithEllipsis()}
+      </NavList>
+    </Nav>
+  );
+};

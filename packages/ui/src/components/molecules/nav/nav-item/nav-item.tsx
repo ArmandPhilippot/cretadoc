@@ -64,7 +64,7 @@ export const NavItem: FC<NavItemProps> = ({
     hasExpandedChildren: hasChildren && isExpanded,
   });
 
-  const navLink = (
+  const NavItemLink = (
     <NavLink
       aria-label={linkAriaLabel}
       isDisabled={isDisabled}
@@ -102,12 +102,12 @@ export const NavItem: FC<NavItemProps> = ({
           }
           isExpanded={isExpanded}
           onExpand={onExpand}
-          summary={navLink}
+          summary={NavItemLink}
         >
           {children}
         </Collapsible>
       ) : (
-        navLink
+        NavItemLink
       )}
       {sep ? (
         <span aria-hidden={true} className={styles.sep}>

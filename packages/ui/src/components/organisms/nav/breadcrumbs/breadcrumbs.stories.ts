@@ -34,3 +34,16 @@ export const LastItemHidden: Story = {
     sep: '>',
   },
 };
+
+export const Ellipsis: Story = {
+  args: {
+    items: [
+      { id: 'item-1', label: 'Item 1', url: '#' },
+      { id: 'item-2', label: 'Item 2', url: '#' },
+      { id: 'item-3', label: 'Item 3', url: '#' },
+      { id: 'item-4', label: 'Item 4', url: '#' },
+      { id: 'item-5', label: 'Item 5', url: '#' },
+      { id: 'current', label: 'Current item' },
+    ],
+  },
+};
