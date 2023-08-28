@@ -1,11 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Description } from '../description';
+import { DescriptionList } from '../description-list';
 import { Term } from '../term';
 import { Group } from './group';
 
 const meta = {
   title: 'Components/Atoms/Lists/Description List/Group',
   component: Group,
+  render: ({ children, ...props }) => (
+    <DescriptionList>
+      <Group {...props}>{children}</Group>
+    </DescriptionList>
+  ),
 } satisfies Meta<typeof Group>;
 
 export default meta;

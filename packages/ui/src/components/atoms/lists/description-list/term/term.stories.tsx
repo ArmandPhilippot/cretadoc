@@ -1,11 +1,19 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { contract } from '../../../../../themes';
-import { Description } from './description';
+import { Description } from '../description';
+import { DescriptionList } from '../description-list';
+import { Term } from './term';
 
 const meta = {
-  title: 'Components/Atoms/Lists/Description List/Description',
-  component: Description,
-} satisfies Meta<typeof Description>;
+  title: 'Components/Atoms/Lists/Description List/Term',
+  component: Term,
+  render: ({ children, ...props }) => (
+    <DescriptionList>
+      <Term {...props}>{children}</Term>
+      <Description>The description of the term.</Description>
+    </DescriptionList>
+  ),
+} satisfies Meta<typeof Term>;
 
 export default meta;
 
@@ -13,7 +21,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    children: 'A description of a term.',
+    children: 'A term to describe.',
   },
 };
 
