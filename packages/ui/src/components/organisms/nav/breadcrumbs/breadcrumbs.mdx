@@ -27,6 +27,12 @@ An ellipsis will be shown if the number of items is greater than the maximum num
 
 <Canvas of={BreadcrumbsStories.Ellipsis} />
 
+## Truncated item
+
+When an item label is too long, it should be truncated. You can control the maximum length using the `maxLength` property.
+
+<Canvas of={BreadcrumbsStories.TruncatedItem} />
+
 ## Accessibility
 
 Since breadcrumbs provide a navigation, you should add a meaningful label (such as "_Breadcrumbs_") using the `aria-label` attribute to describe the type of navigation provided in the nav element.

@@ -1,6 +1,12 @@
 import { useCallback, type FC, type ReactNode } from 'react';
 import { useToggle } from '../../../../hooks';
-import { Nav, type NavProps, VisuallyHidden } from '../../../atoms';
+import {
+  Nav,
+  type NavProps,
+  VisuallyHidden,
+  Truncate,
+  type TruncateProps,
+} from '../../../atoms';
 import { NavItem, NavList } from '../../../molecules';
 import { EllipsisItem } from './ellipsis-item';
 
@@ -47,6 +53,12 @@ export type BreadcrumbsProps = Omit<NavProps, 'children'> & {
    */
   maxItems?: number;
   /**
+   * Set the maximum length of each item label before truncation.
+   *
+   * @default '15ch'
+   */
+  maxLength?: TruncateProps['max'];
+  /**
    * The separator used between items.
    *
    * @default '/'
@@ -63,6 +75,7 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({
   isLastItemHidden = false,
   items,
   maxItems = 4,
+  maxLength = '15ch',
   sep = '/',
   ...props
 }) => {
@@ -70,19 +83,25 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({
 
   const allItems = items.map((item, index) => {
     const isLastItem = index === items.length - 1;
+    const labelContent =
+      typeof item.label === 'string' ? (
+        <Truncate max={maxLength}>{item.label}</Truncate>
+      ) : (
+        item.label
+      );
+    const label =
+      isLastItem && isLastItemHidden ? (
+        <VisuallyHidden>{labelContent}</VisuallyHidden>
+      ) : (
+        labelContent
+      );
 
     return (
       <NavItem
         aria-current={isLastItem ? 'page' : undefined}
         isDisabled={isLastItem}
         key={item.id}
-        label={
-          isLastItem && isLastItemHidden ? (
-            <VisuallyHidden>{item.label}</VisuallyHidden>
-          ) : (
-            item.label
-          )
-        }
+        label={label}
         sep={isLastItem ? undefined : sep}
         to={item.url}
       />

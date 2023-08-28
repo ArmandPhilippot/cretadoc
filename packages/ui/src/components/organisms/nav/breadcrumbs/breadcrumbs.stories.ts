@@ -47,3 +47,14 @@ export const Ellipsis: Story = {
     ],
   },
 };
+
+export const TruncatedItem: Story = {
+  args: {
+    items: [
+      { id: 'item-1', label: 'Item 1', url: '#' },
+      { id: 'item-2', label: 'A very very very long item name', url: '#' },
+      { id: 'item-3', label: 'Item 3', url: '#' },
+      { id: 'current', label: 'Current item' },
+    ],
+  },
+};
