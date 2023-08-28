@@ -10,7 +10,9 @@ export const container = recipe({
   },
   variants: {
     fullscreen: {
-      off: {},
+      off: {
+        padding: contract.spacing.sm,
+      },
       on: {
         padding: 0,
         minHeight: '100%',
