@@ -3,34 +3,42 @@ import { assignInlineVars } from '@vanilla-extract/dynamic';
 import type { FC } from 'react';
 import { contract } from '../../contract';
 import { getContractValueFrom } from '../../utils/helpers';
-import { Preview } from './preview';
+import { Preview, type PreviewProps } from './preview';
 import * as styles from './shadow.css';
 
 /**
- * Retrieve the border color from the given token.
+ * Retrieve the background color from the given token.
  *
  * @param token - A shadow token.
- * @returns {string} The CSS variable for border's color.
+ * @returns {string} The CSS variable for background's color.
  */
-const getBorderColorFrom = (token: KeyPathIn<typeof contract, 'shadow'>) => {
+const getBackgroundColorFrom = (
+  token: KeyPathIn<typeof contract, 'shadow'>
+) => {
   if (token.startsWith('shadow.critical'))
-    return contract.color.borders.critical;
+    return contract.color.background.critical;
 
-  if (token.startsWith('shadow.info')) return contract.color.borders.info;
+  if (token.startsWith('shadow.info')) return contract.color.background.info;
 
   if (token.startsWith('shadow.inverted'))
-    return contract.color.borders.inverted.base;
+    return contract.color.background.inverted.base;
 
-  if (token.startsWith('shadow.muted')) return contract.color.borders.muted;
+  if (token.startsWith('shadow.muted')) return contract.color.background.muted;
 
-  if (token.startsWith('shadow.success')) return contract.color.borders.success;
+  if (token.startsWith('shadow.success'))
+    return contract.color.background.success;
 
-  if (token.startsWith('shadow.warning')) return contract.color.borders.warning;
+  if (token.startsWith('shadow.warning'))
+    return contract.color.background.warning;
 
-  return contract.color.borders.regular.base;
+  return contract.color.background.regular.base;
 };
 
-type ShadowProps = {
+type ShadowProps = Pick<PreviewProps, 'label' | 'labelColor'> & {
+  /**
+   * Override the inline styles.
+   */
+  style?: Record<string, string>;
   /**
    * A token starting with `shadow.`.
    */
@@ -42,26 +50,21 @@ type ShadowProps = {
  *
  * Use it to show a preview of a shadow using any shadow token.
  */
-export const Shadow: FC<ShadowProps> = ({ token }) => {
+export const Shadow: FC<ShadowProps> = ({ style, token, ...props }) => {
   const previewStyles = assignInlineVars({
-    [styles.borderColor]: getBorderColorFrom(token),
+    [styles.bgColor]: getBackgroundColorFrom(token),
     [styles.boxShadow]: getContractValueFrom(token),
   });
 
   return (
-    <Preview style={previewStyles} token={token}>
-      <div className={styles.box({ hasShadow: true })} />
+    <Preview
+      {...props}
+      className={styles.preview}
+      minHeight={120}
+      style={{ ...previewStyles, ...style }}
+      token={token}
+    >
+      <div className={styles.box} />
     </Preview>
   );
 };
-
-/**
- * NoShadow component
- *
- * Use it to show a preview of a box without shadow.
- */
-export const NoShadow: FC = () => (
-  <Preview>
-    <div className={styles.box({ hasShadow: false })} />
-  </Preview>
-);

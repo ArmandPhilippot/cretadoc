@@ -1,27 +1,20 @@
-import { createVar, fallbackVar } from '@vanilla-extract/css';
-import { recipe } from '@vanilla-extract/recipes';
+import { createVar, style } from '@vanilla-extract/css';
 import { contract } from '../../contract';
 
-export const borderColor = createVar();
+export const bgColor = createVar();
 export const boxShadow = createVar();
 
-export const box = recipe({
-  base: {
-    width: 150,
-    height: 80,
-    margin: '0.5rem',
-    borderColor: fallbackVar(borderColor, contract.color.borders.regular.base),
-    borderStyle: 'solid',
-    borderWidth: 1,
-  },
-  variants: {
-    hasShadow: {
-      false: {
-        alignSelf: 'end',
-      },
-      true: {
-        boxShadow,
-      },
-    },
-  },
+export const preview = style({
+  background: bgColor,
+  display: 'flex',
+  flexFlow: 'row wrap',
+  justifyContent: 'center',
+});
+
+export const box = style({
+  width: 150,
+  height: 80,
+  margin: '0.5rem',
+  background: contract.color.background.regular.base,
+  boxShadow,
 });

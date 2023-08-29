@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { contract } from '../contract';
 import { PreviewList } from './components/preview-list';
-import { NoShadow, Shadow } from './components/shadow';
+import { Shadow } from './components/shadow';
 
 const meta: Meta = {
   title: 'Themes/Tokens/Shadows',
@@ -11,15 +12,6 @@ const meta: Meta = {
 };
 
 export default meta;
-
-export const WithoutShadow: StoryObj = {
-  args: {},
-  render: () => (
-    <PreviewList>
-      <NoShadow />
-    </PreviewList>
-  ),
-};
 
 export const Color: StoryObj = {
   args: {},
@@ -32,6 +24,25 @@ export const Color: StoryObj = {
       <Shadow token="shadow.regular.bottom.left.raised" />
       <Shadow token="shadow.success.bottom.left.raised" />
       <Shadow token="shadow.warning.bottom.left.raised" />
+    </PreviewList>
+  ),
+};
+
+export const ColorDirectives: StoryObj = {
+  args: {},
+  render: () => (
+    <PreviewList>
+      <Shadow
+        label="Do:"
+        labelColor="success"
+        token="shadow.critical.bottom.left.raised"
+      />
+      <Shadow
+        label="Don't:"
+        labelColor="critical"
+        style={{ background: contract.color.background.critical }}
+        token="shadow.regular.bottom.left.raised"
+      />
     </PreviewList>
   ),
 };

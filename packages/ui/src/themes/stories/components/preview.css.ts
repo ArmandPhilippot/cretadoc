@@ -2,6 +2,7 @@ import { createVar, style } from '@vanilla-extract/css';
 import { recipe } from '@vanilla-extract/recipes';
 import { contract } from '../../contract';
 
+export const labelColor = createVar();
 export const minHeight = createVar();
 
 export const wrapper = recipe({
@@ -21,6 +22,11 @@ export const wrapper = recipe({
       },
     },
   },
+});
+
+export const label = style({
+  color: labelColor,
+  fontWeight: contract.font.weight.strong,
 });
 
 export const token = style({
