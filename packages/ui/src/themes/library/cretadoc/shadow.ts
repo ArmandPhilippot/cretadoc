@@ -8,42 +8,52 @@ import { getShadowTokens } from '../../utils/shadow';
 
 const firstLayer: ShadowLayer = {
   offset: '0.2px',
-  blur: '0.7px',
+  blur: '0.3px',
   spread: '0',
 };
 
 const secondLayer: ShadowLayer = {
-  offset: '2.8px',
-  blur: '3px',
-  spread: '-0.4px',
+  offset: '1.5px',
+  blur: '2.5px',
+  spread: '-0.3px',
 };
 
 const thirdLayer: ShadowLayer = {
-  offset: '5.5px',
-  blur: '6px',
-  spread: '-0.8px',
+  offset: '4.7px',
+  blur: '8px',
+  spread: '-0.9px',
 };
 
 const fourthLayer: ShadowLayer = {
-  offset: '9.4px',
-  blur: '10.6px',
+  offset: '7.3px',
+  blur: '11.3px',
   spread: '-1.1px',
 };
 
 const fifthLayer: ShadowLayer = {
-  offset: '15.1px',
-  blur: '17px',
-  spread: '-1.4px',
+  offset: '16.3px',
+  blur: '22px',
+  spread: '-2.1px',
 };
 
-const colors: ShadowColors = {
-  critical: 'hsla(5, 60%, 22%, 0.25)',
-  info: 'hsla(182, 60%, 22%, 0.25)',
-  inverted: 'hsla(0, 0%, 100%, 0.25)',
-  muted: 'hsla(204, 7%, 35%, 0.25)',
-  regular: 'hsla(204, 7%, 35%, 0.25)',
-  success: 'hsla(116, 60%, 22%, 0.25)',
-  warning: 'hsla(30, 60%, 22%, 0.25)',
+const lightColors: ShadowColors = {
+  critical: 'hsla(8, 75%, 22%, 0.25)',
+  info: 'hsla(212, 75%, 22%, 0.25)',
+  inverted: 'hsla(195, 15%, 8%, 0.25)',
+  muted: 'hsla(195, 10%, 22%, 0.25)',
+  regular: 'hsla(195, 15%, 22%, 0.25)',
+  success: 'hsla(110, 75%, 22%, 0.25)',
+  warning: 'hsla(35, 75%, 22%, 0.25)',
+};
+
+const darkColors: ShadowColors = {
+  critical: 'hsla(8, 45%, 8%, 0.25)',
+  info: 'hsla(212, 45%, 8%, 0.25)',
+  inverted: 'hsla(195, 15%, 22%, 0.25)',
+  muted: 'hsla(195, 10%, 8%, 0.25)',
+  regular: 'hsla(195, 15%, 8%, 0.25)',
+  success: 'hsla(110, 45%, 8%, 0.25)',
+  warning: 'hsla(35, 45%, 8%, 0.25)',
 };
 
 const layers: ShadowLayers = {
@@ -52,4 +62,5 @@ const layers: ShadowLayers = {
   floating: [firstLayer, secondLayer, thirdLayer, fourthLayer, fifthLayer],
 };
 
-export const shadow: ShadowTokens = getShadowTokens(colors, layers);
+export const lightShadow: ShadowTokens = getShadowTokens(lightColors, layers);
+export const darkShadow: ShadowTokens = getShadowTokens(darkColors, layers);

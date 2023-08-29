@@ -11,6 +11,7 @@ export const container = recipe({
   variants: {
     fullscreen: {
       off: {
+        maxWidth: `calc(100% - 2 * ${contract.spacing.sm})`,
         padding: contract.spacing.sm,
       },
       on: {
