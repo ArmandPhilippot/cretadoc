@@ -1,6 +1,6 @@
 import type { FC, ReactNode } from 'react';
+import type { Position } from '../../../types';
 import { Link, List, ListItem, type ListProps } from '../../atoms';
-import type { Position } from '../../types';
 import * as styles from './colophon.css';
 
 export type ColophonProps = Omit<

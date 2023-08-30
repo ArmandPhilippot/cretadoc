@@ -1,4 +1,4 @@
-import type { SizeTokens } from '../../types/tokens';
+import type { SizeTokens } from '../../../types';
 
 export const size: SizeTokens = {
   full: '100%',

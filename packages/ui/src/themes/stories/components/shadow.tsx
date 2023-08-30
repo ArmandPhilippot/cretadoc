@@ -1,8 +1,8 @@
 import type { KeyPathIn } from '@cretadoc/utils';
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import type { FC } from 'react';
+import { getKeyPathValue } from '../../../utils/helpers';
 import { contract } from '../../contract';
-import { getContractValueFrom } from '../../utils/helpers';
 import { Preview, type PreviewProps } from './preview';
 import * as styles from './shadow.css';
 
@@ -53,7 +53,7 @@ type ShadowProps = Pick<PreviewProps, 'label' | 'labelColor'> & {
 export const Shadow: FC<ShadowProps> = ({ style, token, ...props }) => {
   const previewStyles = assignInlineVars({
     [styles.bgColor]: getBackgroundColorFrom(token),
-    [styles.boxShadow]: getContractValueFrom(token),
+    [styles.boxShadow]: getKeyPathValue(contract, token),
   });
 
   return (

@@ -1,4 +1,4 @@
-import type { IconTokens } from '../../types/tokens';
+import type { IconTokens } from '../../../types';
 
 export const icon: IconTokens = {
   size: {

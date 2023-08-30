@@ -1,4 +1,4 @@
-import type { LengthPercentage } from '../css';
+import type { LengthPercentage } from '../../css';
 
 /**
  * Size tokens.

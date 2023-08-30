@@ -1,16 +1,15 @@
-import type { Color, Length } from '../types/css';
 import type {
-  ShadowXAxisTokens,
-  ShadowYAxisTokens,
-  ShadowElevationTokens,
-  ShadowTokens,
-} from '../types/tokens';
-import type {
+  Color,
+  Length,
   ShadowColors,
   ShadowDirection,
+  ShadowElevationTokens,
   ShadowLayer,
   ShadowLayers,
-} from '../types/utils';
+  ShadowTokens,
+  ShadowXAxisTokens,
+  ShadowYAxisTokens,
+} from '../../types';
 
 /**
  * Get the shadow offset on X axis depending on the given direction.

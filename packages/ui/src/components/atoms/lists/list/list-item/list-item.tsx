@@ -4,10 +4,10 @@ import { contract } from '../../../../../themes';
 import type {
   BorderSizeTokens,
   ColorContextTokens,
+  Position,
   SpacingTokens,
-} from '../../../../../themes/types/tokens';
-import type { Position } from '../../../../types';
-import { getColorFromTokenKey } from '../../../../utils/helpers';
+} from '../../../../../types';
+import { getColorFromContract } from '../../../../../utils/helpers';
 import * as styles from './list-item.css';
 
 export type ListItemBorderPosition =
@@ -111,7 +111,11 @@ export const ListItem: FC<ListItemProps> = ({
     isBordered,
   });
   const itemStyles = assignInlineVars({
-    [styles.borderColor]: getColorFromTokenKey(borderColor, 'borders'),
+    [styles.borderColor]: getColorFromContract(
+      contract,
+      borderColor,
+      'borders'
+    ),
     [styles.borderSize]: contract.border.size[borderSize],
     ...(marker ? { [styles.marker]: marker } : {}),
     ...(paddingBlock

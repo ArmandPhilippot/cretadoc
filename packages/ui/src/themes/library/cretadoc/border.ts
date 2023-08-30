@@ -1,4 +1,4 @@
-import type { BorderTokens } from '../../types/tokens';
+import type { BorderTokens } from '../../../types';
 
 export const border: BorderTokens = {
   radius: {

@@ -1,4 +1,4 @@
-import type { Color, Length, NegativeLength } from './css';
+import type { Color, Length, NegativeLength } from '../css';
 import type {
   ShadowXAxisTokens,
   ShadowYAxisTokens,

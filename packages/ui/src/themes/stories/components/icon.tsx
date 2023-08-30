@@ -1,8 +1,8 @@
 import type { KeyPathIn } from '@cretadoc/utils';
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import type { FC } from 'react';
-import type { contract } from '../../contract';
-import { getContractValueFrom } from '../../utils/helpers';
+import { getKeyPathValue } from '../../../utils/helpers';
+import { contract } from '../../contract';
 import * as styles from './icon.css';
 import { Preview } from './preview';
 
@@ -34,7 +34,7 @@ type IconProps = {
 
 export const Icon: FC<IconProps> = ({ token }) => {
   const previewStyles = assignInlineVars({
-    [styles.iconSize]: getContractValueFrom(token),
+    [styles.iconSize]: getKeyPathValue(contract, token),
   });
 
   return (

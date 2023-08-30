@@ -1,8 +1,8 @@
 import type { KeyPathIn } from '@cretadoc/utils';
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import type { FC } from 'react';
-import type { contract } from '../../contract';
-import { getContractValueFrom } from '../../utils/helpers';
+import { getKeyPathValue } from '../../../utils/helpers';
+import { contract } from '../../contract';
 import * as styles from './border.css';
 import { Preview, type PreviewProps } from './preview';
 
@@ -15,9 +15,11 @@ const getPreviewStylesFrom = (
   const isSize = token.startsWith('border.size');
   const isStyle = token.startsWith('border.style');
 
-  if (isRadius) return { [styles.borderRadius]: getContractValueFrom(token) };
-  if (isSize) return { [styles.borderWidth]: getContractValueFrom(token) };
-  if (isStyle) return { [styles.borderStyle]: getContractValueFrom(token) };
+  if (isRadius)
+    return { [styles.borderRadius]: getKeyPathValue(contract, token) };
+  if (isSize) return { [styles.borderWidth]: getKeyPathValue(contract, token) };
+  if (isStyle)
+    return { [styles.borderStyle]: getKeyPathValue(contract, token) };
   return {};
 };
 

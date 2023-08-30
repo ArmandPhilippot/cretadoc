@@ -1,5 +1,5 @@
 import type { ReplaceTypesIn } from '@cretadoc/utils';
-import type { FontTokens } from '../../types/tokens';
+import type { FontTokens } from '../../../types';
 
 export const font: ReplaceTypesIn<FontTokens, string> = {
   family: {

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { isBrowser } from '../../helpers';
+import { isBrowser } from '../../utils/helpers';
 
 /**
  * Check if the given query matches the document.

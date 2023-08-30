@@ -1,5 +1,5 @@
 import type { ReplaceTypesIn } from '@cretadoc/utils';
-import type { SpacingTokens } from '../../types/tokens';
+import type { SpacingTokens } from '../../../types';
 
 export const spacing: ReplaceTypesIn<SpacingTokens, string> = {
   xxs: 'spacing-xxs',

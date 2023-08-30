@@ -1,4 +1,4 @@
-import type { BorderStyleKeywords, LengthPercentage } from '../css';
+import type { BorderStyleKeywords, LengthPercentage } from '../../css';
 
 export type BorderRadiusTokens = {
   /**

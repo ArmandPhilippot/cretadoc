@@ -1,4 +1,4 @@
-import type { Time } from '../css';
+import type { Time } from '../../css';
 
 /**
  * Use timing tokens for animation durations.

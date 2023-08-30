@@ -1,4 +1,4 @@
-import type { ColorTokens } from '../../types/tokens';
+import type { ColorTokens } from '../../../types';
 
 export const lightColor: ColorTokens = {
   background: {

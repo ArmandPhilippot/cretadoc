@@ -1,5 +1,5 @@
 import type { ReplaceTypesIn } from '@cretadoc/utils';
-import type { IconTokens } from '../../types/tokens';
+import type { IconTokens } from '../../../types';
 
 export const icon: ReplaceTypesIn<IconTokens, string> = {
   size: {

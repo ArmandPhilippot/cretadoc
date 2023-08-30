@@ -1,6 +1,6 @@
 import type { FC } from 'react';
+import type { ThemeAuthor } from '../../../types';
 import { themes } from '../../library';
-import type { ThemeAuthor } from '../../types';
 import * as styles from './themes-list.css';
 
 type AuthorProps = {

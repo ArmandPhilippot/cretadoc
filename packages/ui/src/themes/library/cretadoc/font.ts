@@ -1,4 +1,4 @@
-import type { FontTokens } from '../../types/tokens';
+import type { FontTokens } from '../../../types';
 
 export const font: FontTokens = {
   family: {

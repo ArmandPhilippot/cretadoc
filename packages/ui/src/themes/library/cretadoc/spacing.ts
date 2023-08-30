@@ -1,4 +1,4 @@
-import type { SpacingTokens } from '../../types/tokens';
+import type { SpacingTokens } from '../../../types';
 
 const getSpacingSizes = () => {
   const PERFECT_FIFTH = 1.5;

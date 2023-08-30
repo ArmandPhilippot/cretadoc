@@ -1,4 +1,4 @@
-import type { AnimationTokens } from '../../types/tokens';
+import type { AnimationTokens } from '../../../types';
 
 export const animation: AnimationTokens = {
   duration: {

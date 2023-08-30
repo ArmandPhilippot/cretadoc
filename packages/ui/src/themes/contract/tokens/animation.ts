@@ -1,5 +1,5 @@
 import type { ReplaceTypesIn } from '@cretadoc/utils';
-import type { AnimationTokens } from '../../types/tokens';
+import type { AnimationTokens } from '../../../types';
 
 export const animation: ReplaceTypesIn<AnimationTokens, string> = {
   duration: {

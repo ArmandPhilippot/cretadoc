@@ -1,5 +1,5 @@
 import { type FC, useRef } from 'react';
-import { Demo, DemoPanel } from '../utils/components';
+import { Demo, DemoPanel } from '../utils/stories';
 import {
   type UseHeadingsTreeOptions,
   useHeadingsTree,

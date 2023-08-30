@@ -1,11 +1,8 @@
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import type { FC, HTMLAttributes } from 'react';
 import { contract } from '../../../../themes';
-import type {
-  ColorContextTokens,
-  FontSizeTokens,
-} from '../../../../themes/types/tokens';
-import { getColorFromTokenKey } from '../../../utils/helpers';
+import type { ColorContextTokens, FontSizeTokens } from '../../../../types';
+import { getColorFromContract } from '../../../../utils/helpers';
 import * as styles from './legend.css';
 
 export type LegendColor = keyof ColorContextTokens | 'primary';
@@ -40,7 +37,7 @@ export const Legend: FC<LegendProps> = ({
 }) => {
   const legendClassName = styles.legend;
   const legendStyles = assignInlineVars({
-    [styles.legendColor]: getColorFromTokenKey(color, 'foreground'),
+    [styles.legendColor]: getColorFromContract(contract, color, 'foreground'),
     [styles.legendSize]: contract.font.size[size],
   });
 

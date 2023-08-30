@@ -1,6 +1,6 @@
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import type { FC, HTMLAttributes } from 'react';
-import type { Length } from '../../../../themes/types/css';
+import type { Length } from '../../../../types/css';
 import * as styles from './truncate.css';
 
 export type TruncateProps = Omit<

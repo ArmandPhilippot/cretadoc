@@ -1,7 +1,7 @@
 import type { Maybe, Nullable } from '@cretadoc/utils';
 import { useEffect, useState } from 'react';
 import type { HeadingLevel } from '../../components';
-import { isBrowser } from '../../helpers';
+import { isBrowser } from '../../utils/helpers';
 
 export type HeadingsTreeNode = {
   children: HeadingsTreeNode[];

@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { Demo, DemoPanel } from '../utils/components';
+import { Demo, DemoPanel } from '../utils/stories';
 import { useBoolean } from './use-boolean';
 
 export const UseBooleanDemo: FC = () => {

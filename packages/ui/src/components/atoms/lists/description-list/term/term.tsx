@@ -1,7 +1,8 @@
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import type { FC, HTMLAttributes, ReactNode } from 'react';
-import type { ColorContextTokens } from '../../../../../themes/types/tokens';
-import { getColorFromTokenKey } from '../../../../utils/helpers';
+import { contract } from '../../../../../themes';
+import type { ColorContextTokens } from '../../../../../types';
+import { getColorFromContract } from '../../../../../utils/helpers';
 import * as styles from '../description-list.css';
 
 export type TermProps = HTMLAttributes<HTMLElement> & {
@@ -38,7 +39,7 @@ export const Term: FC<TermProps> = ({
 }) => {
   const termClassName = styles.term({ isBold });
   const termStyles = assignInlineVars({
-    [styles.termColor]: getColorFromTokenKey(color, 'foreground'),
+    [styles.termColor]: getColorFromContract(contract, color, 'foreground'),
   });
 
   return (

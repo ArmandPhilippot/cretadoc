@@ -2,7 +2,7 @@ import type { Nullable } from '@cretadoc/utils';
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import type { HTMLAttributes, OlHTMLAttributes, FC } from 'react';
 import { contract } from '../../../../themes';
-import type { SpacingTokens } from '../../../../themes/types/tokens';
+import type { SpacingTokens } from '../../../../types';
 import * as styles from './list.css';
 
 export type UnorderedListProps = HTMLAttributes<HTMLUListElement>;

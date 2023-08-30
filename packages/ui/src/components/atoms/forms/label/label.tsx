@@ -1,11 +1,8 @@
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import type { FC, LabelHTMLAttributes, ReactNode } from 'react';
 import { contract } from '../../../../themes';
-import type {
-  ColorContextTokens,
-  FontSizeTokens,
-} from '../../../../themes/types/tokens';
-import { getColorFromTokenKey } from '../../../utils/helpers';
+import type { ColorContextTokens, FontSizeTokens } from '../../../../types';
+import { getColorFromContract } from '../../../../utils/helpers';
 import * as styles from './label.css';
 
 export type LabelColor = keyof ColorContextTokens | 'primary';
@@ -55,7 +52,7 @@ export const Label: FC<LabelProps> = ({
   ...props
 }) => {
   const labelStyles = assignInlineVars({
-    [styles.labelColor]: getColorFromTokenKey(color, 'foreground'),
+    [styles.labelColor]: getColorFromContract(contract, color, 'foreground'),
     [styles.labelSize]: contract.font.size[size],
   });
 

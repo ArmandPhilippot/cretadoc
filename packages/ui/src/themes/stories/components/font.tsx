@@ -1,8 +1,8 @@
 import type { KeyPathIn } from '@cretadoc/utils';
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import type { FC } from 'react';
-import type { contract } from '../../contract';
-import { getContractValueFrom } from '../../utils/helpers';
+import { getKeyPathValue } from '../../../utils/helpers';
+import { contract } from '../../contract';
 import * as styles from './font.css';
 import { Preview, type PreviewProps } from './preview';
 
@@ -27,19 +27,19 @@ const getPreviewStylesFrom = (
   token: KeyPathIn<typeof contract, 'font'>
 ): Styles => {
   if (isFontFamily(token))
-    return { [styles.fontFamily]: getContractValueFrom(token) };
+    return { [styles.fontFamily]: getKeyPathValue(contract, token) };
 
   if (isFontSize(token))
-    return { [styles.fontSize]: getContractValueFrom(token) };
+    return { [styles.fontSize]: getKeyPathValue(contract, token) };
 
   if (isFontWeight(token))
-    return { [styles.fontWeight]: getContractValueFrom(token) };
+    return { [styles.fontWeight]: getKeyPathValue(contract, token) };
 
   if (isLetterSpacing(token))
-    return { [styles.letterSpacing]: getContractValueFrom(token) };
+    return { [styles.letterSpacing]: getKeyPathValue(contract, token) };
 
   if (isLineHeight(token))
-    return { [styles.lineHeight]: getContractValueFrom(token) };
+    return { [styles.lineHeight]: getKeyPathValue(contract, token) };
 
   return {};
 };

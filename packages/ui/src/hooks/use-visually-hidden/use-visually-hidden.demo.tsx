@@ -1,5 +1,5 @@
 import type { FC, ReactNode } from 'react';
-import { Box } from '../utils/components';
+import { Box } from '../utils/stories';
 import { useVisuallyHidden } from './use-visually-hidden';
 
 export type UseVisuallyHiddenDemoProps = {

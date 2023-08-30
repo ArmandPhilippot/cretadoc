@@ -1,15 +1,14 @@
-import { getValueByKeyPath, isString, type KeyPathIn } from '@cretadoc/utils';
 import { createGlobalTheme } from '@vanilla-extract/css';
-import { contract } from '../contract';
-import {
-  type CretadocTheme,
-  themesIds,
-  type CretadocDarkTheme,
-  darkThemesIds,
-  type CretadocLightTheme,
-  lightThemesIds,
-} from '../library';
 import type { Theme } from '../types';
+import { contract } from './contract';
+import {
+  type CretadocDarkTheme,
+  type CretadocLightTheme,
+  type CretadocTheme,
+  darkThemesIds,
+  lightThemesIds,
+  themesIds,
+} from './library';
 
 /**
  * Build all themes as global themes.
@@ -49,17 +48,3 @@ export const isValidDarkThemeId = (theme: string): theme is CretadocDarkTheme =>
 export const isValidLightThemeId = (
   theme: string
 ): theme is CretadocLightTheme => (lightThemesIds as string[]).includes(theme);
-
-/**
- * Retrieve the contract value from a design token.
- *
- * @param {KeyPathIn<typeof contract, 'color'>} token - A design token.
- * @returns {string} The contract value.
- */
-export const getContractValueFrom = (
-  token: KeyPathIn<typeof contract>
-): string => {
-  const value = getValueByKeyPath(contract, token);
-
-  return isString(value) ? value : '';
-};

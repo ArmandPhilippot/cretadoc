@@ -1,4 +1,4 @@
-import type { Color } from '../css';
+import type { Color } from '../../css';
 
 export type ExtendedColorsTokens = {
   /**

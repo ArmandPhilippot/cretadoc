@@ -1,11 +1,11 @@
 import { type FC, useId, useState, useCallback } from 'react';
 import { useBoolean, useScrollPosition, useToggle } from '../../hooks';
-import type {
-  CretadocDarkTheme,
-  CretadocLightTheme,
-  CretadocTheme,
+import {
+  isValidThemeId,
+  type CretadocDarkTheme,
+  type CretadocLightTheme,
+  type CretadocTheme,
 } from '../../themes';
-import { isValidThemeId } from '../../themes/utils/helpers';
 import {
   Footer,
   Header,

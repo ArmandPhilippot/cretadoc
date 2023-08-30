@@ -1,8 +1,8 @@
 import type { KeyPathIn } from '@cretadoc/utils';
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import type { FC } from 'react';
-import type { contract } from '../../contract';
-import { getContractValueFrom } from '../../utils/helpers';
+import { getKeyPathValue } from '../../../utils/helpers';
+import { contract } from '../../contract';
 import { Preview } from './preview';
 import * as styles from './spacing.css';
 
@@ -20,7 +20,7 @@ type SpacingProps = {
  */
 export const Spacing: FC<SpacingProps> = ({ token }) => {
   const previewStyles = assignInlineVars({
-    [styles.spacing]: getContractValueFrom(token),
+    [styles.spacing]: getKeyPathValue(contract, token),
   });
 
   return (
@@ -39,7 +39,7 @@ export const Spacing: FC<SpacingProps> = ({ token }) => {
  */
 export const Margin: FC<SpacingProps> = ({ token }) => {
   const previewStyles = assignInlineVars({
-    [styles.spacing]: getContractValueFrom(token),
+    [styles.spacing]: getKeyPathValue(contract, token),
   });
 
   return (
@@ -62,7 +62,7 @@ export const Margin: FC<SpacingProps> = ({ token }) => {
  */
 export const Padding: FC<SpacingProps> = ({ token }) => {
   const previewStyles = assignInlineVars({
-    [styles.spacing]: getContractValueFrom(token),
+    [styles.spacing]: getKeyPathValue(contract, token),
   });
 
   return (

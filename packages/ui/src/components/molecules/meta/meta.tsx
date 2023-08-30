@@ -1,7 +1,7 @@
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import type { FC, ReactNode } from 'react';
 import { contract } from '../../../themes';
-import type { FontSizeTokens } from '../../../themes/types/tokens';
+import type { FontSizeTokens } from '../../../types';
 import {
   Description,
   DescriptionList,

@@ -1,6 +1,6 @@
 import type { Maybe } from '@cretadoc/utils';
 import { type RefObject, useState, useEffect } from 'react';
-import { isBrowser } from '../../helpers';
+import { isBrowser } from '../../utils/helpers';
 
 export type ScrollPosition = {
   x: number;

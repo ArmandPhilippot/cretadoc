@@ -1,4 +1,4 @@
-import type { DarkTheme, LightTheme, Theme } from '../types';
+import type { DarkTheme, LightTheme, Theme } from '../../types';
 import { cretadocDark, cretadocLight } from './cretadoc';
 
 export const darkThemes = [cretadocDark] satisfies readonly DarkTheme[];

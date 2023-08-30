@@ -1,5 +1,5 @@
 import type { ReplaceTypesIn } from '@cretadoc/utils';
-import type { SizeTokens } from '../../types/tokens';
+import type { SizeTokens } from '../../../types';
 
 export const size: ReplaceTypesIn<SizeTokens, string> = {
   full: 'size-full',

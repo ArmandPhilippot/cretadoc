@@ -1,4 +1,4 @@
-import { useBoolean } from '../use-boolean/use-boolean';
+import { useBoolean } from '../use-boolean';
 
 export type UseToggleReturn = readonly [boolean, () => void];
 

@@ -1,8 +1,8 @@
 import { type KeyPathIn, removeUndefined } from '@cretadoc/utils';
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import type { FC } from 'react';
-import type { contract } from '../../contract';
-import { getContractValueFrom } from '../../utils/helpers';
+import { getKeyPathValue } from '../../../utils/helpers';
+import { contract } from '../../contract';
 import * as styles from './color.css';
 import { Preview, type PreviewProps } from './preview';
 
@@ -17,7 +17,7 @@ type Styles = Record<string, string>;
 const getBackgroundPreviewStyles = (
   token: KeyPathIn<typeof contract, 'color'>
 ): Styles => {
-  return { [styles.background]: getContractValueFrom(token) };
+  return { [styles.background]: getKeyPathValue(contract, token) };
 };
 
 /**
@@ -29,7 +29,7 @@ const getBackgroundPreviewStyles = (
 const getBordersPreviewStyles = (
   token: KeyPathIn<typeof contract, 'color'>
 ): Styles => {
-  return { [styles.borderColor]: getContractValueFrom(token) };
+  return { [styles.borderColor]: getKeyPathValue(contract, token) };
 };
 
 /**
@@ -67,9 +67,11 @@ const getForegroundPreviewStyles = (
   const isFgOnBgToken = token.startsWith('color.foreground.on');
 
   return {
-    [styles.foreground]: getContractValueFrom(token),
+    [styles.foreground]: getKeyPathValue(contract, token),
     ...(isFgOnBgToken
-      ? { [styles.background]: getContractValueFrom(getBgTokenFrom(token)) }
+      ? {
+          [styles.background]: getKeyPathValue(contract, getBgTokenFrom(token)),
+        }
       : {}),
   };
 };

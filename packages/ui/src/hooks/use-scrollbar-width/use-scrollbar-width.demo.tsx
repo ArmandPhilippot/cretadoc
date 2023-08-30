@@ -1,5 +1,5 @@
 import { type FC, useRef } from 'react';
-import { Box, Demo, DemoPanel } from '../utils/components';
+import { Box, Demo, DemoPanel } from '../utils/stories';
 import { useScrollBarWidth } from './use-scrollbar-width';
 
 export const UseScrollbarWidthDemo: FC = () => {

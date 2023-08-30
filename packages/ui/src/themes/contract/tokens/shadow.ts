@@ -1,5 +1,5 @@
 import type { ReplaceTypesIn } from '@cretadoc/utils';
-import type { ShadowTokens } from '../../types/tokens';
+import type { ShadowTokens } from '../../../types';
 
 export const shadow: ReplaceTypesIn<ShadowTokens, string> = {
   critical: {

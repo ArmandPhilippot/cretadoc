@@ -1,6 +1,6 @@
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import type { ReactElement } from 'react';
-import type { LengthPercentage } from '../../../themes/types/css';
+import type { LengthPercentage } from '../../../types/css';
 import { List, ListItem, type ListProps } from '../../atoms';
 import type { CardProps } from '../../molecules';
 import * as styles from './cards-list.css';

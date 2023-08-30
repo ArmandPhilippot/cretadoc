@@ -1,5 +1,5 @@
 import type { ReplaceTypesIn } from '@cretadoc/utils';
-import type { ColorTokens } from '../../types/tokens';
+import type { ColorTokens } from '../../../types';
 
 export const color: ReplaceTypesIn<ColorTokens, string> = {
   background: {

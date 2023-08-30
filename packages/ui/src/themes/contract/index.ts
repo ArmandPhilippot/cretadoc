@@ -1,7 +1,7 @@
 import type { Nullable, ReplaceTypesIn } from '@cretadoc/utils';
 import { createGlobalThemeContract } from '@vanilla-extract/css';
-import type { ThemeTokens } from '../types';
-import { THEME_VARS_PREFIX } from '../utils/constants';
+import type { ThemeTokens } from '../../types';
+import { THEME_VARS_PREFIX } from '../../utils/constants';
 import {
   animation,
   border,

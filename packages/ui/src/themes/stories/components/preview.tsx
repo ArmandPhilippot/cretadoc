@@ -1,9 +1,9 @@
 import type { KeyPathIn } from '@cretadoc/utils';
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import type { FC, HTMLAttributes } from 'react';
-import { getColorFromTokenKey } from '../../../components/utils/helpers';
-import type { contract } from '../../contract';
-import type { ColorContextTokens } from '../../types/tokens';
+import type { ColorContextTokens } from '../../../types';
+import { getColorFromContract } from '../../../utils/helpers';
+import { contract } from '../../contract';
 import * as styles from './preview.css';
 
 export type PreviewProps = Pick<
@@ -49,7 +49,7 @@ export const Preview: FC<PreviewProps> = ({
   const wrapperClassName = styles.wrapper({ orientation });
   const wrapperStyles = assignInlineVars({
     [styles.labelColor]: labelColor
-      ? getColorFromTokenKey(labelColor, 'foreground')
+      ? getColorFromContract(contract, labelColor, 'foreground')
       : '',
     [styles.minHeight]: minHeight ? `${minHeight}px` : '',
   });

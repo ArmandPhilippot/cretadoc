@@ -1,5 +1,5 @@
 import type { Nullable } from '@cretadoc/utils';
-import { isBrowser } from './is';
+import { isBrowser } from './is-browser';
 
 /**
  * Retrieve the scrollbar width of either a given element or the window.

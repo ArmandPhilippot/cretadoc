@@ -1,5 +1,5 @@
 import { type RefObject, useCallback, useEffect, useState } from 'react';
-import { getScrollbarWidth } from '../../helpers';
+import { getScrollbarWidth } from '../../utils/helpers';
 
 /**
  * React hook to retrieve the current scrollbar width.

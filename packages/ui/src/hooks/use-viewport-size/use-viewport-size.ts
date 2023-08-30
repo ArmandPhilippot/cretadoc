@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { isBrowser } from '../../helpers';
+import { isBrowser } from '../../utils/helpers';
 
 export type ViewportSize = {
   height: number;

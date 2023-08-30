@@ -2,7 +2,7 @@ import type { Nullable } from '@cretadoc/utils';
 import { render, screen as screenTL } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { getScrollbarWidth } from '../../helpers';
+import { getScrollbarWidth } from '../../utils/helpers';
 import { UseScrollLockDemo } from './use-scroll-lock.demo';
 
 describe('use-scroll-lock', () => {

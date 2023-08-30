@@ -1,8 +1,7 @@
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import type { FC, HTMLAttributes } from 'react';
 import { contract } from '../../../themes';
-import type { IconSizeTokens } from '../../../themes/types/tokens';
-import type { Position } from '../../types';
+import type { IconSizeTokens, Position } from '../../../types';
 import * as styles from './spinner.css';
 
 export type SpinnerProps = HTMLAttributes<HTMLDivElement> & {

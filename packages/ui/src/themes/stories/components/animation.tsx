@@ -10,8 +10,8 @@ import {
   type MouseEventHandler,
   useId,
 } from 'react';
+import { getKeyPathValue } from '../../../utils/helpers';
 import { contract } from '../../contract';
-import { getContractValueFrom } from '../../utils/helpers';
 import * as styles from './animation.css';
 import { Preview } from './preview';
 
@@ -183,9 +183,9 @@ export const InfiniteAnimation: FC<InfiniteAnimationProps> = ({
   const previewStyles = assignInlineVars({
     [styles.animationName]:
       currentAnimation === 'rotate' ? styles.rotate : styles.slideIn,
-    [styles.duration]: getContractValueFrom(currentDuration),
+    [styles.duration]: getKeyPathValue(contract, currentDuration),
     [styles.playState]: currentPlayState,
-    [styles.timing]: getContractValueFrom(currentTimingFunction),
+    [styles.timing]: getKeyPathValue(contract, currentTimingFunction),
   });
 
   const updateAnimation = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
@@ -273,8 +273,8 @@ export const Transition: FC<TransitionProps> = ({
   );
 
   const previewStyles = assignInlineVars({
-    [styles.duration]: getContractValueFrom(currentDuration),
-    [styles.timing]: getContractValueFrom(currentTimingFunction),
+    [styles.duration]: getKeyPathValue(contract, currentDuration),
+    [styles.timing]: getKeyPathValue(contract, currentTimingFunction),
   });
 
   return (

@@ -2,6 +2,7 @@ import './themes.css';
 
 export * from './components';
 export * from './contexts';
-export * from './helpers';
 export * from './hooks';
 export * from './themes';
+export * from './types';
+export { getScrollbarWidth, isBrowser } from './utils/helpers';

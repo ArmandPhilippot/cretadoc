@@ -1,7 +1,7 @@
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import type { FC, HTMLAttributes } from 'react';
 import { contract } from '../../../../../themes';
-import type { SpacingTokens } from '../../../../../themes/types/tokens';
+import type { SpacingTokens } from '../../../../../types';
 import * as styles from '../description-list.css';
 
 export type GroupProps = HTMLAttributes<HTMLDivElement> & {

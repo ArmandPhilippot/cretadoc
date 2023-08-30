@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
+import type { Position } from '../../../../types';
 import { List, type ListProps } from '../../../atoms';
-import type { Position } from '../../../types';
 import type { NavItemProps } from '../nav-item';
 import * as styles from './nav-list.css';
 

@@ -1,10 +1,10 @@
-import type { ShadowTokens } from '../../types/tokens';
 import type {
   ShadowColors,
   ShadowLayer,
   ShadowLayers,
-} from '../../types/utils';
-import { getShadowTokens } from '../../utils/shadow';
+  ShadowTokens,
+} from '../../../types';
+import { getShadowTokens } from '../../../utils/helpers';
 
 const firstLayer: ShadowLayer = {
   offset: '0.2px',

@@ -1,4 +1,3 @@
-import { themes } from './themes/library';
-import { buildThemes } from './themes/utils/helpers';
+import { buildThemes, themes } from './themes';
 
 buildThemes(themes);

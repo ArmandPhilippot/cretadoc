@@ -5,9 +5,9 @@ import type {
   AnimationDurationTokens,
   ColorContextTokens,
   IconSizeTokens,
-} from '../../../themes/types/tokens';
-import type { Position } from '../../types';
-import { getColorFromTokenKey } from '../../utils/helpers';
+  Position,
+} from '../../../types';
+import { getColorFromContract } from '../../../utils/helpers';
 import * as styles from './icon.css';
 import {
   AngleSVGPaths,
@@ -114,7 +114,7 @@ export const Icon: FC<IconProps> = ({
     ...(animationSpeed
       ? { [styles.animationSpeed]: contract.animation.duration[animationSpeed] }
       : {}),
-    [styles.iconColor]: getColorFromTokenKey(color, 'foreground'),
+    [styles.iconColor]: getColorFromContract(contract, color, 'foreground'),
     [styles.iconSize]: contract.icon.size[size],
   });
 

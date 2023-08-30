@@ -1,6 +1,6 @@
 import { type FC, useCallback, useState, useRef } from 'react';
 import { Checkbox, LabelledField } from '../../components';
-import { Box, Demo, DemoPanel } from '../utils/components';
+import { Box, Demo, DemoPanel } from '../utils/stories';
 import { useScrollLock } from './use-scroll-lock';
 
 export const UseScrollLockDemo: FC = () => {

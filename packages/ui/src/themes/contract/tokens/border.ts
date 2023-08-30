@@ -1,5 +1,5 @@
 import type { ReplaceTypesIn } from '@cretadoc/utils';
-import type { BorderTokens } from '../../types/tokens';
+import type { BorderTokens } from '../../../types';
 
 export const border: ReplaceTypesIn<BorderTokens, string> = {
   radius: {

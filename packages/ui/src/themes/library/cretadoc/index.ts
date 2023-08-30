@@ -1,4 +1,4 @@
-import type { Theme, ThemeAuthor, ThemeTokens } from '../../types';
+import type { Theme, ThemeAuthor, ThemeTokens } from '../../../types';
 import { animation } from './animation';
 import { border } from './border';
 import { darkColor, lightColor } from './color';
