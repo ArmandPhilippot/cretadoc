@@ -38,7 +38,7 @@ export const Term: FC<TermProps> = ({
 }) => {
   const termClassName = styles.term({ isBold });
   const termStyles = assignInlineVars({
-    [styles.termColor]: getColorFromTokenKey(color, 'borders'),
+    [styles.termColor]: getColorFromTokenKey(color, 'foreground'),
   });
 
   return (
