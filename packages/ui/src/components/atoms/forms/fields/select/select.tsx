@@ -73,6 +73,7 @@ export type SelectProps<M extends boolean> = Omit<
  */
 export const Select = <M extends boolean = false>({
   className = '',
+  defaultValue,
   isDisabled = false,
   isRequired = false,
   multiple,
@@ -87,6 +88,9 @@ export const Select = <M extends boolean = false>({
     value: '',
     isDisabled: true,
   };
+  const placeholderDefaultValue = multiple
+    ? [firstOption.value]
+    : firstOption.value;
   const allOptions: SelectOption[] = placeholder
     ? [firstOption, ...options]
     : options;
@@ -95,7 +99,7 @@ export const Select = <M extends boolean = false>({
     <select
       {...props}
       className={`${selectClassName} ${className}`}
-      defaultValue={multiple ? [firstOption.value] : firstOption.value}
+      defaultValue={placeholder ? placeholderDefaultValue : defaultValue}
       disabled={isDisabled}
       multiple={multiple}
       required={isRequired}
