@@ -1,5 +1,4 @@
 import type { FC, ReactNode } from 'react';
-import { Box } from '../utils/stories';
 import { useVisuallyHidden } from './use-visually-hidden';
 
 export type UseVisuallyHiddenDemoProps = {
@@ -13,5 +12,5 @@ export const UseVisuallyHiddenDemo: FC<UseVisuallyHiddenDemoProps> = ({
 }) => {
   const visuallyHidden = useVisuallyHidden(isFocusable);
 
-  return <Box className={visuallyHidden}>{children}</Box>;
+  return <div className={visuallyHidden}>{children}</div>;
 };

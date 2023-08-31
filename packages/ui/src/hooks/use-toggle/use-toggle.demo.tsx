@@ -1,20 +1,19 @@
 import type { FC } from 'react';
-import { Demo, DemoPanel } from '../utils/stories';
+import { Button } from '../../components';
+import { Preview, PreviewList } from '../../utils/stories';
 import { useToggle } from './use-toggle';
 
 export const UseToggleDemo: FC = () => {
   const [state, toggle] = useToggle(false);
 
   return (
-    <Demo>
-      <DemoPanel>
-        <p id="output">
+    <PreviewList>
+      <Preview>
+        <p>
           The current state is: <strong>{state ? 'true' : 'false'}</strong>
         </p>
-        <button onClick={toggle} type="button">
-          Toggle
-        </button>
-      </DemoPanel>
-    </Demo>
+        <Button onClick={toggle}>Toggle</Button>
+      </Preview>
+    </PreviewList>
   );
 };

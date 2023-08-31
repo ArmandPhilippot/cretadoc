@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { darkThemes, lightThemes, themes } from './library';
-import { isValidThemeId } from './themes';
+import {
+  isValidDarkThemeId,
+  isValidLightThemeId,
+  isValidThemeId,
+} from './themes';
 
 describe('is-valid-theme-id', () => {
   it('returns true if the theme id is valid', () => {
@@ -20,13 +24,13 @@ describe('is-valid-dark-theme-id', () => {
   it('returns true if the theme id is valid', () => {
     const themeId = darkThemes[0]?.id ?? 'should-exist';
 
-    expect(isValidThemeId(themeId)).toBe(true);
+    expect(isValidDarkThemeId(themeId)).toBe(true);
   });
 
   it('returns false if the theme id is invalid', () => {
     const themeId = 'inexistent-theme';
 
-    expect(isValidThemeId(themeId)).toBe(false);
+    expect(isValidDarkThemeId(themeId)).toBe(false);
   });
 });
 
@@ -34,12 +38,12 @@ describe('is-valid-light-theme-id', () => {
   it('returns true if the theme id is valid', () => {
     const themeId = lightThemes[0]?.id ?? 'should-exist';
 
-    expect(isValidThemeId(themeId)).toBe(true);
+    expect(isValidLightThemeId(themeId)).toBe(true);
   });
 
   it('returns false if the theme id is invalid', () => {
     const themeId = 'inexistent-theme';
 
-    expect(isValidThemeId(themeId)).toBe(false);
+    expect(isValidLightThemeId(themeId)).toBe(false);
   });
 });

@@ -1,5 +1,5 @@
 import { type FC, useRef } from 'react';
-import { Demo, DemoPanel } from '../utils/stories';
+import { Preview, PreviewList } from '../../utils/stories';
 import {
   type UseHeadingsTreeOptions,
   useHeadingsTree,
@@ -25,8 +25,8 @@ export const UseHeadingsTreeDemo: FC<UseHeadingsTreeDemoProps> = ({
   });
 
   return (
-    <Demo>
-      <DemoPanel heading="Given the following structure:">
+    <PreviewList hasSpaceBetween>
+      <Preview title="Given the following structure:">
         <div ref={wrapperRef}>
           <h1>1. Level 1</h1>
           <h2>1.1. Level 2</h2>
@@ -43,12 +43,12 @@ export const UseHeadingsTreeDemo: FC<UseHeadingsTreeDemoProps> = ({
           <h3>1.3.1. Level 3</h3>
           <h3>1.3.2. Level 3</h3>
         </div>
-      </DemoPanel>
-      <DemoPanel heading="The output is:">
+      </Preview>
+      <Preview title="The output is:">
         <pre>
           <code>{JSON.stringify(headingsNode, null, 2)}</code>
         </pre>
-      </DemoPanel>
-    </Demo>
+      </Preview>
+    </PreviewList>
   );
 };

@@ -1,0 +1,53 @@
+import { Meta, Story } from '@storybook/blocks';
+import * as ColorsStories from './colors.stories';
+
+<Meta of={ColorsStories} />
+
+# Colors
+
+You can define your theme colors using design tokens. They are divided in four categories:
+
+- background
+- borders
+- foreground
+- primary
+
+These categories use a semantic palette to help you identify the intended usage.
+
+## Background
+
+Background design tokens define the colors used as background in Cretadoc interfaces.
+
+<Story of={ColorsStories.Background} />
+
+## Borders
+
+Borders design tokens define the color of the borders used in Cretadoc interfaces.
+
+<Story of={ColorsStories.Border} />
+
+## Foreground
+
+Foreground tokens are used to define text and icon colors. Most of them are used on a regular background:
+
+<Story of={ColorsStories.Foreground} />
+
+We also provide special tokens when foreground is used on a non-regular background: each token starts with `on` keyword.
+
+<Story of={ColorsStories.ForegroundOnBackground} />
+
+## Primary
+
+Primary tokens define the colors used to highligh calls to action for example. The primary color is usually your brand primary color.
+
+### As foreground color
+
+<Story of={ColorsStories.PrimaryAsForeground} />
+
+### As background color
+
+<Story of={ColorsStories.PrimaryAsBackground} />
+
+### As borders color
+
+<Story of={ColorsStories.PrimaryAsBorders} />

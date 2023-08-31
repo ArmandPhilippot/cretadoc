@@ -1,7 +1,8 @@
 import { type FC, useCallback, useState, useRef } from 'react';
 import { Checkbox, LabelledField } from '../../components';
-import { Box, Demo, DemoPanel } from '../utils/stories';
+import { Preview, PreviewList } from '../../utils/stories';
 import { useScrollLock } from './use-scroll-lock';
+import * as styles from './use-scroll-lock.demo.css';
 
 export const UseScrollLockDemo: FC = () => {
   const [isBodyScrollLocked, setIsBodyScrollLocked] = useState(false);
@@ -20,8 +21,8 @@ export const UseScrollLockDemo: FC = () => {
   useScrollLock(isDivScrollLocked, divRef);
 
   return (
-    <Demo>
-      <DemoPanel style={{ minHeight: '100vh' }}>
+    <PreviewList hasSpaceBetween>
+      <Preview style={{ minHeight: '100vh' }}>
         <p>If you do not see the body scrollbar, please resize your window.</p>
         <LabelledField
           field={
@@ -36,8 +37,8 @@ export const UseScrollLockDemo: FC = () => {
           label="Lock body scroll"
           layout="row"
         />
-      </DemoPanel>
-      <DemoPanel>
+      </Preview>
+      <Preview>
         <LabelledField
           field={
             <Checkbox
@@ -51,8 +52,15 @@ export const UseScrollLockDemo: FC = () => {
           label="Lock div scroll"
           layout="row"
         />
-        <Box id="locked-div" hasOverflowY ref={divRef} />
-      </DemoPanel>
-    </Demo>
+        <div className={styles.boxWrapper} id="locked-div" ref={divRef}>
+          <div
+            className={styles.box}
+            // cspell:ignore-word noninteractive
+            // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+            tabIndex={0}
+          />
+        </div>
+      </Preview>
+    </PreviewList>
   );
 };

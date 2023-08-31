@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { Demo, DemoPanel } from '../utils/stories';
+import { Preview, PreviewList } from '../../utils/stories';
 import { useMatchMedia } from './use-match-media';
 
 export type UseMatchMediaDemoProps = {
@@ -13,13 +13,13 @@ export const UseMatchMediaDemo: FC<UseMatchMediaDemoProps> = ({ query }) => {
   const isMatching = useMatchMedia(query);
 
   return (
-    <Demo>
-      <DemoPanel>
+    <PreviewList>
+      <Preview>
         <p>
           The query <code>${query}`</code>{' '}
           <strong>{isMatching ? 'matches' : 'does not match'}</strong>.
         </p>
-      </DemoPanel>
-    </Demo>
+      </Preview>
+    </PreviewList>
   );
 };

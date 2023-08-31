@@ -1,13 +1,13 @@
 import type { FC } from 'react';
-import { Demo, DemoPanel } from '../utils/stories';
+import { Preview, PreviewList } from '../../utils/stories';
 import { useViewportSize } from './use-viewport-size';
 
 export const UseViewportSizeDemo: FC = () => {
   const viewportSize = useViewportSize();
 
   return (
-    <Demo>
-      <DemoPanel>
+    <PreviewList>
+      <Preview>
         <p>Resize the browser window to update the values.</p>
         <ul>
           <li>
@@ -17,7 +17,7 @@ export const UseViewportSizeDemo: FC = () => {
             Viewport width: <strong>{viewportSize.width}</strong>
           </li>
         </ul>
-      </DemoPanel>
-    </Demo>
+      </Preview>
+    </PreviewList>
   );
 };

@@ -1,28 +1,30 @@
-import type { FC } from 'react';
-import { Demo, DemoPanel } from '../utils/stories';
+import type { FC, FormEvent } from 'react';
+import { Button, Form } from '../../components';
+import { Preview, PreviewList } from '../../utils/stories';
 import { useBoolean } from './use-boolean';
+import * as styles from './use-boolean.demo.css';
+
+const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+};
 
 export const UseBooleanDemo: FC = () => {
   const { activate, deactivate, state, toggle } = useBoolean(false);
 
   return (
-    <Demo>
-      <DemoPanel>
-        <p id="output">
+    <PreviewList isStacked>
+      <Preview>
+        <p>
           The current state is: <strong>{state ? 'true' : 'false'}</strong>
         </p>
-        <div style={{ display: 'flex', flexFlow: 'row wrap', gap: '1rem' }}>
-          <button onClick={activate} type="button">
-            Activate
-          </button>
-          <button onClick={deactivate} type="button">
-            Deactivate
-          </button>
-          <button onClick={toggle} type="button">
-            Toggle
-          </button>
-        </div>
-      </DemoPanel>
-    </Demo>
+      </Preview>
+      <Preview>
+        <Form className={styles.form} onSubmit={handleSubmit}>
+          <Button onClick={activate}>Activate</Button>
+          <Button onClick={deactivate}>Deactivate</Button>
+          <Button onClick={toggle}>Toggle</Button>
+        </Form>
+      </Preview>
+    </PreviewList>
   );
 };
