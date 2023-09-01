@@ -1,7 +1,4 @@
-/*
- * <reference types="vitest" />
- * <reference types="vite/client" />
- */
+/// <reference types="vitest" />
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
@@ -20,17 +17,22 @@ export default defineConfig(({ mode }) => {
       react(),
       vanillaExtractPlugin({ esbuildOptions: { loader: { '.css': 'empty' } } }),
     ],
+    ssr: {
+      noExternal: ['@cretadoc/ui'],
+    },
     test: {
-      deps: {
-        /*
-         * Using `['@cretadoc/ui']` with or without @vanilla-extract packages
-         * is not enough to avoid the `Unknown file extension ".css"` error. So
-         * far only this workaround is working: https://github.com/vitest-dev/vitest/issues/2806#issuecomment-1474468560
-         */
-        inline: [/^(?!.*vitest).*$/],
-      },
       environment: 'jsdom',
       globals: false,
+      server: {
+        deps: {
+          /*
+           * Using `['@cretadoc/ui']` with or without @vanilla-extract packages
+           * is not enough to avoid the `Unknown file extension ".css"` error.
+           * So far only this workaround is working: https://github.com/vitest-dev/vitest/issues/2806#issuecomment-1474468560
+           */
+          inline: [/^(?!.*vitest).*$/],
+        },
+      },
       setupFiles: './vite.setup.ts',
       watch: false,
     },

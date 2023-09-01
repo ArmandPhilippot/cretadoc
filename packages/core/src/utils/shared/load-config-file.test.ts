@@ -1,4 +1,5 @@
-import { join } from 'path';
+// @vitest-environment node
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { FIXTURES_DIR_PATH } from '../../../tests/utils/constants';
 import {
@@ -6,7 +7,6 @@ import {
   removeConfigFile,
 } from '../../../tests/utils/helpers';
 import { CONFIG_FILE_NAME } from '../constants';
-import { ConfigError } from '../exceptions';
 import { loadConfigFile } from './load-config-file';
 
 describe('load-config-file', () => {
@@ -22,10 +22,8 @@ describe('load-config-file', () => {
   it('throws an error if the config file does not exist', async () => {
     await expect(async () =>
       loadConfigFile(CONFIG_FILE_NAME, FIXTURES_DIR_PATH)
-    ).rejects.toThrow(
-      new ConfigError(
-        `Cannot find ${CONFIG_FILE_NAME} file. A configuration file is required for Cretadoc to work properly.`
-      )
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      '"BAD_CONFIGURATION: Cannot find cretadoc.config.js file. A configuration file is required for Cretadoc to work properly."'
     );
     expect.assertions(1);
   });

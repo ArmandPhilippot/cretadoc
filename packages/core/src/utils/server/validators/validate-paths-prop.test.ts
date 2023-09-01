@@ -1,3 +1,5 @@
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'url';
 import { describe, expect, it } from 'vitest';
 import type { CretadocPaths } from '../../../types/config';
 import type { ValidationError } from '../../../types/internals';
@@ -7,7 +9,7 @@ describe('validate-paths-prop', () => {
   it('returns an empty array if the paths properties are valid', () => {
     const paths: CretadocPaths = {
       doc: null,
-      pages: new URL('.', import.meta.url).pathname,
+      pages: dirname(fileURLToPath(new URL(import.meta.url))),
     };
     expect(validatePathsProp(paths)).toStrictEqual([]);
   });

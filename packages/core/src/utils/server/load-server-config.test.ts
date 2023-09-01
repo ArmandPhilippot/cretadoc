@@ -1,4 +1,5 @@
-import { join } from 'path';
+// @vitest-environment node
+import { join } from 'node:path';
 import type { ReplaceTypesIn } from '@cretadoc/utils';
 import { describe, expect, it } from 'vitest';
 import { FIXTURES_DIR_PATH } from '../../../tests/utils/constants';
@@ -7,7 +8,6 @@ import {
   removeConfigFile,
 } from '../../../tests/utils/helpers';
 import type { CretadocServerConfig } from '../../types';
-import { ConfigError } from '../exceptions';
 import { loadServerConfig } from './load-server-config';
 
 describe('load-server-config', () => {
@@ -23,6 +23,7 @@ describe('load-server-config', () => {
     });
 
     const config = await loadServerConfig(filename, FIXTURES_DIR_PATH);
+
     expect(config.paths.pages).toBe(pages);
 
     await removeConfigFile(configFilePath);
@@ -30,18 +31,18 @@ describe('load-server-config', () => {
     expect.assertions(1);
   });
 
-  it('throws an error if the config file does not exist', async () => {
+  it('throws an error when the config file is empty', async () => {
     const filename = 'load-server-config.test2.fixture.js';
     const configFilePath = join(FIXTURES_DIR_PATH, filename);
 
     await createConfigFile(configFilePath, 'custom', {});
+
     await expect(async () =>
       loadServerConfig(filename, FIXTURES_DIR_PATH)
-    ).rejects.toThrow(
-      new ConfigError(
-        `Found a ${filename} file but it does not export a valid configuration.`
-      )
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      '"BAD_CONFIGURATION: Found a load-server-config.test2.fixture.js file but it does not export a valid configuration."'
     );
+
     await removeConfigFile(configFilePath);
 
     expect.assertions(1);
@@ -59,9 +60,14 @@ describe('load-server-config', () => {
 
     // @ts-expect-error -- The configuration is invalid.
     await createConfigFile(configFilePath, 'custom', config);
-    await expect(async () =>
-      loadServerConfig(filename, FIXTURES_DIR_PATH)
-    ).rejects.toThrowError();
+
+    await expect(async () => loadServerConfig(filename, FIXTURES_DIR_PATH))
+      .rejects.toThrowErrorMatchingInlineSnapshot(`
+      "BAD_CONFIGURATION: 
+      - paths: string or null expected in doc property. Received: number
+      - paths: string or null expected in pages property. Received: number"
+    `);
+
     await removeConfigFile(configFilePath);
 
     expect.assertions(1);

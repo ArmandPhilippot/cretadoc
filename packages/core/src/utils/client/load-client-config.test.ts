@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { join } from 'path';
 import type { ReplaceTypesIn } from '@cretadoc/utils';
 import { describe, expect, it } from 'vitest';
@@ -7,7 +8,6 @@ import {
   removeConfigFile,
 } from '../../../tests/utils/helpers';
 import type { CretadocClientConfig } from '../../types';
-import { ConfigError } from '../exceptions';
 import { loadClientConfig } from './load-client-config';
 
 describe('load-client-config', () => {
@@ -33,13 +33,11 @@ describe('load-client-config', () => {
     const configFilePath = join(FIXTURES_DIR_PATH, filename);
 
     await createConfigFile(configFilePath, 'custom', {});
+
     await expect(async () =>
       loadClientConfig(filename, FIXTURES_DIR_PATH)
-    ).rejects.toThrow(
-      new ConfigError(
-        `Found a ${filename} file but it does not export a valid configuration.`
-      )
-    );
+    ).rejects.toThrowErrorMatchingInlineSnapshot();
+
     await removeConfigFile(configFilePath);
 
     expect.assertions(1);
