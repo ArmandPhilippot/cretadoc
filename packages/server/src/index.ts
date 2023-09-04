@@ -1,4 +1,2 @@
-import { createServer } from './server';
-
-export { createServer };
+export * from './server';
 export * from './types';

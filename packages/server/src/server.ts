@@ -58,18 +58,23 @@ const createExpressApp = async ({
   return app;
 };
 
+// Without this additional type, the config type becomes `any` on build.
+type CreateServer = (
+  config?: PartialDeep<ServerConfig>
+) => Promise<CretadocServer>;
+
 /**
  * Create a new server.
  *
  * @param {PartialDeep<ServerConfig>} [config] - The server configuration.
  * @returns {Promise<CretadocServer>} The methods to start/stop the server.
  */
-export const createServer = async (
+export const createServer: CreateServer = async (
   config?: PartialDeep<ServerConfig>
 ): Promise<CretadocServer> => {
   const mergedConfig = mergeDefaultConfigWith(config);
-  const { api, hostname, hmr, mode, port, ssr, staticDir } = mergedConfig;
-  const app = await createExpressApp({ api, hmr, mode, ssr, staticDir });
+  const { hostname, port, ...appConfig } = mergedConfig;
+  const app = await createExpressApp(appConfig);
   let server: Maybe<Server> = undefined;
 
   const start = () => {
