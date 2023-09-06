@@ -1,5 +1,3 @@
-import { access, constants } from 'fs/promises';
-
 /**
  * Check if a path is valid.
  *
@@ -12,10 +10,11 @@ import { access, constants } from 'fs/promises';
  */
 export const isValidPath = async (
   path: string,
-  mode: number = constants.F_OK
+  mode?: number
 ): Promise<boolean> => {
   try {
-    await access(path, mode);
+    const { access, constants } = await import('fs/promises');
+    await access(path, mode ?? constants.F_OK);
     return true;
   } catch (_err) {
     return false;
@@ -31,8 +30,11 @@ export const isValidPath = async (
  * @param {string} path - An absolute path.
  * @returns {Promise<Boolean>} True if the path is executable.
  */
-export const isExecutable = async (path: string): Promise<boolean> =>
-  isValidPath(path, constants.X_OK);
+export const isExecutable = async (path: string): Promise<boolean> => {
+  const { constants } = await import('fs/promises');
+
+  return isValidPath(path, constants.X_OK);
+};
 
 /**
  * Check if the given path is readable.
@@ -43,8 +45,11 @@ export const isExecutable = async (path: string): Promise<boolean> =>
  * @param {string} path - An absolute path.
  * @returns {Promise<Boolean>} True if the path is readable.
  */
-export const isReadable = async (path: string): Promise<boolean> =>
-  isValidPath(path, constants.R_OK);
+export const isReadable = async (path: string): Promise<boolean> => {
+  const { constants } = await import('fs/promises');
+
+  return isValidPath(path, constants.R_OK);
+};
 
 /**
  * Check if the given path is writable.
@@ -55,5 +60,8 @@ export const isReadable = async (path: string): Promise<boolean> =>
  * @param {string} path - An absolute path.
  * @returns {Promise<Boolean>} True if the path is writable.
  */
-export const isWritable = async (path: string): Promise<boolean> =>
-  isValidPath(path, constants.W_OK);
+export const isWritable = async (path: string): Promise<boolean> => {
+  const { constants } = await import('fs/promises');
+
+  return isValidPath(path, constants.W_OK);
+};
