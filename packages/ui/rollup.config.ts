@@ -1,4 +1,3 @@
-import { vanillaExtractPlugin } from '@vanilla-extract/rollup-plugin';
 import type { RollupOptions } from 'rollup';
 import dts from 'rollup-plugin-dts';
 import esbuild from 'rollup-plugin-esbuild';
@@ -13,7 +12,7 @@ const bundle = (config: RollupOptions): RollupOptions => {
       'react/jsx-runtime',
       '@vanilla-extract/css',
       '@vanilla-extract/dynamic',
-      '@vanilla-extract/recipes/createRuntimeFn',
+      '@vanilla-extract/recipes',
     ],
   };
 };
@@ -22,9 +21,6 @@ const outputOptions: RollupOptions['output'] = {
   preserveModules: true,
   preserveModulesRoot: 'src',
   sourcemap: true,
-  entryFileNames({ name }) {
-    return `${name.replace(/\.css$/, '.css.vanilla')}.js`;
-  },
   assetFileNames({ name }) {
     return name?.replace(/^src\//, '') ?? '';
   },
@@ -45,7 +41,6 @@ export default [
       },
     ],
     plugins: [
-      vanillaExtractPlugin(),
       esbuild({
         jsx: 'automatic',
         minify: true,
