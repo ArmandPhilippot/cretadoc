@@ -2,6 +2,10 @@
 
 It provides the components and themes to build Cretadoc interfaces.
 
+## Requirements
+
+This package uses [Vanilla Extract](https://vanilla-extract.style/) to provides themes and components. The CSS files are not pre-compiled so you need a plugin to integrate Vanilla Extract into your bundler. Please read [Bundler integration](https://vanilla-extract.style/documentation/getting-started#bundler-integration).
+
 ## Install
 
 ```
