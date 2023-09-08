@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.0.0](https://github.com/ArmandPhilippot/cretadoc/compare/@cretadoc/ui@1.0.0...@cretadoc/ui@2.0.0) (2023-09-08)
+
+
+### ⚠ BREAKING CHANGES
+
+* **ui:** CSS files are no longer shipped with the package, you
+should use Vanilla Extract plugin in your bundler
+
+### build
+
+* **ui:** prevent CSS compilation ([07caba7](https://github.com/ArmandPhilippot/cretadoc/commit/07caba7c0f4e122b35b890326013044cef76327b))
+
 ## 1.0.0 (2023-09-01)
 
 
