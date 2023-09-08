@@ -13,10 +13,7 @@ export default defineConfig(({ mode }) => {
       outDir: './dist',
       sourcemap: !isProd,
     },
-    plugins: [
-      react(),
-      vanillaExtractPlugin({ esbuildOptions: { loader: { '.css': 'empty' } } }),
-    ],
+    plugins: [react(), vanillaExtractPlugin()],
     ssr: {
       noExternal: ['@cretadoc/ui'],
     },

@@ -36,7 +36,9 @@ describe('load-client-config', () => {
 
     await expect(async () =>
       loadClientConfig(filename, FIXTURES_DIR_PATH)
-    ).rejects.toThrowErrorMatchingInlineSnapshot();
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      '"BAD_CONFIGURATION: Found a load-client-config.test2.fixture.js file but it does not export a valid configuration."'
+    );
 
     await removeConfigFile(configFilePath);
 
