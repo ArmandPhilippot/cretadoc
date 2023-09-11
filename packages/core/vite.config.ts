@@ -1,7 +1,8 @@
 /// <reference types="vitest" />
+import { vanillaExtractPlugin as veEsbuildPlugin } from '@vanilla-extract/esbuild-plugin';
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
+import { defineConfig, type DepOptimizationConfig } from 'vite';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -13,6 +14,15 @@ export default defineConfig(({ mode }) => {
       outDir: './dist',
       sourcemap: !isProd,
     },
+    optimizeDeps: {
+      esbuildOptions: {
+        plugins: [veEsbuildPlugin()],
+      },
+      /*
+       * Because of esbuildOptions, Typescript complains wrongly about
+       * non assignable type
+       */
+    } as DepOptimizationConfig,
     plugins: [react(), vanillaExtractPlugin()],
     ssr: {
       noExternal: ['@cretadoc/ui'],
