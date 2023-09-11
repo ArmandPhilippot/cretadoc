@@ -1,5 +1,7 @@
 import { recipe } from '@vanilla-extract/recipes';
-import { contract } from '../src';
+import { buildThemes, contract, themes } from '../src';
+
+buildThemes(themes);
 
 export const container = recipe({
   base: {

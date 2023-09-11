@@ -45,9 +45,29 @@ export const App: FC = () => {
 
 This package provides different themes to use in Cretadoc interfaces. Each theme is represented as an object containing an id, a name, a color scheme and a collection of tokens associated to CSS values.
 
+### Build the themes
+
+To use the themes, first you need to build them. This package provides a function named `buildThemes` to make the process easier. All you need to do is to pass an array of themes to build in a `.css.ts` file.
+
+`themes.css.ts`
+
+```ts
+import { buildThemes, themes } from '@cretadoc/ui';
+
+buildThemes(themes);
+```
+
+If you don't need all the themes, you can pass a filtered array to the `buildThemes` helper. For example, if you only want `cretadoc-light` theme, you can do something like:
+
+```ts
+import { buildThemes, lightThemes } from '@cretadoc/ui';
+
+buildThemes(lightThemes.filter((theme) => theme.id === 'cretadoc-light'));
+```
+
 ### Usage with @cretadoc/ui components
 
-To use a theme, you need to add an attribute `data-theme` to your application wrapper. Its value must be a theme id.
+To use a theme, you need to add an attribute `data-theme` to your application wrapper. Its value must be an existent theme id.
 
 **Example with React:**
 
@@ -56,6 +76,7 @@ To use a theme, you need to add an attribute `data-theme` to your application wr
 ```tsx
 import { Button } from '@cretadoc/ui';
 import { FC } from 'react';
+import './themes.css.ts';
 
 export const App: FC = () => {
   return (
@@ -71,8 +92,7 @@ export const App: FC = () => {
 You can reuse the themes contract with your own components. However your application needs:
 
 - to handle [Typescript](https://www.typescriptlang.org/),
-- [Vanilla-extract](https://vanilla-extract.style/) tools (like the `style` function),
-- a bundler that handles CSS. See [Bundler Integration](https://vanilla-extract.style/documentation/getting-started#bundler-integration) to configure your project.
+- [Vanilla-extract](https://vanilla-extract.style/) tools (like the `style` function).
 
 **Example with React:**
 
@@ -108,6 +128,7 @@ export const CustomButton: FC<CustomButtonProps> = ({ children }) => {
 ```tsx
 import { FC } from 'react';
 import { Button } from './custom-button.tsx';
+import './themes.css.ts';
 
 export const App: FC = () => {
   return (
