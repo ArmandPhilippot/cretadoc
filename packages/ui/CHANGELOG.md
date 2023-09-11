@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.0.1](https://github.com/ArmandPhilippot/cretadoc/compare/@cretadoc/ui@2.0.0...@cretadoc/ui@2.0.1) (2023-09-11)
+
+
+### Bug Fixes
+
+* **ui:** let consumers take care of building themes ([37247f8](https://github.com/ArmandPhilippot/cretadoc/commit/37247f8085ffe80539d4600f50168caa126c9c04))
+
 ## [2.0.0](https://github.com/ArmandPhilippot/cretadoc/compare/@cretadoc/ui@1.0.0...@cretadoc/ui@2.0.0) (2023-09-08)
 
 
