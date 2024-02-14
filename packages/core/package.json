@@ -110,7 +110,7 @@
     "rollup-plugin-dts": "^6.0.1",
     "rollup-plugin-esbuild": "^5.0.0",
     "typescript": "^5.2.2",
-    "vite": "^4.4.12",
+    "vite": "^4.5.2",
     "vitest": "^0.34.3",
     "vitest-fetch-mock": "^0.2.2"
   }
