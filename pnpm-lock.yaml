@@ -66,11 +66,11 @@ importers:
         specifier: ^2.2.2
         version: 2.2.2
       graphql:
-        specifier: ^16.8.0
-        version: 16.8.0
+        specifier: ^16.8.1
+        version: 16.8.1
       graphql-yoga:
         specifier: ^4.0.4
-        version: 4.0.4(graphql@16.8.0)
+        version: 4.0.4(graphql@16.8.1)
       validator:
         specifier: ^13.11.0
         version: 13.11.0
@@ -2271,8 +2271,8 @@ packages:
       '@cretadoc/read-dir': 1.0.1
       '@cretadoc/utils': 1.0.2
       dataloader: 2.2.2
-      graphql: 16.8.0
-      graphql-yoga: 4.0.4(graphql@16.8.0)
+      graphql: 16.8.1
+      graphql-yoga: 4.0.4(graphql@16.8.1)
       validator: 13.11.0
     dev: false
 
@@ -3435,62 +3435,62 @@ packages:
       typescript: 5.2.2
     dev: true
 
-  /@graphql-tools/executor@1.2.0(graphql@16.8.0):
+  /@graphql-tools/executor@1.2.0(graphql@16.8.1):
     resolution: {integrity: sha512-SKlIcMA71Dha5JnEWlw4XxcaJ+YupuXg0QCZgl2TOLFz4SkGCwU/geAsJvUJFwK2RbVLpQv/UMq67lOaBuwDtg==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
-      '@graphql-tools/utils': 10.0.5(graphql@16.8.0)
-      '@graphql-typed-document-node/core': 3.2.0(graphql@16.8.0)
+      '@graphql-tools/utils': 10.0.5(graphql@16.8.1)
+      '@graphql-typed-document-node/core': 3.2.0(graphql@16.8.1)
       '@repeaterjs/repeater': 3.0.4
-      graphql: 16.8.0
+      graphql: 16.8.1
       tslib: 2.6.2
       value-or-promise: 1.0.12
     dev: false
 
-  /@graphql-tools/merge@9.0.0(graphql@16.8.0):
+  /@graphql-tools/merge@9.0.0(graphql@16.8.1):
     resolution: {integrity: sha512-J7/xqjkGTTwOJmaJQJ2C+VDBDOWJL3lKrHJN4yMaRLAJH3PosB7GiPRaSDZdErs0+F77sH2MKs2haMMkywzx7Q==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
-      '@graphql-tools/utils': 10.0.5(graphql@16.8.0)
-      graphql: 16.8.0
+      '@graphql-tools/utils': 10.0.5(graphql@16.8.1)
+      graphql: 16.8.1
       tslib: 2.6.2
     dev: false
 
-  /@graphql-tools/schema@10.0.0(graphql@16.8.0):
+  /@graphql-tools/schema@10.0.0(graphql@16.8.1):
     resolution: {integrity: sha512-kf3qOXMFcMs2f/S8Y3A8fm/2w+GaHAkfr3Gnhh2LOug/JgpY/ywgFVxO3jOeSpSEdoYcDKLcXVjMigNbY4AdQg==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
-      '@graphql-tools/merge': 9.0.0(graphql@16.8.0)
-      '@graphql-tools/utils': 10.0.5(graphql@16.8.0)
-      graphql: 16.8.0
+      '@graphql-tools/merge': 9.0.0(graphql@16.8.1)
+      '@graphql-tools/utils': 10.0.5(graphql@16.8.1)
+      graphql: 16.8.1
       tslib: 2.6.2
       value-or-promise: 1.0.12
     dev: false
 
-  /@graphql-tools/utils@10.0.5(graphql@16.8.0):
+  /@graphql-tools/utils@10.0.5(graphql@16.8.1):
     resolution: {integrity: sha512-ZTioQqg9z9eCG3j+KDy54k1gp6wRIsLqkx5yi163KVvXVkfjsrdErCyZjrEug21QnKE9piP4tyxMpMMOT1RuRw==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
-      '@graphql-typed-document-node/core': 3.2.0(graphql@16.8.0)
+      '@graphql-typed-document-node/core': 3.2.0(graphql@16.8.1)
       dset: 3.1.2
-      graphql: 16.8.0
+      graphql: 16.8.1
       tslib: 2.6.2
     dev: false
 
-  /@graphql-typed-document-node/core@3.2.0(graphql@16.8.0):
+  /@graphql-typed-document-node/core@3.2.0(graphql@16.8.1):
     resolution: {integrity: sha512-mB9oAsNCm9aM3/SOv4YtBMqZbYj10R7dkq8byBqxGY/ncFwhf2oQzMV+LCRlWoDSEBJ3COiR1yeDvMtsoOsuFQ==}
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
-      graphql: 16.8.0
+      graphql: 16.8.1
     dev: false
 
   /@graphql-yoga/logger@1.0.0:
@@ -4725,7 +4725,6 @@ packages:
       - encoding
       - supports-color
     dev: true
-
   /@storybook/builder-vite@7.4.1(typescript@5.2.2)(vite@4.4.12):
     resolution: {integrity: sha512-aB7bfirdRLozm4jpBIVhXkzN2sU0J9nF5WTkzT9R0ReRGsHm3+4CDFAPMnHBISgNXkXMLVC4VuQp4w/a4Avjmg==}
     peerDependencies:
@@ -9804,28 +9803,28 @@ packages:
   /graphemer@1.4.0:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
 
-  /graphql-yoga@4.0.4(graphql@16.8.0):
+  /graphql-yoga@4.0.4(graphql@16.8.1):
     resolution: {integrity: sha512-MvCLhFecYNIKuxAZisPjpIL9lxRYbpgPSNKENDO/8CV3oiFlsLJHZb5dp2sVAeLafXHeZ9TgkijLthUBc1+Jag==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       graphql: ^15.2.0 || ^16.0.0
     dependencies:
       '@envelop/core': 4.0.0
-      '@graphql-tools/executor': 1.2.0(graphql@16.8.0)
-      '@graphql-tools/schema': 10.0.0(graphql@16.8.0)
-      '@graphql-tools/utils': 10.0.5(graphql@16.8.0)
+      '@graphql-tools/executor': 1.2.0(graphql@16.8.1)
+      '@graphql-tools/schema': 10.0.0(graphql@16.8.1)
+      '@graphql-tools/utils': 10.0.5(graphql@16.8.1)
       '@graphql-yoga/logger': 1.0.0
       '@graphql-yoga/subscription': 4.0.0
       '@whatwg-node/fetch': 0.9.9
       '@whatwg-node/server': 0.9.13
       dset: 3.1.2
-      graphql: 16.8.0
+      graphql: 16.8.1
       lru-cache: 10.0.1
       tslib: 2.6.2
     dev: false
 
-  /graphql@16.8.0:
-    resolution: {integrity: sha512-0oKGaR+y3qcS5mCu1vb7KG+a89vjn06C7Ihq/dDl3jA+A8B3TKomvi3CiEcVLJQGalbu8F52LxkOym7U5sSfbg==}
+  /graphql@16.8.1:
+    resolution: {integrity: sha512-59LZHPdGZVh695Ud9lRzPBVTtlX9ZCV150Er2W43ro37wVof0ctenSaskPPjN7lVTIN8mSZt8PHUNKZuNQUuxw==}
     engines: {node: ^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0}
     dev: false
 
